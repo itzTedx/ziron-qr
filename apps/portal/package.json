@@ -11,9 +11,10 @@
     "lint:fix": "next lint --fix",
     "typecheck": "tsc --noEmit",
     "clean": "git clean -xdf .cache .next .turbo node_modules",
-      "with-env": "dotenv -e ../../.env --"
+    "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
+    "@ziron/auth": "workspace:*",
     "@ziron/ui": "workspace:*",
     "better-auth": "1.2.12",
     "lucide-react": "^0.475.0",
