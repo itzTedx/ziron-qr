@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ziron/ui": "workspace:*",
     "react": "catalog:react19",
     "react-dom": "catalog:react19",
     "next": "catalog:"
@@ -21,5 +22,6 @@
     "@ziron/prettier-config": "workspace:*",
     "@ziron/typescript-config": "workspace:*",
     "typescript": "catalog:"
-  }
+  },
+  "prettier": "@ziron/prettier-config"
 }

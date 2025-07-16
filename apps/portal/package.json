@@ -28,5 +28,6 @@
     "@ziron/prettier-config": "workspace:*",
     "@ziron/typescript-config": "workspace:*",
     "typescript": "catalog:"
-  }
+  },
+  "prettier": "@ziron/prettier-config"
 }
