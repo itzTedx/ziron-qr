@@ -8,9 +8,7 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 
-
-
-export const rolesEnum = pgEnum("roles", ["user",  "admin", "dev"]);
+export const rolesEnum = pgEnum("roles", ["user", "admin", "dev"]);
 
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom().notNull(),
@@ -20,7 +18,7 @@ export const users = pgTable("users", {
     .$defaultFn(() => false)
     .notNull(),
   image: text("image"),
-  role: rolesEnum("role").default("user"),
+  role: rolesEnum("role").default("user").notNull(),
   banned: boolean("banned"),
   banReason: text("ban_reason"),
   banExpires: date("ban_expires_at"),
@@ -65,8 +63,6 @@ export const accounts = pgTable("accounts", {
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
 });
-
-
 
 export const twoFactors = pgTable("two_factors", {
   id: uuid("id").primaryKey().defaultRandom().notNull(),

@@ -1,6 +1,6 @@
-import { Slot } from '@radix-ui/react-slot'
 import { cn } from '@ziron/utils'
 import { cva, type VariantProps } from 'class-variance-authority'
+import { Slot as SlotPrimitive } from 'radix-ui'
 import * as React from 'react'
 
 const buttonVariants = cva(
@@ -9,7 +9,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'from-primary to-brand-secondary relative inline-block w-full cursor-pointer rounded-md bg-white bg-gradient-to-bl px-4 py-2 text-center  text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset] transition duration-200',
+          'from-primary to-brand-secondary relative inline-block w-full cursor-pointer rounded-md bg-white bg-gradient-to-bl text-center text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset] transition duration-200',
         destructive:
           'bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40',
         outline:
@@ -43,7 +43,7 @@ function Button({
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean
   }) {
-  const Comp = asChild ? Slot : 'button'
+  const Comp = asChild ? SlotPrimitive.Slot : 'button'
 
   return (
     <Comp

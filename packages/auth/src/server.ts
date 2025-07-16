@@ -1,4 +1,5 @@
 import type { BetterAuthOptions } from "better-auth";
+
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
@@ -29,7 +30,7 @@ export function initAuth(options: {
     user: {
       additionalFields: {
         role: {
-          type: ["user",  "admin"],
+          type: ["user", "admin", "dev"],
           input: false,
         },
       },
@@ -75,3 +76,4 @@ export function initAuth(options: {
 
 export type Auth = ReturnType<typeof initAuth>;
 export type Session = Auth["$Infer"]["Session"];
+export type User = Auth["$Infer"]["Session"]["user"];

@@ -5,6 +5,7 @@ const nextConfig = {
     "@ziron/auth",
     "@ziron/utils",
     "@ziron/validators",
+    "@ziron/db",
   ],
 
   eslint: { ignoreDuringBuilds: true },

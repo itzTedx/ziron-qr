@@ -1,7 +1,5 @@
 import "server-only";
 
-import { cache } from "react";
-import { headers } from "next/headers";
 import { env } from "@/lib/env/server";
 
 import { initAuth } from "@ziron/auth";
@@ -16,7 +14,3 @@ export const auth = initAuth({
   productionUrl: env.BETTER_AUTH_URL,
   secret: env.BETTER_AUTH_SECRET,
 });
-
-export const getSession = cache(async () =>
-  auth.api.getSession({ headers: await headers() }),
-);

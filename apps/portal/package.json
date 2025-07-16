@@ -16,7 +16,9 @@
   },
   "dependencies": {
     "@bprogress/next": "^3.2.12",
+    "@tabler/icons-react": "^3.34.0",
     "@ziron/auth": "workspace:*",
+    "@ziron/db": "workspace:*",
     "@ziron/ui": "workspace:*",
     "@ziron/utils": "workspace:*",
     "@ziron/validators": "workspace:*",
