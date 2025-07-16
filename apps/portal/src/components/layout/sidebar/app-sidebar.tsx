@@ -6,6 +6,7 @@ import Link from "next/link";
 import { NavMain } from "@/components/layout/sidebar/nav-main";
 import { NavUser } from "@/components/layout/sidebar/nav-user";
 
+import type { Company } from "@ziron/db/schema";
 import { User } from "@ziron/auth";
 import { IconLogo } from "@ziron/ui/assets/logo";
 import {
@@ -19,12 +20,14 @@ import {
   SidebarRail,
 } from "@ziron/ui/components/sidebar";
 
+import { NavProjects } from "./nav-projects";
+
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
-  // data?: CompanyType[];
+  data?: Company[];
   user: User;
 }
 
-export function AppSidebar({ user, ...props }: AppSidebarProps) {
+export function AppSidebar({ data, user, ...props }: AppSidebarProps) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -47,7 +50,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
 
       <SidebarContent>
         <NavMain />
-        {/* <NavProjects data={data} /> */}
+        <NavProjects data={data} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={user} />

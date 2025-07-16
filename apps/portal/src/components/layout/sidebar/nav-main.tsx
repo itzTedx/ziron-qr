@@ -2,13 +2,12 @@
 
 import Link from "next/link";
 
-import { IconBuildingCog, IconCards, IconPlus } from "@tabler/icons-react";
+import { IconBuildingCog, IconCards } from "@tabler/icons-react";
 
 import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@ziron/ui/components/sidebar";
@@ -31,10 +30,6 @@ export function NavMain() {
             <IconBuildingCog />
             <span className="text-sm font-medium">Add Company</span>
           </SidebarMenuButton>
-
-          <SidebarMenuAction>
-            <IconPlus className="size-3 text-gray-300" />
-          </SidebarMenuAction>
         </SidebarMenuItem>
         <SidebarMenuItem>
           <Link href="/card/new">
@@ -42,10 +37,6 @@ export function NavMain() {
               <IconCards />
               <span className="text-sm font-medium">Create Card</span>
             </SidebarMenuButton>
-
-            <SidebarMenuAction>
-              <IconPlus className="size-3 text-gray-300" />
-            </SidebarMenuAction>
           </Link>
         </SidebarMenuItem>
       </SidebarMenu>

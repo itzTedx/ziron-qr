@@ -1,19 +1,14 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
-
 // import { CompanyType } from "@/server/schema";
-import { IconCards, IconDots } from "@tabler/icons-react";
-import { Trash2 } from "lucide-react";
+import { IconPlus } from "@tabler/icons-react";
 
+import { Company } from "@ziron/db/schema";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@ziron/ui/components/dropdown-menu";
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@ziron/ui/components/avatar";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -25,7 +20,7 @@ import {
 } from "@ziron/ui/components/sidebar";
 
 interface Props {
-  data?: CompanyType[];
+  data?: Company[];
 }
 
 export function NavProjects({ data }: Props) {
@@ -38,46 +33,20 @@ export function NavProjects({ data }: Props) {
         <SidebarMenu>
           {data.map((item) => (
             <SidebarMenuItem key={item.name}>
-              <SidebarMenuButton asChild tooltip={item.name}>
-                <Link href="/">
-                  {item.logo && (
-                    <div className="relative size-4 shrink-0">
-                      <Image
-                        src={item.logo}
-                        fill
-                        alt={item.name}
-                        className="object-contain"
-                      />
-                    </div>
-                  )}
-                  <span>{item.name}</span>
-                </Link>
+              <SidebarMenuButton
+                tooltip={item.name}
+                className="p-0 group-data-[collapsible=icon]:p-0!"
+              >
+                <Avatar>
+                  <AvatarImage src={item.logo ?? undefined} />
+                  <AvatarFallback>{item.name.slice(0, 1)}</AvatarFallback>
+                </Avatar>
+                <span>{item.name}</span>
               </SidebarMenuButton>
 
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <SidebarMenuAction showOnHover>
-                    <IconDots />
-                    <span className="sr-only">More</span>
-                  </SidebarMenuAction>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  className="w-48"
-                  side={isMobile ? "bottom" : "right"}
-                  align={isMobile ? "end" : "start"}
-                >
-                  <DropdownMenuItem>
-                    <IconCards className="text-muted-foreground size-4" />
-                    <span className="pl-1 text-sm">Create card</span>
-                  </DropdownMenuItem>
-
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <Trash2 className="text-muted-foreground size-4" />
-                    <span className="pl-1 text-sm">Delete Company</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <SidebarMenuAction>
+                <IconPlus className="size-3 text-gray-300" />
+              </SidebarMenuAction>
             </SidebarMenuItem>
           ))}
         </SidebarMenu>
