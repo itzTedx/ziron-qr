@@ -97,6 +97,9 @@ importers:
       '@ziron/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      better-auth:
+        specifier: 1.2.12
+        version: 1.2.12
       lucide-react:
         specifier: ^0.475.0
         version: 0.475.0(react@19.0.0)
