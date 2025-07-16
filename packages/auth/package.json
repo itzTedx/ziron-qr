@@ -18,12 +18,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@better-auth/expo": "1.2.9",
     "@t3-oss/env-nextjs": "^0.13.6",
     "@ziron/redis": "workspace:*",
     "@ziron/db": "workspace:*",
-    "better-auth": "1.2.9",
-    "next": "^15.3.5",
+    "better-auth": "1.2.12",
+    "next": "catalog:",
     "react": "catalog:react19",
     "react-dom": "catalog:react19",
     "zod": "catalog:"
