@@ -1,8 +1,11 @@
 {
-  "name": "@workspace/typescript-config",
+  "name": "@ziron/typescript-config",
   "version": "0.0.0",
   "private": true,
   "license": "PROPRIETARY",
+  "scripts": {
+    "clean": "git clean -xdf .cache .next .turbo node_modules"
+  },
   "publishConfig": {
     "access": "public"
   }

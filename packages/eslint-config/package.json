@@ -1,8 +1,11 @@
 {
-  "name": "@workspace/eslint-config",
+  "name": "@ziron/eslint-config",
   "version": "0.0.0",
   "type": "module",
   "private": true,
+  "scripts": {
+    "clean": "git clean -xdf .cache .next .turbo node_modules"
+  },
   "exports": {
     "./base": "./base.js",
     "./next-js": "./next.js",
