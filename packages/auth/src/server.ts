@@ -58,7 +58,7 @@ export function initAuth(options: {
       },
     },
     advanced: {
-      cookiePrefix: "foneflip",
+      cookiePrefix: "ziron",
       database: {
         generateId: false,
       },
