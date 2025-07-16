@@ -11,17 +11,20 @@
     "lint:fix": "next lint --fix",
     "typecheck": "tsc --noEmit",
     "clean": "git clean -xdf .cache .next .turbo node_modules",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
     "@ziron/auth": "workspace:*",
+    "@ziron/utils": "workspace:*",
     "@ziron/ui": "workspace:*",
     "better-auth": "1.2.12",
     "lucide-react": "^0.475.0",
     "next": "catalog:",
     "next-themes": "^0.4.4",
     "react": "catalog:react19",
-    "react-dom": "catalog:react19"
+    "react-dom": "catalog:react19",
+    "sonner": "^2.0.6"
   },
   "devDependencies": {
     "@types/node": "^20",
