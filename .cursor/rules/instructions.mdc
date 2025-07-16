@@ -15,3 +15,5 @@ Icons in Buttons don't need size or Margin it's handled automatically by our sha
 
 
 Don't run type checks in terminal or create temporary test files.
+
+Always use kebab case for files

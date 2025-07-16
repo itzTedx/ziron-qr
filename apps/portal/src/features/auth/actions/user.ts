@@ -85,3 +85,13 @@ export const signUp = async (
     };
   }
 };
+
+/**
+ * Checks if the given user has the 'admin' role.
+ * @param user - The user object to check.
+ * @returns True if the user is an admin, false otherwise.
+ */
+export async function isAdminUser(): Promise<boolean> {
+  const { user } = await getCurrentUser();
+  return user.role === "admin";
+}

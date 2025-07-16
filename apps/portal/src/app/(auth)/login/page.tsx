@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
+
+import { getSession } from "@/features/auth/actions/user";
 import { LoginForm } from "@/features/auth/components/login-form";
-import { getSession } from "@/lib/auth/server";
 
 import { IconLogoMono } from "@ziron/ui/assets/logo";
 import { Card, CardContent } from "@ziron/ui/components/card";

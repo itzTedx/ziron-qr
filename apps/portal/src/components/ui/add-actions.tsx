@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { IconPlus } from "@tabler/icons-react";
+import { parseAsString, useQueryStates } from "nuqs";
 
 import { Button } from "@ziron/ui/components/button";
 import {
@@ -18,8 +19,10 @@ import {
 
 export function AddAction() {
   const [open, setOpen] = useState(false);
-
   const router = useRouter();
+  const [_, setCompanyModal] = useQueryStates({
+    modal: parseAsString,
+  });
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -69,9 +72,10 @@ export function AddAction() {
           <DropdownMenuLabel>Add new</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            // onClick={() => {
-            //   openModal();
-            // }}
+            onClick={() => {
+              setCompanyModal({ modal: "company" });
+              setOpen(false);
+            }}
             className="group hover:bg-secondary hover:text-background cursor-pointer transition"
           >
             Company

@@ -106,6 +106,9 @@ importers:
       '@ziron/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@ziron/redis':
+        specifier: workspace:*
+        version: link:../../packages/redis
       '@ziron/ui':
         specifier: workspace:*
         version: link:../../packages/ui

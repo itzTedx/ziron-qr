@@ -19,6 +19,7 @@
     "@tabler/icons-react": "^3.34.0",
     "@ziron/auth": "workspace:*",
     "@ziron/db": "workspace:*",
+    "@ziron/redis": "workspace:*",
     "@ziron/ui": "workspace:*",
     "@ziron/utils": "workspace:*",
     "@ziron/validators": "workspace:*",

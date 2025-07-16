@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import Header from "@/components/layout/header";
 import { AppSidebar } from "@/components/layout/sidebar/app-sidebar";
 import { getCurrentUser } from "@/features/auth/actions/user";
+import CompanyFormModal from "@/features/company/components/modal";
 
 import { ScrollArea } from "@ziron/ui/components/scroll-area";
 import { SidebarInset, SidebarProvider } from "@ziron/ui/components/sidebar";
@@ -43,6 +44,7 @@ export default async function RootLayout({
           <ScrollArea className="-mt-20">{children}</ScrollArea>
         </SidebarInset>
       </SidebarProvider>
+      <CompanyFormModal />
     </div>
   );
 }
