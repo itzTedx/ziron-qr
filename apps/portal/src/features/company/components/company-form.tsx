@@ -17,7 +17,6 @@ import { toast } from "sonner";
 
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -26,7 +25,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@ziron/ui/components/alert-dialog";
-import { Button, buttonVariants } from "@ziron/ui/components/button";
+import { Button } from "@ziron/ui/components/button";
 import { DialogFooter } from "@ziron/ui/components/dialog";
 import {
   Form,
@@ -41,7 +40,7 @@ import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 import { Textarea } from "@ziron/ui/components/textarea";
 import { companySchema, CompanyType } from "@ziron/validators";
 
-import { upsertCompany } from "../actions/mutations";
+import { deleteCompany, upsertCompany } from "../actions/mutations";
 
 interface CompanyFormProps {
   initialData: CompanyType;
@@ -53,12 +52,21 @@ export default function CompanyForm({
   isEditMode,
 }: CompanyFormProps) {
   const [isPending, startTransition] = useTransition();
+  const [isDeletePending, startDeleteTransition] = useTransition();
   const [uploading, setUploading] = useState(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   // const router = useRouter();
 
   const [, setCompanyModal] = useQueryStates({
     modal: parseAsString,
+  });
+  const [_, setFields] = useQueryStates({
+    id: parseAsString,
+    name: parseAsString,
+    logo: parseAsString,
+    address: parseAsString,
+    phone: parseAsString,
+    website: parseAsString,
   });
 
   const defaultValues = initialData ? { ...initialData } : {};
@@ -88,11 +96,48 @@ export default function CompanyForm({
           `Company: ${result.data?.name} has been ${isEditMode ? "Edited" : "Created"}`,
         );
         setCompanyModal({ modal: null });
+        setFields({
+          id: null,
+          name: null,
+          logo: null,
+          address: null,
+          phone: null,
+          website: null,
+        });
+        form.reset(); // This will reset the form fields to their default values
       }
 
       if (result.error) {
         toast.error(result.error);
       }
+    });
+  }
+
+  function handleDelete(id: string) {
+    startTransition(async () => {
+      const result = await deleteCompany(id);
+
+      if (result.success) {
+        toast.success(
+          `Company: ${result.data?.name} has been ${isEditMode ? "Edited" : "Created"}`,
+        );
+        setCompanyModal({ modal: null });
+        setFields({
+          id: null,
+          name: null,
+          logo: null,
+          address: null,
+          phone: null,
+          website: null,
+        });
+        form.reset(); // This will reset the form fields to their default values
+      }
+
+      if (result.error) {
+        toast.error(result.error);
+        console.error(result.details);
+      }
+      setIsDeleteLoading(false);
     });
   }
 
@@ -265,12 +310,16 @@ export default function CompanyForm({
                   <AlertDialogCancel onClick={() => setIsDeleteLoading(false)}>
                     Cancel
                   </AlertDialogCancel>
-                  <AlertDialogAction
-                    className={buttonVariants({ variant: "destructive" })}
-                    // onClick={() => deleteAction({ id: initialData.id! })}
+
+                  <Button
+                    variant={"destructive"}
+                    type="button"
+                    onClick={() => handleDelete(initialData.id ?? "")}
                   >
-                    Yes, I&apos;m sure
-                  </AlertDialogAction>
+                    <LoadingSwap isLoading={isDeletePending}>
+                      Yes, I&apos;m sure
+                    </LoadingSwap>
+                  </Button>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>

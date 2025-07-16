@@ -4,28 +4,47 @@ import { db } from "@ziron/db/client";
 import {
   COMPANY_CACHE_DURATIONS,
   COMPANY_REDIS_KEYS,
+  CompanyOrdering,
   redisCache,
 } from "./cache";
 
-export async function getCompanies() {
+export async function getCompanies(orderBy: CompanyOrdering = "name_asc") {
   try {
-    // Try Redis first
-    const cached = await redisCache.get<Company[]>(
-      COMPANY_REDIS_KEYS.COMPANIES,
-    );
+    const cacheKey = COMPANY_REDIS_KEYS.COMPANIES(orderBy);
+    const cached = await redisCache.get<Company[]>(cacheKey);
     if (cached) {
       return cached;
     }
 
-    // Fallback to database
-    const data = await db.query.companies.findMany();
+    let orderFn;
+    switch (orderBy) {
+      case "name_asc":
+        orderFn = (companies: any, { asc }: { asc: any; desc: any }) =>
+          asc(companies.name);
+        break;
+      case "name_desc":
+        orderFn = (companies: any, { desc }: { asc: any; desc: any }) =>
+          desc(companies.name);
+        break;
+      case "createdAt_asc":
+        orderFn = (companies: any, { asc }: { asc: any; desc: any }) =>
+          asc(companies.createdAt);
+        break;
+      case "createdAt_desc":
+        orderFn = (companies: any, { desc }: { asc: any; desc: any }) =>
+          desc(companies.createdAt);
+        break;
+      default:
+        orderFn = (companies: any, { asc }: { asc: any; desc: any }) =>
+          asc(companies.name);
+    }
 
-    // Cache the result
-    await redisCache.set(
-      COMPANY_REDIS_KEYS.COMPANIES,
-      data,
-      COMPANY_CACHE_DURATIONS.LONG,
-    );
+    const data = await db.query.companies.findMany({
+      where: (companies, { isNull }) => isNull(companies.deletedAt),
+      orderBy: orderFn,
+    });
+
+    await redisCache.set(cacheKey, data, COMPANY_CACHE_DURATIONS.LONG);
 
     return data;
   } catch (error) {

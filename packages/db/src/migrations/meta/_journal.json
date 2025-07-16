@@ -36,6 +36,13 @@
       "when": 1752696961744,
       "tag": "0004_pretty_annihilus",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1752701931203,
+      "tag": "0005_clear_proteus",
+      "breakpoints": true
     }
   ]
 }

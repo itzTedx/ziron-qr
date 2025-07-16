@@ -15,7 +15,7 @@ export default function CompanyFormModal() {
   const [modal, setCompanyModal] = useQueryStates({
     modal: parseAsString,
   });
-  const [fields, _] = useQueryStates({
+  const [fields, setFields] = useQueryStates({
     id: parseAsString,
     name: parseAsString,
     logo: parseAsString,
@@ -29,6 +29,14 @@ export default function CompanyFormModal() {
       open={modal.modal === "company"}
       onOpenChange={(v) => {
         if (!v) setCompanyModal({ modal: null });
+        setFields({
+          id: null,
+          name: null,
+          logo: null,
+          address: null,
+          phone: null,
+          website: null,
+        });
       }}
     >
       <DialogContent className="min-w-xl p-0">
@@ -39,6 +47,7 @@ export default function CompanyFormModal() {
         </DialogHeader>
         <CompanyForm
           initialData={{
+            id: fields.id ?? undefined,
             name: fields.name ?? "",
             address: fields.address ?? "",
             phone: fields.phone ?? "",

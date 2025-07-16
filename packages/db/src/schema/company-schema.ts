@@ -14,6 +14,7 @@ export const companies = pgTable("companies", {
   updatedAt: timestamp("updated_at")
     .defaultNow()
     .$onUpdate(() => new Date()),
+  deletedAt: timestamp("deletedAt"),
 });
 
 export type Company = InferResultType<"companies">;

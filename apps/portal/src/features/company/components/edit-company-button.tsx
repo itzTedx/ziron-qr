@@ -31,6 +31,7 @@ export default function EditCompanyButton({ initialData }: EditButtonProps) {
       onClick={() => {
         setCompanyModal({ modal: "company" });
         setFields({
+          id: initialData.id ?? "",
           name: initialData.name ?? "",
           address: initialData.address ?? "",
           phone: initialData.phone ?? "",

@@ -2,6 +2,7 @@
 
 import { createLog } from "@/lib/utils";
 
+import { eq } from "@ziron/db";
 import { db } from "@ziron/db/client";
 import { companies } from "@ziron/db/schema";
 import { companySchema, z } from "@ziron/validators";
@@ -86,6 +87,53 @@ export async function upsertCompany(formData: unknown) {
     return {
       success: false,
       error: "Failed to upsert company",
+      details: error instanceof Error ? error.message : String(error),
+    };
+  }
+}
+
+export async function deleteCompany(id: string) {
+  log.info("Received deleteCompany request", { id });
+  if (!id) {
+    log.warn("No id provided for deleteCompany");
+    return {
+      success: false,
+      error: "No company id provided",
+    };
+  }
+
+  try {
+    const deleted = await db
+      .update(companies)
+      .set({ deletedAt: new Date() })
+      .where(eq(companies.id, id))
+      .returning();
+    log.info("Company soft delete operation complete", { deleted });
+
+    if (!deleted || !deleted[0]) {
+      log.error("Delete failed, no company deleted from database.", {
+        deleted,
+      });
+      return {
+        success: false,
+        error: "Delete failed, no company deleted from database.",
+      };
+    }
+
+    // Invalidate caches
+    log.info("Invalidating company caches", { companyId: id });
+    await invalidateCompanyCaches(id);
+
+    log.info("Delete company successful", { company: deleted[0] });
+    return {
+      success: true,
+      data: deleted[0],
+    };
+  } catch (error) {
+    log.error("deleteCompany failed", { error });
+    return {
+      success: false,
+      error: "Failed to delete company",
       details: error instanceof Error ? error.message : String(error),
     };
   }

@@ -17,9 +17,18 @@ export const COMPANY_CACHE_DURATIONS = {
   VERY_LONG: 86400,
 } as const;
 
+export const COMPANY_ORDERINGS = [
+  "name_asc",
+  "name_desc",
+  "createdAt_asc",
+  "createdAt_desc",
+] as const;
+
+export type CompanyOrdering = (typeof COMPANY_ORDERINGS)[number];
+
 // Redis keys
 export const COMPANY_REDIS_KEYS = {
-  COMPANIES: "companies:all",
+  COMPANIES: (order: CompanyOrdering) => `companies:all:${order}`,
   COMPANY_BY_ID: (id: string) => `company:${id}`,
 } as const;
 
@@ -79,7 +88,9 @@ export const revalidateCompanyCaches = (companyId?: string) => {
 
 export const invalidateCompanyCaches = async (companyId?: string) => {
   revalidateCompanyCaches(companyId);
-  const keysToInvalidate: string[] = [COMPANY_REDIS_KEYS.COMPANIES];
+  const keysToInvalidate: string[] = COMPANY_ORDERINGS.map((order) =>
+    COMPANY_REDIS_KEYS.COMPANIES(order),
+  );
   if (companyId) {
     keysToInvalidate.push(COMPANY_REDIS_KEYS.COMPANY_BY_ID(companyId));
   }
