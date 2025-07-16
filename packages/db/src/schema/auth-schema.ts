@@ -10,7 +10,7 @@ import {
 
 
 
-export const rolesEnum = pgEnum("roles", ["user", "vendor", "admin", "dev"]);
+export const rolesEnum = pgEnum("roles", ["user",  "admin", "dev"]);
 
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom().notNull(),
@@ -47,6 +47,25 @@ export const sessions = pgTable("sessions", {
   impersonatedBy: text("impersonated_by"),
   activeOrganizationId: text("active_vendors_id"),
 });
+
+export const accounts = pgTable("accounts", {
+  id: uuid("id").primaryKey().defaultRandom().notNull(),
+  accountId: text("account_id").notNull(),
+  providerId: text("provider_id").notNull(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  accessToken: text("access_token"),
+  refreshToken: text("refresh_token"),
+  idToken: text("id_token"),
+  accessTokenExpiresAt: timestamp("access_token_expires_at"),
+  refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
+  scope: text("scope"),
+  password: text("password"),
+  createdAt: timestamp("created_at").notNull(),
+  updatedAt: timestamp("updated_at").notNull(),
+});
+
 
 
 export const twoFactors = pgTable("two_factors", {
