@@ -1,8 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { isAdminUser } from "@/features/auth/actions/user";
 import { getCompanies } from "@/features/company/actions/queries";
+import EditCompanyButton from "@/features/company/components/edit-company-button";
 import { IconPlus } from "@tabler/icons-react";
 
 import { Button } from "@ziron/ui/components/button";
@@ -16,7 +18,9 @@ import { cn } from "@ziron/utils";
 export default async function Page() {
   const companies = await getCompanies();
   const isAdmin = await isAdminUser();
-  console.log(companies);
+
+  if (!isAdmin) redirect("/login");
+
   return (
     <section className="mt-20 grid gap-8 px-4 py-6 md:px-12">
       {companies?.map((company, i) => (
@@ -38,16 +42,15 @@ export default async function Page() {
                 <h2 className="font-medium capitalize">{company.name}</h2>
               </div>
             </CollapsibleTrigger>
-            {isAdmin && (
-              <div className="flex gap-2">
-                {/* <EditCompanyButton initialData={company} /> */}
-                <Button size="icon" variant="outline" asChild>
-                  <Link href={`/card/new?company=${company.id}`}>
-                    <IconPlus className="size-4" />
-                  </Link>
-                </Button>
-              </div>
-            )}
+
+            <div className="flex gap-2">
+              <EditCompanyButton initialData={company} />
+              <Button size="icon" variant="outline" asChild>
+                <Link href={`/card/new?company=${company.id}`}>
+                  <IconPlus className="size-4" />
+                </Link>
+              </Button>
+            </div>
           </div>
 
           {/* Company Content */}

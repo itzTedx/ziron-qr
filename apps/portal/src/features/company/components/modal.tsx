@@ -16,8 +16,9 @@ export default function CompanyFormModal() {
     modal: parseAsString,
   });
   const [fields, _] = useQueryStates({
+    id: parseAsString,
     name: parseAsString,
-    logourl: parseAsString,
+    logo: parseAsString,
     address: parseAsString,
     phone: parseAsString,
     website: parseAsString,
@@ -42,7 +43,7 @@ export default function CompanyFormModal() {
             address: fields.address ?? "",
             phone: fields.phone ?? "",
             website: fields.website ?? "",
-            logo: fields.logourl ?? "",
+            logo: fields.logo ?? "",
           }}
           isEditMode={!!fields.name}
         />

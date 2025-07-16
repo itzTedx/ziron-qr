@@ -2,7 +2,6 @@
 
 import { useState, useTransition } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -54,11 +53,10 @@ export default function CompanyForm({
   isEditMode,
 }: CompanyFormProps) {
   const [isPending, startTransition] = useTransition();
-  //   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const router = useRouter();
+  // const router = useRouter();
 
-  const [modal, setCompanyModal] = useQueryStates({
+  const [, setCompanyModal] = useQueryStates({
     modal: parseAsString,
   });
 
@@ -68,13 +66,6 @@ export default function CompanyForm({
     resolver: zodResolver(companySchema),
     defaultValues,
   });
-
-  //     onError: (error) => {
-  //       console.log(error);
-  //       toast.error("Something went wrong.");
-  //       setLoading(false);
-  //     },
-  //   });
 
   //   const { execute: deleteAction } = useAction(deleteCompany, {
   //     onSuccess: ({ data }) => {
@@ -96,6 +87,10 @@ export default function CompanyForm({
           `Company: ${result.data?.name} has been ${isEditMode ? "Edited" : "Created"}`,
         );
         setCompanyModal({ modal: null });
+      }
+
+      if (result.error) {
+        toast.error(result.error);
       }
     });
   }
@@ -243,12 +238,12 @@ export default function CompanyForm({
             />
           </div>
         </div>
-        <DialogFooter className="gap-3">
+        <DialogFooter className="w-full gap-3">
           {isEditMode && (
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button
-                  variant="outline"
+                  variant="destructive"
                   className="gap-1.5 font-medium hover:bg-red-500 hover:text-red-100"
                 >
                   <IconTrash className="size-4" />
