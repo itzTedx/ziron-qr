@@ -43,6 +43,20 @@
       "when": 1752701931203,
       "tag": "0005_clear_proteus",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1752703678680,
+      "tag": "0006_perpetual_wild_pack",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1752704396128,
+      "tag": "0007_illegal_lester",
+      "breakpoints": true
     }
   ]
 }

@@ -3,6 +3,7 @@
 import Link from "next/link";
 
 import { IconBuildingCog, IconCards } from "@tabler/icons-react";
+import { parseAsString, useQueryStates } from "nuqs";
 
 import {
   SidebarGroup,
@@ -12,10 +13,10 @@ import {
   SidebarMenuItem,
 } from "@ziron/ui/components/sidebar";
 
-// import { useCompanyFormModal } from "@/store/use-company-form-modal";
-
 export function NavMain() {
-  // const openModal = useCompanyFormModal((state) => state.openModal);
+  const [, setCompanyModal] = useQueryStates({
+    modal: parseAsString,
+  });
   return (
     <SidebarGroup>
       <SidebarGroupLabel className="truncate">Digital Card</SidebarGroupLabel>
@@ -23,9 +24,9 @@ export function NavMain() {
         <SidebarMenuItem>
           <SidebarMenuButton
             tooltip={"Digital Card"}
-            // onClick={() => {
-            //   openModal();
-            // }}
+            onClick={() => {
+              setCompanyModal({ modal: "company" });
+            }}
           >
             <IconBuildingCog />
             <span className="text-sm font-medium">Add Company</span>
