@@ -54,6 +54,7 @@ export default function CompanyForm({
 }: CompanyFormProps) {
   const [isPending, startTransition] = useTransition();
   const [uploading, setUploading] = useState(false);
+  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   // const router = useRouter();
 
   const [, setCompanyModal] = useQueryStates({
@@ -238,16 +239,18 @@ export default function CompanyForm({
             />
           </div>
         </div>
-        <DialogFooter className="w-full gap-3">
+        <DialogFooter className="gap-3 sm:justify-start">
           {isEditMode && (
             <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button
-                  variant="destructive"
-                  className="gap-1.5 font-medium hover:bg-red-500 hover:text-red-100"
-                >
-                  <IconTrash className="size-4" />
-                  Delete
+              <AlertDialogTrigger
+                asChild
+                onClick={() => setIsDeleteLoading(true)}
+              >
+                <Button variant="destructive">
+                  <LoadingSwap isLoading={isDeleteLoading}>
+                    <IconTrash className="size-4" />
+                    Delete
+                  </LoadingSwap>
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
@@ -259,7 +262,9 @@ export default function CompanyForm({
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogCancel onClick={() => setIsDeleteLoading(false)}>
+                    Cancel
+                  </AlertDialogCancel>
                   <AlertDialogAction
                     className={buttonVariants({ variant: "destructive" })}
                     // onClick={() => deleteAction({ id: initialData.id! })}
@@ -270,7 +275,7 @@ export default function CompanyForm({
               </AlertDialogContent>
             </AlertDialog>
           )}
-          <Button type="submit" disabled={isPending}>
+          <Button type="submit" disabled={isPending} className="w-full shrink">
             <LoadingSwap
               isLoading={isPending}
               className="flex items-center justify-center gap-1.5 font-medium"
