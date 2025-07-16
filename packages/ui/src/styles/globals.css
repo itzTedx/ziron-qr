@@ -128,3 +128,19 @@
     @apply bg-background text-foreground;
   }
 }
+
+::selection {
+  background-color: var(--brand-secondary);
+  color: #fff;
+  text-shadow:
+    0 0 1px #fff,
+    0 0 1px #fff;
+}
+
+::-moz-selection {
+  background-color: var(--brand-secondary);
+  color: #fff;
+  text-shadow:
+    0 0 1px #fff,
+    0 0 1px #fff;
+}

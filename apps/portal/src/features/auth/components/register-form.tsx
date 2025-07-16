@@ -1,6 +1,5 @@
 "use client";
 
-import type { z } from "zod/v4";
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,7 +19,7 @@ import {
 import { Input } from "@ziron/ui/components/input";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 import { toast } from "@ziron/ui/components/sonner";
-import { registerUserSchema } from "@ziron/validators";
+import { registerUserSchema, RegisterUserType } from "@ziron/validators";
 
 export const RegisterForm = () => {
   const router = useRouter();
@@ -29,7 +28,7 @@ export const RegisterForm = () => {
 
   const toggleVisibility = () => setIsVisible((prevState) => !prevState);
 
-  const form = useForm<z.infer<typeof registerUserSchema>>({
+  const form = useForm<RegisterUserType>({
     resolver: zodResolver(registerUserSchema),
     defaultValues: {
       username: "",
@@ -38,7 +37,7 @@ export const RegisterForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof registerUserSchema>) {
+  function onSubmit(values: RegisterUserType) {
     startTransition(async () => {
       await authClient.signUp.email({
         email: values.email,

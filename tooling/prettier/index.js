@@ -1,5 +1,3 @@
-import { fileURLToPath } from "node:url";
-
 /** @typedef {import("prettier").Config} PrettierConfig */
 /** @typedef {import("prettier-plugin-tailwindcss").PluginOptions} TailwindConfig */
 /** @typedef {import("@ianvs/prettier-plugin-sort-imports").PluginConfig} SortImportsConfig */
@@ -17,6 +15,7 @@ const config = {
     "^(react/(.*)$)|^(react$)|^(react-native(.*)$)",
     "^(next/(.*)$)|^(next$)",
     "^(expo(.*)$)|^(expo$)",
+    "",
     "<THIRD_PARTY_MODULES>",
     "",
     "<TYPES>^@ziron",
