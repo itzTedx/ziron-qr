@@ -41,6 +41,9 @@ export async function getCompanies(orderBy: CompanyOrdering = "name_asc") {
 
     const data = await db.query.companies.findMany({
       where: (companies, { isNull }) => isNull(companies.deletedAt),
+      with: {
+        cards: true,
+      },
       orderBy: orderFn,
     });
 

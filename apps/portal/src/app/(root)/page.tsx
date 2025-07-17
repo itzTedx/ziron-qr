@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { isAdminUser } from "@/features/auth/actions/user";
+import { PersonCard } from "@/features/card/components/card-item";
 import { getCompanies } from "@/features/company/actions/queries";
 import EditCompanyButton from "@/features/company/components/edit-company-button";
 import { IconPlus } from "@tabler/icons-react";
@@ -57,7 +58,7 @@ export default async function Page() {
               "grid grid-cols-2 gap-4 pt-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5",
             )}
           >
-            {/* {!company.persons.length ? (
+            {company.cards?.length < 0 ? (
               <div className="bg-background col-span-full flex w-full flex-col items-center justify-center gap-3 rounded-md border py-9">
                 <Image
                   src="/not-available.svg"
@@ -78,26 +79,18 @@ export default async function Page() {
               </div>
             ) : (
               <>
-                {company.persons.map(async (person) => {
-                  const cover = getAbsoluteUrl(
-                    person.cover,
-                    process.env.NEXT_PUBLIC_BASE_PATH as string,
-                  );
-                  const placeholderImage = await getPlaceholder(person.image);
-                  const placeholderCover = await getPlaceholder(cover);
+                {company.cards?.map((card) => {
+                  // const cover = getAbsoluteUrl(
+                  //   person.cover,
+                  //   process.env.NEXT_PUBLIC_BASE_PATH as string,
+                  // );
+                  // const placeholderImage = await getPlaceholder(person.image);
+                  // const placeholderCover = await getPlaceholder(cover);
 
-                  return (
-                    <PersonCard
-                      key={person.id}
-                      person={{ ...person, company }}
-                      placeholderImage={placeholderImage}
-                      placeholderCover={placeholderCover}
-                      isAdmin={isAdmin}
-                    />
-                  );
+                  return <PersonCard key={card.id} card={card} />;
                 })}
               </>
-            )} */}
+            )}
           </CollapsibleContent>
         </Collapsible>
       ))}

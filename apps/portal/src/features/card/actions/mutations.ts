@@ -6,7 +6,13 @@ import { db } from "@ziron/db/client";
 import { cards, cardStyles, emails, links, phones } from "@ziron/db/schema";
 import { cardSchema, z } from "@ziron/validators";
 
-import { invalidateCardCaches } from "./cache";
+import {
+  CARD_CACHE_DURATIONS,
+  CARD_ORDERINGS,
+  CARD_REDIS_KEYS,
+  invalidateCardCaches,
+  redisCache,
+} from "./cache";
 import { upsertArray } from "./helpers";
 
 const log = createLog("Card");
@@ -148,6 +154,25 @@ export async function upsertCard(formData: unknown) {
     log.info("Invalidating card caches", { cardId: result.cardId });
     // After upserting and before returning success, invalidate card caches
     await invalidateCardCaches(result.cardId);
+
+    // Set card cache for CARD_BY_ID
+    const cardCacheKey = CARD_REDIS_KEYS.CARD_BY_ID(result.cardId);
+    log.info("Setting card cache", {
+      cardCacheKey,
+      duration: CARD_CACHE_DURATIONS.MEDIUM,
+    });
+    await redisCache.set(
+      cardCacheKey,
+      result.card[0],
+      CARD_CACHE_DURATIONS.MEDIUM,
+    );
+
+    // Optionally, update all card list caches (invalidate and repopulate)
+    for (const order of CARD_ORDERINGS) {
+      const listCacheKey = CARD_REDIS_KEYS.CARDS(order);
+      log.info("Deleting card list cache for order", { order, listCacheKey });
+      await redisCache.del(listCacheKey);
+    }
 
     log.success("upsertCard success", { card: result.card[0] });
     return {
