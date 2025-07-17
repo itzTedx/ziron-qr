@@ -22,10 +22,10 @@ import {
   SelectValue,
 } from "@ziron/ui/components/select";
 import { cn } from "@ziron/utils";
-import { EmailsType, LabelEnum, zCardSchema } from "@ziron/validators";
+import { LabelEnum, PhonesType, zCardSchema } from "@ziron/validators";
 
 interface Props {
-  data: EmailsType;
+  data: PhonesType;
 }
 
 export const PhonesField = ({ data }: Props) => {
@@ -38,9 +38,9 @@ export const PhonesField = ({ data }: Props) => {
 
   const handleAppend = useCallback(() => {
     if (data) {
-      const lastEmailField = data[fields.length - 1];
-      if (lastEmailField && !lastEmailField.email) {
-        toast.error("Please add a email before adding another.");
+      const lastPhoneField = data[fields.length - 1];
+      if (lastPhoneField && !lastPhoneField.phone) {
+        toast.error("Please add a phone number before adding another.");
         return;
       }
     }
@@ -60,7 +60,8 @@ export const PhonesField = ({ data }: Props) => {
                 </FormLabel>
                 <FormControl>
                   <PhoneInput
-                    {...field}
+                    value={field.value}
+                    onChange={field.onChange}
                     className={cn("w-full rounded-e-none border-r-0")}
                   />
                 </FormControl>

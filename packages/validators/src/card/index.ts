@@ -9,17 +9,19 @@ const appearanceSchema = z.object({
   isDarkMode: z.boolean().optional(),
 });
 
-const phonesSchema = z.array(
-  z.object({
-    id: z.string().optional(),
-    phone: z
-      .string({ message: "Invalid phone number" })
-      .min(6, { message: "Phone number too short" })
-      .max(20, { message: "Phone number too long" })
-      .optional(),
-    label: LabelEnum,
-  }),
-);
+const phonesSchema = z
+  .array(
+    z.object({
+      id: z.string().optional(),
+      phone: z
+        .string({ message: "Invalid phone number" })
+        .min(6, { message: "Phone number too short" })
+        .max(20, { message: "Phone number too long" })
+        .optional(),
+      label: LabelEnum,
+    }),
+  )
+  .optional();
 
 export type PhonesType = z.infer<typeof phonesSchema>;
 
@@ -58,7 +60,7 @@ export const cardSchema = z
     companyId: z.string(),
 
     // Contact information
-    phones: phonesSchema.optional(),
+    phones: phonesSchema,
     emails: emailsSchema,
     address: z.string().optional(),
     mapUrl: z.url().optional(),

@@ -48,6 +48,7 @@ export function PhoneInput({
 }: PhoneInputProps) {
   const autoId = useId();
   const inputId = id || autoId;
+  console.log("[PhoneInput] value:", value);
   return (
     <RPNInput.default
       className={cn("flex rounded-md shadow-xs", className)}
@@ -61,6 +62,7 @@ export function PhoneInput({
       placeholder={placeholder}
       value={value}
       onChange={(newValue) => {
+        console.log("[PhoneInput] onChange called with:", newValue);
         onChange(newValue ?? "");
       }}
       disabled={disabled}
@@ -72,17 +74,20 @@ PhoneInput.displayName = "PhoneInput";
 const PlainInput = React.forwardRef<
   HTMLInputElement,
   React.ComponentProps<typeof Input>
->(({ className, type, ...props }, ref) => (
-  <Input
-    ref={ref}
-    data-slot="phone-input"
-    className={cn(
-      "-ms-px w-full rounded-s-none rounded-e-none border-r-0 shadow-none focus-visible:z-10",
-      className,
-    )}
-    {...props}
-  />
-));
+>(({ className, type, ...props }, ref) => {
+  console.log("[PlainInput] props:", props);
+  return (
+    <Input
+      ref={ref}
+      data-slot="phone-input"
+      className={cn(
+        "-ms-px w-full rounded-s-none rounded-e-none border-r-0 shadow-none focus-visible:z-10",
+        className,
+      )}
+      {...props}
+    />
+  );
+});
 PlainInput.displayName = "PlainInput";
 
 type CountrySelectProps = {
