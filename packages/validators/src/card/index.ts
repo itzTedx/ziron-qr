@@ -2,15 +2,12 @@ import { z } from "zod/v4";
 
 export const LabelEnum = z.enum(["Primary", "Work", "Personal"]);
 
-const appearanceSchema = z
-  .object({
-    template: z.string().optional(),
-    theme: z.string().optional(),
-    btnColor: z.string().optional(),
-    isDarkMode: z.boolean().optional(),
-  })
-  .optional();
-
+const appearanceSchema = z.object({
+  template: z.string(),
+  theme: z.string().optional(),
+  btnColor: z.string().optional(),
+  isDarkMode: z.boolean().optional(),
+});
 const phonesSchema = z
   .array(
     z.object({

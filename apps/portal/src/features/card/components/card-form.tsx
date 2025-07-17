@@ -12,6 +12,7 @@ import {
 } from "@ziron/ui/components/tabs";
 import { cardSchema, zCardSchema } from "@ziron/validators";
 
+import { CardCustomize } from "./form-sections/customize";
 import { CardGeneral } from "./form-sections/general";
 import { CardLinks } from "./form-sections/links";
 import { ProfileDashboard } from "./profile-dashboard";
@@ -46,6 +47,12 @@ export function CardForm({ companies, isEditMode }: Props) {
       companyId: "",
       designation: "",
       bio: "",
+      appearance: {
+        template: "default",
+        theme: "#4938ff",
+        btnColor: "#4938ff",
+        isDarkMode: false,
+      },
     },
   });
 
@@ -96,9 +103,7 @@ export function CardForm({ companies, isEditMode }: Props) {
               <CardLinks />
             </TabsContent>
             <TabsContent value="customize">
-              <p className="text-muted-foreground p-4 text-center text-xs">
-                Content for Tab 3
-              </p>
+              <CardCustomize />
             </TabsContent>
           </Tabs>
         </div>
