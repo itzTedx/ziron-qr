@@ -13,6 +13,7 @@ import {
 import { cardSchema, zCardSchema } from "@ziron/validators";
 
 import { CardGeneral } from "./form-sections/general";
+import { CardLinks } from "./form-sections/links";
 import { ProfileDashboard } from "./profile-dashboard";
 
 interface Props {
@@ -28,9 +29,6 @@ export function CardForm({ companies, isEditMode }: Props) {
     defaultValues: {
       id: "",
       name: "",
-      bio: "",
-      designation: "",
-      companyId: "",
       emails: [
         {
           email: "",
@@ -43,6 +41,11 @@ export function CardForm({ companies, isEditMode }: Props) {
           label: "Primary",
         },
       ],
+      address: "",
+      mapUrl: "",
+      companyId: "",
+      designation: "",
+      bio: "",
     },
   });
 
@@ -90,9 +93,7 @@ export function CardForm({ companies, isEditMode }: Props) {
               <CardGeneral data={generalInfoData} />
             </TabsContent>
             <TabsContent value="links">
-              <p className="text-muted-foreground p-4 text-center text-xs">
-                Content for Tab 2
-              </p>
+              <CardLinks />
             </TabsContent>
             <TabsContent value="customize">
               <p className="text-muted-foreground p-4 text-center text-xs">

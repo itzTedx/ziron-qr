@@ -40,14 +40,6 @@ export const cards = pgTable(
       .notNull()
       .references(() => companies.id, { onDelete: "cascade" }),
 
-    // Styling and appearance
-    template: varchar("template", { length: 50 }).default("default").notNull(),
-    isDarkMode: boolean("is_dark_mode").default(false).notNull(),
-    theme: varchar("theme_color", { length: 7 }).default("#4938ff").notNull(),
-    btnColor: varchar("button_color", { length: 7 })
-      .default("#4938ff")
-      .notNull(),
-
     // Timestamps
     createdAt: timestamp("created_at", { withTimezone: true })
       .defaultNow()
@@ -61,10 +53,39 @@ export const cards = pgTable(
     index("cards_name_idx").on(table.name),
     index("cards_slug_idx").on(table.slug),
     index("cards_company_id_idx").on(table.companyId),
-    index("cards_template_idx").on(table.template),
     index("cards_created_at_idx").on(table.createdAt),
     index("cards_deleted_at_idx").on(table.deletedAt),
     uniqueIndex("cards_slug_unique_idx").on(table.slug),
+  ],
+);
+
+// New card_styles table
+export const cardStyles = pgTable(
+  "card_styles",
+  {
+    id: uuid("id").primaryKey().defaultRandom().notNull(),
+    cardId: uuid("card_id")
+      .notNull()
+      .references(() => cards.id, { onDelete: "cascade" }),
+    template: varchar("template", { length: 50 }).default("default").notNull(),
+    isDarkMode: boolean("is_dark_mode").default(false).notNull(),
+    theme: varchar("theme_color", { length: 7 }).default("#4938ff").notNull(),
+    btnColor: varchar("button_color", { length: 7 })
+      .default("#4938ff")
+      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .defaultNow()
+      .$onUpdate(() => new Date()),
+    deletedAt: timestamp("deleted_at", { withTimezone: true }),
+  },
+  (table) => [
+    index("card_styles_card_id_idx").on(table.cardId),
+    index("card_styles_template_idx").on(table.template),
+    index("card_styles_created_at_idx").on(table.createdAt),
+    index("card_styles_deleted_at_idx").on(table.deletedAt),
   ],
 );
 
@@ -163,7 +184,20 @@ export const cardsRelations = relations(cards, ({ one, many }) => ({
   links: many(links),
   emails: many(emails),
   phones: many(phones),
+  styles: one(cardStyles, {
+    fields: [cards.id],
+    references: [cardStyles.cardId],
+    relationName: "cardStyles",
+  }),
   // attachments: one(attachments),
+}));
+
+export const cardStylesRelations = relations(cardStyles, ({ one }) => ({
+  card: one(cards, {
+    fields: [cardStyles.cardId],
+    references: [cards.id],
+    relationName: "cardStylesCard",
+  }),
 }));
 
 export const cardLinksRelations = relations(links, ({ one }) => ({

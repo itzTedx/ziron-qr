@@ -81,7 +81,7 @@ export const CompanyField = ({ data: data }: Props) => {
                   variant="outline"
                   role="combobox"
                   className={cn(
-                    "border-input text-foreground w-full justify-between",
+                    "border-input text-foreground dark:bg-input/30 w-full justify-between bg-transparent",
                     !field.value && "text-muted-foreground",
                   )}
                 >
