@@ -1,5 +1,3 @@
-import { useCallback } from "react";
-
 import { IconPlus, IconX } from "@tabler/icons-react";
 import { toast } from "sonner";
 
@@ -36,7 +34,7 @@ export const EmailsField = ({ data }: Props) => {
     control: form.control,
   });
 
-  const handleAppend = useCallback(() => {
+  const handleAppend = () => {
     if (data) {
       const lastEmailField = data[fields.length - 1];
       if (lastEmailField && !lastEmailField.email) {
@@ -45,7 +43,8 @@ export const EmailsField = ({ data }: Props) => {
       }
     }
     append({ email: "", label: "Primary" });
-  }, [data, fields.length, append]);
+  };
+
   return (
     <div className="space-y-2">
       {fields.map((field, i) => (

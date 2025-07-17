@@ -31,17 +31,18 @@ import { cn } from "@ziron/utils";
 import { zCardSchema } from "@ziron/validators";
 
 interface Props {
-  companyData: Company[];
-  companyId: string;
+  data: Company[];
 }
 
-export const CompanyField = ({ companyData: data, companyId }: Props) => {
+export const CompanyField = ({ data: data }: Props) => {
   const [openPopover, setOpenPopover] = useState(false);
   const [, setCompanyModal] = useQueryStates({
     modal: parseAsString,
   });
 
   const form = useFormContext<zCardSchema>();
+
+  const companyId = form.getValues("companyId");
 
   // Memoize company lookup
   const selectedCompany = useMemo(() => {
@@ -52,7 +53,7 @@ export const CompanyField = ({ companyData: data, companyId }: Props) => {
   const handleSelect = useCallback(
     (companyId?: string) => {
       if (companyId) {
-        form.setValue("companyId", parseInt(companyId));
+        form.setValue("companyId", companyId);
         setOpenPopover(false);
       }
     },

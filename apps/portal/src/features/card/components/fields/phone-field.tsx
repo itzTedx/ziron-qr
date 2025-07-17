@@ -1,5 +1,3 @@
-import { useCallback } from "react";
-
 import { PhoneInput } from "@/components/ui/phone-input";
 import { IconPlus, IconX } from "@tabler/icons-react";
 import { toast } from "sonner";
@@ -36,7 +34,7 @@ export const PhonesField = ({ data }: Props) => {
     control: form.control,
   });
 
-  const handleAppend = useCallback(() => {
+  const handleAppend = () => {
     if (data) {
       const lastPhoneField = data[fields.length - 1];
       if (lastPhoneField && !lastPhoneField.phone) {
@@ -45,7 +43,7 @@ export const PhonesField = ({ data }: Props) => {
       }
     }
     append({ phone: "", label: "Primary" });
-  }, [data, fields.length, append]);
+  };
   return (
     <div className="space-y-2">
       {fields.map((field, i) => (
@@ -126,7 +124,7 @@ export const PhonesField = ({ data }: Props) => {
         onClick={handleAppend}
       >
         <IconPlus className="size-4" />
-        Add work or personal email
+        Add another number
       </Button>
     </div>
   );

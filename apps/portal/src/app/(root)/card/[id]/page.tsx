@@ -17,10 +17,10 @@ export default async function CardPage({ params }: { params: Params }) {
   return (
     <div>
       <CardForm
-      // data={companies}
-      // isEditMode={isEditMode}
-      // initialData={card}
-      // id={id}
+        companies={companies}
+        isEditMode={isEditMode}
+        // initialData={card}
+        // id={id}
       />
     </div>
   );

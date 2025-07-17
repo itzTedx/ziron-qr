@@ -2,6 +2,7 @@
 
 import { useQueryState } from "nuqs";
 
+import { Company } from "@ziron/db/schema";
 import { Form, useForm, zodResolver } from "@ziron/ui/components/form";
 import {
   Tabs,
@@ -14,7 +15,12 @@ import { cardSchema, zCardSchema } from "@ziron/validators";
 import { CardGeneral } from "./form-sections/general";
 import { ProfileDashboard } from "./profile-dashboard";
 
-export function CardForm() {
+interface Props {
+  companies: Company[];
+  isEditMode: boolean;
+}
+
+export function CardForm({ companies, isEditMode }: Props) {
   const [tab, setTab] = useQueryState("tab");
   const defaultTab = tab || "general";
   const form = useForm<zCardSchema>({
@@ -45,6 +51,7 @@ export function CardForm() {
   }
 
   const generalInfoData = {
+    companies,
     emails: form.getValues("emails"),
     phones: form.getValues("phones"),
   };
