@@ -26,8 +26,7 @@ import { cn } from "@ziron/utils";
 export type PhoneInputProps = {
   value?: string;
   onChange: (value: string) => void;
-  onBlur?: () => void;
-  name?: string;
+
   className?: string;
   id?: string;
   placeholder?: string;
@@ -38,8 +37,7 @@ export type PhoneInputProps = {
 export function PhoneInput({
   value,
   onChange,
-  onBlur,
-  name,
+
   className = "",
   id,
   placeholder = "Enter phone number",
@@ -62,7 +60,6 @@ export function PhoneInput({
       placeholder={placeholder}
       value={value}
       onChange={(newValue) => {
-        console.log("[PhoneInput] onChange called with:", newValue);
         onChange(newValue ?? "");
       }}
       disabled={disabled}
@@ -75,7 +72,6 @@ const PlainInput = React.forwardRef<
   HTMLInputElement,
   React.ComponentProps<typeof Input>
 >(({ className, type, ...props }, ref) => {
-  console.log("[PlainInput] props:", props);
   return (
     <Input
       ref={ref}
