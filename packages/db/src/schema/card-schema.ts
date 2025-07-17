@@ -83,6 +83,7 @@ export const cardStyles = pgTable(
   },
   (table) => [
     index("card_styles_card_id_idx").on(table.cardId),
+    uniqueIndex("card_styles_card_id_unique_idx").on(table.cardId),
     index("card_styles_template_idx").on(table.template),
     index("card_styles_created_at_idx").on(table.createdAt),
     index("card_styles_deleted_at_idx").on(table.deletedAt),

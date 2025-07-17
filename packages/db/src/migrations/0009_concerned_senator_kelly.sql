@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "card_styles_card_id_unique_idx" ON "card_styles" USING btree ("card_id");

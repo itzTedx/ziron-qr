@@ -46,7 +46,6 @@ export function PhoneInput({
 }: PhoneInputProps) {
   const autoId = useId();
   const inputId = id || autoId;
-  console.log("[PhoneInput] value:", value);
   return (
     <RPNInput.default
       className={cn("flex rounded-md shadow-xs", className)}

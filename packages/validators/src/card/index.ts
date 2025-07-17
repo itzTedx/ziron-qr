@@ -49,7 +49,7 @@ const linksSchema = z.array(
 export const cardSchema = z
   .object({
     // Core card information
-    id: z.uuid().optional(),
+    id: z.string().optional(),
     name: z
       .string()
       .min(2, { message: "Please enter full name" })

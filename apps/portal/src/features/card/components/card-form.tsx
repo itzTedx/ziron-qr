@@ -1,6 +1,11 @@
 "use client";
 
+import { useTransition } from "react";
+import { useRouter } from "next/navigation";
+
+import { validateForm } from "@/lib/utils";
 import { useQueryState } from "nuqs";
+import { toast } from "sonner";
 
 import { Company } from "@ziron/db/schema";
 import { Form, useForm, zodResolver } from "@ziron/ui/components/form";
@@ -12,6 +17,7 @@ import {
 } from "@ziron/ui/components/tabs";
 import { cardSchema, zCardSchema } from "@ziron/validators";
 
+import { upsertCard } from "../actions/mutations";
 import { CardCustomize } from "./form-sections/customize";
 import { CardGeneral } from "./form-sections/general";
 import { CardLinks } from "./form-sections/links";
@@ -23,12 +29,14 @@ interface Props {
 }
 
 export function CardForm({ companies, isEditMode }: Props) {
+  const router = useRouter();
   const [tab, setTab] = useQueryState("tab");
   const defaultTab = tab || "general";
+  const [isPending, startTransition] = useTransition();
   const form = useForm<zCardSchema>({
     resolver: zodResolver(cardSchema),
     defaultValues: {
-      id: "",
+      id: undefined,
       name: "",
       emails: [
         {
@@ -56,8 +64,24 @@ export function CardForm({ companies, isEditMode }: Props) {
     },
   });
 
+  const formdata = form.watch();
+  const validation = validateForm(formdata, cardSchema);
+
+  console.log(validation);
+
   function onSubmit(values: zCardSchema) {
-    console.log(values);
+    startTransition(async () => {
+      const result = await upsertCard(values);
+      if (result.success) {
+        toast.success(
+          `Card: ${result.data?.name} has been ${isEditMode ? "Edited" : "Created"}`,
+        );
+        router.push("/");
+      }
+      if (result.error) {
+        toast.error(result.error);
+      }
+    });
   }
 
   const generalInfoData = {
@@ -69,7 +93,7 @@ export function CardForm({ companies, isEditMode }: Props) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <ProfileDashboard />
+        <ProfileDashboard isPending={isPending} />
         <div className="mx-auto grid max-w-7xl grid-cols-3 gap-4">
           <Tabs
             defaultValue={defaultTab}

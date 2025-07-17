@@ -12,8 +12,13 @@ import {
 import { Icons } from "@ziron/ui/assets/icons";
 import { Badge } from "@ziron/ui/components/badge";
 import { Button } from "@ziron/ui/components/button";
+import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 
-export const ProfileDashboard = () => {
+interface Props {
+  isPending: boolean;
+}
+
+export const ProfileDashboard = ({ isPending }: Props) => {
   const serverAction = async () => {
     // Simulate a server action
     await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -149,7 +154,7 @@ export const ProfileDashboard = () => {
             </ActionButton>
 
             <Button type="submit" size="lg">
-              Save Changes
+              <LoadingSwap isLoading={isPending}>Save Changes</LoadingSwap>
             </Button>
           </div>
         </div>
