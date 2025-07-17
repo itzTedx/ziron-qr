@@ -1,4 +1,4 @@
-import CardForm from "@/features/card/components/card-form";
+import { CardForm } from "@/features/card/components/card-form";
 import { getCompanies } from "@/features/company/actions/queries";
 
 type Params = Promise<{ id: string }>;
@@ -17,10 +17,10 @@ export default async function CardPage({ params }: { params: Params }) {
   return (
     <div>
       <CardForm
-        data={companies}
-        isEditMode={isEditMode}
-        // initialData={card}
-        id={id}
+      // data={companies}
+      // isEditMode={isEditMode}
+      // initialData={card}
+      // id={id}
       />
     </div>
   );
