@@ -7,6 +7,7 @@ import type { ControllerProps, FieldPath, FieldValues } from 'react-hook-form'
 import {
   Controller,
   FormProvider,
+  useFieldArray,
   useForm,
   useFormContext,
   useFormState,
@@ -14,7 +15,6 @@ import {
 
 import { Label } from '@ziron/ui/components/label'
 import { cn } from '@ziron/utils'
-
 const Form = FormProvider
 
 type FormFieldContextValue<
@@ -164,7 +164,9 @@ export {
   FormItem,
   FormLabel,
   FormMessage,
+  useFieldArray,
   useForm,
+  useFormContext,
   useFormField,
   zodResolver,
 }

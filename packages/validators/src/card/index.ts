@@ -21,13 +21,19 @@ const phonesSchema = z.array(
   }),
 );
 
-const emailsSchema = z.array(
-  z.object({
-    id: z.string().optional(),
-    email: z.email({ message: "Invalid email address" }).optional(),
-    label: LabelEnum,
-  }),
-);
+export type PhonesType = z.infer<typeof phonesSchema>;
+
+const emailsSchema = z
+  .array(
+    z.object({
+      id: z.string().optional(),
+      email: z.email({ message: "Invalid email address" }).optional(),
+      label: LabelEnum,
+    }),
+  )
+  .optional();
+
+export type EmailsType = z.infer<typeof emailsSchema>;
 
 const linksSchema = z.array(
   z.object({
@@ -53,7 +59,7 @@ export const cardSchema = z
 
     // Contact information
     phones: phonesSchema.optional(),
-    emails: emailsSchema.optional(),
+    emails: emailsSchema,
     address: z.string().optional(),
     mapUrl: z.url().optional(),
 

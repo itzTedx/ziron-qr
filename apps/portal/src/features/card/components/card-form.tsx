@@ -2,17 +2,7 @@
 
 import { useQueryState } from "nuqs";
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  useForm,
-  zodResolver,
-} from "@ziron/ui/components/form";
-import { Input } from "@ziron/ui/components/input";
+import { Form, useForm, zodResolver } from "@ziron/ui/components/form";
 import {
   Tabs,
   TabsContent,
@@ -21,6 +11,7 @@ import {
 } from "@ziron/ui/components/tabs";
 import { cardSchema, zCardSchema } from "@ziron/validators";
 
+import { CardGeneral } from "./form-sections/general";
 import { ProfileDashboard } from "./profile-dashboard";
 
 export function CardForm() {
@@ -34,12 +25,29 @@ export function CardForm() {
       bio: "",
       designation: "",
       companyId: "",
+      emails: [
+        {
+          email: "",
+          label: "Primary",
+        },
+      ],
+      phones: [
+        {
+          phone: "",
+          label: "Primary",
+        },
+      ],
     },
   });
 
   function onSubmit(values: zCardSchema) {
     console.log(values);
   }
+
+  const generalInfoData = {
+    emails: form.getValues("emails"),
+    phones: form.getValues("phones"),
+  };
 
   return (
     <Form {...form}>
@@ -72,20 +80,7 @@ export function CardForm() {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="general">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Full Name" {...field} />
-                    </FormControl>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <CardGeneral data={generalInfoData} />
             </TabsContent>
             <TabsContent value="links">
               <p className="text-muted-foreground p-4 text-center text-xs">

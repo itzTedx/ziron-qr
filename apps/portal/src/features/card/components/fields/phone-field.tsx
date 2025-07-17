@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 
+import { PhoneInput } from "@/components/ui/phone-input";
 import { IconPlus, IconX } from "@tabler/icons-react";
 import { toast } from "sonner";
 
@@ -13,7 +14,6 @@ import {
   useFieldArray,
   useFormContext,
 } from "@ziron/ui/components/form";
-import { Input } from "@ziron/ui/components/input";
 import {
   Select,
   SelectContent,
@@ -28,11 +28,11 @@ interface Props {
   data: EmailsType;
 }
 
-export const EmailsField = ({ data }: Props) => {
+export const PhonesField = ({ data }: Props) => {
   const form = useFormContext<zCardSchema>();
 
   const { fields, append, remove } = useFieldArray({
-    name: "emails",
+    name: "phones",
     control: form.control,
   });
 
@@ -44,7 +44,7 @@ export const EmailsField = ({ data }: Props) => {
         return;
       }
     }
-    append({ email: "", label: "Primary" });
+    append({ phone: "", label: "Primary" });
   }, [data, fields.length, append]);
   return (
     <div className="space-y-2">
@@ -52,17 +52,16 @@ export const EmailsField = ({ data }: Props) => {
         <div className="flex w-full items-end" key={field.id}>
           <FormField
             control={form.control}
-            name={`emails.${i}.email`}
+            name={`phones.${i}.phone`}
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel className={cn(i !== 0 && "sr-only")}>
-                  Email
+                  Phone
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="name@company.com"
-                    className={cn("w-full rounded-e-none border-r-0")}
+                  <PhoneInput
                     {...field}
+                    className={cn("w-full rounded-e-none border-r-0")}
                   />
                 </FormControl>
 
@@ -75,7 +74,7 @@ export const EmailsField = ({ data }: Props) => {
             name={`emails.${i}.label`}
             render={({ field }) => (
               <FormItem>
-                <FormLabel className={"sr-only"}>Email Label</FormLabel>
+                <FormLabel className={"sr-only"}>Phone Label</FormLabel>
 
                 <Select
                   onValueChange={field.onChange}
