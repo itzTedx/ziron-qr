@@ -1,19 +1,19 @@
+import PhoneMockup from "@/components/ui/phone-mockup";
+import { ResponsiveModal } from "@/components/ui/responsive-modal";
 import { IconArrowsMaximize } from "@tabler/icons-react";
 
-import CardTemplate from "@/components/features/templates/card-template";
-import DefaultTemplate from "@/components/features/templates/default-template";
-import ModernTemplate from "@/components/features/templates/modern-template";
-import PhoneMockup from "@/components/phone-mockup";
-import { ResponsiveModal } from "@/components/responsive-modal";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
-import { Company, Person } from "@/types";
+import { CardType, Company } from "@ziron/db/schema";
+import { Card, CardContent, CardHeader } from "@ziron/ui/components/card";
+import { ScrollArea } from "@ziron/ui/components/scroll-area";
+import CardTemplate from "@ziron/ui/templates/card-template";
+import DefaultTemplate from "@ziron/ui/templates/default-template";
+import ModernTemplate from "@ziron/ui/templates/modern-template";
+import { cn } from "@ziron/utils";
 
 interface Props {
   isOpen: boolean;
   closeModal: () => void;
-  cardData: Person;
+  cardData: CardType;
   company: Company[];
 }
 
@@ -24,7 +24,7 @@ export const Preview = ({
   company: data,
 }: Props) => {
   return (
-    <Card className="sticky top-24 col-span-4 hidden h-fit rounded-lg bg-background @container md:block">
+    <Card className="bg-background @container sticky top-24 col-span-4 hidden h-fit rounded-lg md:block">
       <CardHeader className="flex-row items-center justify-between border-b py-4">
         <h5>Preview</h5>
         <ResponsiveModal
@@ -37,12 +37,12 @@ export const Preview = ({
           <CardContent
             className={cn(
               "relative p-0",
-              cardData.isDarkMode ? "dark" : "light"
+              cardData.styles.isDarkMode ? "dark" : "light",
             )}
           >
             <ScrollArea className="h-[640px]">
               {(() => {
-                switch (cardData.template) {
+                switch (cardData.styles.template) {
                   case "default":
                     return <DefaultTemplate card={cardData} company={data} />;
                   case "modern":
@@ -63,7 +63,7 @@ export const Preview = ({
         <PhoneMockup>
           <ScrollArea className="h-full">
             {(() => {
-              switch (cardData.template) {
+              switch (cardData.styles.template) {
                 case "default":
                   return <DefaultTemplate card={cardData} company={data} />;
                 case "modern":

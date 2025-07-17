@@ -1,3 +1,4 @@
+import { getCardById } from "@/features/card/actions/queries";
 import { CardForm } from "@/features/card/components/card-form";
 import { getCompanies } from "@/features/company/actions/queries";
 
@@ -8,7 +9,7 @@ export default async function CardPage({ params }: { params: Params }) {
   const companies = await getCompanies();
 
   // Fetching the card based on the ID
-  // const { card } = await getCardById(params.id);
+  const card = await getCardById(id);
 
   if (!companies) return null;
 
@@ -19,8 +20,7 @@ export default async function CardPage({ params }: { params: Params }) {
       <CardForm
         companies={companies}
         isEditMode={isEditMode}
-        // initialData={card}
-        // id={id}
+        initialData={card}
       />
     </div>
   );

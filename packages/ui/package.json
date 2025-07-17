@@ -44,6 +44,7 @@
     "./postcss.config": "./postcss.config.mjs",
     "./components/*": "./src/components/*.tsx",
     "./assets/*": "./src/assets/*.tsx",
-    "./hooks/*": "./src/hooks/*.ts"
+    "./hooks/*": "./src/hooks/*.ts",
+    "./templates/*": "./src/templates/*.tsx"
   }
 }

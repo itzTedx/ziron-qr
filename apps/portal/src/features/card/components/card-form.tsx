@@ -7,7 +7,7 @@ import { validateForm } from "@/lib/utils";
 import { useQueryState } from "nuqs";
 import { toast } from "sonner";
 
-import { Company } from "@ziron/db/schema";
+import { CardType, Company } from "@ziron/db/schema";
 import { Form, useForm, zodResolver } from "@ziron/ui/components/form";
 import {
   Tabs,
@@ -26,9 +26,10 @@ import { ProfileDashboard } from "./profile-dashboard";
 interface Props {
   companies: Company[];
   isEditMode: boolean;
+  initialData?: CardType;
 }
 
-export function CardForm({ companies, isEditMode }: Props) {
+export function CardForm({ companies, isEditMode, initialData }: Props) {
   const router = useRouter();
   const [tab, setTab] = useQueryState("tab");
   const defaultTab = tab || "general";
@@ -36,30 +37,34 @@ export function CardForm({ companies, isEditMode }: Props) {
   const form = useForm<zCardSchema>({
     resolver: zodResolver(cardSchema),
     defaultValues: {
-      id: undefined,
-      name: "",
-      emails: [
-        {
-          email: "",
-          label: "Primary",
-        },
-      ],
+      id: initialData?.id ?? undefined,
+      name: initialData?.name ?? "",
+      emails: initialData?.emails.map((email) => ({
+        id: email.id,
+        email: email.email ?? undefined,
+        label:
+          email.label === "Primary" ||
+          email.label === "Work" ||
+          email.label === "Personal"
+            ? email.label
+            : "Primary",
+      })),
       phones: [
         {
           phone: "",
           label: "Primary",
         },
       ],
-      address: "",
-      mapUrl: "",
-      companyId: "",
-      designation: "",
-      bio: "",
+      address: initialData?.address ?? "",
+      mapUrl: initialData?.mapUrl ?? "",
+      companyId: initialData?.companyId ?? "",
+      designation: initialData?.designation ?? "",
+      bio: initialData?.bio ?? "",
       appearance: {
-        template: "default",
-        theme: "#4938ff",
-        btnColor: "#4938ff",
-        isDarkMode: false,
+        template: initialData?.styles?.template ?? "default",
+        theme: initialData?.styles?.theme ?? "#4938ff",
+        btnColor: initialData?.styles?.btnColor ?? "#4938ff",
+        isDarkMode: initialData?.styles?.isDarkMode ?? false,
       },
     },
   });
@@ -130,6 +135,7 @@ export function CardForm({ companies, isEditMode }: Props) {
               <CardCustomize />
             </TabsContent>
           </Tabs>
+          {/* <Preview /> */}
         </div>
       </form>
     </Form>

@@ -57,3 +57,33 @@ export async function getCards(orderBy: CardOrdering = "name_asc") {
     console.log(error);
   }
 }
+
+export async function getCardById(cardId: string) {
+  try {
+    const cacheKey = CARD_REDIS_KEYS.CARD_BY_ID(cardId);
+    const cached = await redisCache.get<CardType>(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
+    const data = await db.query.cards.findFirst({
+      where: (cards, { eq, isNull }) =>
+        eq(cards.id, cardId) && isNull(cards.deletedAt),
+      with: {
+        emails: true,
+        phones: true,
+        company: true,
+        links: true,
+        styles: true,
+      },
+    });
+
+    if (data) {
+      await redisCache.set(cacheKey, data, CARD_CACHE_DURATIONS.LONG);
+    }
+
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}

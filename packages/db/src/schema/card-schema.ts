@@ -232,5 +232,6 @@ export type CardType = InferResultType<
     phones: true;
     company: true;
     links: true;
+    styles: true;
   }
 >;
