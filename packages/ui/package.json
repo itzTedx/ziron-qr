@@ -33,6 +33,7 @@
     "@types/node": "^20",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
+    "@ziron/db": "workspace:*",
     "@ziron/eslint-config": "workspace:*",
     "@ziron/typescript-config": "workspace:*",
     "@ziron/utils": "workspace:*",

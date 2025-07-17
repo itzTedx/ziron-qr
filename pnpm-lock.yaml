@@ -27,7 +27,7 @@ catalogs:
       version: 19.1.8
     '@types/react-dom':
       specifier: ^19.1.5
-      version: 19.1.6
+      version: 19.0.4
     react:
       specifier: 19.0.0
       version: 19.0.0
@@ -366,6 +366,9 @@ importers:
       '@types/react-dom':
         specifier: catalog:react19
         version: 19.0.4(@types/react@19.0.10)
+      '@ziron/db':
+        specifier: workspace:*
+        version: link:../db
       '@ziron/eslint-config':
         specifier: workspace:*
         version: link:../../tooling/eslint-config

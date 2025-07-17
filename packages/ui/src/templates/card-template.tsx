@@ -1,23 +1,20 @@
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image'
+import Link from 'next/link'
 
 import {
   IconBuildingSkyscraper,
   IconMail,
   IconPhone,
   IconPinned,
-} from "@tabler/icons-react";
-
-import SaveContactButton from "@/components/save-contact-button";
-import getTextColorByBackground from "@/lib/get-brightness-by-color";
-import { cn } from "@/lib/utils";
-import { Company, Person } from "@/types";
-import { removeExtension } from "@/utils/remove-extension";
+} from '@tabler/icons-react'
+import { CardType, Company } from '@ziron/db/schema'
+import { cn, getTextColorByBackground, removeExtension } from '@ziron/utils'
+import SaveContactButton from '../components/save-contact-button'
 
 interface TemplateProps {
-  card?: Person;
-  company?: Company[];
-  imageBase64URI?: string;
+  card?: CardType
+  company?: Company[]
+  imageBase64URI?: string
 }
 
 export default function CardTemplate({
@@ -25,31 +22,33 @@ export default function CardTemplate({
   company,
   imageBase64URI,
 }: TemplateProps) {
-  if (!card) return null;
+  if (!card) return null
 
-  const companyData = company?.find((c) => c.id === card.companyId);
+  const companyData = company?.find((c) => c.id === card.companyId)
 
-  const textColor = getTextColorByBackground(card.theme || "#4938ff");
-  const btnTextColor = getTextColorByBackground(card.btnColor || "#4938ff");
+  const textColor = getTextColorByBackground(card.styles?.theme || '#4938ff')
+  const btnTextColor = getTextColorByBackground(
+    card.styles?.btnColor || '#4938ff'
+  )
 
-  const theme = card.theme || "#4938ff";
-  const btnColor = card.btnColor || "#4938ff";
+  const theme = card.styles?.theme || '#4938ff'
+  const btnColor = card.styles?.btnColor || '#4938ff'
 
   return (
     <div className="relative flex h-full w-full flex-col justify-between @sm:max-h-[700px]">
       <div
         className={cn(
-          "no-scrollbar pb-6",
-          card.isDarkMode
-            ? "dark bg-background text-foreground"
-            : "bg-white text-black"
+          'no-scrollbar pb-6',
+          card.styles?.isDarkMode
+            ? 'dark bg-background text-foreground'
+            : 'bg-white text-black'
         )}
       >
         <header className="w-full">
           <div className="relative w-full">
             <div className="relative h-40">
               <Image
-                src={card.cover ? card.cover : "/images/placeholder-cover.jpg"}
+                src={card.cover ? card.cover : '/images/placeholder-cover.jpg'}
                 alt={`${card.name}'s cover`}
                 className="object-cover"
                 sizes="100vw"
@@ -125,7 +124,7 @@ export default function CardTemplate({
           </div>
           <section
             className={cn(
-              "mt-12 flex flex-col items-center gap-y-3 px-6 py-4 @sm:mt-24"
+              'mt-12 flex flex-col items-center gap-y-3 px-6 py-4 @sm:mt-24'
             )}
           >
             {card.links && card.links.length > 0 && (
@@ -134,7 +133,7 @@ export default function CardTemplate({
                   <LinkBox
                     color={theme}
                     key={`${index}-${link.label}-${link.url}`}
-                    href={link.url || "#"}
+                    href={link.url || '#'}
                   >
                     <div className="relative size-7 flex-shrink-0 @sm:size-9">
                       <Image src={link.icon} fill alt="" sizes="10vw" />
@@ -175,7 +174,7 @@ export default function CardTemplate({
                   href={
                     card.company && card.company.website
                       ? card.company.website
-                      : "#"
+                      : '#'
                   }
                   target="_blank"
                   className="flex items-center gap-2 text-sm @sm:text-base"
@@ -222,7 +221,7 @@ export default function CardTemplate({
         )}
       </div>
     </div>
-  );
+  )
 }
 
 const LinkBox = ({
@@ -231,10 +230,10 @@ const LinkBox = ({
   color,
   children,
 }: {
-  href: string;
-  download?: boolean;
-  color: string;
-  children: React.ReactNode;
+  href: string
+  download?: boolean
+  color: string
+  children: React.ReactNode
 }) => {
   return (
     <Link
@@ -246,5 +245,5 @@ const LinkBox = ({
     >
       {children}
     </Link>
-  );
-};
+  )
+}

@@ -21,6 +21,7 @@ import { upsertCard } from "../actions/mutations";
 import { CardCustomize } from "./form-sections/customize";
 import { CardGeneral } from "./form-sections/general";
 import { CardLinks } from "./form-sections/links";
+import { Preview } from "./preview";
 import { ProfileDashboard } from "./profile-dashboard";
 
 interface Props {
@@ -139,7 +140,7 @@ export function CardForm({ companies, isEditMode, initialData }: Props) {
               <CardCustomize />
             </TabsContent>
           </Tabs>
-          {/* <Preview /> */}
+          <Preview companies={companies} />
         </div>
       </form>
     </Form>

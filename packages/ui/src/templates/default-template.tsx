@@ -1,24 +1,21 @@
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image'
+import Link from 'next/link'
 
 import {
   IconBuildingSkyscraper,
   IconMail,
   IconPhone,
   IconPinned,
-} from "@tabler/icons-react";
-
-import { Icons } from "@/components/assets/icons";
-import SaveContactButton from "@/components/save-contact-button";
-import getTextColorByBackground from "@/lib/get-brightness-by-color";
-import { cn } from "@/lib/utils";
-import { Company, Person } from "@/types";
-import { removeExtension } from "@/utils/remove-extension";
+} from '@tabler/icons-react'
+import { CardType, Company } from '@ziron/db/schema'
+import { cn, getTextColorByBackground, removeExtension } from '@ziron/utils'
+import { Icons } from '../assets/icons'
+import SaveContactButton from '../components/save-contact-button'
 
 interface TemplateProps {
-  card?: Person;
-  company?: Company[];
-  imageBase64URI?: string;
+  card?: CardType
+  company?: Company[]
+  imageBase64URI?: string
 }
 
 export default function DefaultTemplate({
@@ -26,23 +23,23 @@ export default function DefaultTemplate({
   company,
   imageBase64URI,
 }: TemplateProps) {
-  if (!card) return null;
+  if (!card) return null
 
-  const companyData = company?.find((c) => c.id === card.companyId);
+  const companyData = company?.find((c) => c.id === card.companyId)
 
-  const textColor = getTextColorByBackground(card.btnColor || "#4938ff");
+  const textColor = getTextColorByBackground(card.styles?.btnColor || '#4938ff')
 
-  const theme = card.theme || "#4938ff";
+  const theme = card.styles?.theme || '#4938ff'
 
-  console.log("isDarkMode", card.isDarkMode);
+  console.log('isDarkMode', card.styles?.isDarkMode)
 
   return (
     <div
       className={cn(
-        "relative flex h-full w-full flex-col justify-between",
-        card.isDarkMode
-          ? "dark bg-background text-foreground"
-          : "bg-white text-black"
+        'relative flex h-full w-full flex-col justify-between',
+        card.styles?.isDarkMode
+          ? 'dark bg-background text-foreground'
+          : 'bg-white text-black'
       )}
     >
       <div className="no-scrollbar">
@@ -51,7 +48,7 @@ export default function DefaultTemplate({
             <div className="flex h-24 w-full items-start justify-center pt-4 @sm:h-36">
               {card.cover && (
                 <Image
-                  src={`${card.cover ? card.cover : "/images/placeholder-cover.jpg"}`}
+                  src={`${card.cover ? card.cover : '/images/placeholder-cover.jpg'}`}
                   fill
                   alt="cover"
                   className="object-cover"
@@ -85,8 +82,8 @@ export default function DefaultTemplate({
           </div>
           <section
             className={cn(
-              "space-y-0.5 px-8 py-4 text-center",
-              card.image ? "mt-8 @sm:mt-12" : ""
+              'space-y-0.5 px-8 py-4 text-center',
+              card.image ? 'mt-8 @sm:mt-12' : ''
             )}
           >
             {card.name && (
@@ -113,7 +110,7 @@ export default function DefaultTemplate({
                   href={
                     card.company && card.company.website
                       ? card.company.website
-                      : "#"
+                      : '#'
                   }
                   target="_blank"
                   className="flex items-center gap-2 text-sm @sm:text-base"
@@ -123,7 +120,7 @@ export default function DefaultTemplate({
                 </Link>
               ) : null}
               {card.emails &&
-                card.emails[0].email &&
+                card.emails[0]?.email &&
                 card.emails.map((email, i) => (
                   <Link
                     key={`${i + 1}-${email.email}`}
@@ -135,8 +132,8 @@ export default function DefaultTemplate({
                   </Link>
                 ))}
               {card.phones &&
-                card.phones[0].phone &&
-                card.phones.map((phone, i) => (
+                card.phones[0]?.phone &&
+                card?.phones.map((phone, i) => (
                   <Link
                     key={`${i + 1}-${phone.phone}`}
                     href={`tel:${phone.phone}`}
@@ -149,7 +146,7 @@ export default function DefaultTemplate({
 
               {card.address && (
                 <Link
-                  href={card.mapUrl ?? "#"}
+                  href={card.mapUrl ?? '#'}
                   className="flex items-start gap-2 text-sm @sm:text-base"
                 >
                   <IconPinned className="mt-1.5 size-4 flex-shrink-0 stroke-[1.5] @sm:size-5" />
@@ -166,7 +163,7 @@ export default function DefaultTemplate({
               {card.links.map((link, index) => (
                 <Link
                   key={`${index}-${link.url}`}
-                  href={link.url || "#"}
+                  href={link.url || '#'}
                   target="_blank"
                   className="flex items-center gap-2 rounded-md border p-3 text-sm @sm:text-base"
                 >
@@ -203,8 +200,8 @@ export default function DefaultTemplate({
       </div>
       <div
         className={cn(
-          "sticky bottom-0 mt-auto h-20 w-full max-w-screen-sm p-4",
-          card.isDarkMode ? "bg-background" : "bg-white"
+          'sticky bottom-0 mt-auto h-20 w-full max-w-screen-sm p-4',
+          card.styles?.isDarkMode ? 'bg-background' : 'bg-white'
         )}
       >
         <SaveContactButton
@@ -217,5 +214,5 @@ export default function DefaultTemplate({
         />
       </div>
     </div>
-  );
+  )
 }

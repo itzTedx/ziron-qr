@@ -1,19 +1,17 @@
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image'
+import Link from 'next/link'
 
-import { IconMail, IconPhone, IconPinned } from "@tabler/icons-react";
+import { IconMail, IconPhone, IconPinned } from '@tabler/icons-react'
 
-import { Icons } from "@/components/assets/icons";
-import SaveContactButton from "@/components/save-contact-button";
-import getTextColorByBackground from "@/lib/get-brightness-by-color";
-import { cn } from "@/lib/utils";
-import { Company, Person } from "@/types";
-import { removeExtension } from "@/utils/remove-extension";
+import { CardType, Company } from '@ziron/db/schema'
+import { cn, getTextColorByBackground, removeExtension } from '@ziron/utils'
+import { Icons } from '../assets/icons'
+import SaveContactButton from '../components/save-contact-button'
 
 interface TemplateProps {
-  card?: Person;
-  company?: Company[];
-  imageBase64URI?: string;
+  card?: CardType
+  company?: Company[]
+  imageBase64URI?: string
 }
 
 export default function ModernTemplate({
@@ -21,22 +19,22 @@ export default function ModernTemplate({
   company,
   imageBase64URI,
 }: TemplateProps) {
-  if (!card) return null;
+  if (!card) return null
 
-  const companyData = company?.find((c) => c.id === card.companyId);
+  const companyData = company?.find((c) => c.id === card.companyId)
 
-  const textColor = getTextColorByBackground(card.btnColor || "#4938ff");
+  const textColor = getTextColorByBackground(card.styles.btnColor || '#4938ff')
 
-  const theme = card.theme || "#4938ff";
-  const btnColor = card.btnColor || "#4938ff";
+  const theme = card.styles.theme || '#4938ff'
+  const btnColor = card.styles.btnColor || '#4938ff'
   return (
     <div className="relative flex h-full w-full flex-col justify-between @sm:h-dvh">
       <div
         className={cn(
-          "no-scrollbar md:overflow-y-scroll",
-          card.isDarkMode
-            ? "dark bg-background text-foreground"
-            : "bg-white text-black"
+          'no-scrollbar md:overflow-y-scroll',
+          card.styles.isDarkMode
+            ? 'dark bg-background text-foreground'
+            : 'bg-white text-black'
         )}
       >
         <header className="mb-9 w-full">
@@ -44,16 +42,16 @@ export default function ModernTemplate({
             <section
               className="relative bg-primary"
               style={{
-                aspectRatio: "16/9",
+                aspectRatio: '16/9',
 
                 maskImage:
                   "url(\"data:image/svg+xml,%3Csvg width='445' height='218' viewBox='0 0 445 218' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M222.5 179.725C80.8333 179.725 0 218 0 218V0H445V218C445 218 364.167 179.725 222.5 179.725Z' fill='%234A3AFF'/%3E%3C/svg%3E\")",
                 WebkitMaskImage:
                   "url(\"data:image/svg+xml,%3Csvg width='445' height='218' viewBox='0 0 445 218' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M222.5 179.725C80.8333 179.725 0 218 0 218V0H445V218C445 218 364.167 179.725 222.5 179.725Z' fill='%234A3AFF'/%3E%3C/svg%3E\")",
-                maskRepeat: "no-repeat",
-                WebkitMaskRepeat: "no-repeat",
-                maskSize: "contain",
-                WebkitMaskSize: "contain",
+                maskRepeat: 'no-repeat',
+                WebkitMaskRepeat: 'no-repeat',
+                maskSize: 'contain',
+                WebkitMaskSize: 'contain',
               }}
             >
               <div className="absolute top-3 z-50 flex h-24 w-full items-start justify-center bg-cover bg-center bg-no-repeat pt-4 @sm:h-32">
@@ -93,7 +91,7 @@ export default function ModernTemplate({
             )}
           </div>
 
-          <section className={cn("space-y-0.5 px-8 py-4 text-center")}>
+          <section className={cn('space-y-0.5 px-8 py-4 text-center')}>
             {card.name && (
               <h1 className="text-xl font-bold @sm:text-2xl">{card.name}</h1>
             )}
@@ -117,7 +115,7 @@ export default function ModernTemplate({
           <section className="mt-4 flex w-full flex-col space-y-3 px-8">
             {card.phones && (
               <Link
-                href={`tel:${card.phones[0].phone}`}
+                href={`tel:${card.phones[0]?.phone}`}
                 className="flex h-10 w-full items-center justify-center rounded-full border-2 border-primary px-6 text-center font-semibold text-primary @sm:h-12"
                 style={{
                   color: theme,
@@ -185,7 +183,7 @@ export default function ModernTemplate({
                 <LinkBox
                   color={theme}
                   key={`${index}-${link.label}-${link.url}`}
-                  href={link.url || "#"}
+                  href={link.url || '#'}
                 >
                   <div className="relative size-9 flex-shrink-0 @sm:size-16">
                     <Image src={link.icon} fill alt="" sizes="10vw" />
@@ -207,7 +205,7 @@ export default function ModernTemplate({
         )}
       </div>
     </div>
-  );
+  )
 }
 
 const LinkBox = ({
@@ -216,10 +214,10 @@ const LinkBox = ({
   color,
   children,
 }: {
-  href: string;
-  download?: boolean;
-  color: string;
-  children: React.ReactNode;
+  href: string
+  download?: boolean
+  color: string
+  children: React.ReactNode
 }) => {
   return (
     <Link
@@ -231,5 +229,5 @@ const LinkBox = ({
     >
       {children}
     </Link>
-  );
-};
+  )
+}
