@@ -40,7 +40,7 @@ export function CardForm({ companies, isEditMode, initialData }: Props) {
       id: initialData?.id ?? undefined,
       name: initialData?.name ?? "",
       emails: initialData?.emails.map((email) => ({
-        id: email.id,
+        id: email.id ?? undefined,
         email: email.email ?? undefined,
         label:
           email.label === "Primary" ||
@@ -49,12 +49,16 @@ export function CardForm({ companies, isEditMode, initialData }: Props) {
             ? email.label
             : "Primary",
       })),
-      phones: [
-        {
-          phone: "",
-          label: "Primary",
-        },
-      ],
+      phones: initialData?.phones.map((phone) => ({
+        id: phone.id ?? undefined,
+        phone: phone.phone ?? undefined,
+        label:
+          phone.label === "Primary" ||
+          phone.label === "Work" ||
+          phone.label === "Personal"
+            ? phone.label
+            : "Primary",
+      })),
       address: initialData?.address ?? "",
       mapUrl: initialData?.mapUrl ?? "",
       companyId: initialData?.companyId ?? "",
