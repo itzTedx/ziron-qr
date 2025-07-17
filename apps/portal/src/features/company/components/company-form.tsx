@@ -76,17 +76,6 @@ export default function CompanyForm({
     defaultValues,
   });
 
-  //   const { execute: deleteAction } = useAction(deleteCompany, {
-  //     onSuccess: ({ data }) => {
-  //       if (data?.success) {
-  //         router.push("/");
-  //         toast.success(data.success);
-  //         closeModal();
-  //       }
-  //       if (data?.error) toast.error(data.error);
-  //     },
-  //   });
-
   function onSubmit(values: CompanyType) {
     startTransition(async () => {
       const result = await upsertCompany(values);

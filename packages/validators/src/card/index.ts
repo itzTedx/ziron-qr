@@ -10,7 +10,7 @@ export const cardSchema = z
       .max(256, { message: "Name is too long" }),
     bio: z.string().optional(),
     designation: z.string().optional(),
-    companyId: z.number(),
+    companyId: z.string(),
 
     // Contact information
     phones: z

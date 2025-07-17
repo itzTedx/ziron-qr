@@ -1,14 +1,17 @@
 "use client";
 
-import { memo, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
+import { InfoTooltip, SimpleTooltipContent } from "@/components/ui/tooltip";
 import { useDebounce } from "@/hooks/debounce";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { IconTrash } from "@tabler/icons-react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
-import { CardType, Company } from "@ziron/db/schema";
+import type { CardType } from "@ziron/db/schema";
+import { Company } from "@ziron/db/schema";
 import { Button } from "@ziron/ui/components/button";
 import {
   Form,
@@ -21,6 +24,7 @@ import {
 import { Input } from "@ziron/ui/components/input";
 import { Label } from "@ziron/ui/components/label";
 import { ScrollArea, ScrollBar } from "@ziron/ui/components/scroll-area";
+import { Switch } from "@ziron/ui/components/switch";
 import { TabsContent } from "@ziron/ui/components/tabs";
 import { Textarea } from "@ziron/ui/components/textarea";
 import { cn } from "@ziron/utils";
@@ -28,10 +32,7 @@ import { cardSchema, zCardSchema } from "@ziron/validators";
 
 import { DndLinks } from "./dnd-links";
 import { CompanyField } from "./fields/company-field";
-import { EmailsField } from "./fields/emails-field";
-import { PhonesField } from "./fields/phones-field";
 import { ThemeSelector } from "./fields/theme-selector";
-import { Preview } from "./preview";
 import ProfileDashboard from "./profile-dashboard";
 import { TabsComp } from "./tabs";
 
@@ -41,8 +42,6 @@ interface CardProps {
   initialData?: CardType;
   id: string;
 }
-
-const MemoizedPreview = memo(Preview);
 
 export default function CardForm({
   data,
@@ -67,8 +66,9 @@ export default function CardForm({
   const form = useForm<zCardSchema>({
     resolver: zodResolver(cardSchema),
 
-    // defaultValues,
-    mode: "onChange",
+    defaultValues: {
+      address: "",
+    },
   });
 
   // Optimize form watching
@@ -81,7 +81,7 @@ export default function CardForm({
   useEffect(() => {
     const companyIdParams = searchParams.get("company");
     if (companyIdParams) {
-      form.setValue("companyId", parseInt(companyIdParams));
+      form.setValue("companyId", companyIdParams);
     }
   }, [searchParams, form]);
 
@@ -123,7 +123,7 @@ export default function CardForm({
         ...link,
         id: link.id ? parseInt(link.id.toString()) : undefined,
       })),
-    } as CardType;
+    } as Partial<CardType>;
   }, [data, debouncedValue]);
 
   /** Debugging */
@@ -162,11 +162,11 @@ export default function CardForm({
                 value="information"
                 className="grid grid-cols-2 gap-4"
               >
-                <ImageUploadButton
+                {/* <ImageUploadButton
                   isEditMode={isEditMode}
                   cardData={cardData}
                   setLoading={setLoading}
-                />
+                /> */}
 
                 <FormField
                   control={form.control}
@@ -183,8 +183,8 @@ export default function CardForm({
                   )}
                 />
 
-                <EmailsField emails={cardData.emails} />
-                <PhonesField phones={cardData.phones} />
+                {/* <EmailsField emails={cardData.emails} />
+                <PhonesField phones={cardData.phones} /> */}
 
                 <FormField
                   control={form.control}
@@ -352,10 +352,10 @@ export default function CardForm({
                       <FormItem className="flex w-full flex-col items-start justify-between gap-3 p-3 sm:flex-row sm:items-center">
                         <FormLabel>Theme Color</FormLabel>
                         <FormControl>
-                          <ColorsInput
+                          {/* <ColorsInput
                             value={field.value}
                             onChange={field.onChange}
-                          />
+                          /> */}
                         </FormControl>
 
                         <FormMessage />
@@ -371,10 +371,10 @@ export default function CardForm({
                         <FormItem className="flex w-full flex-col items-start justify-between gap-3 p-3 sm:flex-row sm:items-center">
                           <FormLabel>Button</FormLabel>
                           <FormControl>
-                            <ColorsInput
+                            {/* <ColorsInput
                               value={field.value}
                               onChange={field.onChange}
-                            />
+                            /> */}
                           </FormControl>
 
                           <FormMessage />
@@ -395,17 +395,44 @@ export default function CardForm({
               )}
             </TabsComp>
 
-            <MemoizedPreview
+            {/* <Preview
               closeModal={onOpenChange}
               isOpen={isOpen}
               cardData={cardData}
               company={data}
-            />
+            /> */}
           </div>
-          <ActionButtons
-            isEditMode={isEditMode}
-            disabled={form.formState.isSubmitting || loading}
-          />
+
+          <div className="bg-background/50 fixed bottom-0 w-full px-6 py-4 backdrop-blur-md md:hidden">
+            {isEditMode ? (
+              <div className="flex gap-3">
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={form.formState.isSubmitting || loading}
+                >
+                  Save Changes
+                </Button>
+                <Button
+                  type="submit"
+                  variant="destructive"
+                  className="flex-shrink-0"
+                  size="icon"
+                  disabled={form.formState.isSubmitting || loading}
+                >
+                  <IconTrash className="size-4" />
+                </Button>
+              </div>
+            ) : (
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={form.formState.isSubmitting || loading}
+              >
+                Create Card
+              </Button>
+            )}
+          </div>
         </form>
       </Form>
     </main>

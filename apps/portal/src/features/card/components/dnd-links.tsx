@@ -1,26 +1,27 @@
 "use client";
 
+import { useCallback, useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import { memo, useCallback, useMemo, useRef, useState } from "react";
 
+import { ResponsiveModal } from "@/components/ui/responsive-modal";
 import { IconGripVertical, IconPlus, IconTrash } from "@tabler/icons-react";
 import { Reorder } from "framer-motion";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
-import { ResponsiveModal } from "@/components/responsive-modal";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { DialogClose } from "@/components/ui/dialog";
+import { Button } from "@ziron/ui/components/button";
+import { Card } from "@ziron/ui/components/card";
+import { DialogClose } from "@ziron/ui/components/dialog";
 import {
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { LINKS } from "@/constants";
-import { Link } from "@/types";
-import { zCardSchema } from "@/types/card-schema";
+} from "@ziron/ui/components/form";
+import { Input } from "@ziron/ui/components/input";
+import { zCardSchema } from "@ziron/validators";
+
+import { LINKS } from "../data/constants";
+import { Link } from "../types";
 
 interface Props {
   loading: boolean;
@@ -43,100 +44,98 @@ interface LinkItemProps {
 }
 
 // Memoized Link Item Component
-const LinkItem = memo(
-  ({ data, index, loading, onRemove, form }: LinkItemProps) => {
-    const isGeneral = data.category === "General";
+const LinkItem = ({ data, index, loading, onRemove, form }: LinkItemProps) => {
+  const isGeneral = data.category === "General";
 
-    return (
-      <Card className="flex items-center justify-between gap-2 p-3 md:p-4">
-        {isGeneral ? (
-          <div className="grid w-full items-center gap-4 md:grid-cols-5">
-            <FormField
-              control={form.control}
-              name={`links.${index}.label`}
-              render={({ field }) => (
-                <FormItem className="flex gap-2 space-y-0 md:col-span-2 md:gap-3">
-                  <Image
-                    src={data.icon}
-                    height={40}
-                    width={40}
-                    alt=""
-                    className="flex-shrink-0"
+  return (
+    <Card className="flex items-center justify-between gap-2 p-3 md:p-4">
+      {isGeneral ? (
+        <div className="grid w-full items-center gap-4 md:grid-cols-5">
+          <FormField
+            control={form.control}
+            name={`links.${index}.label`}
+            render={({ field }) => (
+              <FormItem className="flex gap-2 space-y-0 md:col-span-2 md:gap-3">
+                <Image
+                  src={data.icon}
+                  height={40}
+                  width={40}
+                  alt=""
+                  className="flex-shrink-0"
+                />
+                <FormControl>
+                  <Input
+                    className="space-y-0"
+                    {...field}
+                    disabled={loading}
+                    placeholder={`${data.label} Title`}
                   />
-                  <FormControl>
-                    <Input
-                      className="space-y-0"
-                      {...field}
-                      disabled={loading}
-                      placeholder={`${data.label} Title`}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              key={data.id}
-              name={`links.${index}.url`}
-              render={({ field }) => (
-                <FormItem className="md:col-span-3">
-                  <FormControl>
-                    <Input
-                      {...field}
-                      disabled={loading}
-                      placeholder={`${data.label} Url`}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        ) : (
-          <div className="flex flex-1 gap-2 md:gap-3">
-            <Image src={data.icon} height={40} width={40} alt="" />
-            <FormField
-              control={form.control}
-              key={data.id}
-              name={`links.${index}.url`}
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormControl>
-                    <Input
-                      {...field}
-                      disabled={loading}
-                      placeholder={`${data.label} url`}
-                    />
-                  </FormControl>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            key={data.id}
+            name={`links.${index}.url`}
+            render={({ field }) => (
+              <FormItem className="md:col-span-3">
+                <FormControl>
+                  <Input
+                    {...field}
+                    disabled={loading}
+                    placeholder={`${data.label} Url`}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+      ) : (
+        <div className="flex flex-1 gap-2 md:gap-3">
+          <Image src={data.icon} height={40} width={40} alt="" />
+          <FormField
+            control={form.control}
+            key={data.id}
+            name={`links.${index}.url`}
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormControl>
+                  <Input
+                    {...field}
+                    disabled={loading}
+                    placeholder={`${data.label} url`}
+                  />
+                </FormControl>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        )}
-        <Button
-          type="button"
-          variant="ghost"
-          className="shrink-0 text-destructive hover:text-destructive"
-          size="smallIcon"
-          onClick={() => onRemove(index)}
-        >
-          <IconTrash size={16} />
-        </Button>
-        <button
-          type="button"
-          title="Drag to Re-Order"
-          className="text-gray-400 hover:bg-transparent hover:text-foreground"
-          onClick={(e) => e.preventDefault()}
-        >
-          <IconGripVertical size={16} />
-        </button>
-      </Card>
-    );
-  }
-);
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+      )}
+      <Button
+        type="button"
+        variant="ghost"
+        className="text-destructive hover:text-destructive shrink-0"
+        size="icon"
+        onClick={() => onRemove(index)}
+      >
+        <IconTrash size={16} />
+      </Button>
+      <button
+        type="button"
+        title="Drag to Re-Order"
+        className="hover:text-foreground text-gray-400 hover:bg-transparent"
+        onClick={(e) => e.preventDefault()}
+      >
+        <IconGripVertical size={16} />
+      </button>
+    </Card>
+  );
+};
 LinkItem.displayName = "LinkItem";
 
 // Memoized Suggestion Card
@@ -151,7 +150,7 @@ interface SuggestionCardProps {
   }) => void;
 }
 
-const SuggestionCard = memo(({ link, item, onAppend }: SuggestionCardProps) => (
+const SuggestionCard = ({ link, item, onAppend }: SuggestionCardProps) => (
   <Card
     onClick={() =>
       onAppend({
@@ -161,13 +160,13 @@ const SuggestionCard = memo(({ link, item, onAppend }: SuggestionCardProps) => (
         icon: link.icon,
       })
     }
-    className="flex flex-col items-center justify-between p-6 transition-colors hover:border-primary hover:bg-muted/20"
+    className="hover:border-primary hover:bg-muted/20 flex flex-col items-center justify-between p-6 transition-colors"
     role="button"
   >
     <Image src={link.icon} height={40} width={40} alt="" />
-    <p className="mt-1 whitespace-nowrap text-sm font-medium">{link.label}</p>
+    <p className="mt-1 text-sm font-medium whitespace-nowrap">{link.label}</p>
   </Card>
-));
+);
 
 SuggestionCard.displayName = "SuggestionCard";
 
@@ -186,14 +185,14 @@ export const DndLinks = ({ loading, open, setOpen }: Props) => {
     (data: { category: string; label: string; url: string; icon: string }) => {
       append(data);
     },
-    [append]
+    [append],
   );
 
   const handleRemove = useCallback(
     (index: number) => {
       remove(index);
     },
-    [remove]
+    [remove],
   );
 
   const handleReorder = useCallback(
@@ -206,7 +205,7 @@ export const DndLinks = ({ loading, open, setOpen }: Props) => {
         }
       });
     },
-    [active, fields, move]
+    [active, fields, move],
   );
 
   // Memoize suggestions data
@@ -216,9 +215,9 @@ export const DndLinks = ({ loading, open, setOpen }: Props) => {
         item.links.slice(0, 4).map((link) => ({
           ...link,
           itemLabel: item.label,
-        }))
+        })),
       ).flat(),
-    []
+    [],
   );
 
   const handleLinkAdd = (link: Link, category: string) => {
@@ -280,7 +279,7 @@ export const DndLinks = ({ loading, open, setOpen }: Props) => {
           </Button>
         }
       >
-        <div className="p-6 pb-6 pt-0">
+        <div className="p-6 pt-0 pb-6">
           {LINKS.map((item, i) => (
             <div key={i} className="py-3">
               <h4 className="pb-2 text-sm font-medium text-gray-700">
@@ -304,7 +303,7 @@ export const DndLinks = ({ loading, open, setOpen }: Props) => {
                       <Button
                         variant="ghost"
                         onClick={() => handleLinkAdd(link, item.label)}
-                        className="h-8 gap-2 px-2 font-semibold text-primary hover:text-blue-800"
+                        className="text-primary h-8 gap-2 px-2 font-semibold hover:text-blue-800"
                       >
                         <IconPlus className="size-3 stroke-[2.5]" />
                         Add
@@ -345,7 +344,7 @@ export const DndLinks = ({ loading, open, setOpen }: Props) => {
               e.preventDefault();
               setOpen(true);
             }}
-            className="flex flex-col items-center justify-center text-sm font-medium text-muted-foreground transition-colors hover:border-primary hover:bg-muted/20"
+            className="text-muted-foreground hover:border-primary hover:bg-muted/20 flex flex-col items-center justify-center text-sm font-medium transition-colors"
             role="button"
           >
             View More

@@ -1,10 +1,12 @@
-import Image from "next/image";
 import { useCallback, useMemo, useState } from "react";
+import Image from "next/image";
 
 import { IconCaretUpDownFilled } from "@tabler/icons-react";
+import { parseAsString, useQueryStates } from "nuqs";
 import { useFormContext } from "react-hook-form";
 
-import { Button } from "@/components/ui/button";
+import { Company } from "@ziron/db/schema";
+import { Button } from "@ziron/ui/components/button";
 import {
   Command,
   CommandEmpty,
@@ -12,32 +14,33 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
+} from "@ziron/ui/components/command";
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@ziron/ui/components/form";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import { useCompanyFormModal } from "@/store/use-company-form-modal";
-import { Company } from "@/types";
-import { zCardSchema } from "@/types/card-schema";
+} from "@ziron/ui/components/popover";
+import { cn } from "@ziron/utils";
+import { zCardSchema } from "@ziron/validators";
 
 interface Props {
   companyData: Company[];
-  companyId: number;
+  companyId: string;
 }
 
 export const CompanyField = ({ companyData: data, companyId }: Props) => {
   const [openPopover, setOpenPopover] = useState(false);
-  const openCompanyModal = useCompanyFormModal((state) => state.openModal);
+  const [, setCompanyModal] = useQueryStates({
+    modal: parseAsString,
+  });
+
   const form = useFormContext<zCardSchema>();
 
   // Memoize company lookup
@@ -53,14 +56,14 @@ export const CompanyField = ({ companyData: data, companyId }: Props) => {
         setOpenPopover(false);
       }
     },
-    [form]
+    [form],
   );
 
   // Memoize modal handler
   const handleModalOpen = useCallback(() => {
     setOpenPopover(false);
-    openCompanyModal();
-  }, [openCompanyModal]);
+    setCompanyModal({ modal: "company" });
+  }, []);
 
   return (
     <FormField
@@ -77,8 +80,8 @@ export const CompanyField = ({ companyData: data, companyId }: Props) => {
                   variant="outline"
                   role="combobox"
                   className={cn(
-                    "w-full justify-between border-input text-foreground",
-                    !field.value && "text-muted-foreground"
+                    "border-input text-foreground w-full justify-between",
+                    !field.value && "text-muted-foreground",
                   )}
                 >
                   {selectedCompany ? (

@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { useId, useMemo } from "react";
+import Image from "next/image";
 
 import { IconCheck } from "@tabler/icons-react";
 
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { RadioGroup, RadioGroupItem } from "@ziron/ui/components/radio-group";
 
 interface Props {
   value: string;
@@ -55,7 +55,7 @@ export const ThemeSelector = ({ onChange, value }: Props) => {
           </div>
 
           <span className="group mt-2 flex items-center justify-center gap-2">
-            <div className="flex aspect-square size-5 items-center justify-center rounded-full border border-primary text-background shadow-none ring-offset-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 disabled:cursor-not-allowed disabled:opacity-50 peer-data-[state=checked]:group-[]:border-primary peer-data-[state=checked]:group-[]:bg-primary peer-data-[state=checked]:group-[]:ring-1 peer-data-[state=checked]:group-[]:ring-foreground">
+            <div className="border-primary text-background focus-visible:ring-ring peer-data-[state=checked]:group-[]:border-primary peer-data-[state=checked]:group-[]:bg-primary peer-data-[state=checked]:group-[]:ring-1 peer-data-[state=checked]:group-[]:ring-foreground flex aspect-square size-5 items-center justify-center rounded-full border shadow-none ring-offset-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 disabled:cursor-not-allowed disabled:opacity-50">
               <IconCheck
                 size={16}
                 strokeWidth={2}
@@ -67,7 +67,7 @@ export const ThemeSelector = ({ onChange, value }: Props) => {
           </span>
         </label>
       )),
-    [id]
+    [id],
   );
 
   return (

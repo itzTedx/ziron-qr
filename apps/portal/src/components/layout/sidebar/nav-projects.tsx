@@ -32,7 +32,7 @@ export function NavProjects({ data }: Props) {
         <SidebarGroupLabel>Companies</SidebarGroupLabel>
         <SidebarMenu>
           {data.map((item) => (
-            <SidebarMenuItem key={item.name}>
+            <SidebarMenuItem key={item.id}>
               <SidebarMenuButton
                 tooltip={item.name}
                 className="p-0 group-data-[collapsible=icon]:p-0!"
