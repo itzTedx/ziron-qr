@@ -23,16 +23,16 @@ export default function ModernTemplate({
 
   const companyData = company?.find((c) => c.id === card.companyId)
 
-  const textColor = getTextColorByBackground(card.styles.btnColor || '#4938ff')
+  const textColor = getTextColorByBackground(card.styles?.btnColor || '#4938ff')
 
-  const theme = card.styles.theme || '#4938ff'
-  const btnColor = card.styles.btnColor || '#4938ff'
+  const theme = card.styles?.theme || '#4938ff'
+  const btnColor = card.styles?.btnColor || '#4938ff'
   return (
     <div className="relative flex h-full w-full flex-col justify-between @sm:h-dvh">
       <div
         className={cn(
           'no-scrollbar md:overflow-y-scroll',
-          card.styles.isDarkMode
+          card.styles?.isDarkMode
             ? 'dark bg-background text-foreground'
             : 'bg-white text-black'
         )}
