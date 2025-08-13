@@ -1,5 +1,14 @@
 # Ziron QR - Digital Business Card Platform
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/Node.js-20+-green.svg)](https://nodejs.org/)
+[![pnpm](https://img.shields.io/badge/pnpm-10.4.1+-orange.svg)](https://pnpm.io/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7+-blue.svg)](https://www.typescriptlang.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-15-black.svg)](https://nextjs.org/)
+[![Turbo](https://img.shields.io/badge/Turbo-2.4.2+-purple.svg)](https://turbo.build/)
+[![Drizzle](https://img.shields.io/badge/Drizzle-ORM-0.44+-green.svg)](https://orm.drizzle.team/)
+[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.2+-blue.svg)](https://better-auth.com/)
+
 A modern, full-stack platform for creating and managing digital business cards with QR code functionality. Built with Next.js, TypeScript, and a monorepo architecture.
 
 ## 🚀 Features
@@ -41,12 +50,37 @@ This project uses a monorepo structure with the following components:
 
 ## 🛠️ Tech Stack
 
+### Frontend
+![React](https://img.shields.io/badge/React-19+-61DAFB?logo=react&logoColor=black&style=for-the-badge)
+![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js&logoColor=white&style=for-the-badge)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.7+-3178C6?logo=typescript&logoColor=white&style=for-the-badge)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.0-38B2AC?logo=tailwind-css&logoColor=white&style=for-the-badge)
+
+### Backend & Database
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17+-336791?logo=postgresql&logoColor=white&style=for-the-badge)
+![Drizzle ORM](https://img.shields.io/badge/Drizzle_ORM-0.44+-green?logo=drizzle&logoColor=white&style=for-the-badge)
+![Redis](https://img.shields.io/badge/Redis-7.2+-DC382D?logo=redis&logoColor=white&style=for-the-badge)
+![Better Auth](https://img.shields.io/badge/Better_Auth-1.2+-blue?logo=better-auth&logoColor=white&style=for-the-badge)
+
+### Development Tools
+![Turbo](https://img.shields.io/badge/Turbo-2.4.2+-purple?logo=turbo&logoColor=white&style=for-the-badge)
+![pnpm](https://img.shields.io/badge/pnpm-10.4.1+-orange?logo=pnpm&logoColor=white&style=for-the-badge)
+![Docker](https://img.shields.io/badge/Docker-✓-2496ED?logo=docker&logoColor=white&style=for-the-badge)
+![ESLint](https://img.shields.io/badge/ESLint-✓-4B32C3?logo=eslint&logoColor=white&style=for-the-badge)
+
+### UI & Components
+![shadcn/ui](https://img.shields.io/badge/shadcn/ui-✓-000000?logo=shadcn&logoColor=white&style=for-the-badge)
+![Radix UI](https://img.shields.io/badge/Radix_UI-✓-161618?logo=radix-ui&logoColor=white&style=for-the-badge)
+![Lucide React](https://img.shields.io/badge/Lucide_React-✓-000000?logo=lucide&logoColor=white&style=for-the-badge)
+![React Hook Form](https://img.shields.io/badge/React_Hook_Form-✓-EC5990?logo=react-hook-form&logoColor=white&style=for-the-badge)
+
+### Key Technologies
 - **Framework**: Next.js 15 with App Router
 - **Language**: TypeScript 5.7
 - **Database**: PostgreSQL with Drizzle ORM
-- **Authentication**: Better Auth
-- **Caching**: Redis
-- **UI**: shadcn/ui, Tailwind CSS, Radix UI
+- **Authentication**: Better Auth with 2FA support
+- **Caching**: Redis for session management
+- **UI Library**: shadcn/ui with Tailwind CSS
 - **Forms**: React Hook Form with Zod validation
 - **State Management**: React hooks, nuqs for URL state
 - **Build Tool**: Turbo for monorepo management
@@ -230,6 +264,8 @@ Ensure all required environment variables are set for production:
 5. Submit a pull request
 
 ## 📄 License
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 This project is private and proprietary.
 
