@@ -71,7 +71,7 @@ export const ThemeSelector = ({ onChange, value }: Props) => {
   );
 
   return (
-    <fieldset className="space-y-4">
+    <fieldset className="space-y-4 pb-4">
       <RadioGroup
         className="flex gap-3"
         onValueChange={onChange}

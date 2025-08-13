@@ -2,6 +2,7 @@
 
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
+
 import { PasswordInput } from "@/components/ui/password-input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -49,6 +50,7 @@ export function LoginForm() {
             if (ctx.error.status === 403) {
               toast.info("Please verify your email address");
             }
+            console.error(ctx.error);
           },
         },
       });
@@ -78,6 +80,9 @@ export function LoginForm() {
               </FormItem>
             )}
           />
+
+          {/* <Button>hello</Button> */}
+
           <FormField
             control={form.control}
             name="password"

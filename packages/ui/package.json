@@ -20,6 +20,7 @@
     "next-themes": "^0.4.4",
     "radix-ui": "^1.4.2",
     "react": "catalog:react19",
+    "react-aria-components": "^1.11.0",
     "react-dom": "catalog:react19",
     "react-hook-form": "^7.60.0",
     "tailwind-merge": "^3.0.1",
@@ -33,6 +34,7 @@
     "@types/node": "^20",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
+    "@ziron/db": "workspace:*",
     "@ziron/eslint-config": "workspace:*",
     "@ziron/typescript-config": "workspace:*",
     "@ziron/utils": "workspace:*",
@@ -44,6 +46,7 @@
     "./postcss.config": "./postcss.config.mjs",
     "./components/*": "./src/components/*.tsx",
     "./assets/*": "./src/assets/*.tsx",
-    "./hooks/*": "./src/hooks/*.ts"
+    "./hooks/*": "./src/hooks/*.ts",
+    "./templates/*": "./src/templates/*.tsx"
   }
 }

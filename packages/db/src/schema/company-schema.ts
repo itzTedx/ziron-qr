@@ -54,4 +54,9 @@ export const companyRelations = relations(companies, ({ many }) => ({
   cards: many(cards),
 }));
 
-export type Company = InferResultType<"companies">;
+export type Company = InferResultType<
+  "companies",
+  {
+    cards: true;
+  }
+>;

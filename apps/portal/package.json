@@ -5,8 +5,8 @@
   "private": true,
   "scripts": {
     "dev": "pnpm with-env next dev --turbopack -p 3000",
-    "build": "next build",
-    "start": "next start",
+    "build": "pnpm with-env next build",
+    "start": "pnpm with-env next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "typecheck": "tsc --noEmit",
@@ -30,6 +30,7 @@
     "nuqs": "^2.4.3",
     "react": "catalog:react19",
     "react-dom": "catalog:react19",
+    "react-phone-number-input": "^3.4.12",
     "sonner": "^2.0.6"
   },
   "devDependencies": {

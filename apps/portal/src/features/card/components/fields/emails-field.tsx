@@ -1,43 +1,32 @@
-"use client";
-
-import { memo, useCallback } from "react";
-
 import { IconPlus, IconX } from "@tabler/icons-react";
-import { useFieldArray, useFormContext } from "react-hook-form";
 import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@ziron/ui/components/button";
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+  useFieldArray,
+  useFormContext,
+} from "@ziron/ui/components/form";
+import { Input } from "@ziron/ui/components/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { cn } from "@/lib/utils";
-import { zCardSchema } from "@/types/card-schema";
+} from "@ziron/ui/components/select";
+import { cn } from "@ziron/utils";
+import { EmailsType, LabelEnum, zCardSchema } from "@ziron/validators";
 
 interface Props {
-  emails?: {
-    email?: string | null;
-    label?: string | null;
-  }[];
+  data: EmailsType;
 }
 
-/**
- * EmailsField Component
- * Renders a dynamic form for managing multiple email addresses with labels
- * @param {emails} emails
- */
-export const EmailsField = memo(({ emails }: Props) => {
+export const EmailsField = ({ data }: Props) => {
   const form = useFormContext<zCardSchema>();
 
   const { fields, append, remove } = useFieldArray({
@@ -45,56 +34,44 @@ export const EmailsField = memo(({ emails }: Props) => {
     control: form.control,
   });
 
-  const handleRemove = useCallback(
-    (index: number) => (e: React.MouseEvent) => {
-      e.preventDefault();
-      remove(index);
-    },
-    [remove]
-  );
-
-  const handleAppend = useCallback(() => {
-    if (emails) {
-      const lastEmailField = emails[fields.length - 1];
+  const handleAppend = () => {
+    if (data) {
+      const lastEmailField = data[fields.length - 1];
       if (lastEmailField && !lastEmailField.email) {
         toast.error("Please add a email before adding another.");
         return;
       }
     }
-    append({ email: "", label: "primary" });
-  }, [emails, fields.length, append]);
+    append({ email: "", label: "Primary" });
+  };
 
   return (
-    <div className="col-span-2 sm:col-span-1">
-      {fields.map((field, index) => (
+    <div className="space-y-2">
+      {fields.map((field, i) => (
         <div className="flex w-full items-end" key={field.id}>
           <FormField
             control={form.control}
-            name={`emails.${index}.email`}
+            name={`emails.${i}.email`}
             render={({ field }) => (
               <FormItem className="w-full">
-                <div className="flex items-center justify-between">
-                  <FormLabel className={cn(index !== 0 && "sr-only")}>
-                    Email
-                  </FormLabel>
-                  <FormMessage />
-                </div>
-
-                <FormControl className="w-full">
+                <FormLabel className={cn(i !== 0 && "sr-only")}>
+                  Email
+                </FormLabel>
+                <FormControl>
                   <Input
-                    type="email"
-                    {...field}
                     placeholder="name@company.com"
                     className={cn("w-full rounded-e-none border-r-0")}
+                    {...field}
                   />
                 </FormControl>
+
+                <FormMessage />
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
-            name={`emails.${index}.label`}
+            name={`emails.${i}.label`}
             render={({ field }) => (
               <FormItem>
                 <FormLabel className={"sr-only"}>Email Label</FormLabel>
@@ -106,51 +83,50 @@ export const EmailsField = memo(({ emails }: Props) => {
                   <FormControl>
                     <SelectTrigger
                       className={cn(
-                        "w-24 shrink-0 rounded-none text-xs font-medium text-muted-foreground",
+                        "text-muted-foreground w-20 shrink-0 gap-0.5 rounded-none px-2 text-[11px] font-medium",
                         fields.length === 1
                           ? "rounded-e-lg border-r"
-                          : "border-r-0"
+                          : "border-r-0",
                       )}
                     >
                       <SelectValue placeholder="Label" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="primary">Primary</SelectItem>
-                    <SelectItem value="work">Work</SelectItem>
-                    <SelectItem value="personal">Personal</SelectItem>
+                    {LabelEnum.options.map((option) => (
+                      <SelectItem value={option} key={option}>
+                        {option}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </FormItem>
             )}
           />
-
           <Button
             size="icon"
             variant="outline"
-            onClick={handleRemove(index)}
+            type="button"
+            onClick={() => remove(i)}
             className={cn(
-              "shrink-0",
-              fields.length > 1 ? "flex rounded-s-none" : "hidden"
+              "dark:bg-input/30 dark:hover:bg-input/50 shrink-0 bg-transparent",
+              fields.length > 1 ? "flex rounded-s-none" : "hidden",
             )}
           >
-            <IconX className="size-4 text-muted-foreground" />
+            <IconX className="text-muted-foreground size-4" />
           </Button>
         </div>
       ))}
-
       <Button
         type="button"
         variant="link"
         size="sm"
-        className="px-0"
+        className="gap-1 px-0"
         onClick={handleAppend}
       >
-        <IconPlus className="mr-2 size-4" />
+        <IconPlus className="size-4" />
         Add work or personal email
       </Button>
     </div>
   );
-});
-
-EmailsField.displayName = "EmailsField";
+};

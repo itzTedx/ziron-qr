@@ -18,16 +18,11 @@ import {
   FormMessage,
 } from "@ziron/ui/components/form";
 import { Input } from "@ziron/ui/components/input";
+import { cn } from "@ziron/utils";
 import { zCardSchema } from "@ziron/validators";
 
 import { LINKS } from "../data/constants";
 import { Link } from "../types";
-
-interface Props {
-  loading: boolean;
-  open: boolean;
-  setOpen: (open: boolean) => void;
-}
 
 interface LinkItemProps {
   data: {
@@ -48,14 +43,14 @@ const LinkItem = ({ data, index, loading, onRemove, form }: LinkItemProps) => {
   const isGeneral = data.category === "General";
 
   return (
-    <Card className="flex items-center justify-between gap-2 p-3 md:p-4">
+    <Card className="flex flex-row items-center justify-between gap-2 px-3 py-2">
       {isGeneral ? (
-        <div className="grid w-full items-center gap-4 md:grid-cols-5">
+        <div className="grid w-full gap-4 md:grid-cols-5">
           <FormField
             control={form.control}
             name={`links.${index}.label`}
             render={({ field }) => (
-              <FormItem className="flex gap-2 space-y-0 md:col-span-2 md:gap-3">
+              <FormItem className="flex gap-2 md:col-span-2 md:gap-3">
                 <Image
                   src={data.icon}
                   height={40}
@@ -160,19 +155,20 @@ const SuggestionCard = ({ link, item, onAppend }: SuggestionCardProps) => (
         icon: link.icon,
       })
     }
-    className="hover:border-primary hover:bg-muted/20 flex flex-col items-center justify-between p-6 transition-colors"
+    className="hover:border-primary hover:bg-muted/20 flex size-28 cursor-pointer flex-col items-center gap-2 transition-colors"
     role="button"
   >
     <Image src={link.icon} height={40} width={40} alt="" />
-    <p className="mt-1 text-sm font-medium whitespace-nowrap">{link.label}</p>
+    <p className="text-sm font-medium whitespace-nowrap">{link.label}</p>
   </Card>
 );
 
 SuggestionCard.displayName = "SuggestionCard";
 
-export const DndLinks = ({ loading, open, setOpen }: Props) => {
+export const DndLinks = () => {
   const form = useFormContext<zCardSchema>();
   const [active, setActive] = useState(0);
+  const [open, setOpen] = useState(false); // Add modal open state
   const dragRef = useRef<HTMLDivElement>(null);
 
   const { fields, append, remove, move } = useFieldArray({
@@ -228,8 +224,6 @@ export const DndLinks = ({ loading, open, setOpen }: Props) => {
       icon: link.icon,
       category: category,
     });
-
-    setOpen(false);
   };
 
   return (
@@ -259,7 +253,7 @@ export const DndLinks = ({ loading, open, setOpen }: Props) => {
                   id: data.id,
                 }}
                 index={index}
-                loading={loading}
+                loading={false}
                 onRemove={handleRemove}
                 form={form}
               />
@@ -268,13 +262,13 @@ export const DndLinks = ({ loading, open, setOpen }: Props) => {
         </Reorder.Group>
       </div>
       <ResponsiveModal
-        isOpen={open}
-        closeModal={setOpen}
         title={"Add Link"}
-        className="max-w-2xl"
+        className="min-w-2xl"
         asChild
+        isOpen={open} // Use isOpen instead of open
+        closeModal={setOpen} // Use closeModal instead of setOpen
         trigger={
-          <Button type="button" variant="outline" className="h-12 w-full">
+          <Button type="button" variant="outline" size="lg" className="w-full">
             <IconPlus size={16} className="mr-2" /> Add
           </Button>
         }
@@ -282,11 +276,16 @@ export const DndLinks = ({ loading, open, setOpen }: Props) => {
         <div className="p-6 pt-0 pb-6">
           {LINKS.map((item, i) => (
             <div key={i} className="py-3">
-              <h4 className="pb-2 text-sm font-medium text-gray-700">
+              <h4 className="text-muted-foreground pb-2 text-sm">
                 {item.label}
               </h4>
 
-              <div className="grid grid-cols-[repeat(auto-fill,minmax(18rem,1fr))] gap-x-6">
+              <div
+                className={cn(
+                  "grid gap-x-6",
+                  item.links.length > 1 ? "grid-cols-2" : "grid-cols-1",
+                )}
+              >
                 {item.links.map((link, i) => (
                   <div
                     className="flex items-center justify-between border-b py-3"
@@ -303,7 +302,7 @@ export const DndLinks = ({ loading, open, setOpen }: Props) => {
                       <Button
                         variant="ghost"
                         onClick={() => handleLinkAdd(link, item.label)}
-                        className="text-primary h-8 gap-2 px-2 font-semibold hover:text-blue-800"
+                        className="text-primary h-8 gap-2 px-2 font-semibold"
                       >
                         <IconPlus className="size-3 stroke-[2.5]" />
                         Add

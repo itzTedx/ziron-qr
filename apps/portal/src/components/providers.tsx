@@ -25,7 +25,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         >
           {children}
         </ProgressProvider>
-        <Toaster />
+        <Toaster closeButton richColors />
       </NextThemesProvider>
     </NuqsAdapter>
   );

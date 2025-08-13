@@ -31,11 +31,11 @@ import { cn } from "@ziron/utils";
 import { zCardSchema } from "@ziron/validators";
 
 interface Props {
-  companyData: Company[];
-  companyId: string;
+  data: Company[];
+  companyId?: string;
 }
 
-export const CompanyField = ({ companyData: data, companyId }: Props) => {
+export const CompanyField = ({ data: data, companyId }: Props) => {
   const [openPopover, setOpenPopover] = useState(false);
   const [, setCompanyModal] = useQueryStates({
     modal: parseAsString,
@@ -52,7 +52,7 @@ export const CompanyField = ({ companyData: data, companyId }: Props) => {
   const handleSelect = useCallback(
     (companyId?: string) => {
       if (companyId) {
-        form.setValue("companyId", parseInt(companyId));
+        form.setValue("companyId", companyId);
         setOpenPopover(false);
       }
     },
@@ -80,7 +80,7 @@ export const CompanyField = ({ companyData: data, companyId }: Props) => {
                   variant="outline"
                   role="combobox"
                   className={cn(
-                    "border-input text-foreground w-full justify-between",
+                    "border-input text-foreground dark:bg-input/30 w-full justify-between bg-transparent",
                     !field.value && "text-muted-foreground",
                   )}
                 >
