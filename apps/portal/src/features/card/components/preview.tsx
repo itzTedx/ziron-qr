@@ -11,15 +11,17 @@ import CardTemplate from "@ziron/ui/templates/card-template";
 import DefaultTemplate from "@ziron/ui/templates/default-template";
 import ModernTemplate from "@ziron/ui/templates/modern-template";
 import { cn } from "@ziron/utils";
+import { zCardSchema } from "@ziron/validators";
 
 interface Props {
   companies: Company[];
+  cardData: zCardSchema;
 }
 
-export const Preview = ({ companies }: Props) => {
+export const Preview = ({ companies, cardData }: Props) => {
   const [preview, setPreview] = useQueryState("preview");
-  const form = useFormContext<any>();
-  const cardData = form.watch();
+  const form = useFormContext<zCardSchema>();
+  // const cardData = form.watch();
 
   // Find the selected company based on cardData.companyId
   const company = companies.filter((c) => c.id === cardData.companyId);

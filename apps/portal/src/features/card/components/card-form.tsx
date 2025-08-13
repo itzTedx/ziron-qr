@@ -34,6 +34,7 @@ export function CardForm({ companies, isEditMode, initialData }: Props) {
   const router = useRouter();
   const [tab, setTab] = useQueryState("tab");
   const defaultTab = tab || "general";
+
   const [isPending, startTransition] = useTransition();
   const form = useForm<zCardSchema>({
     resolver: zodResolver(cardSchema),
@@ -94,17 +95,18 @@ export function CardForm({ companies, isEditMode, initialData }: Props) {
     });
   }
 
-  const generalInfoData = {
+  const data = {
     companies,
     emails: form.getValues("emails"),
     phones: form.getValues("phones"),
+    template: form.getValues("appearance.template"),
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <ProfileDashboard isPending={isPending} />
-        <div className="mx-auto grid max-w-7xl grid-cols-3 gap-4">
+        <div className="mx-auto grid max-w-7xl grid-cols-3 gap-4 pb-6">
           <Tabs
             defaultValue={defaultTab}
             onValueChange={(value) => setTab(value)}
@@ -131,16 +133,16 @@ export function CardForm({ companies, isEditMode, initialData }: Props) {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="general">
-              <CardGeneral data={generalInfoData} />
+              <CardGeneral data={data} />
             </TabsContent>
             <TabsContent value="links">
               <CardLinks />
             </TabsContent>
             <TabsContent value="customize">
-              <CardCustomize />
+              <CardCustomize template={data.template} />
             </TabsContent>
           </Tabs>
-          <Preview companies={companies} />
+          <Preview companies={companies} cardData={formdata} />
         </div>
       </form>
     </Form>

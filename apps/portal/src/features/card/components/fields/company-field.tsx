@@ -32,17 +32,16 @@ import { zCardSchema } from "@ziron/validators";
 
 interface Props {
   data: Company[];
+  companyId?: string;
 }
 
-export const CompanyField = ({ data: data }: Props) => {
+export const CompanyField = ({ data: data, companyId }: Props) => {
   const [openPopover, setOpenPopover] = useState(false);
   const [, setCompanyModal] = useQueryStates({
     modal: parseAsString,
   });
 
   const form = useFormContext<zCardSchema>();
-
-  const companyId = form.getValues("companyId");
 
   // Memoize company lookup
   const selectedCompany = useMemo(() => {
