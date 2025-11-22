@@ -5,8 +5,12 @@ packages:
 catalog:
   "@biomejs/biome": 2.3.6
   typescript: ^5
-  zod: 3.25.76
+  zod: ^4.1.12
   next: 16.0.3
+  "@orpc/server": ^1.11.3
+  "@orpc/client": ^1.11.3
+  "@orpc/openapi": ^1.11.3
+  "@orpc/zod": ^1.11.3
 catalogs:
   react19:
     react: 19.2.0

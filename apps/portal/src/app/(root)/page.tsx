@@ -17,7 +17,7 @@ export default async function Page() {
   const companies = await getCompanies();
   const isAdmin = await isAdminUser();
 
-  if (!isAdmin) redirect("/login");
+  if (!isAdmin) redirect("/unauthorized");
 
   return (
     <section className="mt-20 grid gap-8 px-4 py-6 md:px-12">

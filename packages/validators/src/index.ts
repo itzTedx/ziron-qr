@@ -1,5 +1,5 @@
 export { zodResolver } from "@hookform/resolvers/zod";
-export * from "zod/v4";
+export * from "zod";
 
 export * from "./auth";
 export * from "./card";

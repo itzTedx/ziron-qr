@@ -88,5 +88,5 @@ export const signUp = async (email: string, password: string, username: string) 
  */
 export async function isAdminUser(): Promise<boolean> {
   const { user } = await getCurrentUser();
-  return user.role === "admin";
+  return user.role === "admin" || user.role === "dev";
 }

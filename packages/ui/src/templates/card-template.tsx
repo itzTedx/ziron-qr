@@ -72,7 +72,7 @@ export default function CardTemplate({ card, company, imageBase64URI }: Template
                         href={`mailto:${email.email}`}
                         key={`${i + 1}-${email.email}`}
                       >
-                        <IconMail className="@sm:size-5 size-4 flex-shrink-0 stroke-[1.5]" />
+                        <IconMail className="@sm:size-5 size-4 shrink-0 stroke-[1.5]" />
                         {email.email}
                       </Link>
                     ))}
@@ -83,7 +83,7 @@ export default function CardTemplate({ card, company, imageBase64URI }: Template
                         href={`tel:${phone.phone}`}
                         key={`${i + 1}-${phone.phone}`}
                       >
-                        <IconPhone className="@sm:size-5 size-4 flex-shrink-0 stroke-[1.5]" />
+                        <IconPhone className="@sm:size-5 size-4 shrink-0 stroke-[1.5]" />
                         {phone.phone}
                       </Link>
                     ))}
@@ -105,7 +105,7 @@ export default function CardTemplate({ card, company, imageBase64URI }: Template
               <div className="flex @sm:gap-4 gap-2">
                 {card.links.map((link, index) => (
                   <LinkBox color={theme} href={link.url || "#"} key={`${index}-${link.label}-${link.url}`}>
-                    <div className="relative @sm:size-9 size-7 flex-shrink-0">
+                    <div className="relative @sm:size-9 size-7 shrink-0">
                       <Image alt="" fill sizes="10vw" src={link.icon} />
                     </div>
                     <h5 className="sr-only">{link.label}</h5>
@@ -139,14 +139,14 @@ export default function CardTemplate({ card, company, imageBase64URI }: Template
                   href={card.company && card.company.website ? card.company.website : "#"}
                   target="_blank"
                 >
-                  <IconBuildingSkyscraper className="@sm:size-5 size-4 flex-shrink-0 stroke-[1.5]" />
+                  <IconBuildingSkyscraper className="@sm:size-5 size-4 shrink-0 stroke-[1.5]" />
                   {companyData?.name || card.company?.name}
                 </Link>
               ) : null}
 
               {card.address && (
                 <Link className="flex items-start gap-2 @sm:text-base text-sm" href={"#"}>
-                  <IconPinned className="mt-1.5 @sm:size-5 size-4 flex-shrink-0 stroke-[1.5]" />
+                  <IconPinned className="mt-1.5 @sm:size-5 size-4 shrink-0 stroke-[1.5]" />
                   {card.address}
                 </Link>
               )}

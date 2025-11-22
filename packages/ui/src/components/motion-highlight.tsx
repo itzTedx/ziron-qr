@@ -34,7 +34,7 @@ type MotionHighlightContextType<T extends string> = {
 };
 
 const MotionHighlightContext = React.createContext<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: i dont know the type
   MotionHighlightContextType<any> | undefined
 >(undefined);
 
@@ -267,7 +267,7 @@ function MotionHighlight<T extends string>({ ref, ...props }: MotionHighlightPro
           ? render(children)
           : render(
               React.Children.map(children, (child, index) => (
-                <MotionHighlightItem className={props?.itemsClassName} key={index}>
+                <MotionHighlightItem className={props?.itemsClassName} key={child.key ?? index}>
                   {child}
                 </MotionHighlightItem>
               ))
@@ -465,7 +465,7 @@ function MotionHighlightItem({
             )}
           </AnimatePresence>
 
-          <div className={cn("relative z-[1]", className)} data-slot="motion-highlight-item" {...dataAttributes}>
+          <div className={cn("relative z-1", className)} data-slot="motion-highlight-item" {...dataAttributes}>
             {children}
           </div>
         </>

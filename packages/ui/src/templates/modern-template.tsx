@@ -123,20 +123,20 @@ export default function ModernTemplate({ card, company, imageBase64URI }: Templa
               {card.emails &&
                 card.emails.map((e, i) => (
                   <LinkBox color={theme} href={`mailto:${e.email}`} key={`${e.id}-${i}-${e.email}`}>
-                    <IconMail className="@sm:size-16 size-9 flex-shrink-0 stroke-[1.5]" />
+                    <IconMail className="@sm:size-16 size-9 shrink-0 stroke-[1.5]" />
                     <p className="sr-only">{e.email}</p>
                   </LinkBox>
                 ))}
               {card.phones &&
                 card.phones.map((ph, i) => (
                   <LinkBox color={theme} href={`tel:${ph.phone}`} key={`${ph.id}-${i}-${ph.phone}`}>
-                    <IconPhone className="@sm:size-16 size-9 flex-shrink-0 stroke-[1.5]" />
+                    <IconPhone className="@sm:size-16 size-9 shrink-0 stroke-[1.5]" />
                     <p className="sr-only"> {ph.phone}</p>
                   </LinkBox>
                 ))}
               {card.address && (
                 <LinkBox color={theme} href={"#"}>
-                  <IconPinned className="@sm:size-16 size-9 flex-shrink-0 stroke-[1.5]" />
+                  <IconPinned className="@sm:size-16 size-9 shrink-0 stroke-[1.5]" />
                   <p className="sr-only"> {card.address}</p>
                 </LinkBox>
               )}
@@ -150,7 +150,7 @@ export default function ModernTemplate({ card, company, imageBase64URI }: Templa
             <div className="grid grid-cols-3 gap-4">
               {card.links.map((link, index) => (
                 <LinkBox color={theme} href={link.url || "#"} key={`${index}-${link.label}-${link.url}`}>
-                  <div className="relative @sm:size-16 size-9 flex-shrink-0">
+                  <div className="relative @sm:size-16 size-9 shrink-0">
                     <Image alt="" fill sizes="10vw" src={link.icon} />
                   </div>
                   <h5 className="sr-only">{link.label}</h5>
@@ -158,7 +158,7 @@ export default function ModernTemplate({ card, company, imageBase64URI }: Templa
               ))}
               {card.attachmentUrl && card.attachmentFileName && (
                 <LinkBox color={theme} download href={card.attachmentUrl}>
-                  <Icons.pdf className="relative @sm:size-16 size-9 flex-shrink-0" />
+                  <Icons.pdf className="relative @sm:size-16 size-9 shrink-0" />
 
                   <h5 className="sr-only">{removeExtension(card.attachmentFileName)}</h5>
                 </LinkBox>

@@ -1,0 +1,8 @@
+{
+  "extends": "@ziron/typescript-config/base.json",
+  "paths": {
+    "@/*": ["./src/*"]
+  },
+  "include": ["src", "*.ts"],
+  "exclude": ["node_modules"]
+}

@@ -84,7 +84,7 @@ export function LoginForm() {
             )}
           />
           <Button
-            className="relative inline-block w-full cursor-pointer rounded-md bg-gradient-to-bl bg-white from-primary to-brand-secondary px-4 py-2 text-center font-bold text-sm text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset] transition duration-200"
+            className="relative inline-block w-full cursor-pointer rounded-md bg-linear-0-to-bl bg-white from-primary to-brand-secondary px-4 py-2 text-center font-bold text-sm text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset] transition duration-200"
             disabled={isPending}
             type="submit"
           >

@@ -59,7 +59,7 @@ export default function DefaultTemplate({ card, company, imageBase64URI }: Templ
                       src={card.company.logo}
                       width={100}
                     />
-                    <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-background/50 to-transparent" />
+                    <div className="absolute inset-x-0 bottom-0 h-12 bg-linear-to-t from-background/50 to-transparent" />
                   </>
                 )}
               </div>
@@ -83,7 +83,7 @@ export default function DefaultTemplate({ card, company, imageBase64URI }: Templ
                   href={card.company && card.company.website ? card.company.website : "#"}
                   target="_blank"
                 >
-                  <IconBuildingSkyscraper className="@sm:size-5 size-4 flex-shrink-0 stroke-[1.5]" />
+                  <IconBuildingSkyscraper className="@sm:size-5 size-4 shrink-0 stroke-[1.5]" />
                   {companyData?.name || card.company?.name}
                 </Link>
               ) : null}
@@ -95,7 +95,7 @@ export default function DefaultTemplate({ card, company, imageBase64URI }: Templ
                     href={`mailto:${email.email}`}
                     key={`${i + 1}-${email.email}`}
                   >
-                    <IconMail className="@sm:size-5 size-4 flex-shrink-0 stroke-[1.5]" />
+                    <IconMail className="@sm:size-5 size-4 shrink-0 stroke-[1.5]" />
                     {email.email}
                   </Link>
                 ))}
@@ -107,14 +107,14 @@ export default function DefaultTemplate({ card, company, imageBase64URI }: Templ
                     href={`tel:${phone.phone}`}
                     key={`${i + 1}-${phone.phone}`}
                   >
-                    <IconPhone className="@sm:size-5 size-4 flex-shrink-0 stroke-[1.5]" />
+                    <IconPhone className="@sm:size-5 size-4 shrink-0 stroke-[1.5]" />
                     {phone.phone}
                   </Link>
                 ))}
 
               {card.address && (
                 <Link className="flex items-start gap-2 @sm:text-base text-sm" href={card.mapUrl ?? "#"}>
-                  <IconPinned className="mt-1.5 @sm:size-5 size-4 flex-shrink-0 stroke-[1.5]" />
+                  <IconPinned className="mt-1.5 @sm:size-5 size-4 shrink-0 stroke-[1.5]" />
                   {card.address}
                 </Link>
               )}
@@ -132,7 +132,7 @@ export default function DefaultTemplate({ card, company, imageBase64URI }: Templ
                   key={`${index}-${link.url}`}
                   target="_blank"
                 >
-                  <div className="relative size-8 flex-shrink-0">
+                  <div className="relative size-8 shrink-0">
                     <Image alt="" fill sizes="10vw" src={link.icon} />
                   </div>
                   <h5 className="font-semibold">{link.label}</h5>
@@ -150,7 +150,7 @@ export default function DefaultTemplate({ card, company, imageBase64URI }: Templ
                 download
                 href={card.attachmentUrl}
               >
-                <div className="relative size-8 flex-shrink-0">
+                <div className="relative size-8 shrink-0">
                   <Icons.pdf />
                 </div>
                 <h5 className="font-semibold">{removeExtension(card.attachmentFileName)}</h5>
