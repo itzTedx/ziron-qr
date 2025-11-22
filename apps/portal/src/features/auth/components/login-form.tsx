@@ -4,7 +4,6 @@ import { useTransition } from "react";
 
 import { useRouter } from "next/navigation";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 
 import { authClient } from "@ziron/auth/client";
@@ -12,7 +11,7 @@ import { Button } from "@ziron/ui/components/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, useForm } from "@ziron/ui/components/form";
 import { Input } from "@ziron/ui/components/input";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
-import { LoginUserType, loginUserSchema } from "@ziron/validators";
+import { LoginUserType, loginUserSchema, zodResolver } from "@ziron/validators";
 
 import { PasswordInput } from "@/components/ui/password-input";
 

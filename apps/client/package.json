@@ -10,16 +10,17 @@
   },
   "dependencies": {
     "@ziron/ui": "workspace:*",
+    "next": "catalog:",
     "react": "catalog:react19",
-    "react-dom": "catalog:react19",
-    "next": "catalog:"
+    "react-dom": "catalog:react19"
   },
   "devDependencies": {
+    "@biomejs/biome": "catalog:",
     "@types/node": "^20",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
-    "@biomejs/biome": "catalog:",
     "@ziron/typescript-config": "workspace:*",
+    "babel-plugin-react-compiler": "^1.0.0",
     "typescript": "catalog:"
   }
 }

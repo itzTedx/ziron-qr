@@ -15,6 +15,7 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.1.1",
     "zod": "catalog:"
   },
   "devDependencies": {

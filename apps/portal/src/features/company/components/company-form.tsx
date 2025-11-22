@@ -4,7 +4,6 @@ import { useState, useTransition } from "react";
 
 import Image from "next/image";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { IconBuilding, IconEdit, IconLoader, IconPlus, IconTrash } from "@tabler/icons-react";
 import { parseAsString, useQueryStates } from "nuqs";
 import { useForm } from "react-hook-form";
@@ -22,7 +21,7 @@ import {
 } from "@ziron/ui/components/alert-dialog";
 import { Button } from "@ziron/ui/components/button";
 import { DialogFooter } from "@ziron/ui/components/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ziron/ui/components/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, zodResolver } from "@ziron/ui/components/form";
 import { Input } from "@ziron/ui/components/input";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 import { Textarea } from "@ziron/ui/components/textarea";
@@ -120,7 +119,7 @@ export default function CompanyForm({ initialData, isEditMode }: CompanyFormProp
           <FormField
             control={form.control}
             name="logo"
-            render={({}) => (
+            render={() => (
               <FormItem>
                 <FormControl>
                   <div className="mt-2 flex flex-col items-center gap-2">

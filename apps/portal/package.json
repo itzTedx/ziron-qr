@@ -23,22 +23,26 @@
     "@ziron/ui": "workspace:*",
     "@ziron/utils": "workspace:*",
     "@ziron/validators": "workspace:*",
-    "better-auth": "1.2.12",
+    "better-auth": "1.4.0",
+    "dotenv-cli": "^8.0.0",
     "lucide-react": "^0.475.0",
+    "motion": "^12.23.6",
     "next": "catalog:",
     "next-themes": "^0.4.4",
     "nuqs": "^2.4.3",
     "react": "catalog:react19",
     "react-dom": "catalog:react19",
+    "react-hook-form": "^7.60.0",
     "react-phone-number-input": "^3.4.12",
     "sonner": "^2.0.6"
   },
   "devDependencies": {
+    "@biomejs/biome": "catalog:",
     "@types/node": "^20",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
-    "@biomejs/biome": "catalog:",
     "@ziron/typescript-config": "workspace:*",
+    "babel-plugin-react-compiler": "^1.0.0",
     "typescript": "catalog:"
   }
 }

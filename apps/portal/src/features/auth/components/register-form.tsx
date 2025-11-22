@@ -4,12 +4,20 @@ import { useState, useTransition } from "react";
 
 import { useRouter } from "next/navigation";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 import { authClient } from "@ziron/auth/client";
 import { Button } from "@ziron/ui/components/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, useForm } from "@ziron/ui/components/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  useForm,
+  zodResolver,
+} from "@ziron/ui/components/form";
 import { Input } from "@ziron/ui/components/input";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 import { toast } from "@ziron/ui/components/sonner";

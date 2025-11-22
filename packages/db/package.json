@@ -12,7 +12,8 @@
   "scripts": {
     "build": "tsup --clean",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
-    "dev": "concurrently \"pnpm with-env drizzle-kit studio --config=drizzle.config.ts --port=8080 --verbose\" \"tsc --watch\"",
+    "dev:old": "concurrently \"pnpm with-env drizzle-kit studio --config=drizzle.config.ts --verbose\" \"tsc --watch\"",
+    "dev": "pnpm with-env drizzle-kit studio --config=drizzle.config.ts --verbose",
     "format": "biome check .",
     "lint": "biome check .",
     "generate": "pnpm with-env drizzle-kit generate",

@@ -5,7 +5,7 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 
 import { IconGripVertical, IconPlus, IconTrash } from "@tabler/icons-react";
-import { Reorder } from "framer-motion";
+import { Reorder } from "motion/react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 import { Button } from "@ziron/ui/components/button";
@@ -48,7 +48,7 @@ const LinkItem = ({ data, index, loading, onRemove, form }: LinkItemProps) => {
             name={`links.${index}.label`}
             render={({ field }) => (
               <FormItem className="flex gap-2 md:col-span-2 md:gap-3">
-                <Image alt="" className="flex-shrink-0" height={40} src={data.icon} width={40} />
+                <Image alt={data.category ?? "Image"} className="shrink-0" height={40} src={data.icon} width={40} />
                 <FormControl>
                   <Input className="space-y-0" {...field} disabled={loading} placeholder={`${data.label} Title`} />
                 </FormControl>
@@ -243,7 +243,7 @@ export const DndLinks = () => {
       >
         <div className="p-6 pt-0 pb-6">
           {LINKS.map((item, i) => (
-            <div className="py-3" key={i}>
+            <div className="py-3" key={`${item.label}-${i}`}>
               <h4 className="pb-2 text-muted-foreground text-sm">{item.label}</h4>
 
               <div className={cn("grid gap-x-6", item.links.length > 1 ? "grid-cols-2" : "grid-cols-1")}>

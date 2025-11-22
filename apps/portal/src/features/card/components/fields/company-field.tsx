@@ -4,7 +4,6 @@ import Image from "next/image";
 
 import { IconCaretUpDownFilled } from "@tabler/icons-react";
 import { parseAsString, useQueryStates } from "nuqs";
-import { useFormContext } from "react-hook-form";
 
 import { Company } from "@ziron/db/schema";
 import { Button } from "@ziron/ui/components/button";
@@ -16,7 +15,7 @@ import {
   CommandItem,
   CommandList,
 } from "@ziron/ui/components/command";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ziron/ui/components/form";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage, useFormContext } from "@ziron/ui/components/form";
 import { Popover, PopoverContent, PopoverTrigger } from "@ziron/ui/components/popover";
 import { cn } from "@ziron/utils";
 import { zCardSchema } from "@ziron/validators";
@@ -94,7 +93,7 @@ export const CompanyField = ({ data: data, companyId }: Props) => {
                 </Button>
               </FormControl>
             </PopoverTrigger>
-            <PopoverContent align="start" className="p-0 sm:w-[19.5rem]">
+            <PopoverContent align="start" className="p-0 sm:w-78">
               <Command>
                 <CommandInput placeholder="Search Category..." />
                 <CommandEmpty>Company not found</CommandEmpty>

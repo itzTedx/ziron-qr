@@ -5,71 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1752674660197,
-      "tag": "0000_regular_wonder_man",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1752674889476,
-      "tag": "0001_adorable_sleepwalker",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1752674911271,
-      "tag": "0002_clumsy_next_avengers",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1752691126114,
-      "tag": "0003_tidy_jean_grey",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1752696961744,
-      "tag": "0004_pretty_annihilus",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1752701931203,
-      "tag": "0005_clear_proteus",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1752703678680,
-      "tag": "0006_perpetual_wild_pack",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "7",
-      "when": 1752704396128,
-      "tag": "0007_illegal_lester",
-      "breakpoints": true
-    },
-    {
-      "idx": 8,
-      "version": "7",
-      "when": 1752752052947,
-      "tag": "0008_sour_terrax",
-      "breakpoints": true
-    },
-    {
-      "idx": 9,
-      "version": "7",
-      "when": 1752755835786,
-      "tag": "0009_concerned_senator_kelly",
+      "when": 1763792886797,
+      "tag": "0000_rare_wasp",
       "breakpoints": true
     }
   ]

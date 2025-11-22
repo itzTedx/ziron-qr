@@ -70,7 +70,7 @@ export const CardCustomize = ({ template }: Props) => {
         <FormField
           control={form.control}
           name={"appearance.theme"}
-          render={({ field }) => (
+          render={() => (
             <FormItem className="flex w-full flex-col items-start justify-between gap-3 p-3 sm:flex-row sm:items-center">
               <FormLabel>Theme Color</FormLabel>
               <FormControl>{/* <ColorsInput value={field.value} onChange={field.onChange} /> */}</FormControl>
@@ -83,7 +83,7 @@ export const CardCustomize = ({ template }: Props) => {
           <FormField
             control={form.control}
             name={"appearance.btnColor"}
-            render={({ field }) => (
+            render={() => (
               <FormItem className="flex w-full flex-col items-start justify-between gap-3 p-3 sm:flex-row sm:items-center">
                 <FormLabel>Button</FormLabel>
                 <FormControl>{/* <ColorsInput value={field.value} onChange={field.onChange} /> */}</FormControl>

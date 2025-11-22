@@ -19,17 +19,17 @@
   },
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.13.6",
-    "@ziron/redis": "workspace:*",
     "@ziron/db": "workspace:*",
-    "better-auth": "1.2.12",
+    "@ziron/redis": "workspace:*",
+    "better-auth": "1.4.0",
     "next": "catalog:",
     "react": "catalog:react19",
     "react-dom": "catalog:react19",
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@types/react": "catalog:react19",
     "@biomejs/biome": "catalog:",
+    "@types/react": "catalog:react19",
     "@ziron/typescript-config": "workspace:*",
     "typescript": "catalog:"
   }
