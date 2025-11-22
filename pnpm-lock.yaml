@@ -212,6 +212,9 @@ importers:
       '@ziron/db':
         specifier: workspace:*
         version: link:../db
+      '@ziron/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@ziron/validators':
         specifier: workspace:*
         version: link:../validators

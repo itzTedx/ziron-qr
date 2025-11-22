@@ -3,6 +3,7 @@
 import { eq } from "@ziron/db";
 import { db } from "@ziron/db/client";
 import { companies } from "@ziron/db/schema";
+import { slugify } from "@ziron/utils";
 import { companySchema, z } from "@ziron/validators";
 
 import { createLog } from "@/lib/utils";
@@ -25,11 +26,14 @@ export async function upsertCompany(formData: unknown) {
 
   try {
     let company;
+
+    const slug = slugify(data.name);
+
     if (data.id) {
       log.info("Attempting to update existing company", { id: data.id });
       company = await db
         .insert(companies)
-        .values(data)
+        .values({ ...data, slug })
         .onConflictDoUpdate({
           target: companies.id,
           set: {
@@ -47,7 +51,7 @@ export async function upsertCompany(formData: unknown) {
       log.info("Attempting to create new company", { name: data.name });
       company = await db
         .insert(companies)
-        .values({ ...data, createdAt: new Date(), updatedAt: new Date() })
+        .values({ ...data, slug, createdAt: new Date(), updatedAt: new Date() })
         .returning();
       log.info("Company creation operation complete", { company });
     }

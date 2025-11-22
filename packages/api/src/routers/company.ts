@@ -1,9 +1,11 @@
 import { db } from "@ziron/db/client";
-import { Company } from "@ziron/db/schema";
+import { Company, companies } from "@ziron/db/schema";
+import { slugify } from "@ziron/utils";
 import { companySchema, z } from "@ziron/validators";
 
+import { COMPANY_ORDERINGS, getOrder } from "@/utils/company-ordering";
+
 import { protectedProcedure } from "..";
-import { COMPANY_ORDERINGS, getOrder } from "../utils/company-ordering";
 
 export const createCompany = protectedProcedure
   .route({ method: "POST", path: "/company", summary: "Create a new company", tags: ["company"] })
@@ -11,12 +13,30 @@ export const createCompany = protectedProcedure
   .output(
     z.object({
       success: z.boolean(),
+      companyName: z.string(),
     })
   )
-  .handler(async () => {
-    return {
-      success: true,
-    };
+  .handler(async ({ input, errors }) => {
+    const slug = slugify(input.name);
+
+    try {
+      const [company] = await db
+        .insert(companies)
+        .values({
+          ...input,
+          slug,
+        })
+        .returning({
+          name: companies.name,
+        });
+
+      return {
+        success: true,
+        companyName: company?.name ?? "",
+      };
+    } catch {
+      throw errors.INTERNAL_SERVER_ERROR();
+    }
   });
 
 export const listCompanies = protectedProcedure

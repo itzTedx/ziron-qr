@@ -34,9 +34,9 @@ export function AppSidebar({ data, user, ...props }: AppSidebarProps) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
+            <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:p-1.5!">
               <Link href="/">
-                <IconLogo className="!size-5" />
+                <IconLogo className="size-5!" />
                 <span>
                   <span className="truncate font-semibold">Ziron Media</span>
                 </span>
