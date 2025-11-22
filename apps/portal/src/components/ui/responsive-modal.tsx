@@ -44,14 +44,12 @@ export const ResponsiveModal = ({
 
   if (isMobile) {
     return (
-      <Drawer open={isOpen} onOpenChange={closeModal}>
+      <Drawer onOpenChange={closeModal} open={isOpen}>
         {trigger && <DrawerTrigger asChild={asChild}>{trigger}</DrawerTrigger>}
         <DrawerContent>
           <DrawerHeader>
             <DrawerTitle>{title}</DrawerTitle>
-            {description && (
-              <DrawerDescription className="sr-only">{title}</DrawerDescription>
-            )}
+            {description && <DrawerDescription className="sr-only">{title}</DrawerDescription>}
           </DrawerHeader>
           {children}
         </DrawerContent>
@@ -60,14 +58,12 @@ export const ResponsiveModal = ({
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={closeModal}>
+    <Dialog onOpenChange={closeModal} open={isOpen}>
       {trigger && <DialogTrigger asChild={asChild}>{trigger}</DialogTrigger>}
       <DialogContent className={cn("p-0", "max-w-xl", className)}>
         <DialogHeader className="border-b p-6">
           <DialogTitle>{title}</DialogTitle>
-          {description && (
-            <DialogDescription className="sr-only">{title}</DialogDescription>
-          )}
+          {description && <DialogDescription className="sr-only">{title}</DialogDescription>}
         </DialogHeader>
         {children}
       </DialogContent>

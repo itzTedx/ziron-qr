@@ -12,8 +12,8 @@
   "license": "MIT",
   "scripts": {
     "clean": "git clean -xdf .cache .turbo dist node_modules",
-    "format": "prettier --check . --ignore-path ../../.gitignore",
-    "lint": "eslint",
+    "format": "biome check .",
+    "lint": "biome check .",
     "generate": "dotenv -e ../../.env -- pnpx @better-auth/cli generate --output ../db/src/auth-schema.ts --config ./src/index.ts",
     "typecheck": "tsc --noEmit"
   },
@@ -29,12 +29,8 @@
   },
   "devDependencies": {
     "@types/react": "catalog:react19",
-    "@ziron/eslint-config": "workspace:*",
-    "@ziron/prettier-config": "workspace:*",
+    "@biomejs/biome": "catalog:",
     "@ziron/typescript-config": "workspace:*",
-    "eslint": "catalog:",
-    "prettier": "catalog:",
     "typescript": "catalog:"
-  },
-  "prettier": "@ziron/prettier-config"
+  }
 }

@@ -1,8 +1,8 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 
-import { createLog } from "@/lib/utils";
-
 import redis from "@ziron/redis";
+
+import { createLog } from "@/lib/utils";
 
 const log = createLog("CompanyCache");
 
@@ -36,20 +36,15 @@ export const redisCache = {
       if (cached) {
         log.info("Cache hit", { key });
         return JSON.parse(cached);
-      } else {
-        log.info("Cache miss", { key });
-        return null;
       }
+      log.info("Cache miss", { key });
+      return null;
     } catch (error) {
       log.error(`Redis get error for key ${key}`, { error });
       return null;
     }
   },
-  async set<T>(
-    key: string,
-    data: T,
-    ttl: number = COMPANY_CACHE_DURATIONS.MEDIUM,
-  ): Promise<void> {
+  async set<T>(key: string, data: T, ttl: number = COMPANY_CACHE_DURATIONS.MEDIUM): Promise<void> {
     try {
       log.info("Setting cache", { key, ttl });
       await redis.setex(key, ttl, JSON.stringify(data));

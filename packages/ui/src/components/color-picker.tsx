@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import { cn } from '@ziron/utils'
-import * as React from 'react'
+import * as React from "react";
+
 import {
   ColorArea as AriaColorArea,
   ColorAreaProps as AriaColorAreaProps,
@@ -22,39 +22,30 @@ import {
   ColorPickerStateContext,
   composeRenderProps,
   parseColor,
-} from 'react-aria-components'
+} from "react-aria-components";
 
-const ColorField = AriaColorField
-const ColorPicker = AriaColorPicker
+import { cn } from "@ziron/utils";
+
+const ColorField = AriaColorField;
+const ColorPicker = AriaColorPicker;
 
 function ColorSlider({ className, ...props }: AriaColorSliderProps) {
-  return (
-    <AriaColorSlider
-      className={composeRenderProps(className, (className) =>
-        cn('py-1', className)
-      )}
-      {...props}
-    />
-  )
+  return <AriaColorSlider className={composeRenderProps(className, (className) => cn("py-1", className))} {...props} />;
 }
 
 function ColorArea({ className, ...props }: AriaColorAreaProps) {
   return (
     <AriaColorArea
-      className={composeRenderProps(className, (className) =>
-        cn('h-[232px] w-full rounded-lg', className)
-      )}
+      className={composeRenderProps(className, (className) => cn("h-[232px] w-full rounded-lg", className))}
       {...props}
     />
-  )
+  );
 }
 
 function SliderTrack({ className, style, ...props }: AriaSliderTrackProps) {
   return (
     <AriaSliderTrack
-      className={composeRenderProps(className, (className) =>
-        cn('h-2 w-full rounded-full', className)
-      )}
+      className={composeRenderProps(className, (className) => cn("h-2 w-full rounded-full", className))}
       style={({ defaultStyle }) => ({
         ...style,
         background: `${defaultStyle.background},
@@ -65,46 +56,38 @@ function SliderTrack({ className, style, ...props }: AriaSliderTrackProps) {
       })}
       {...props}
     />
-  )
+  );
 }
 
 function ColorThumb({ className, ...props }: AriaColorThumbProps) {
   return (
     <AriaColorThumb
       className={composeRenderProps(className, (className) =>
-        cn('z-50 size-3 rounded-full ring-2 ring-stroke-white-0', className)
+        cn("z-50 size-3 rounded-full ring-2 ring-stroke-white-0", className)
       )}
       {...props}
     />
-  )
+  );
 }
 
-function ColorSwatchPicker({
-  className,
-  ...props
-}: AriaColorSwatchPickerProps) {
+function ColorSwatchPicker({ className, ...props }: AriaColorSwatchPickerProps) {
   return (
     <AriaColorSwatchPicker
-      className={composeRenderProps(className, (className) =>
-        cn('flex w-full flex-wrap gap-1', className)
-      )}
+      className={composeRenderProps(className, (className) => cn("flex w-full flex-wrap gap-1", className))}
       {...props}
     />
-  )
+  );
 }
 
-function ColorSwatchPickerItem({
-  className,
-  ...props
-}: AriaColorSwatchPickerItemProps) {
+function ColorSwatchPickerItem({ className, ...props }: AriaColorSwatchPickerItemProps) {
   return (
     <AriaColorSwatchPickerItem
       className={composeRenderProps(className, (className) =>
-        cn('group/swatch-item cursor-pointer p-1 focus:outline-none', className)
+        cn("group/swatch-item cursor-pointer p-1 focus:outline-none", className)
       )}
       {...props}
     />
-  )
+  );
 }
 
 function ColorSwatch({ className, style, ...props }: AriaColorSwatchProps) {
@@ -112,7 +95,7 @@ function ColorSwatch({ className, style, ...props }: AriaColorSwatchProps) {
     <AriaColorSwatch
       className={composeRenderProps(className, (className) =>
         cn(
-          'size-4 rounded-full border-stroke-white-0 group-data-[selected=true]/swatch-item:border-2 group-data-[selected=true]/swatch-item:ring-[1.5px]',
+          "size-4 rounded-full border-stroke-white-0 group-data-[selected=true]/swatch-item:border-2 group-data-[selected=true]/swatch-item:ring-[1.5px]",
           className
         )
       )}
@@ -126,39 +109,34 @@ function ColorSwatch({ className, style, ...props }: AriaColorSwatchProps) {
       })}
       {...props}
     />
-  )
+  );
 }
 
-const EyeDropperButton = React.forwardRef<
-  HTMLButtonElement,
-  React.HTMLAttributes<HTMLButtonElement>
->(({ ...rest }, forwardedRef) => {
-  const state = React.useContext(ColorPickerStateContext)!
+const EyeDropperButton = React.forwardRef<HTMLButtonElement, React.HTMLAttributes<HTMLButtonElement>>(
+  ({ ...rest }, forwardedRef) => {
+    const state = React.useContext(ColorPickerStateContext)!;
 
-  // eslint-disable-next-line
-  // @ts-ignore
-  if (typeof EyeDropper === 'undefined') {
-    return null
+    // eslint-disable-next-line
+    // @ts-ignore
+    if (typeof EyeDropper === "undefined") {
+      return null;
+    }
+
+    return (
+      <button
+        aria-label="Eye dropper"
+        onClick={() => {
+          // eslint-disable-next-line
+          // @ts-ignore
+          new EyeDropper().open().then((result: { sRGBHex: string }) => state.setColor(parseColor(result.sRGBHex)));
+        }}
+        ref={forwardedRef}
+        {...rest}
+      />
+    );
   }
-
-  return (
-    <button
-      ref={forwardedRef}
-      aria-label="Eye dropper"
-      onClick={() => {
-        // eslint-disable-next-line
-        // @ts-ignore
-        new EyeDropper()
-          .open()
-          .then((result: { sRGBHex: string }) =>
-            state.setColor(parseColor(result.sRGBHex))
-          )
-      }}
-      {...rest}
-    />
-  )
-})
-EyeDropperButton.displayName = 'EyeDropperButton'
+);
+EyeDropperButton.displayName = "EyeDropperButton";
 
 export {
   ColorArea as Area,
@@ -171,4 +149,4 @@ export {
   ColorSwatchPicker as SwatchPicker,
   ColorSwatchPickerItem as SwatchPickerItem,
   ColorThumb as Thumb,
-}
+};

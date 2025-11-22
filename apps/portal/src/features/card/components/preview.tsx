@@ -1,5 +1,3 @@
-import PhoneMockup from "@/components/ui/phone-mockup";
-import { ResponsiveModal } from "@/components/ui/responsive-modal";
 import { IconArrowsMaximize } from "@tabler/icons-react";
 import { useQueryState } from "nuqs";
 import { useFormContext } from "react-hook-form";
@@ -12,6 +10,9 @@ import DefaultTemplate from "@ziron/ui/templates/default-template";
 import ModernTemplate from "@ziron/ui/templates/modern-template";
 import { cn } from "@ziron/utils";
 import { zCardSchema } from "@ziron/validators";
+
+import PhoneMockup from "@/components/ui/phone-mockup";
+import { ResponsiveModal } from "@/components/ui/responsive-modal";
 
 interface Props {
   companies: Company[];
@@ -27,42 +28,30 @@ export const Preview = ({ companies, cardData }: Props) => {
   const company = companies.filter((c) => c.id === cardData.companyId);
 
   return (
-    <Card className="bg-background @container sticky top-24 col-span-1 hidden h-fit rounded-lg md:block">
+    <Card className="@container sticky top-24 col-span-1 hidden h-fit rounded-lg bg-background md:block">
       <CardHeader className="flex-row items-center justify-between border-b py-4">
         <h5>Preview</h5>
         <ResponsiveModal
-          isOpen={preview === "open"}
-          closeModal={() => setPreview(null)}
-          trigger={
-            <IconArrowsMaximize
-              className="size-4 cursor-pointer text-gray-600"
-              onClick={() => setPreview("open")}
-            />
-          }
-          title="Preview"
           className="max-w-sm gap-0"
+          closeModal={() => setPreview(null)}
+          isOpen={preview === "open"}
+          title="Preview"
+          trigger={
+            <IconArrowsMaximize className="size-4 cursor-pointer text-gray-600" onClick={() => setPreview("open")} />
+          }
         >
-          <CardContent
-            className={cn(
-              "relative p-0",
-              cardData.appearance?.isDarkMode ? "dark" : "light",
-            )}
-          >
+          <CardContent className={cn("relative p-0", cardData.appearance?.isDarkMode ? "dark" : "light")}>
             <ScrollArea className="h-[640px]">
               {(() => {
                 switch (cardData.appearance?.template) {
                   case "default":
-                    return (
-                      <DefaultTemplate card={cardData} company={company} />
-                    );
+                    return <DefaultTemplate card={cardData} company={company} />;
                   case "modern":
                     return <ModernTemplate card={cardData} company={company} />;
                   case "card":
                     return <CardTemplate card={cardData} company={company} />;
                   default:
-                    return (
-                      <DefaultTemplate card={cardData} company={company} />
-                    );
+                    return <DefaultTemplate card={cardData} company={company} />;
                 }
               })()}
             </ScrollArea>

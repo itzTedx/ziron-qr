@@ -18,7 +18,7 @@ const phonesSchema = z
         .max(20, { message: "Phone number too long" })
         .optional(),
       label: LabelEnum,
-    }),
+    })
   )
   .optional();
 
@@ -30,7 +30,7 @@ const emailsSchema = z
       id: z.string().optional(),
       email: z.email({ message: "Invalid email address" }).optional(),
       label: LabelEnum,
-    }),
+    })
   )
   .optional();
 
@@ -43,17 +43,14 @@ const linksSchema = z.array(
     url: z.url({ message: "Please enter a valid URL" }),
     icon: z.string(),
     category: z.string().optional(),
-  }),
+  })
 );
 
 export const cardSchema = z
   .object({
     // Core card information
     id: z.string().optional(),
-    name: z
-      .string()
-      .min(2, { message: "Please enter full name" })
-      .max(256, { message: "Name is too long" }),
+    name: z.string().min(2, { message: "Please enter full name" }).max(256, { message: "Name is too long" }),
     bio: z.string().optional(),
     designation: z.string().optional(),
     companyId: z.string(),
@@ -80,7 +77,7 @@ export const cardSchema = z
     appearance: appearanceSchema,
   })
   .describe(
-    "Validates card data: core info (name, bio, designation, companyId), contact details (phones, emails, address), media (image, cover, attachments), links, and styling preferences.",
+    "Validates card data: core info (name, bio, designation, companyId), contact details (phones, emails, address), media (image, cover, attachments), links, and styling preferences."
   );
 
 export type zCardSchema = z.infer<typeof cardSchema>;

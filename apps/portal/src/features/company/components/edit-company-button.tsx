@@ -26,8 +26,6 @@ export default function EditCompanyButton({ initialData }: EditButtonProps) {
 
   return (
     <Button
-      size="icon"
-      variant="outline"
       onClick={() => {
         setCompanyModal({ modal: "company" });
         setFields({
@@ -39,6 +37,8 @@ export default function EditCompanyButton({ initialData }: EditButtonProps) {
           logo: initialData.logo ?? "",
         });
       }}
+      size="icon"
+      variant="outline"
     >
       <IconEdit className="size-4" />
     </Button>

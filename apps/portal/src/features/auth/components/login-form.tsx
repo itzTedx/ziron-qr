@@ -1,26 +1,20 @@
 "use client";
 
 import { useTransition } from "react";
+
 import { useRouter } from "next/navigation";
 
-import { PasswordInput } from "@/components/ui/password-input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 
 import { authClient } from "@ziron/auth/client";
 import { Button } from "@ziron/ui/components/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  useForm,
-} from "@ziron/ui/components/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, useForm } from "@ziron/ui/components/form";
 import { Input } from "@ziron/ui/components/input";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
-import { loginUserSchema, LoginUserType } from "@ziron/validators";
+import { LoginUserType, loginUserSchema } from "@ziron/validators";
+
+import { PasswordInput } from "@/components/ui/password-input";
 
 export function LoginForm() {
   const router = useRouter();
@@ -59,7 +53,7 @@ export function LoginForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="mt-9">
+      <form className="mt-9" onSubmit={form.handleSubmit(onSubmit)}>
         <div className="grid gap-6">
           <FormField
             control={form.control}
@@ -68,13 +62,7 @@ export function LoginForm() {
               <FormItem>
                 <FormLabel>Email address</FormLabel>
                 <FormControl>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="name@mail.com"
-                    required
-                    {...field}
-                  />
+                  <Input id="email" placeholder="name@mail.com" required type="email" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -97,9 +85,9 @@ export function LoginForm() {
             )}
           />
           <Button
-            type="submit"
-            className="from-primary to-brand-secondary relative inline-block w-full cursor-pointer rounded-md bg-white bg-gradient-to-bl px-4 py-2 text-center text-sm font-bold text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset] transition duration-200"
+            className="relative inline-block w-full cursor-pointer rounded-md bg-gradient-to-bl bg-white from-primary to-brand-secondary px-4 py-2 text-center font-bold text-sm text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset] transition duration-200"
             disabled={isPending}
+            type="submit"
           >
             <LoadingSwap isLoading={isPending}>Login</LoadingSwap>
           </Button>

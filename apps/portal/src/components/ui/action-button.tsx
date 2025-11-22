@@ -28,8 +28,8 @@ export function ActionButton({
 }: ComponentProps<typeof Button> & {
   action: () => Promise<{ error: boolean; message?: string }>;
   requireAreYouSure?: boolean;
-  areYouSureDescription?: React.ReactNode;
-  actionButton?: React.ReactNode;
+  areYouSureDescription?: ComponentProps<typeof AlertDialogDescription>["children"];
+  actionButton?: ComponentProps<typeof LoadingSwap>["children"];
 }) {
   const [isLoading, startTransition] = useTransition();
 
@@ -49,17 +49,11 @@ export function ActionButton({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              {areYouSureDescription}
-            </AlertDialogDescription>
+            <AlertDialogDescription>{areYouSureDescription}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              disabled={isLoading}
-              onClick={performAction}
-              variant={props.variant}
-            >
+            <AlertDialogAction disabled={isLoading} onClick={performAction} variant={props.variant}>
               <LoadingSwap isLoading={isLoading}>{actionButton}</LoadingSwap>
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -77,10 +71,7 @@ export function ActionButton({
         props.onClick?.(e);
       }}
     >
-      <LoadingSwap
-        isLoading={isLoading}
-        className="inline-flex items-center gap-2"
-      >
+      <LoadingSwap className="inline-flex items-center gap-2" isLoading={isLoading}>
         {props.children}
       </LoadingSwap>
     </Button>

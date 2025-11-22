@@ -1,12 +1,5 @@
 import { Company } from "@ziron/db/schema";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  useFormContext,
-} from "@ziron/ui/components/form";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage, useFormContext } from "@ziron/ui/components/form";
 import { Input } from "@ziron/ui/components/input";
 import { Textarea } from "@ziron/ui/components/textarea";
 import { EmailsType, PhonesType, zCardSchema } from "@ziron/validators";
@@ -55,11 +48,7 @@ export const CardGeneral = ({ data }: Props) => {
               <FormItem>
                 <FormLabel>Address</FormLabel>
                 <FormControl>
-                  <Textarea
-                    placeholder="Enter Full Address"
-                    className="min-h-fit"
-                    {...field}
-                  />
+                  <Textarea className="min-h-fit" placeholder="Enter Full Address" {...field} />
                 </FormControl>
 
                 <FormMessage />
@@ -73,10 +62,7 @@ export const CardGeneral = ({ data }: Props) => {
               <FormItem>
                 <FormLabel>Google Map Link</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="https://maps.app.goo.gl/link"
-                    {...field}
-                  />
+                  <Input placeholder="https://maps.app.goo.gl/link" {...field} />
                 </FormControl>
 
                 <FormMessage />

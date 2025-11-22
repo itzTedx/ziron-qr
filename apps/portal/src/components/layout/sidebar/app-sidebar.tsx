@@ -1,13 +1,11 @@
 "use client";
 
 import * as React from "react";
+
 import Link from "next/link";
 
-import { NavMain } from "@/components/layout/sidebar/nav-main";
-import { NavUser } from "@/components/layout/sidebar/nav-user";
-
-import type { Company } from "@ziron/db/schema";
 import { User } from "@ziron/auth";
+import type { Company } from "@ziron/db/schema";
 import { IconLogo } from "@ziron/ui/assets/logo";
 import {
   Sidebar,
@@ -19,6 +17,9 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@ziron/ui/components/sidebar";
+
+import { NavMain } from "@/components/layout/sidebar/nav-main";
+import { NavUser } from "@/components/layout/sidebar/nav-user";
 
 import { NavProjects } from "./nav-projects";
 
@@ -33,10 +34,7 @@ export function AppSidebar({ data, user, ...props }: AppSidebarProps) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5"
-            >
+            <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
               <Link href="/">
                 <IconLogo className="!size-5" />
                 <span>

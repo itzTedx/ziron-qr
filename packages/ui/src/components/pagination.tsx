@@ -1,36 +1,24 @@
 import * as React from "react";
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  MoreHorizontalIcon,
-} from "lucide-react";
 
-import { cn } from "@ziron/utils";
+import { ChevronLeftIcon, ChevronRightIcon, MoreHorizontalIcon } from "lucide-react";
+
 import { Button, buttonVariants } from "@ziron/ui/components/button";
+import { cn } from "@ziron/utils";
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
     <nav
-      role="navigation"
       aria-label="pagination"
-      data-slot="pagination"
       className={cn("mx-auto flex w-full justify-center", className)}
+      data-slot="pagination"
+      role="navigation"
       {...props}
     />
   );
 }
 
-function PaginationContent({
-  className,
-  ...props
-}: React.ComponentProps<"ul">) {
-  return (
-    <ul
-      data-slot="pagination-content"
-      className={cn("flex flex-row items-center gap-1", className)}
-      {...props}
-    />
-  );
+function PaginationContent({ className, ...props }: React.ComponentProps<"ul">) {
+  return <ul className={cn("flex flex-row items-center gap-1", className)} data-slot="pagination-content" {...props} />;
 }
 
 function PaginationItem({ ...props }: React.ComponentProps<"li">) {
@@ -42,38 +30,30 @@ type PaginationLinkProps = {
 } & Pick<React.ComponentProps<typeof Button>, "size"> &
   React.ComponentProps<"a">;
 
-function PaginationLink({
-  className,
-  isActive,
-  size = "icon",
-  ...props
-}: PaginationLinkProps) {
+function PaginationLink({ className, isActive, size = "icon", ...props }: PaginationLinkProps) {
   return (
     <a
       aria-current={isActive ? "page" : undefined}
-      data-slot="pagination-link"
-      data-active={isActive}
       className={cn(
         buttonVariants({
           variant: isActive ? "outline" : "ghost",
           size,
         }),
-        className,
+        className
       )}
+      data-active={isActive}
+      data-slot="pagination-link"
       {...props}
     />
   );
 }
 
-function PaginationPrevious({
-  className,
-  ...props
-}: React.ComponentProps<typeof PaginationLink>) {
+function PaginationPrevious({ className, ...props }: React.ComponentProps<typeof PaginationLink>) {
   return (
     <PaginationLink
       aria-label="Go to previous page"
-      size="default"
       className={cn("gap-1 px-2.5 sm:pl-2.5", className)}
+      size="default"
       {...props}
     >
       <ChevronLeftIcon />
@@ -82,15 +62,12 @@ function PaginationPrevious({
   );
 }
 
-function PaginationNext({
-  className,
-  ...props
-}: React.ComponentProps<typeof PaginationLink>) {
+function PaginationNext({ className, ...props }: React.ComponentProps<typeof PaginationLink>) {
   return (
     <PaginationLink
       aria-label="Go to next page"
-      size="default"
       className={cn("gap-1 px-2.5 sm:pr-2.5", className)}
+      size="default"
       {...props}
     >
       <span className="hidden sm:block">Next</span>
@@ -99,15 +76,12 @@ function PaginationNext({
   );
 }
 
-function PaginationEllipsis({
-  className,
-  ...props
-}: React.ComponentProps<"span">) {
+function PaginationEllipsis({ className, ...props }: React.ComponentProps<"span">) {
   return (
     <span
       aria-hidden
-      data-slot="pagination-ellipsis"
       className={cn("flex size-9 items-center justify-center", className)}
+      data-slot="pagination-ellipsis"
       {...props}
     >
       <MoreHorizontalIcon className="size-4" />

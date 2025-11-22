@@ -1,45 +1,34 @@
-'use client'
+"use client";
 
-import { CheckIcon } from 'lucide-react'
-import { RadioGroup as RadioGroupPrimitive } from 'radix-ui'
-import * as React from 'react'
+import * as React from "react";
 
-import { cn } from '@ziron/utils'
+import { CheckIcon } from "lucide-react";
+import { RadioGroup as RadioGroupPrimitive } from "radix-ui";
 
-function RadioGroup({
-  className,
-  ...props
-}: React.ComponentProps<typeof RadioGroupPrimitive.Root>) {
-  return (
-    <RadioGroupPrimitive.Root
-      data-slot="radio-group"
-      className={cn('grid gap-3', className)}
-      {...props}
-    />
-  )
+import { cn } from "@ziron/utils";
+
+function RadioGroup({ className, ...props }: React.ComponentProps<typeof RadioGroupPrimitive.Root>) {
+  return <RadioGroupPrimitive.Root className={cn("grid gap-3", className)} data-slot="radio-group" {...props} />;
 }
 
-function RadioGroupItem({
-  className,
-  ...props
-}: React.ComponentProps<typeof RadioGroupPrimitive.Item>) {
+function RadioGroupItem({ className, ...props }: React.ComponentProps<typeof RadioGroupPrimitive.Item>) {
   return (
     <RadioGroupPrimitive.Item
-      data-slot="radio-group-item"
       className={cn(
-        'aspect-square size-9 rounded-full border border-primary text-background ring-offset-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:ring-1 data-[state=checked]:ring-foreground md:size-7',
+        "aspect-square size-9 rounded-full border border-primary text-background ring-offset-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:ring-1 data-[state=checked]:ring-foreground md:size-7",
         className
       )}
+      data-slot="radio-group-item"
       {...props}
     >
       <RadioGroupPrimitive.Indicator
-        data-slot="radio-group-indicator"
         className="relative flex items-center justify-center"
+        data-slot="radio-group-indicator"
       >
         <CheckIcon className="size-6 text-current md:size-4" />
       </RadioGroupPrimitive.Indicator>
     </RadioGroupPrimitive.Item>
-  )
+  );
 }
 
-export { RadioGroup, RadioGroupItem }
+export { RadioGroup, RadioGroupItem };

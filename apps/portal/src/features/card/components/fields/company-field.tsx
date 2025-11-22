@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
+
 import Image from "next/image";
 
 import { IconCaretUpDownFilled } from "@tabler/icons-react";
@@ -15,18 +16,8 @@ import {
   CommandItem,
   CommandList,
 } from "@ziron/ui/components/command";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@ziron/ui/components/form";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@ziron/ui/components/popover";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ziron/ui/components/form";
+import { Popover, PopoverContent, PopoverTrigger } from "@ziron/ui/components/popover";
 import { cn } from "@ziron/utils";
 import { zCardSchema } from "@ziron/validators";
 
@@ -56,7 +47,7 @@ export const CompanyField = ({ data: data, companyId }: Props) => {
         setOpenPopover(false);
       }
     },
-    [form],
+    [form]
   );
 
   // Memoize modal handler
@@ -73,28 +64,25 @@ export const CompanyField = ({ data: data, companyId }: Props) => {
         <FormItem>
           <FormLabel>Company</FormLabel>
 
-          <Popover open={openPopover} onOpenChange={setOpenPopover}>
+          <Popover onOpenChange={setOpenPopover} open={openPopover}>
             <PopoverTrigger asChild>
               <FormControl>
                 <Button
-                  variant="outline"
-                  role="combobox"
                   className={cn(
-                    "border-input text-foreground dark:bg-input/30 w-full justify-between bg-transparent",
-                    !field.value && "text-muted-foreground",
+                    "w-full justify-between border-input bg-transparent text-foreground dark:bg-input/30",
+                    !field.value && "text-muted-foreground"
                   )}
+                  role="combobox"
+                  variant="outline"
                 >
                   {selectedCompany ? (
                     <span className="inline-flex items-center gap-2.5">
                       <div className="relative aspect-square size-4">
                         <Image
-                          src={
-                            selectedCompany.logo ||
-                            "/images/placeholder-cover.jpg"
-                          }
-                          fill
                           alt={`${selectedCompany.name} logo`}
                           className="object-contain"
+                          fill
+                          src={selectedCompany.logo || "/images/placeholder-cover.jpg"}
                         />
                       </div>
                       <span>{selectedCompany.name}</span>
@@ -114,27 +102,24 @@ export const CompanyField = ({ data: data, companyId }: Props) => {
                   <CommandGroup heading="Companies">
                     {data.map((cat) => (
                       <CommandItem
-                        value={cat.name}
                         className="cursor-pointer gap-2.5 px-4 py-2.5 font-medium"
                         key={cat.id}
                         onSelect={() => handleSelect(cat.id?.toString())}
+                        value={cat.name}
                       >
                         <Image
-                          src={cat.logo || "/images/placeholder-cover.jpg"}
-                          height={16}
-                          width={16}
                           alt={`${cat.name} logo`}
+                          height={16}
                           loading="lazy"
+                          src={cat.logo || "/images/placeholder-cover.jpg"}
+                          width={16}
                         />
                         <span>{cat.name}</span>
                       </CommandItem>
                     ))}
                   </CommandGroup>
                   <CommandGroup heading="New Company?">
-                    <CommandItem
-                      className="cursor-pointer px-4 py-2.5 font-medium"
-                      onSelect={handleModalOpen}
-                    >
+                    <CommandItem className="cursor-pointer px-4 py-2.5 font-medium" onSelect={handleModalOpen}>
                       Add new
                     </CommandItem>
                   </CommandGroup>

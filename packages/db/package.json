@@ -13,8 +13,8 @@
     "build": "tsup --clean",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
     "dev": "concurrently \"pnpm with-env drizzle-kit studio --config=drizzle.config.ts --port=8080 --verbose\" \"tsc --watch\"",
-    "format": "prettier --check . --ignore-path ../../.gitignore",
-    "lint": "eslint",
+    "format": "biome check .",
+    "lint": "biome check .",
     "generate": "pnpm with-env drizzle-kit generate",
     "migrate": "pnpm with-env drizzle-kit migrate",
     "push": "pnpm with-env drizzle-kit push",
@@ -32,16 +32,12 @@
   },
   "devDependencies": {
     "@types/pg": "^8.15.4",
-    "@ziron/eslint-config": "workspace:*",
-    "@ziron/prettier-config": "workspace:*",
+    "@biomejs/biome": "catalog:",
     "@ziron/typescript-config": "workspace:*",
     "concurrently": "^9.2.0",
     "dotenv-cli": "^8.0.0",
     "drizzle-kit": "^0.31.1",
-    "eslint": "catalog:",
-    "prettier": "catalog:",
     "tsx": "^4.20.3",
     "typescript": "catalog:"
-  },
-  "prettier": "@ziron/prettier-config"
+  }
 }

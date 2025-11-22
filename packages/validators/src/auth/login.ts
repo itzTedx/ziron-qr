@@ -5,8 +5,6 @@ export const loginUserSchema = z
     email: z.email(),
     password: z.string().min(4),
   })
-  .describe(
-    "Validates user login data: valid email, and password (min 4 chars).",
-  );
+  .describe("Validates user login data: valid email, and password (min 4 chars).");
 
 export type LoginUserType = z.infer<typeof loginUserSchema>;

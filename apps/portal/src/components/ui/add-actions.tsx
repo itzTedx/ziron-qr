@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -61,9 +62,9 @@ export function AddAction() {
 
   return (
     <>
-      <DropdownMenu open={open} onOpenChange={setOpen}>
+      <DropdownMenu onOpenChange={setOpen} open={open}>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="icon" className="flex-shrink-0">
+          <Button className="flex-shrink-0" size="icon" variant="outline">
             <span className="sr-only">Add new company or digital card</span>
             <IconPlus className="size-4" />
           </Button>
@@ -72,31 +73,26 @@ export function AddAction() {
           <DropdownMenuLabel>Add new</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem
+            className="group cursor-pointer transition hover:bg-secondary hover:text-background"
             onClick={() => {
               setCompanyModal({ modal: "company" });
               setOpen(false);
             }}
-            className="group hover:bg-secondary hover:text-background cursor-pointer transition"
           >
             Company
-            <kbd className="bg-muted pointer-events-none absolute top-1/2 right-2.5 hidden h-5 -translate-y-1/2 items-center justify-center gap-1 rounded border px-1.5 align-top font-mono text-xs font-medium opacity-100 select-none sm:flex">
-              <span className="text-[9px]">⌘ </span>{" "}
-              <span className="-mt-[0.13rem] text-[12px]">⇧ </span>
+            <kbd className="-translate-y-1/2 pointer-events-none absolute top-1/2 right-2.5 hidden h-5 select-none items-center justify-center gap-1 rounded border bg-muted px-1.5 align-top font-medium font-mono text-xs opacity-100 sm:flex">
+              <span className="text-[9px]">⌘ </span> <span className="-mt-[0.13rem] text-[12px]">⇧ </span>
               <span className="-mt-0.5">D</span>
             </kbd>
           </DropdownMenuItem>
           <DropdownMenuItem
-            className="group hover:bg-secondary hover:text-background transition"
+            className="group transition hover:bg-secondary hover:text-background"
             onClick={() => setOpen(false)}
           >
-            <Link
-              href="/card/new"
-              onClick={() => localStorage.removeItem("card-form-data")}
-            >
+            <Link href="/card/new" onClick={() => localStorage.removeItem("card-form-data")}>
               Digital Card
-              <kbd className="bg-muted pointer-events-none absolute top-1/2 right-2.5 hidden h-5 -translate-y-1/2 items-center justify-center gap-1 rounded border px-1.5 font-mono text-xs font-medium opacity-100 select-none sm:flex">
-                <span className="text-[9px]">⌘</span>{" "}
-                <span className="-mt-0.5">D</span>
+              <kbd className="-translate-y-1/2 pointer-events-none absolute top-1/2 right-2.5 hidden h-5 select-none items-center justify-center gap-1 rounded border bg-muted px-1.5 font-medium font-mono text-xs opacity-100 sm:flex">
+                <span className="text-[9px]">⌘</span> <span className="-mt-0.5">D</span>
               </kbd>
             </Link>
           </DropdownMenuItem>

@@ -23,20 +23,20 @@ export function NavMain() {
       <SidebarMenu>
         <SidebarMenuItem>
           <SidebarMenuButton
-            tooltip={"Digital Card"}
             onClick={() => {
               setCompanyModal({ modal: "company" });
             }}
+            tooltip={"Digital Card"}
           >
             <IconBuildingCog />
-            <span className="text-sm font-medium">Add Company</span>
+            <span className="font-medium text-sm">Add Company</span>
           </SidebarMenuButton>
         </SidebarMenuItem>
         <SidebarMenuItem>
           <Link href="/card/new">
             <SidebarMenuButton tooltip={"Digital Card"}>
               <IconCards />
-              <span className="text-sm font-medium">Create Card</span>
+              <span className="font-medium text-sm">Create Card</span>
             </SidebarMenuButton>
           </Link>
         </SidebarMenuItem>

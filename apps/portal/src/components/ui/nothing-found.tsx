@@ -13,17 +13,10 @@ export const NothingFound = () => {
   });
 
   return (
-    <div className="bg-background absolute inset-0 flex flex-col items-center justify-center gap-3 py-9">
-      <Image
-        src="/not-available.svg"
-        height={200}
-        width={200}
-        alt="No Cards Available"
-      />
+    <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-background py-9">
+      <Image alt="No Cards Available" height={200} src="/not-available.svg" width={200} />
 
-      <p className="text-muted-foreground pt-2 font-semibold">
-        No Cards or Company Available
-      </p>
+      <p className="pt-2 font-semibold text-muted-foreground">No Cards or Company Available</p>
       <Button
         className="gap-2"
         onClick={() => {

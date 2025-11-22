@@ -12,16 +12,16 @@ const CopyButton = ({ link }: { link: string }) => {
   return (
     <div
       className={cn(
-        "border-input bg-background focus-visible:ring-ring active:ring-ring flex w-full items-center justify-between overflow-hidden rounded-full border p-1 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none active:ring-2 active:ring-offset-2 active:outline-none",
+        "flex w-full items-center justify-between overflow-hidden rounded-full border border-input bg-background p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 active:outline-none active:ring-2 active:ring-ring active:ring-offset-2"
       )}
     >
-      <p className="truncate overflow-hidden pr-2 pl-2 text-[10px] text-ellipsis whitespace-nowrap md:pl-4 md:text-sm lg:max-w-[30ch]">
+      <p className="overflow-hidden truncate text-ellipsis whitespace-nowrap pr-2 pl-2 text-[10px] md:pl-4 md:text-sm lg:max-w-[30ch]">
         {link}
       </p>
       <Button
-        size="icon"
-        className="bg-foreground text-background hover:bg-foreground/80 shrink-0 rounded-full *:size-4"
+        className="shrink-0 rounded-full bg-foreground text-background *:size-4 hover:bg-foreground/80"
         onClick={() => copyToClipboard(link)}
+        size="icon"
         type="button"
       >
         {isCopied ? <Check /> : <Copy />}

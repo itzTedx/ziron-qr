@@ -1,12 +1,13 @@
 /// <reference types="./types.d.ts" />
 
-import * as path from "node:path";
 import { includeIgnoreFile } from "@eslint/compat";
 import { default as eslint, default as js } from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
 import importPlugin from "eslint-plugin-import";
 import turboPlugin from "eslint-plugin-turbo";
 import tseslint from "typescript-eslint";
+
+import * as path from "node:path";
 
 /**
  * All packages that leverage t3-env should use this rule
@@ -21,8 +22,7 @@ export const restrictEnvAccess = tseslint.config(
         {
           object: "process",
           property: "env",
-          message:
-            "Use `import { env } from '~/env'` instead to ensure validated types.",
+          message: "Use `import { env } from '~/env'` instead to ensure validated types.",
         },
       ],
       "no-restricted-imports": [
@@ -30,12 +30,11 @@ export const restrictEnvAccess = tseslint.config(
         {
           name: "process",
           importNames: ["env"],
-          message:
-            "Use `import { env } from '~/env'` instead to ensure validated types.",
+          message: "Use `import { env } from '~/env'` instead to ensure validated types.",
         },
       ],
     },
-  },
+  }
 );
 
 const baseConfig = [
@@ -75,18 +74,12 @@ export default tseslint.config(
     ],
     rules: {
       ...turboPlugin.configs.recommended.rules,
-      "@typescript-eslint/no-unused-vars": [
-        "error",
-        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
-      ],
+      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
       "@typescript-eslint/consistent-type-imports": [
         "warn",
         { prefer: "type-imports", fixStyle: "separate-type-imports" },
       ],
-      "@typescript-eslint/no-misused-promises": [
-        2,
-        { checksVoidReturn: { attributes: false } },
-      ],
+      "@typescript-eslint/no-misused-promises": [2, { checksVoidReturn: { attributes: false } }],
       "@typescript-eslint/no-unnecessary-condition": [
         "error",
         {
@@ -107,5 +100,5 @@ export default tseslint.config(
   {
     linterOptions: { reportUnusedDisableDirectives: true },
     languageOptions: { parserOptions: { projectService: true } },
-  },
+  }
 );

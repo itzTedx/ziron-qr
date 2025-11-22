@@ -5,10 +5,10 @@
   "private": true,
   "scripts": {
     "clean": "git clean -xdf .cache .turbo dist node_modules",
-    "lint": "eslint . --max-warnings 0",
-    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "biome check .",
+    "format": "biome check .",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
-    "ui-add": "pnpm dlx shadcn@latest add && prettier src --write --list-different"
+    "ui-add": "pnpm dlx shadcn@latest add && biome check --write src"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
@@ -34,8 +34,8 @@
     "@types/node": "^20",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
+    "@biomejs/biome": "catalog:",
     "@ziron/db": "workspace:*",
-    "@ziron/eslint-config": "workspace:*",
     "@ziron/typescript-config": "workspace:*",
     "@ziron/utils": "workspace:*",
     "tailwindcss": "^4.0.8",

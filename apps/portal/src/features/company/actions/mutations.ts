@@ -1,18 +1,13 @@
 "use server";
 
-import { createLog } from "@/lib/utils";
-
 import { eq } from "@ziron/db";
 import { db } from "@ziron/db/client";
 import { companies } from "@ziron/db/schema";
 import { companySchema, z } from "@ziron/validators";
 
-import {
-  COMPANY_CACHE_DURATIONS,
-  COMPANY_REDIS_KEYS,
-  invalidateCompanyCaches,
-  redisCache,
-} from "./cache";
+import { createLog } from "@/lib/utils";
+
+import { COMPANY_CACHE_DURATIONS, COMPANY_REDIS_KEYS, invalidateCompanyCaches, redisCache } from "./cache";
 
 const log = createLog("Company");
 
@@ -103,11 +98,7 @@ export async function deleteCompany(id: string) {
   }
 
   try {
-    const deleted = await db
-      .update(companies)
-      .set({ deletedAt: new Date() })
-      .where(eq(companies.id, id))
-      .returning();
+    const deleted = await db.update(companies).set({ deletedAt: new Date() }).where(eq(companies.id, id)).returning();
     log.info("Company soft delete operation complete", { deleted });
 
     if (!deleted || !deleted[0]) {

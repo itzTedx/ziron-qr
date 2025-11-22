@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
+
 import { useRouter } from "next/navigation";
 
 import { authClient } from "@ziron/auth/client";
@@ -28,10 +29,10 @@ export const LogoutButton = ({ children, className }: Props) => {
   }
   return (
     <button
-      onClick={logout}
-      disabled={isPending}
       aria-disabled={isPending}
       className={cn("flex cursor-pointer items-center gap-2", className)}
+      disabled={isPending}
+      onClick={logout}
     >
       {children}
     </button>

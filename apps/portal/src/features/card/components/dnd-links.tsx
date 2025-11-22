@@ -1,9 +1,9 @@
 "use client";
 
 import { useCallback, useMemo, useRef, useState } from "react";
+
 import Image from "next/image";
 
-import { ResponsiveModal } from "@/components/ui/responsive-modal";
 import { IconGripVertical, IconPlus, IconTrash } from "@tabler/icons-react";
 import { Reorder } from "framer-motion";
 import { useFieldArray, useFormContext } from "react-hook-form";
@@ -11,15 +11,12 @@ import { useFieldArray, useFormContext } from "react-hook-form";
 import { Button } from "@ziron/ui/components/button";
 import { Card } from "@ziron/ui/components/card";
 import { DialogClose } from "@ziron/ui/components/dialog";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@ziron/ui/components/form";
+import { FormControl, FormField, FormItem, FormMessage } from "@ziron/ui/components/form";
 import { Input } from "@ziron/ui/components/input";
 import { cn } from "@ziron/utils";
 import { zCardSchema } from "@ziron/validators";
+
+import { ResponsiveModal } from "@/components/ui/responsive-modal";
 
 import { LINKS } from "../data/constants";
 import { Link } from "../types";
@@ -51,20 +48,9 @@ const LinkItem = ({ data, index, loading, onRemove, form }: LinkItemProps) => {
             name={`links.${index}.label`}
             render={({ field }) => (
               <FormItem className="flex gap-2 md:col-span-2 md:gap-3">
-                <Image
-                  src={data.icon}
-                  height={40}
-                  width={40}
-                  alt=""
-                  className="flex-shrink-0"
-                />
+                <Image alt="" className="flex-shrink-0" height={40} src={data.icon} width={40} />
                 <FormControl>
-                  <Input
-                    className="space-y-0"
-                    {...field}
-                    disabled={loading}
-                    placeholder={`${data.label} Title`}
-                  />
+                  <Input className="space-y-0" {...field} disabled={loading} placeholder={`${data.label} Title`} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -77,11 +63,7 @@ const LinkItem = ({ data, index, loading, onRemove, form }: LinkItemProps) => {
             render={({ field }) => (
               <FormItem className="md:col-span-3">
                 <FormControl>
-                  <Input
-                    {...field}
-                    disabled={loading}
-                    placeholder={`${data.label} Url`}
-                  />
+                  <Input {...field} disabled={loading} placeholder={`${data.label} Url`} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -90,7 +72,7 @@ const LinkItem = ({ data, index, loading, onRemove, form }: LinkItemProps) => {
         </div>
       ) : (
         <div className="flex flex-1 gap-2 md:gap-3">
-          <Image src={data.icon} height={40} width={40} alt="" />
+          <Image alt="" height={40} src={data.icon} width={40} />
           <FormField
             control={form.control}
             key={data.id}
@@ -98,11 +80,7 @@ const LinkItem = ({ data, index, loading, onRemove, form }: LinkItemProps) => {
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormControl>
-                  <Input
-                    {...field}
-                    disabled={loading}
-                    placeholder={`${data.label} url`}
-                  />
+                  <Input {...field} disabled={loading} placeholder={`${data.label} url`} />
                 </FormControl>
 
                 <FormMessage />
@@ -112,19 +90,19 @@ const LinkItem = ({ data, index, loading, onRemove, form }: LinkItemProps) => {
         </div>
       )}
       <Button
+        className="shrink-0 text-destructive hover:text-destructive"
+        onClick={() => onRemove(index)}
+        size="icon"
         type="button"
         variant="ghost"
-        className="text-destructive hover:text-destructive shrink-0"
-        size="icon"
-        onClick={() => onRemove(index)}
       >
         <IconTrash size={16} />
       </Button>
       <button
-        type="button"
-        title="Drag to Re-Order"
-        className="hover:text-foreground text-gray-400 hover:bg-transparent"
+        className="text-gray-400 hover:bg-transparent hover:text-foreground"
         onClick={(e) => e.preventDefault()}
+        title="Drag to Re-Order"
+        type="button"
       >
         <IconGripVertical size={16} />
       </button>
@@ -137,16 +115,12 @@ LinkItem.displayName = "LinkItem";
 interface SuggestionCardProps {
   link: { label: string; url: string; icon: string; id?: number };
   item: { label: string };
-  onAppend: (data: {
-    category: string;
-    label: string;
-    url: string;
-    icon: string;
-  }) => void;
+  onAppend: (data: { category: string; label: string; url: string; icon: string }) => void;
 }
 
 const SuggestionCard = ({ link, item, onAppend }: SuggestionCardProps) => (
   <Card
+    className="flex size-28 cursor-pointer flex-col items-center gap-2 transition-colors hover:border-primary hover:bg-muted/20"
     onClick={() =>
       onAppend({
         category: item.label,
@@ -155,11 +129,10 @@ const SuggestionCard = ({ link, item, onAppend }: SuggestionCardProps) => (
         icon: link.icon,
       })
     }
-    className="hover:border-primary hover:bg-muted/20 flex size-28 cursor-pointer flex-col items-center gap-2 transition-colors"
     role="button"
   >
-    <Image src={link.icon} height={40} width={40} alt="" />
-    <p className="text-sm font-medium whitespace-nowrap">{link.label}</p>
+    <Image alt="" height={40} src={link.icon} width={40} />
+    <p className="whitespace-nowrap font-medium text-sm">{link.label}</p>
   </Card>
 );
 
@@ -181,14 +154,14 @@ export const DndLinks = () => {
     (data: { category: string; label: string; url: string; icon: string }) => {
       append(data);
     },
-    [append],
+    [append]
   );
 
   const handleRemove = useCallback(
     (index: number) => {
       remove(index);
     },
-    [remove],
+    [remove]
   );
 
   const handleReorder = useCallback(
@@ -201,7 +174,7 @@ export const DndLinks = () => {
         }
       });
     },
-    [active, fields, move],
+    [active, fields, move]
   );
 
   // Memoize suggestions data
@@ -211,9 +184,9 @@ export const DndLinks = () => {
         item.links.slice(0, 4).map((link) => ({
           ...link,
           itemLabel: item.label,
-        })),
+        }))
       ).flat(),
-    [],
+    []
   );
 
   const handleLinkAdd = (link: Link, category: string) => {
@@ -229,20 +202,15 @@ export const DndLinks = () => {
   return (
     <>
       <div className="flex flex-col gap-8 pt-3" ref={dragRef}>
-        <Reorder.Group
-          as="div"
-          className="w-full space-y-4"
-          values={fields}
-          onReorder={handleReorder}
-        >
+        <Reorder.Group as="div" className="w-full space-y-4" onReorder={handleReorder} values={fields}>
           {fields.map((data, index) => (
             <Reorder.Item
               as="div"
-              id={data.id}
               dragConstraints={dragRef}
+              id={data.id}
+              key={data.id}
               onDragStart={() => setActive(index)}
               value={data}
-              key={data.id}
             >
               <LinkItem
                 data={{
@@ -252,57 +220,47 @@ export const DndLinks = () => {
                   icon: data.icon || "",
                   id: data.id,
                 }}
+                form={form}
                 index={index}
                 loading={false}
                 onRemove={handleRemove}
-                form={form}
               />
             </Reorder.Item>
           ))}
         </Reorder.Group>
       </div>
       <ResponsiveModal
-        title={"Add Link"}
-        className="min-w-2xl"
         asChild
+        className="min-w-2xl"
+        closeModal={setOpen}
         isOpen={open} // Use isOpen instead of open
-        closeModal={setOpen} // Use closeModal instead of setOpen
+        title={"Add Link"} // Use closeModal instead of setOpen
         trigger={
-          <Button type="button" variant="outline" size="lg" className="w-full">
-            <IconPlus size={16} className="mr-2" /> Add
+          <Button className="w-full" size="lg" type="button" variant="outline">
+            <IconPlus className="mr-2" size={16} /> Add
           </Button>
         }
       >
         <div className="p-6 pt-0 pb-6">
           {LINKS.map((item, i) => (
-            <div key={i} className="py-3">
-              <h4 className="text-muted-foreground pb-2 text-sm">
-                {item.label}
-              </h4>
+            <div className="py-3" key={i}>
+              <h4 className="pb-2 text-muted-foreground text-sm">{item.label}</h4>
 
-              <div
-                className={cn(
-                  "grid gap-x-6",
-                  item.links.length > 1 ? "grid-cols-2" : "grid-cols-1",
-                )}
-              >
+              <div className={cn("grid gap-x-6", item.links.length > 1 ? "grid-cols-2" : "grid-cols-1")}>
                 {item.links.map((link, i) => (
-                  <div
-                    className="flex items-center justify-between border-b py-3"
-                    key={`addLink-${i}-${link.label}`}
-                  >
+                  <div className="flex items-center justify-between border-b py-3" key={`addLink-${i}-${link.label}`}>
                     <div className="flex items-center gap-4 font-medium">
                       <div className="relative size-8">
-                        <Image src={link.icon} fill alt="" sizes="10vw" />
+                        <Image alt="" fill sizes="10vw" src={link.icon} />
                       </div>
 
                       <p>{link.label}</p>
                     </div>
                     <DialogClose asChild>
                       <Button
-                        variant="ghost"
+                        className="h-8 gap-2 px-2 font-semibold text-primary"
                         onClick={() => handleLinkAdd(link, item.label)}
-                        className="text-primary h-8 gap-2 px-2 font-semibold"
+                        variant="ghost"
                       >
                         <IconPlus className="size-3 stroke-[2.5]" />
                         Add
@@ -320,11 +278,11 @@ export const DndLinks = () => {
         <div className="flex items-center justify-between">
           <h3>Suggestions</h3>
           <Button
-            variant="link"
-            type="button"
             onClick={useCallback(() => {
               setOpen(true);
             }, [setOpen])}
+            type="button"
+            variant="link"
           >
             View All
           </Button>
@@ -332,18 +290,18 @@ export const DndLinks = () => {
         <div className="grid grid-cols-[repeat(auto-fill,minmax(7rem,1fr))] gap-3">
           {suggestionLinks.map((link) => (
             <SuggestionCard
+              item={{ label: link.itemLabel }}
               key={link.id}
               link={{ ...link, id: link.id }}
-              item={{ label: link.itemLabel }}
               onAppend={handleAppend}
             />
           ))}
           <Card
+            className="flex flex-col items-center justify-center font-medium text-muted-foreground text-sm transition-colors hover:border-primary hover:bg-muted/20"
             onClick={(e) => {
               e.preventDefault();
               setOpen(true);
             }}
-            className="text-muted-foreground hover:border-primary hover:bg-muted/20 flex flex-col items-center justify-center text-sm font-medium transition-colors"
             role="button"
           >
             View More

@@ -7,11 +7,11 @@
     "dev": "pnpm with-env next dev --turbopack -p 3000",
     "build": "pnpm with-env next build",
     "start": "pnpm with-env next start",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
     "typecheck": "tsc --noEmit",
     "clean": "git clean -xdf .cache .next .turbo node_modules",
-    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "format": "biome check .",
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
@@ -37,10 +37,8 @@
     "@types/node": "^20",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
-    "@ziron/eslint-config": "workspace:^",
-    "@ziron/prettier-config": "workspace:*",
+    "@biomejs/biome": "catalog:",
     "@ziron/typescript-config": "workspace:*",
     "typescript": "catalog:"
-  },
-  "prettier": "@ziron/prettier-config"
+  }
 }

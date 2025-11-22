@@ -12,13 +12,7 @@ import {
   useFormContext,
 } from "@ziron/ui/components/form";
 import { Input } from "@ziron/ui/components/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@ziron/ui/components/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ziron/ui/components/select";
 import { cn } from "@ziron/utils";
 import { EmailsType, LabelEnum, zCardSchema } from "@ziron/validators";
 
@@ -54,15 +48,9 @@ export const EmailsField = ({ data }: Props) => {
             name={`emails.${i}.email`}
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel className={cn(i !== 0 && "sr-only")}>
-                  Email
-                </FormLabel>
+                <FormLabel className={cn(i !== 0 && "sr-only")}>Email</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="name@company.com"
-                    className={cn("w-full rounded-e-none border-r-0")}
-                    {...field}
-                  />
+                  <Input className={cn("w-full rounded-e-none border-r-0")} placeholder="name@company.com" {...field} />
                 </FormControl>
 
                 <FormMessage />
@@ -76,17 +64,12 @@ export const EmailsField = ({ data }: Props) => {
               <FormItem>
                 <FormLabel className={"sr-only"}>Email Label</FormLabel>
 
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+                <Select defaultValue={field.value} onValueChange={field.onChange}>
                   <FormControl>
                     <SelectTrigger
                       className={cn(
-                        "text-muted-foreground w-20 shrink-0 gap-0.5 rounded-none px-2 text-[11px] font-medium",
-                        fields.length === 1
-                          ? "rounded-e-lg border-r"
-                          : "border-r-0",
+                        "w-20 shrink-0 gap-0.5 rounded-none px-2 font-medium text-[11px] text-muted-foreground",
+                        fields.length === 1 ? "rounded-e-lg border-r" : "border-r-0"
                       )}
                     >
                       <SelectValue placeholder="Label" />
@@ -94,7 +77,7 @@ export const EmailsField = ({ data }: Props) => {
                   </FormControl>
                   <SelectContent>
                     {LabelEnum.options.map((option) => (
-                      <SelectItem value={option} key={option}>
+                      <SelectItem key={option} value={option}>
                         {option}
                       </SelectItem>
                     ))}
@@ -104,26 +87,20 @@ export const EmailsField = ({ data }: Props) => {
             )}
           />
           <Button
-            size="icon"
-            variant="outline"
-            type="button"
-            onClick={() => remove(i)}
             className={cn(
-              "dark:bg-input/30 dark:hover:bg-input/50 shrink-0 bg-transparent",
-              fields.length > 1 ? "flex rounded-s-none" : "hidden",
+              "shrink-0 bg-transparent dark:bg-input/30 dark:hover:bg-input/50",
+              fields.length > 1 ? "flex rounded-s-none" : "hidden"
             )}
+            onClick={() => remove(i)}
+            size="icon"
+            type="button"
+            variant="outline"
           >
-            <IconX className="text-muted-foreground size-4" />
+            <IconX className="size-4 text-muted-foreground" />
           </Button>
         </div>
       ))}
-      <Button
-        type="button"
-        variant="link"
-        size="sm"
-        className="gap-1 px-0"
-        onClick={handleAppend}
-      >
+      <Button className="gap-1 px-0" onClick={handleAppend} size="sm" type="button" variant="link">
         <IconPlus className="size-4" />
         Add work or personal email
       </Button>

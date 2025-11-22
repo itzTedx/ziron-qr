@@ -1,16 +1,11 @@
 "use client";
 
 import { useState, useTransition } from "react";
+
 import Image from "next/image";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  IconBuilding,
-  IconEdit,
-  IconLoader,
-  IconPlus,
-  IconTrash,
-} from "@tabler/icons-react";
+import { IconBuilding, IconEdit, IconLoader, IconPlus, IconTrash } from "@tabler/icons-react";
 import { parseAsString, useQueryStates } from "nuqs";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -27,18 +22,11 @@ import {
 } from "@ziron/ui/components/alert-dialog";
 import { Button } from "@ziron/ui/components/button";
 import { DialogFooter } from "@ziron/ui/components/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@ziron/ui/components/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ziron/ui/components/form";
 import { Input } from "@ziron/ui/components/input";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 import { Textarea } from "@ziron/ui/components/textarea";
-import { companySchema, CompanyType } from "@ziron/validators";
+import { CompanyType, companySchema } from "@ziron/validators";
 
 import { deleteCompany, upsertCompany } from "../actions/mutations";
 
@@ -47,10 +35,7 @@ interface CompanyFormProps {
   isEditMode: boolean;
 }
 
-export default function CompanyForm({
-  initialData,
-  isEditMode,
-}: CompanyFormProps) {
+export default function CompanyForm({ initialData, isEditMode }: CompanyFormProps) {
   const [isPending, startTransition] = useTransition();
   const [isDeletePending, startDeleteTransition] = useTransition();
   const [uploading, setUploading] = useState(false);
@@ -81,9 +66,7 @@ export default function CompanyForm({
       const result = await upsertCompany(values);
 
       if (result.success) {
-        toast.success(
-          `Company: ${result.data?.name} has been ${isEditMode ? "Edited" : "Created"}`,
-        );
+        toast.success(`Company: ${result.data?.name} has been ${isEditMode ? "Edited" : "Created"}`);
         setCompanyModal({ modal: null });
         setFields({
           id: null,
@@ -107,9 +90,7 @@ export default function CompanyForm({
       const result = await deleteCompany(id);
 
       if (result.success) {
-        toast.success(
-          `Company: ${result.data?.name} has been ${isEditMode ? "Edited" : "Created"}`,
-        );
+        toast.success(`Company: ${result.data?.name} has been ${isEditMode ? "Edited" : "Created"}`);
         setCompanyModal({ modal: null });
         setFields({
           id: null,
@@ -134,7 +115,7 @@ export default function CompanyForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="p-6 pt-3">
+      <form className="p-6 pt-3" onSubmit={form.handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-6 pb-6 md:flex-row">
           <FormField
             control={form.control}
@@ -144,18 +125,11 @@ export default function CompanyForm({
                 <FormControl>
                   <div className="mt-2 flex flex-col items-center gap-2">
                     <div className="grid size-28 place-items-center rounded-md border bg-gray-50">
-                      {uploading && (
-                        <IconLoader className="text-muted-foreground/50 absolute animate-spin" />
-                      )}
+                      {uploading && <IconLoader className="absolute animate-spin text-muted-foreground/50" />}
                       {!uploading && logo ? (
-                        <Image
-                          src={logo}
-                          height={70}
-                          width={70}
-                          alt="Company Logo"
-                        />
+                        <Image alt="Company Logo" height={70} src={logo} width={70} />
                       ) : (
-                        <IconBuilding className="text-muted size-20" />
+                        <IconBuilding className="size-20 text-muted" />
                       )}
                     </div>
                     {/* <UploadButton
@@ -211,12 +185,7 @@ export default function CompanyForm({
                 <FormItem>
                   <FormLabel>Company Name</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Name"
-                      autoFocus
-                      {...field}
-                      className="w-full"
-                    />
+                    <Input autoFocus placeholder="Name" {...field} className="w-full" />
                   </FormControl>
 
                   <FormMessage />
@@ -260,11 +229,7 @@ export default function CompanyForm({
                 <FormItem>
                   <FormLabel>Address</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Enter full address"
-                      {...field}
-                      className="w-full"
-                    />
+                    <Textarea placeholder="Enter full address" {...field} className="w-full" />
                   </FormControl>
 
                   <FormMessage />
@@ -276,10 +241,7 @@ export default function CompanyForm({
         <DialogFooter className="gap-3 sm:justify-start">
           {isEditMode && (
             <AlertDialog>
-              <AlertDialogTrigger
-                asChild
-                onClick={() => setIsDeleteLoading(true)}
-              >
+              <AlertDialogTrigger asChild onClick={() => setIsDeleteLoading(true)}>
                 <Button variant="destructive">
                   <LoadingSwap isLoading={isDeleteLoading}>
                     <IconTrash className="size-4" />
@@ -291,38 +253,23 @@ export default function CompanyForm({
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    the company and all the cards related to it.
+                    This action cannot be undone. This will permanently delete the company and all the cards related to
+                    it.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel onClick={() => setIsDeleteLoading(false)}>
-                    Cancel
-                  </AlertDialogCancel>
+                  <AlertDialogCancel onClick={() => setIsDeleteLoading(false)}>Cancel</AlertDialogCancel>
 
-                  <Button
-                    variant={"destructive"}
-                    type="button"
-                    onClick={() => handleDelete(initialData.id ?? "")}
-                  >
-                    <LoadingSwap isLoading={isDeletePending}>
-                      Yes, I&apos;m sure
-                    </LoadingSwap>
+                  <Button onClick={() => handleDelete(initialData.id ?? "")} type="button" variant={"destructive"}>
+                    <LoadingSwap isLoading={isDeletePending}>Yes, I&apos;m sure</LoadingSwap>
                   </Button>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
           )}
-          <Button type="submit" disabled={isPending} className="w-full shrink">
-            <LoadingSwap
-              isLoading={isPending}
-              className="flex items-center justify-center gap-1.5 font-medium"
-            >
-              {isEditMode ? (
-                <IconEdit className="size-4" />
-              ) : (
-                <IconPlus className="size-4" />
-              )}
+          <Button className="w-full shrink" disabled={isPending} type="submit">
+            <LoadingSwap className="flex items-center justify-center gap-1.5 font-medium" isLoading={isPending}>
+              {isEditMode ? <IconEdit className="size-4" /> : <IconPlus className="size-4" />}
               {isEditMode ? "Save Changes" : "Add Company"}
             </LoadingSwap>
           </Button>

@@ -11,7 +11,7 @@
   },
   "scripts": {
     "clean": "git clean -xdf .cache .turbo node_modules",
-    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "format": "biome check .",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -28,12 +28,8 @@
     "typescript-eslint": "^8.33.1"
   },
   "devDependencies": {
-    "@ziron/prettier-config": "workspace:*",
+    "@biomejs/biome": "catalog:",
     "@ziron/typescript-config": "workspace:*",
-    "eslint": "catalog:",
-    "eslint-plugin-only-warn": "^1.1.0",
-    "prettier": "catalog:",
     "typescript": "catalog:"
-  },
-  "prettier": "@ziron/prettier-config"
+  }
 }

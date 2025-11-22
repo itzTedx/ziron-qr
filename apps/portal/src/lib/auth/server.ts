@@ -1,13 +1,10 @@
 import "server-only";
 
-import { env } from "@/lib/env/server";
-
 import { initAuth } from "@ziron/auth";
 
-const baseUrl =
-  env.NODE_ENV === "production"
-    ? `https://${env.PRODUCTION_URL}`
-    : "http://localhost:3000";
+import { env } from "@/lib/env/server";
+
+const baseUrl = env.NODE_ENV === "production" ? `https://${env.PRODUCTION_URL}` : "http://localhost:3000";
 
 export const auth = initAuth({
   baseUrl,

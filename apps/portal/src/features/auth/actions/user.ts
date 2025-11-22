@@ -1,16 +1,15 @@
 import { cache } from "react";
+
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-
-import { auth } from "@/lib/auth/server";
 
 import { eq } from "@ziron/db";
 import { db } from "@ziron/db/client";
 import { users } from "@ziron/db/schema";
 
-export const getSession = cache(async () =>
-  auth.api.getSession({ headers: await headers() }),
-);
+import { auth } from "@/lib/auth/server";
+
+export const getSession = cache(async () => auth.api.getSession({ headers: await headers() }));
 
 export const getCurrentUser = async () => {
   const session = await auth.api.getSession({
@@ -58,11 +57,7 @@ export const signIn = async (email: string, password: string) => {
   }
 };
 
-export const signUp = async (
-  email: string,
-  password: string,
-  username: string,
-) => {
+export const signUp = async (email: string, password: string, username: string) => {
   try {
     await auth.api.signUpEmail({
       body: {

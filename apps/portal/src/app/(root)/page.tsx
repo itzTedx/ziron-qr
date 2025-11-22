@@ -2,19 +2,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { IconPlus } from "@tabler/icons-react";
+
+import { Button } from "@ziron/ui/components/button";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@ziron/ui/components/collapsible";
+import { cn } from "@ziron/utils";
+
 import { isAdminUser } from "@/features/auth/actions/user";
 import { PersonCard } from "@/features/card/components/card-item";
 import { getCompanies } from "@/features/company/actions/queries";
 import EditCompanyButton from "@/features/company/components/edit-company-button";
-import { IconPlus } from "@tabler/icons-react";
-
-import { Button } from "@ziron/ui/components/button";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@ziron/ui/components/collapsible";
-import { cn } from "@ziron/utils";
 
 export default async function Page() {
   const companies = await getCompanies();
@@ -24,19 +21,19 @@ export default async function Page() {
 
   return (
     <section className="mt-20 grid gap-8 px-4 py-6 md:px-12">
-      {companies?.map((company, i) => (
-        <Collapsible key={company.id} className="w-full">
+      {companies?.map((company) => (
+        <Collapsible className="w-full" key={company.id}>
           <div className="flex w-full cursor-pointer items-center justify-between border-b pb-3">
             <CollapsibleTrigger className="flex w-full items-center gap-3">
               {company.logo && (
                 <div className="flex size-8 items-center justify-center rounded-sm border bg-white p-1">
                   <Image
-                    src={company.logo}
                     alt={`${company.name}'s Logo`}
-                    title={`${company.name}'s Logo`}
-                    height={35}
-                    width={35}
                     className="size-4 object-contain"
+                    height={35}
+                    src={company.logo}
+                    title={`${company.name}'s Logo`}
+                    width={35}
                   />
                 </div>
               )}
@@ -45,7 +42,7 @@ export default async function Page() {
 
             <div className="flex gap-2">
               <EditCompanyButton initialData={company} />
-              <Button size="icon" variant="outline" asChild>
+              <Button asChild size="icon" variant="outline">
                 <Link href={`/card/new?company=${company.id}`}>
                   <IconPlus className="size-4" />
                 </Link>
@@ -54,23 +51,14 @@ export default async function Page() {
           </div>
 
           <CollapsibleContent
-            className={cn(
-              "grid grid-cols-2 gap-4 pt-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5",
-            )}
+            className={cn("grid grid-cols-2 gap-4 pt-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5")}
           >
             {company.cards?.length < 0 ? (
-              <div className="bg-background col-span-full flex w-full flex-col items-center justify-center gap-3 rounded-md border py-9">
-                <Image
-                  src="/not-available.svg"
-                  height={200}
-                  width={200}
-                  alt="No Cards Available"
-                />
-                <p className="text-muted-foreground pt-2 font-semibold">
-                  No Cards Available
-                </p>
+              <div className="col-span-full flex w-full flex-col items-center justify-center gap-3 rounded-md border bg-background py-9">
+                <Image alt="No Cards Available" height={200} src="/not-available.svg" width={200} />
+                <p className="pt-2 font-semibold text-muted-foreground">No Cards Available</p>
                 {isAdmin && (
-                  <Button className="gap-2" asChild>
+                  <Button asChild className="gap-2">
                     <Link href={`/card/new?company=${company.id}`}>
                       <IconPlus className="size-4" /> Add Card
                     </Link>
@@ -87,7 +75,7 @@ export default async function Page() {
                   // const placeholderImage = await getPlaceholder(person.image);
                   // const placeholderCover = await getPlaceholder(cover);
 
-                  return <PersonCard key={card.id} card={card} />;
+                  return <PersonCard card={card} key={card.id} />;
                 })}
               </>
             )}

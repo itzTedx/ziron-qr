@@ -17,12 +17,7 @@ export const CARD_CACHE_DURATIONS = {
   VERY_LONG: 86400,
 } as const;
 
-export const CARD_ORDERINGS = [
-  "name_asc",
-  "name_desc",
-  "createdAt_asc",
-  "createdAt_desc",
-] as const;
+export const CARD_ORDERINGS = ["name_asc", "name_desc", "createdAt_asc", "createdAt_desc"] as const;
 
 export type CardOrdering = (typeof CARD_ORDERINGS)[number];
 
@@ -43,11 +38,7 @@ export const redisCache = {
       return null;
     }
   },
-  async set<T>(
-    key: string,
-    data: T,
-    ttl: number = CARD_CACHE_DURATIONS.MEDIUM,
-  ): Promise<void> {
+  async set<T>(key: string, data: T, ttl: number = CARD_CACHE_DURATIONS.MEDIUM): Promise<void> {
     try {
       await redis.setex(key, ttl, JSON.stringify(data));
     } catch (error) {
@@ -88,9 +79,7 @@ export const revalidateCardCaches = (cardId?: string) => {
 
 export const invalidateCardCaches = async (cardId?: string) => {
   revalidateCardCaches(cardId);
-  const keysToInvalidate: string[] = CARD_ORDERINGS.map((order) =>
-    CARD_REDIS_KEYS.CARDS(order),
-  );
+  const keysToInvalidate: string[] = CARD_ORDERINGS.map((order) => CARD_REDIS_KEYS.CARDS(order));
   if (cardId) {
     keysToInvalidate.push(CARD_REDIS_KEYS.CARD_BY_ID(cardId));
   }

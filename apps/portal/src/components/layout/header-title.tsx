@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function HeaderTitle() {
   return (
-    <Link href="/" className="text-xl font-medium">
+    <Link className="font-medium text-xl" href="/">
       Dashboard
     </Link>
   );

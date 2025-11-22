@@ -6,7 +6,7 @@
     "dev": "next dev --turbopack -p 3001",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "biome check ."
   },
   "dependencies": {
     "@ziron/ui": "workspace:*",
@@ -18,10 +18,8 @@
     "@types/node": "^20",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
-    "@ziron/eslint-config": "workspace:^",
-    "@ziron/prettier-config": "workspace:*",
+    "@biomejs/biome": "catalog:",
     "@ziron/typescript-config": "workspace:*",
     "typescript": "catalog:"
-  },
-  "prettier": "@ziron/prettier-config"
+  }
 }

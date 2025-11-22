@@ -1,14 +1,8 @@
-"use client";
-
 // import { CompanyType } from "@/server/schema";
 import { IconPlus } from "@tabler/icons-react";
 
 import { Company } from "@ziron/db/schema";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@ziron/ui/components/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@ziron/ui/components/avatar";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -16,7 +10,6 @@ import {
   SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from "@ziron/ui/components/sidebar";
 
 interface Props {
@@ -24,8 +17,6 @@ interface Props {
 }
 
 export function NavProjects({ data }: Props) {
-  const { isMobile } = useSidebar();
-
   if (data)
     return (
       <SidebarGroup>
@@ -33,10 +24,7 @@ export function NavProjects({ data }: Props) {
         <SidebarMenu>
           {data.map((item) => (
             <SidebarMenuItem key={item.id}>
-              <SidebarMenuButton
-                tooltip={item.name}
-                className="p-0 group-data-[collapsible=icon]:p-0!"
-              >
+              <SidebarMenuButton className="p-0 group-data-[collapsible=icon]:p-0!" tooltip={item.name}>
                 <Avatar>
                   <AvatarImage src={item.logo ?? undefined} />
                   <AvatarFallback>{item.name.slice(0, 1)}</AvatarFallback>

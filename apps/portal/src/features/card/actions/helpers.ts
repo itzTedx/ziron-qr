@@ -7,7 +7,7 @@ export async function upsertArray<T extends { id?: string }>(
   items: T[] | undefined,
   fields: (item: T) => Record<string, any>,
   cardId: string,
-  dbOrTx: any = db,
+  dbOrTx: any = db
 ) {
   const now = new Date();
 
@@ -23,7 +23,7 @@ export async function upsertArray<T extends { id?: string }>(
         order: idx,
         createdAt: now,
         updatedAt: now,
-      })),
+      }))
     );
   }
 }

@@ -1,63 +1,52 @@
-import Image from 'next/image'
-import Link from 'next/link'
+import Image from "next/image";
+import Link from "next/link";
 
-import {
-  IconBuildingSkyscraper,
-  IconMail,
-  IconPhone,
-  IconPinned,
-} from '@tabler/icons-react'
-import { CardType, Company } from '@ziron/db/schema'
-import { cn, getTextColorByBackground, removeExtension } from '@ziron/utils'
-import SaveContactButton from '../components/save-contact-button'
+import { IconBuildingSkyscraper, IconMail, IconPhone, IconPinned } from "@tabler/icons-react";
+
+import { CardType, Company } from "@ziron/db/schema";
+import { cn, getTextColorByBackground, removeExtension } from "@ziron/utils";
+
+import SaveContactButton from "../components/save-contact-button";
 
 interface TemplateProps {
-  card?: CardType
-  company?: Company[]
-  imageBase64URI?: string
+  card?: CardType;
+  company?: Company[];
+  imageBase64URI?: string;
 }
 
-export default function CardTemplate({
-  card,
-  company,
-  imageBase64URI,
-}: TemplateProps) {
-  if (!card) return null
+export default function CardTemplate({ card, company, imageBase64URI }: TemplateProps) {
+  if (!card) return null;
 
-  const companyData = company?.find((c) => c.id === card.companyId)
+  const companyData = company?.find((c) => c.id === card.companyId);
 
-  const textColor = getTextColorByBackground(card.styles?.theme || '#4938ff')
-  const btnTextColor = getTextColorByBackground(
-    card.styles?.btnColor || '#4938ff'
-  )
+  const textColor = getTextColorByBackground(card.styles?.theme || "#4938ff");
+  const btnTextColor = getTextColorByBackground(card.styles?.btnColor || "#4938ff");
 
-  const theme = card.styles?.theme || '#4938ff'
-  const btnColor = card.styles?.btnColor || '#4938ff'
+  const theme = card.styles?.theme || "#4938ff";
+  const btnColor = card.styles?.btnColor || "#4938ff";
 
   return (
-    <div className="relative flex h-full w-full flex-col justify-between @sm:max-h-[700px]">
+    <div className="relative flex h-full @sm:max-h-[700px] w-full flex-col justify-between">
       <div
         className={cn(
-          'no-scrollbar pb-6',
-          card.styles?.isDarkMode
-            ? 'dark bg-background text-foreground'
-            : 'bg-white text-black'
+          "no-scrollbar pb-6",
+          card.styles?.isDarkMode ? "dark bg-background text-foreground" : "bg-white text-black"
         )}
       >
         <header className="w-full">
           <div className="relative w-full">
             <div className="relative h-40">
               <Image
-                src={card.cover ? card.cover : '/images/placeholder-cover.jpg'}
                 alt={`${card.name}'s cover`}
                 className="object-cover"
-                sizes="100vw"
                 fill
+                sizes="100vw"
+                src={card.cover ? card.cover : "/images/placeholder-cover.jpg"}
               />
             </div>
 
             <section
-              className="absolute inset-x-4 top-16 z-10 rounded-md border border-background px-4 py-4 @sm:inset-x-6 @sm:px-6"
+              className="absolute @sm:inset-x-6 inset-x-4 top-16 z-10 rounded-md border border-background @sm:px-6 px-4 py-4"
               style={{
                 backgroundColor: theme,
                 color: textColor,
@@ -65,23 +54,12 @@ export default function CardTemplate({
             >
               <div className="flex items-center justify-between">
                 <div>
-                  {card.name && (
-                    <h1 className="text-xl font-bold @sm:text-2xl">
-                      {card.name}
-                    </h1>
-                  )}
-                  {card.designation && (
-                    <h2 className="text-xs @sm:text-sm">{card.designation}</h2>
-                  )}
+                  {card.name && <h1 className="font-bold @sm:text-2xl text-xl">{card.name}</h1>}
+                  {card.designation && <h2 className="@sm:text-sm text-xs">{card.designation}</h2>}
                 </div>
                 {card.image && (
-                  <div className="relative size-16 overflow-hidden rounded-full border-4 border-background bg-gray-100 @sm:size-24">
-                    <Image
-                      src={card.image}
-                      fill
-                      alt=""
-                      className="object-cover"
-                    />
+                  <div className="relative @sm:size-24 size-16 overflow-hidden rounded-full border-4 border-background bg-gray-100">
+                    <Image alt="" className="object-cover" fill src={card.image} />
                   </div>
                 )}
               </div>
@@ -90,53 +68,45 @@ export default function CardTemplate({
                   {card.emails &&
                     card.emails.map((email, i) => (
                       <Link
-                        key={`${i + 1}-${email.email}`}
+                        className="flex items-center gap-2 @sm:text-base text-xs"
                         href={`mailto:${email.email}`}
-                        className="flex items-center gap-2 text-xs @sm:text-base"
+                        key={`${i + 1}-${email.email}`}
                       >
-                        <IconMail className="size-4 flex-shrink-0 stroke-[1.5] @sm:size-5" />
+                        <IconMail className="@sm:size-5 size-4 flex-shrink-0 stroke-[1.5]" />
                         {email.email}
                       </Link>
                     ))}
                   {card.phones &&
                     card.phones.map((phone, i) => (
                       <Link
-                        key={`${i + 1}-${phone.phone}`}
+                        className="flex items-center gap-2 @sm:text-base text-xs"
                         href={`tel:${phone.phone}`}
-                        className="flex items-center gap-2 text-xs @sm:text-base"
+                        key={`${i + 1}-${phone.phone}`}
                       >
-                        <IconPhone className="size-4 flex-shrink-0 stroke-[1.5] @sm:size-5" />
+                        <IconPhone className="@sm:size-5 size-4 flex-shrink-0 stroke-[1.5]" />
                         {phone.phone}
                       </Link>
                     ))}
                 </div>
                 {card.company && card.company.logo && (
                   <Image
-                    src={card.company.logo}
-                    height={100}
-                    width={80}
                     alt="cover"
                     className="z-30 h-5 object-contain"
+                    height={100}
+                    src={card.company.logo}
+                    width={80}
                   />
                 )}
               </div>
             </section>
           </div>
-          <section
-            className={cn(
-              'mt-12 flex flex-col items-center gap-y-3 px-6 py-4 @sm:mt-24'
-            )}
-          >
+          <section className={cn("@sm:mt-24 mt-12 flex flex-col items-center gap-y-3 px-6 py-4")}>
             {card.links && card.links.length > 0 && (
-              <div className="flex gap-2 @sm:gap-4">
+              <div className="flex @sm:gap-4 gap-2">
                 {card.links.map((link, index) => (
-                  <LinkBox
-                    color={theme}
-                    key={`${index}-${link.label}-${link.url}`}
-                    href={link.url || '#'}
-                  >
-                    <div className="relative size-7 flex-shrink-0 @sm:size-9">
-                      <Image src={link.icon} fill alt="" sizes="10vw" />
+                  <LinkBox color={theme} href={link.url || "#"} key={`${index}-${link.label}-${link.url}`}>
+                    <div className="relative @sm:size-9 size-7 flex-shrink-0">
+                      <Image alt="" fill sizes="10vw" src={link.icon} />
                     </div>
                     <h5 className="sr-only">{link.label}</h5>
                   </LinkBox>
@@ -154,42 +124,29 @@ export default function CardTemplate({
                 }}
               />
             </div>
-            {card.bio && (
-              <p className="w-full text-balance text-[10px] @sm:text-xs">
-                {card.bio}
-              </p>
-            )}
+            {card.bio && <p className="w-full text-balance @sm:text-xs text-[10px]">{card.bio}</p>}
           </section>
         </header>
 
         {card.company || card.emails || card.phones || card.address ? (
-          <section className="px-4 py-3 @sm:px-6 @sm:py-4">
-            <h2 className="pb-3 text-xs font-medium text-gray-600 @sm:text-sm">
-              Contact Info
-            </h2>
+          <section className="@sm:px-6 px-4 @sm:py-4 py-3">
+            <h2 className="pb-3 font-medium @sm:text-sm text-gray-600 text-xs">Contact Info</h2>
 
-            <div className="space-y-3 @sm:space-y-4">
+            <div className="@sm:space-y-4 space-y-3">
               {card.company || companyData ? (
                 <Link
-                  href={
-                    card.company && card.company.website
-                      ? card.company.website
-                      : '#'
-                  }
+                  className="flex items-center gap-2 @sm:text-base text-sm"
+                  href={card.company && card.company.website ? card.company.website : "#"}
                   target="_blank"
-                  className="flex items-center gap-2 text-sm @sm:text-base"
                 >
-                  <IconBuildingSkyscraper className="size-4 flex-shrink-0 stroke-[1.5] @sm:size-5" />
+                  <IconBuildingSkyscraper className="@sm:size-5 size-4 flex-shrink-0 stroke-[1.5]" />
                   {companyData?.name || card.company?.name}
                 </Link>
               ) : null}
 
               {card.address && (
-                <Link
-                  href={`#`}
-                  className="flex items-start gap-2 text-sm @sm:text-base"
-                >
-                  <IconPinned className="mt-1.5 size-4 flex-shrink-0 stroke-[1.5] @sm:size-5" />
+                <Link className="flex items-start gap-2 @sm:text-base text-sm" href={"#"}>
+                  <IconPinned className="mt-1.5 @sm:size-5 size-4 flex-shrink-0 stroke-[1.5]" />
                   {card.address}
                 </Link>
               )}
@@ -198,30 +155,26 @@ export default function CardTemplate({
         ) : null}
 
         {card.attachmentUrl && card.attachmentFileName && (
-          <section className="space-y-3 px-4 @sm:space-y-4 @sm:px-6">
-            <h2 className="pt-3 text-sm font-medium text-gray-600">
-              Attachment
-            </h2>
+          <section className="@sm:space-y-4 space-y-3 @sm:px-6 px-4">
+            <h2 className="pt-3 font-medium text-gray-600 text-sm">Attachment</h2>
             <div className="space-y-4">
               <Link
-                href={card.attachmentUrl}
+                className="flex items-center gap-2 rounded-md border p-3 @sm:text-base text-sm"
                 download
-                className="flex items-center gap-2 rounded-md border p-3 text-sm @sm:text-base"
+                href={card.attachmentUrl}
                 style={{
                   borderColor: btnColor,
                   color: btnColor,
                 }}
               >
-                <h5 className="font-semibold">
-                  {removeExtension(card.attachmentFileName)}
-                </h5>
+                <h5 className="font-semibold">{removeExtension(card.attachmentFileName)}</h5>
               </Link>
             </div>
           </section>
         )}
       </div>
     </div>
-  )
+  );
 }
 
 const LinkBox = ({
@@ -230,20 +183,20 @@ const LinkBox = ({
   color,
   children,
 }: {
-  href: string
-  download?: boolean
-  color: string
-  children: React.ReactNode
+  href: string;
+  download?: boolean;
+  color: string;
+  children: React.ReactNode;
 }) => {
   return (
     <Link
-      href={href}
+      className="flex @sm:size-14 size-10 items-center justify-center gap-2 rounded-md border border-primary bg-primary/10 @sm:text-base text-sm"
       download={download}
-      target="_blank"
-      className="flex size-10 items-center justify-center gap-2 rounded-md border border-primary bg-primary/10 text-sm @sm:size-14 @sm:text-base"
+      href={href}
       style={{ borderColor: color, backgroundColor: `${color}10` }}
+      target="_blank"
     >
       {children}
     </Link>
-  )
-}
+  );
+};

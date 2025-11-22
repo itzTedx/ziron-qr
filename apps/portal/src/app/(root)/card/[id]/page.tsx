@@ -17,11 +17,7 @@ export default async function CardPage({ params }: { params: Params }) {
 
   return (
     <div>
-      <CardForm
-        companies={companies}
-        isEditMode={isEditMode}
-        initialData={card}
-      />
+      <CardForm companies={companies} initialData={card} isEditMode={isEditMode} />
     </div>
   );
 }

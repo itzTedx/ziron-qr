@@ -1,10 +1,6 @@
 import "dotenv/config";
 
-import {
-  BuildQueryResult,
-  DBQueryConfig,
-  ExtractTablesWithRelations,
-} from "drizzle-orm";
+import { BuildQueryResult, DBQueryConfig, ExtractTablesWithRelations } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 

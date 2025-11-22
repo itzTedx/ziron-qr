@@ -1,12 +1,7 @@
-import type { CardType } from "@ziron/db/schema";
 import { db } from "@ziron/db/client";
+import type { CardType } from "@ziron/db/schema";
 
-import {
-  CARD_CACHE_DURATIONS,
-  CARD_REDIS_KEYS,
-  CardOrdering,
-  redisCache,
-} from "./cache";
+import { CARD_CACHE_DURATIONS, CARD_REDIS_KEYS, CardOrdering, redisCache } from "./cache";
 
 export async function getCards(orderBy: CardOrdering = "name_asc") {
   try {
@@ -19,24 +14,19 @@ export async function getCards(orderBy: CardOrdering = "name_asc") {
     let orderFn;
     switch (orderBy) {
       case "name_asc":
-        orderFn = (cards: any, { asc }: { asc: any; desc: any }) =>
-          asc(cards.name);
+        orderFn = (cards: any, { asc }: { asc: any; desc: any }) => asc(cards.name);
         break;
       case "name_desc":
-        orderFn = (cards: any, { desc }: { asc: any; desc: any }) =>
-          desc(cards.name);
+        orderFn = (cards: any, { desc }: { asc: any; desc: any }) => desc(cards.name);
         break;
       case "createdAt_asc":
-        orderFn = (cards: any, { asc }: { asc: any; desc: any }) =>
-          asc(cards.createdAt);
+        orderFn = (cards: any, { asc }: { asc: any; desc: any }) => asc(cards.createdAt);
         break;
       case "createdAt_desc":
-        orderFn = (cards: any, { desc }: { asc: any; desc: any }) =>
-          desc(cards.createdAt);
+        orderFn = (cards: any, { desc }: { asc: any; desc: any }) => desc(cards.createdAt);
         break;
       default:
-        orderFn = (cards: any, { asc }: { asc: any; desc: any }) =>
-          asc(cards.name);
+        orderFn = (cards: any, { asc }: { asc: any; desc: any }) => asc(cards.name);
     }
 
     const data = await db.query.cards.findMany({
@@ -67,8 +57,7 @@ export async function getCardById(cardId: string) {
     }
 
     const data = await db.query.cards.findFirst({
-      where: (cards, { eq, isNull }) =>
-        eq(cards.id, cardId) && isNull(cards.deletedAt),
+      where: (cards, { eq, isNull }) => eq(cards.id, cardId) && isNull(cards.deletedAt),
       with: {
         emails: true,
         phones: true,

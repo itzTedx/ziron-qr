@@ -1,5 +1,4 @@
 import type { BetterAuthOptions } from "better-auth";
-
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
@@ -8,11 +7,7 @@ import { emailOTP, twoFactor } from "better-auth/plugins";
 import { db } from "@ziron/db/client";
 import redis from "@ziron/redis";
 
-export function initAuth(options: {
-  baseUrl: string;
-  productionUrl: string;
-  secret: string | undefined;
-}) {
+export function initAuth(options: { baseUrl: string; productionUrl: string; secret: string | undefined }) {
   const config = {
     database: drizzleAdapter(db, {
       provider: "pg",
@@ -64,11 +59,7 @@ export function initAuth(options: {
         generateId: false,
       },
     },
-    trustedOrigins: [
-      "expo://",
-      "http://localhost:3000",
-      "http://192.168.0.206:3000",
-    ],
+    trustedOrigins: ["expo://", "http://localhost:3000", "http://192.168.0.206:3000"],
   } satisfies BetterAuthOptions;
 
   return betterAuth(config);

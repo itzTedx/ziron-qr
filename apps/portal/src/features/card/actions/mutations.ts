@@ -1,18 +1,12 @@
 "use server";
 
-import { createLog } from "@/lib/utils";
-
 import { db } from "@ziron/db/client";
-import { cards, cardStyles, emails, links, phones } from "@ziron/db/schema";
+import { cardStyles, cards, emails, links, phones } from "@ziron/db/schema";
 import { cardSchema, z } from "@ziron/validators";
 
-import {
-  CARD_CACHE_DURATIONS,
-  CARD_ORDERINGS,
-  CARD_REDIS_KEYS,
-  invalidateCardCaches,
-  redisCache,
-} from "./cache";
+import { createLog } from "@/lib/utils";
+
+import { CARD_CACHE_DURATIONS, CARD_ORDERINGS, CARD_REDIS_KEYS, invalidateCardCaches, redisCache } from "./cache";
 import { upsertArray } from "./helpers";
 
 const log = createLog("Card");
@@ -112,7 +106,7 @@ export async function upsertCard(formData: unknown) {
           label: item.label,
         }),
         cardId,
-        tx,
+        tx
       );
 
       log.info("Upserting emails", { emails: data.emails });
@@ -124,26 +118,21 @@ export async function upsertCard(formData: unknown) {
           label: item.label,
         }),
         cardId,
-        tx,
+        tx
       );
 
       log.info("Upserting links", { links: data.links });
       await upsertArray(
         links,
         data.links,
-        (item: {
-          label: string;
-          url: string;
-          icon: string;
-          category?: string;
-        }) => ({
+        (item: { label: string; url: string; icon: string; category?: string }) => ({
           label: item.label,
           url: item.url,
           icon: item.icon,
           category: item.category ?? null,
         }),
         cardId,
-        tx,
+        tx
       );
 
       // Return card and cardId for use after transaction
@@ -161,11 +150,7 @@ export async function upsertCard(formData: unknown) {
       cardCacheKey,
       duration: CARD_CACHE_DURATIONS.MEDIUM,
     });
-    await redisCache.set(
-      cardCacheKey,
-      result.card[0],
-      CARD_CACHE_DURATIONS.MEDIUM,
-    );
+    await redisCache.set(cardCacheKey, result.card[0], CARD_CACHE_DURATIONS.MEDIUM);
 
     // Optionally, update all card list caches (invalidate and repopulate)
     for (const order of CARD_ORDERINGS) {

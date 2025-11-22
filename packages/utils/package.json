@@ -5,13 +5,10 @@
   "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "files": [
-    "dist/**"
-  ],
+  "files": ["dist/**"],
   "scripts": {
     "build": "tsup",
-    "lint": "eslint src/",
-    "dev": "tsup --watch",
+    "lint": "biome check .",
     "check-types": "tsc --noEmit"
   },
   "peerDependencies": {
@@ -22,6 +19,7 @@
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "catalog:react19",
+    "@biomejs/biome": "catalog:",
     "@ziron/typescript-config": "workspace:*",
     "next": "catalog:",
     "react": "catalog:react19",
@@ -32,6 +30,5 @@
     "clsx": "^2.1.1",
     "tailwind-merge": "^2.4.0",
     "zod": "catalog:"
-  },
-  "prettier": "@ziron/prettier-config"
+  }
 }

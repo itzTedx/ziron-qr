@@ -1,21 +1,18 @@
 "use client";
 
 import { useTransition } from "react";
+
 import { useRouter } from "next/navigation";
 
-import { validateForm } from "@/lib/utils";
 import { useQueryState } from "nuqs";
 import { toast } from "sonner";
 
 import { CardType, Company } from "@ziron/db/schema";
 import { Form, useForm, zodResolver } from "@ziron/ui/components/form";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@ziron/ui/components/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@ziron/ui/components/tabs";
 import { cardSchema, zCardSchema } from "@ziron/validators";
+
+import { validateForm } from "@/lib/utils";
 
 import { upsertCard } from "../actions/mutations";
 import { CardCustomize } from "./form-sections/customize";
@@ -45,21 +42,13 @@ export function CardForm({ companies, isEditMode, initialData }: Props) {
         id: email.id ?? undefined,
         email: email.email ?? undefined,
         label:
-          email.label === "Primary" ||
-          email.label === "Work" ||
-          email.label === "Personal"
-            ? email.label
-            : "Primary",
+          email.label === "Primary" || email.label === "Work" || email.label === "Personal" ? email.label : "Primary",
       })),
       phones: initialData?.phones.map((phone) => ({
         id: phone.id ?? undefined,
         phone: phone.phone ?? undefined,
         label:
-          phone.label === "Primary" ||
-          phone.label === "Work" ||
-          phone.label === "Personal"
-            ? phone.label
-            : "Primary",
+          phone.label === "Primary" || phone.label === "Work" || phone.label === "Personal" ? phone.label : "Primary",
       })),
       address: initialData?.address ?? "",
       mapUrl: initialData?.mapUrl ?? "",
@@ -84,9 +73,7 @@ export function CardForm({ companies, isEditMode, initialData }: Props) {
     startTransition(async () => {
       const result = await upsertCard(values);
       if (result.success) {
-        toast.success(
-          `Card: ${result.data?.name} has been ${isEditMode ? "Edited" : "Created"}`,
-        );
+        toast.success(`Card: ${result.data?.name} has been ${isEditMode ? "Edited" : "Created"}`);
         router.push("/");
       }
       if (result.error) {
@@ -108,26 +95,26 @@ export function CardForm({ companies, isEditMode, initialData }: Props) {
         <ProfileDashboard isPending={isPending} />
         <div className="mx-auto grid max-w-7xl grid-cols-3 gap-4 pb-6">
           <Tabs
+            className="col-span-2 mt-6 w-full px-6"
             defaultValue={defaultTab}
             onValueChange={(value) => setTab(value)}
-            className="col-span-2 mt-6 w-full px-6"
           >
             <TabsList className="h-auto w-full justify-start rounded-none border-b bg-transparent p-0">
               <TabsTrigger
+                className="relative rounded-none py-2 after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary"
                 value="general"
-                className="data-[state=active]:after:bg-primary relative rounded-none py-2 after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
               >
                 General
               </TabsTrigger>
               <TabsTrigger
+                className="relative rounded-none py-2 after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary"
                 value="links"
-                className="data-[state=active]:after:bg-primary relative rounded-none py-2 after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
               >
                 Links
               </TabsTrigger>
               <TabsTrigger
+                className="relative rounded-none py-2 after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary"
                 value="customize"
-                className="data-[state=active]:after:bg-primary relative rounded-none py-2 after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
               >
                 Customize
               </TabsTrigger>
@@ -142,7 +129,7 @@ export function CardForm({ companies, isEditMode, initialData }: Props) {
               <CardCustomize template={data.template} />
             </TabsContent>
           </Tabs>
-          <Preview companies={companies} cardData={formdata} />
+          <Preview cardData={formdata} companies={companies} />
         </div>
       </form>
     </Form>

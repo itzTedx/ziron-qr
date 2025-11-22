@@ -1,9 +1,10 @@
 {
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.organizeImports": "always"
+    "source.organizeImports.biome": "explicit",
+    "source.fixAll.biome": "explicit"
   },
-
+  "editor.defaultFormatter": "biomejs.biome",
   "files.associations": {
     "*.css": "tailwindcss"
   },
@@ -12,6 +13,8 @@
     ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
     ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
   ],
-
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
   "cSpell.words": ["Foneflip", "nuqs", "ziron"]
 }

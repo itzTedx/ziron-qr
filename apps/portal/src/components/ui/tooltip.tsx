@@ -1,33 +1,22 @@
 "use client";
 
 import { ReactNode, useState } from "react";
+
 import Link from "next/link";
 
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import { HelpCircle } from "lucide-react";
 
 import { Badge } from "@ziron/ui/components/badge";
-import {
-  Button,
-  ButtonProps,
-  buttonVariants,
-} from "@ziron/ui/components/button";
+import { Button, ButtonProps, buttonVariants } from "@ziron/ui/components/button";
 import { cn } from "@ziron/utils";
 
 export function TooltipProvider({ children }: { children: React.ReactNode }) {
-  return (
-    <TooltipPrimitive.Provider delayDuration={150}>
-      {children}
-    </TooltipPrimitive.Provider>
-  );
+  return <TooltipPrimitive.Provider delayDuration={150}>{children}</TooltipPrimitive.Provider>;
 }
 
-export interface TooltipProps
-  extends Omit<TooltipPrimitive.TooltipContentProps, "content"> {
-  content:
-    | React.ReactNode
-    | string
-    | ((props: { setOpen: (open: boolean) => void }) => ReactNode);
+export interface TooltipProps extends Omit<TooltipPrimitive.TooltipContentProps, "content"> {
+  content: React.ReactNode | string | ((props: { setOpen: (open: boolean) => void }) => ReactNode);
   contentClassName?: string;
   disableHoverableContent?: TooltipPrimitive.TooltipProps["disableHoverableContent"];
 }
@@ -44,36 +33,33 @@ export function Tooltip({
 
   return (
     <TooltipPrimitive.Root
-      open={open}
-      onOpenChange={setOpen}
       delayDuration={0}
       disableHoverableContent={disableHoverableContent}
+      onOpenChange={setOpen}
+      open={open}
     >
       <TooltipPrimitive.Trigger
         asChild
-        onClick={() => {
-          setOpen(true);
-        }}
         onBlur={() => {
           setOpen(false);
+        }}
+        onClick={() => {
+          setOpen(true);
         }}
       >
         {children}
       </TooltipPrimitive.Trigger>
       <TooltipPrimitive.Portal>
         <TooltipPrimitive.Content
-          sideOffset={8}
-          side={side}
-          className="animate-slide-up-fade pointer-events-auto z-[99] items-center overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
+          className="pointer-events-auto z-[99] animate-slide-up-fade items-center overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
           collisionPadding={0}
+          side={side}
+          sideOffset={8}
           {...rest}
         >
           {typeof content === "string" ? (
             <span
-              className={cn(
-                "block max-w-xs px-4 py-2 text-center text-sm text-pretty text-gray-700",
-                contentClassName,
-              )}
+              className={cn("block max-w-xs text-pretty px-4 py-2 text-center text-gray-700 text-sm", contentClassName)}
             >
               {content}
             </span>
@@ -103,7 +89,7 @@ export function TooltipContent({
 }) {
   return (
     <div className="flex max-w-xs flex-col items-center space-y-3 p-4 text-center">
-      <p className="text-sm text-gray-700">{title}</p>
+      <p className="text-gray-700 text-sm">{title}</p>
       {cta &&
         (href ? (
           <Link
@@ -111,13 +97,13 @@ export function TooltipContent({
             {...(target ? { target } : {})}
             className={cn(
               buttonVariants({ variant: "default" }),
-              "flex h-9 w-full items-center justify-center rounded-lg border px-4 text-sm whitespace-nowrap",
+              "flex h-9 w-full items-center justify-center whitespace-nowrap rounded-lg border px-4 text-sm"
             )}
           >
             {cta}
           </Link>
         ) : onClick ? (
-          <Button onClick={onClick} variant="default" className="h-9">
+          <Button className="h-9" onClick={onClick} variant="default">
             {cta}
           </Button>
         ) : null)}
@@ -125,25 +111,17 @@ export function TooltipContent({
   );
 }
 
-export function SimpleTooltipContent({
-  title,
-  cta,
-  href,
-}: {
-  title: string;
-  cta?: string;
-  href?: string;
-}) {
+export function SimpleTooltipContent({ title, cta, href }: { title: string; cta?: string; href?: string }) {
   return (
-    <div className="max-w-xs px-4 py-2 text-center text-sm text-gray-700">
+    <div className="max-w-xs px-4 py-2 text-center text-gray-700 text-sm">
       {title}{" "}
       {cta && href && (
         <Link
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={(e) => e.stopPropagation()}
           className="inline-flex text-gray-500 underline underline-offset-4 hover:text-gray-800"
+          href={href}
+          onClick={(e) => e.stopPropagation()}
+          rel="noopener noreferrer"
+          target="_blank"
         >
           {cta}
         </Link>
@@ -164,10 +142,7 @@ export function BadgeTooltip({ children, content, ...props }: TooltipProps) {
   return (
     <Tooltip content={content} {...props}>
       <div className="flex cursor-pointer items-center">
-        <Badge
-          variant="default"
-          className="border-gray-300 transition-all hover:bg-gray-200"
-        >
+        <Badge className="border-gray-300 transition-all hover:bg-gray-200" variant="default">
           {children}
         </Badge>
       </div>
@@ -190,7 +165,7 @@ export function ButtonTooltip({
         {...props}
         className={cn(
           "flex h-6 w-6 items-center justify-center rounded-md text-gray-500 transition-colors duration-75 hover:bg-gray-100 active:bg-gray-200 disabled:cursor-not-allowed disabled:hover:bg-transparent",
-          props.className,
+          props.className
         )}
       >
         {children}

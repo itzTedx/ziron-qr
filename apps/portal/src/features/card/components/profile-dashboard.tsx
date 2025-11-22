@@ -1,18 +1,14 @@
 import Image from "next/image";
 
-import { ActionButton } from "@/components/ui/action-button";
-import { ResponsiveModal } from "@/components/ui/responsive-modal";
-import {
-  IconArrowsMaximize,
-  IconCamera,
-  IconShare,
-  IconTrash,
-} from "@tabler/icons-react";
+import { IconArrowsMaximize, IconCamera, IconShare, IconTrash } from "@tabler/icons-react";
 
 import { Icons } from "@ziron/ui/assets/icons";
 import { Badge } from "@ziron/ui/components/badge";
 import { Button } from "@ziron/ui/components/button";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
+
+import { ActionButton } from "@/components/ui/action-button";
+import { ResponsiveModal } from "@/components/ui/responsive-modal";
 
 interface Props {
   isPending: boolean;
@@ -27,29 +23,29 @@ export const ProfileDashboard = ({ isPending }: Props) => {
 
   return (
     <div>
-      <div className="group bg-secondary relative h-72">
+      <div className="group relative h-72 bg-secondary">
         <Image
-          src={"/images/placeholder-cover.jpg"}
+          alt="cover image"
+          className="object-cover transition-[filter] group-hover:brightness-90"
           fill
           priority
-          sizes="100vw"
-          alt="cover image"
-          title="Cover Image"
-          className="object-cover transition-[filter] group-hover:brightness-90"
           quality={80}
+          sizes="100vw"
+          src={"/images/placeholder-cover.jpg"}
+          title="Cover Image"
         />
       </div>
-      <section className="mx-auto -mt-16 max-w-7xl">
-        <div className="border-background bg-background/80 shadow-muted/30 relative grid grid-cols-10 rounded-lg border-t px-6 py-4 backdrop-blur-xl sm:border sm:shadow-lg md:divide-x">
+      <section className="-mt-16 mx-auto max-w-7xl">
+        <div className="relative grid grid-cols-10 rounded-lg border-background border-t bg-background/80 px-6 py-4 shadow-muted/30 backdrop-blur-xl sm:border sm:shadow-lg md:divide-x">
           <div className="col-span-10 flex md:col-span-4 md:px-3 lg:px-6">
-            <div className="group absolute left-1/2 size-28 -translate-y-20 max-md:-translate-x-1/2 md:-top-[60%] md:left-5 md:size-36 md:translate-y-[30%]">
+            <div className="group -translate-y-20 max-md:-translate-x-1/2 md:-top-[60%] absolute left-1/2 size-28 md:left-5 md:size-36 md:translate-y-[30%]">
               <Image
-                src="/images/placeholder-cover.jpg"
-                fill
-                sizes="10vw"
                 alt="Profile Image"
+                className="overflow-clip rounded-full border-4 border-background object-cover transition-[filter] group-hover:brightness-90"
+                fill
                 quality={25}
-                className="border-background overflow-clip rounded-full border-4 object-cover transition-[filter] group-hover:brightness-90"
+                sizes="10vw"
+                src="/images/placeholder-cover.jpg"
               />
               <ResponsiveModal
                 //   isOpen={openPhoto}
@@ -59,8 +55,8 @@ export const ProfileDashboard = ({ isPending }: Props) => {
                 trigger={
                   <Button
                     className="absolute right-1 bottom-1 z-10 flex items-center justify-center rounded-full"
-                    variant="outline"
                     size="icon"
+                    variant="outline"
                   >
                     <IconCamera className="size-5" />
                   </Button>
@@ -78,7 +74,7 @@ export const ProfileDashboard = ({ isPending }: Props) => {
             </div>
             <div className="w-full max-md:mt-3 md:ml-36">
               <div className="flex items-center justify-between gap-3">
-                <Badge variant="secondary" className="gap-1.5">
+                <Badge className="gap-1.5" variant="secondary">
                   {/* {data.company && data.company.logo && (
               <Image
               src={data.company.logo}
@@ -89,30 +85,28 @@ export const ProfileDashboard = ({ isPending }: Props) => {
               )} */}
                   {/* {data.company?.name} */}
                 </Badge>
-                <span className="text-primary flex gap-2 md:hidden">
+                <span className="flex gap-2 text-primary md:hidden">
                   <Button
-                    type="button"
+                    size="icon"
                     //   onClick={() => {
                     //     openPreview();
                     //   }}
+                    type="button"
                     variant="ghost"
-                    size="icon"
                   >
                     <IconArrowsMaximize className="size-5" />
                   </Button>
                   <Button
-                    type="button"
-                    //   onClick={handleShare}
-                    variant="ghost"
                     size="icon"
+                    //   onClick={handleShare}
+                    type="button"
+                    variant="ghost"
                   >
                     <IconShare className="size-5" />
                   </Button>
                 </span>
               </div>
-              <h2 className="text-lg font-semibold lg:text-2xl">
-                {/* {data.name} */} Untitled Card
-              </h2>
+              <h2 className="font-semibold text-lg lg:text-2xl">{/* {data.name} */} Untitled Card</h2>
               <p className="text-sm">{/* {data.designation} */} Designation</p>
             </div>
           </div>
@@ -126,13 +120,13 @@ export const ProfileDashboard = ({ isPending }: Props) => {
               <div className="flex items-center gap-2">
                 {/* <CopyButton link={shareLink} /> */}
                 <Button
-                  type="button"
+                  className="hidden items-center gap-1.5 md:flex"
                   onClick={(e) => {
                     e.preventDefault();
                     //   handleShare();
                   }}
+                  type="button"
                   variant="outline"
-                  className="hidden items-center gap-1.5 md:flex"
                 >
                   <Icons.share className="size-4 stroke-[1.5]" />
                   <span className="hidden lg:block">Share</span>
@@ -144,16 +138,16 @@ export const ProfileDashboard = ({ isPending }: Props) => {
           <div className="col-span-2 hidden flex-col gap-3 px-6 md:flex">
             <ActionButton
               action={serverAction}
-              requireAreYouSure
-              areYouSureDescription="This action cannot be undone."
               actionButton="Delete"
+              areYouSureDescription="This action cannot be undone."
+              requireAreYouSure
               variant="destructive"
             >
               <IconTrash className="size-4" />
               Delete
             </ActionButton>
 
-            <Button type="submit" size="lg">
+            <Button size="lg" type="submit">
               <LoadingSwap isLoading={isPending}>Save Changes</LoadingSwap>
             </Button>
           </div>

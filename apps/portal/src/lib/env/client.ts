@@ -10,6 +10,5 @@ export const env = createEnv({
   experimental__runtimeEnv: {
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
   },
-  skipValidation:
-    !!process.env.CI || process.env.npm_lifecycle_event === "lint",
+  skipValidation: !!process.env.CI || process.env.npm_lifecycle_event === "lint",
 });

@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useMemo } from "react";
+
 import Image from "next/image";
 
 import { IconCheck } from "@tabler/icons-react";
@@ -32,51 +33,40 @@ export const ThemeSelector = ({ onChange, value }: Props) => {
   const radioItems = useMemo(
     () =>
       THEME_ITEMS.map((item) => (
-        <label
-          key={`${id}-${item.value}`}
-          className="grid shrink-0 flex-col items-center justify-center"
-        >
-          <RadioGroupItem
-            id={`${id}-${item.value}`}
-            value={item.value}
-            className={radioItemStyles}
-          />
+        <label className="grid shrink-0 flex-col items-center justify-center" key={`${id}-${item.value}`}>
+          <RadioGroupItem className={radioItemStyles} id={`${id}-${item.value}`} value={item.value} />
           <div className={radioWrapperStyles}>
             <div className={imageContainerStyles}>
               <Image
-                src={item.image}
                 alt={item.label}
+                className="rounded-xl object-cover"
                 fill
                 priority
                 sizes="(max-width: 768px) 60vh, (max-width: 1024px) 96vh, 30rem"
-                className="rounded-xl object-cover"
+                src={item.image}
               />
             </div>
           </div>
 
           <span className="group mt-2 flex items-center justify-center gap-2">
-            <div className="border-primary text-background focus-visible:ring-ring peer-data-[state=checked]:group-[]:border-primary peer-data-[state=checked]:group-[]:bg-primary peer-data-[state=checked]:group-[]:ring-1 peer-data-[state=checked]:group-[]:ring-foreground flex aspect-square size-5 items-center justify-center rounded-full border shadow-none ring-offset-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 disabled:cursor-not-allowed disabled:opacity-50">
+            <div className="flex aspect-square size-5 items-center justify-center rounded-full border border-primary text-background shadow-none ring-offset-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 disabled:cursor-not-allowed disabled:opacity-50 peer-data-[state=checked]:group-[]:border-primary peer-data-[state=checked]:group-[]:bg-primary peer-data-[state=checked]:group-[]:ring-1 peer-data-[state=checked]:group-[]:ring-foreground">
               <IconCheck
+                aria-hidden="true"
+                className="peer-data-[state=unchecked]:group-[]:hidden"
                 size={16}
                 strokeWidth={2}
-                className="peer-data-[state=unchecked]:group-[]:hidden"
-                aria-hidden="true"
               />
             </div>
-            <span className="text-xs font-medium">{item.label}</span>
+            <span className="font-medium text-xs">{item.label}</span>
           </span>
         </label>
       )),
-    [id],
+    [id]
   );
 
   return (
     <fieldset className="space-y-4 pb-4">
-      <RadioGroup
-        className="flex gap-3"
-        onValueChange={onChange}
-        defaultValue={value}
-      >
+      <RadioGroup className="flex gap-3" defaultValue={value} onValueChange={onChange}>
         {radioItems}
       </RadioGroup>
     </fieldset>

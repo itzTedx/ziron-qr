@@ -9,15 +9,14 @@
     "lint": "turbo lint",
     "db:generate": "pnpm -F @ziron/db generate",
     "db:migrate": "turbo -F @ziron/db migrate",
-    "format": "turbo run format --continue -- --cache --cache-location .cache/.prettiercache",
-    "format:fix": "turbo run format --continue -- --write --cache --cache-location .cache/.prettiercache",
+    "format": "biome check .",
+    "format:fix": "biome check --write .",
     "ui-add": "turbo run ui-add"
   },
   "devDependencies": {
-    "@ziron/eslint-config": "workspace:*",
     "@ziron/typescript-config": "workspace:*",
-    "prettier": "^3.5.1",
-    "turbo": "^2.4.2",
+    "@biomejs/biome": "catalog:",
+    "turbo": "^2.6.1",
     "typescript": "5.7.3"
   },
   "packageManager": "pnpm@10.4.1",

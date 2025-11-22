@@ -1,15 +1,5 @@
 import { relations } from "drizzle-orm";
-import {
-  boolean,
-  index,
-  pgTable,
-  real,
-  text,
-  timestamp,
-  uniqueIndex,
-  uuid,
-  varchar,
-} from "drizzle-orm/pg-core";
+import { boolean, index, pgTable, real, text, timestamp, uniqueIndex, uuid, varchar } from "drizzle-orm/pg-core";
 
 import { InferResultType } from "../client";
 import { companies } from "./company-schema";
@@ -41,9 +31,7 @@ export const cards = pgTable(
       .references(() => companies.id, { onDelete: "cascade" }),
 
     // Timestamps
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true })
       .defaultNow()
       .$onUpdate(() => new Date()),
@@ -56,7 +44,7 @@ export const cards = pgTable(
     index("cards_created_at_idx").on(table.createdAt),
     index("cards_deleted_at_idx").on(table.deletedAt),
     uniqueIndex("cards_slug_unique_idx").on(table.slug),
-  ],
+  ]
 );
 
 // New card_styles table
@@ -70,12 +58,8 @@ export const cardStyles = pgTable(
     template: varchar("template", { length: 50 }).default("default").notNull(),
     isDarkMode: boolean("is_dark_mode").default(false).notNull(),
     theme: varchar("theme_color", { length: 7 }).default("#4938ff").notNull(),
-    btnColor: varchar("button_color", { length: 7 })
-      .default("#4938ff")
-      .notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    btnColor: varchar("button_color", { length: 7 }).default("#4938ff").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true })
       .defaultNow()
       .$onUpdate(() => new Date()),
@@ -87,7 +71,7 @@ export const cardStyles = pgTable(
     index("card_styles_template_idx").on(table.template),
     index("card_styles_created_at_idx").on(table.createdAt),
     index("card_styles_deleted_at_idx").on(table.deletedAt),
-  ],
+  ]
 );
 
 export const phones = pgTable(
@@ -102,9 +86,7 @@ export const phones = pgTable(
       .references(() => cards.id, { onDelete: "cascade" }),
 
     // Timestamps
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true })
       .defaultNow()
       .$onUpdate(() => new Date()),
@@ -115,7 +97,7 @@ export const phones = pgTable(
     index("phones_order_idx").on(table.order),
     index("phones_created_at_idx").on(table.createdAt),
     index("phones_deleted_at_idx").on(table.deletedAt),
-  ],
+  ]
 );
 
 export const emails = pgTable(
@@ -130,9 +112,7 @@ export const emails = pgTable(
       .references(() => cards.id, { onDelete: "cascade" }),
 
     // Timestamps
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true })
       .defaultNow()
       .$onUpdate(() => new Date()),
@@ -143,7 +123,7 @@ export const emails = pgTable(
     index("emails_order_idx").on(table.order),
     index("emails_created_at_idx").on(table.createdAt),
     index("emails_deleted_at_idx").on(table.deletedAt),
-  ],
+  ]
 );
 
 export const links = pgTable(
@@ -160,9 +140,7 @@ export const links = pgTable(
       .references(() => cards.id, { onDelete: "cascade" }),
 
     // Timestamps
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true })
       .defaultNow()
       .$onUpdate(() => new Date()),
@@ -174,7 +152,7 @@ export const links = pgTable(
     index("links_order_idx").on(table.order),
     index("links_created_at_idx").on(table.createdAt),
     index("links_deleted_at_idx").on(table.deletedAt),
-  ],
+  ]
 );
 
 export const cardsRelations = relations(cards, ({ one, many }) => ({
