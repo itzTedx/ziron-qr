@@ -16,7 +16,7 @@ import { ResponsiveModal } from "@/components/ui/responsive-modal";
 
 interface Props {
   companies: Company[];
-  cardData: zCardSchema;
+  cardData: Partial<zCardSchema>;
 }
 
 export const Preview = ({ companies, cardData }: Props) => {

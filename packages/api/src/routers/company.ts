@@ -6,7 +6,15 @@ import { companySchema, z } from "@ziron/validators";
 import { protectedProcedure } from "..";
 
 export const createCompany = protectedProcedure
-  .route({ method: "POST", path: "/company", summary: "Create a new company", tags: ["company"] })
+  .route({
+    method: "POST",
+    path: "/company",
+    summary: "Create a new company",
+    description: "Create a new company with the given name, phone, website, address, and logo",
+    successStatus: 200,
+
+    tags: ["company"],
+  })
   .input(companySchema)
   .output(
     z.object({
@@ -40,11 +48,11 @@ export const listCompanies = protectedProcedure
     method: "GET",
     path: "/company",
     summary: "List all companies",
+    description: "List all companies with their cards",
     tags: ["company"],
   })
-  .input(z.void())
   .output(z.array(z.custom<Company>()))
-  .handler(async ({ input }) => {
+  .handler(async () => {
     const data = await db.query.companies.findMany({
       where: (companies, { isNull }) => isNull(companies.deletedAt),
       with: {

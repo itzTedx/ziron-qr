@@ -13,6 +13,7 @@ interface Props {
     companies: Company[];
     emails?: EmailsType;
     phones?: PhonesType;
+    companyId?: string;
   };
 }
 
@@ -71,7 +72,7 @@ export const CardGeneral = ({ data }: Props) => {
           />
         </div>
         <div className="space-y-4">
-          <CompanyField data={data.companies} />
+          <CompanyField companyId={data.companyId} data={data.companies} />
           <FormField
             control={form.control}
             name="designation"

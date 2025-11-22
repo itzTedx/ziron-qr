@@ -63,7 +63,7 @@ export const CompaniesList = () => {
               <div className="flex gap-2">
                 <EditCompanyButton initialData={company} />
                 <Button asChild size="icon" variant="outline">
-                  <Link href={`/card/new?company=${company.id}`}>
+                  <Link href={`/card/new?companyId=${company.id}`}>
                     <IconPlus className="size-4" />
                   </Link>
                 </Button>

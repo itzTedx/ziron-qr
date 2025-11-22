@@ -6,15 +6,18 @@ import { Icons } from "@ziron/ui/assets/icons";
 import { Badge } from "@ziron/ui/components/badge";
 import { Button } from "@ziron/ui/components/button";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
+import { zCardSchema } from "@ziron/validators";
 
 import { ActionButton } from "@/components/ui/action-button";
 import { ResponsiveModal } from "@/components/ui/responsive-modal";
 
 interface Props {
   isPending: boolean;
+  data: Partial<Pick<zCardSchema, "name" | "designation" | "slug" | "image" | "cover">>;
+  companyName?: string;
 }
 
-export const ProfileDashboard = ({ isPending }: Props) => {
+export const ProfileDashboard = ({ isPending, companyName, data }: Props) => {
   const serverAction = async () => {
     // Simulate a server action
     await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -75,15 +78,7 @@ export const ProfileDashboard = ({ isPending }: Props) => {
             <div className="w-full max-md:mt-3 md:ml-36">
               <div className="flex items-center justify-between gap-3">
                 <Badge className="gap-1.5" variant="secondary">
-                  {/* {data.company && data.company.logo && (
-              <Image
-              src={data.company.logo}
-              height={8}
-              width={8}
-              alt=""
-              />
-              )} */}
-                  {/* {data.company?.name} */}
+                  {companyName}
                 </Badge>
                 <span className="flex gap-2 text-primary md:hidden">
                   <Button
@@ -106,8 +101,10 @@ export const ProfileDashboard = ({ isPending }: Props) => {
                   </Button>
                 </span>
               </div>
-              <h2 className="font-semibold text-lg lg:text-2xl">{/* {data.name} */} Untitled Card</h2>
-              <p className="text-sm">{/* {data.designation} */} Designation</p>
+              <h2 className="font-semibold text-lg lg:text-2xl">{data && data.name ? data.name : "Untitled Card"}</h2>
+              <p className="text-muted-foreground text-sm">
+                {data && data.designation ? data.designation : "Designation"}
+              </p>
             </div>
           </div>
 

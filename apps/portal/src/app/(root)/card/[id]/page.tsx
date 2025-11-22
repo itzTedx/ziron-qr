@@ -4,7 +4,11 @@ import { getCompanies } from "@/features/company/actions/queries";
 
 type Params = Promise<{ id: string }>;
 
-export default async function CardPage({ params }: { params: Params }) {
+interface Props {
+  params: Params;
+}
+
+export default async function CardPage({ params }: Props) {
   const { id } = await params;
   const companies = await getCompanies();
 

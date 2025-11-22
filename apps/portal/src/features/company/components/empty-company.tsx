@@ -24,7 +24,7 @@ export const EmptyCompany = ({ id }: Props) => {
       <EmptyContent>
         <div className="flex gap-2">
           <Button asChild className="gap-2">
-            <Link href={`/card/new?company=${id}`}>
+            <Link href={`/card/new?companyId=${id}`}>
               <IconPlus className="size-4" /> Create a Card
             </Link>
           </Button>

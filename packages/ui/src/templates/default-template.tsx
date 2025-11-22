@@ -24,8 +24,6 @@ export default function DefaultTemplate({ card, company, imageBase64URI }: Templ
 
   const theme = card.styles?.theme || "#4938ff";
 
-  console.log("isDarkMode", card.styles?.isDarkMode);
-
   return (
     <div
       className={cn(

@@ -1,4 +1,4 @@
-import { z } from "zod/v4";
+import { z } from "zod";
 
 export const LabelEnum = z.enum(["Primary", "Work", "Personal"]);
 
@@ -56,10 +56,10 @@ export const cardSchema = z
     companyId: z.string(),
 
     // Contact information
-    phones: phonesSchema,
-    emails: emailsSchema,
+    phones: phonesSchema.optional(),
+    emails: emailsSchema.nullish(),
     address: z.string().optional(),
-    mapUrl: z.url().optional(),
+    mapUrl: z.string().optional(),
 
     // Media and attachments
     image: z.string().optional(),

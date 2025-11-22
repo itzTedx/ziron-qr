@@ -2,6 +2,7 @@ import { IconPlus, IconX } from "@tabler/icons-react";
 import { toast } from "sonner";
 
 import { Button } from "@ziron/ui/components/button";
+import { ButtonGroup } from "@ziron/ui/components/button-group";
 import {
   FormControl,
   FormField,
@@ -11,6 +12,7 @@ import {
   useFieldArray,
   useFormContext,
 } from "@ziron/ui/components/form";
+import { InputGroup } from "@ziron/ui/components/input-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ziron/ui/components/select";
 import { cn } from "@ziron/utils";
 import { LabelEnum, PhonesType, zCardSchema } from "@ziron/validators";
@@ -42,66 +44,60 @@ export const PhonesField = ({ data }: Props) => {
   return (
     <div className="space-y-2">
       {fields.map((field, i) => (
-        <div className="flex w-full items-end" key={field.id}>
+        <div className="flex w-full items-end" key={`phones-${field.id}-${i}`}>
           <FormField
             control={form.control}
             name={`phones.${i}.phone`}
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel className={cn(i !== 0 && "sr-only")}>Phone</FormLabel>
+                <FormLabel className={cn(i !== 0 && "sr-only")} htmlFor={field.name}>
+                  Phone
+                </FormLabel>
                 <FormControl>
-                  <PhoneInput
-                    className={cn("w-full rounded-e-none border-r-0")}
-                    onChange={field.onChange}
-                    value={field.value}
-                  />
+                  <ButtonGroup className="w-full">
+                    <InputGroup>
+                      <PhoneInput
+                        className={cn("w-full rounded-e-none border-0 shadow-none")}
+                        id={field.name}
+                        onChange={field.onChange}
+                        value={field.value}
+                      />
+                    </InputGroup>
+
+                    <Select
+                      defaultValue={form.getValues(`phones.${i}.label`)}
+                      onValueChange={(e: (typeof LabelEnum.options)[number]) => form.setValue(`phones.${i}.label`, e)}
+                    >
+                      <SelectTrigger className="text-xs">
+                        <SelectValue placeholder="Label" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {LabelEnum.options.map((option) => (
+                          <SelectItem key={`phones-${i}-${option}`} value={option}>
+                            {option}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+
+                    {fields.length > 1 && (
+                      <Button
+                        className={cn("shrink-0 bg-transparent dark:bg-input/30 dark:hover:bg-input/50")}
+                        onClick={() => remove(i)}
+                        size="icon"
+                        type="button"
+                        variant="outline"
+                      >
+                        <IconX className="size-4 text-muted-foreground" />
+                      </Button>
+                    )}
+                  </ButtonGroup>
                 </FormControl>
 
                 <FormMessage />
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name={`emails.${i}.label`}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className={"sr-only"}>Phone Label</FormLabel>
-
-                <Select defaultValue={field.value} onValueChange={field.onChange}>
-                  <FormControl>
-                    <SelectTrigger
-                      className={cn(
-                        "w-20 shrink-0 gap-0.5 rounded-none px-2 font-medium text-[11px] text-muted-foreground",
-                        fields.length === 1 ? "rounded-e-lg border-r" : "border-r-0"
-                      )}
-                    >
-                      <SelectValue placeholder="Label" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {LabelEnum.options.map((option) => (
-                      <SelectItem key={option} value={option}>
-                        {option}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormItem>
-            )}
-          />
-          <Button
-            className={cn(
-              "shrink-0 bg-transparent dark:bg-input/30 dark:hover:bg-input/50",
-              fields.length > 1 ? "flex rounded-s-none" : "hidden"
-            )}
-            onClick={() => remove(i)}
-            size="icon"
-            type="button"
-            variant="outline"
-          >
-            <IconX className="size-4 text-muted-foreground" />
-          </Button>
         </div>
       ))}
       <Button className="gap-1 px-0" onClick={handleAppend} size="sm" type="button" variant="link">

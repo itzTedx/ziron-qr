@@ -6,7 +6,7 @@ import Image from "next/image";
 
 import { isDefinedError } from "@orpc/client";
 import { IconBuilding, IconEdit, IconLoader, IconPlus, IconTrash } from "@tabler/icons-react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { parseAsString, useQueryStates } from "nuqs";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -43,7 +43,7 @@ export default function CompanyForm({ initialData, isEditMode }: CompanyFormProp
   const [isDeletePending, startDeleteTransition] = useTransition();
   const [uploading, setUploading] = useState(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
-  // const router = useRouter();
+  const queryClient = useQueryClient();
 
   const [, setCompanyModal] = useQueryStates({
     modal: parseAsString,
@@ -68,6 +68,11 @@ export default function CompanyForm({ initialData, isEditMode }: CompanyFormProp
     orpc.company.create.mutationOptions({
       onSuccess: (newCompany) => {
         toast.success(`Company: ${newCompany.companyName} created successfully`);
+
+        queryClient.invalidateQueries({
+          queryKey: orpc.company.list.queryKey(),
+        });
+
         setCompanyModal({ modal: null });
         setFields({
           id: null,
@@ -82,7 +87,7 @@ export default function CompanyForm({ initialData, isEditMode }: CompanyFormProp
       onError: (error) => {
         if (isDefinedError(error)) {
           if (error.code === "NOT_FOUND") {
-            toast.error("Workspace not found", { description: error.message });
+            toast.error("Company not found", { description: error.message });
             return;
           }
           toast.error("Failed to create company, try again later!", { description: error.message });
@@ -279,8 +284,11 @@ export default function CompanyForm({ initialData, isEditMode }: CompanyFormProp
               </AlertDialogContent>
             </AlertDialog>
           )}
-          <Button className="w-full shrink" disabled={isPending} type="submit">
-            <LoadingSwap className="flex items-center justify-center gap-1.5 font-medium" isLoading={isPending}>
+          <Button className="w-full shrink" disabled={createCompany.isPending} type="submit">
+            <LoadingSwap
+              className="flex items-center justify-center gap-1.5 font-medium"
+              isLoading={createCompany.isPending}
+            >
               {isEditMode ? <IconEdit className="size-4" /> : <IconPlus className="size-4" />}
               {isEditMode ? "Save Changes" : "Add Company"}
             </LoadingSwap>
