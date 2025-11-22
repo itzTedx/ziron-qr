@@ -4,7 +4,6 @@ import { slugify } from "@ziron/utils";
 import { companySchema, z } from "@ziron/validators";
 
 import { protectedProcedure } from "..";
-import { COMPANY_ORDERINGS, getOrder } from "../utils/company-ordering";
 
 export const createCompany = protectedProcedure
   .route({ method: "POST", path: "/company", summary: "Create a new company", tags: ["company"] })
@@ -43,11 +42,7 @@ export const listCompanies = protectedProcedure
     summary: "List all companies",
     tags: ["company"],
   })
-  .input(
-    z.object({
-      orderBy: z.enum(COMPANY_ORDERINGS).optional(),
-    })
-  )
+  .input(z.void())
   .output(z.array(z.custom<Company>()))
   .handler(async ({ input }) => {
     const data = await db.query.companies.findMany({
@@ -55,7 +50,7 @@ export const listCompanies = protectedProcedure
       with: {
         cards: true,
       },
-      orderBy: getOrder(input.orderBy),
+      // orderBy: getOrder(input.orderBy),
     });
 
     return data;

@@ -10,7 +10,7 @@ interface EditButtonProps {
   initialData: Company;
 }
 
-export default function EditCompanyButton({ initialData }: EditButtonProps) {
+export function EditCompanyButton({ initialData }: EditButtonProps) {
   const [, setCompanyModal] = useQueryStates({
     modal: parseAsString,
   });

@@ -4,7 +4,9 @@ import { useState, useTransition } from "react";
 
 import Image from "next/image";
 
+import { isDefinedError } from "@orpc/client";
 import { IconBuilding, IconEdit, IconLoader, IconPlus, IconTrash } from "@tabler/icons-react";
+import { useMutation } from "@tanstack/react-query";
 import { parseAsString, useQueryStates } from "nuqs";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -27,7 +29,9 @@ import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 import { Textarea } from "@ziron/ui/components/textarea";
 import { CompanyType, companySchema } from "@ziron/validators";
 
-import { deleteCompany, upsertCompany } from "../actions/mutations";
+import { orpc } from "@/lib/orpc/client";
+
+import { deleteCompany } from "../actions/mutations";
 
 interface CompanyFormProps {
   initialData: CompanyType;
@@ -60,12 +64,10 @@ export default function CompanyForm({ initialData, isEditMode }: CompanyFormProp
     defaultValues,
   });
 
-  function onSubmit(values: CompanyType) {
-    startTransition(async () => {
-      const result = await upsertCompany(values);
-
-      if (result.success) {
-        toast.success(`Company: ${result.data?.name} has been ${isEditMode ? "Edited" : "Created"}`);
+  const createCompany = useMutation(
+    orpc.company.create.mutationOptions({
+      onSuccess: (newCompany) => {
+        toast.success(`Company: ${newCompany.companyName} created successfully`);
         setCompanyModal({ modal: null });
         setFields({
           id: null,
@@ -76,12 +78,23 @@ export default function CompanyForm({ initialData, isEditMode }: CompanyFormProp
           website: null,
         });
         form.reset(); // This will reset the form fields to their default values
-      }
+      },
+      onError: (error) => {
+        if (isDefinedError(error)) {
+          if (error.code === "NOT_FOUND") {
+            toast.error("Workspace not found", { description: error.message });
+            return;
+          }
+          toast.error("Failed to create company, try again later!", { description: error.message });
+          return;
+        }
+        toast.error(error.message);
+      },
+    })
+  );
 
-      if (result.error) {
-        toast.error(result.error);
-      }
-    });
+  function onSubmit(values: CompanyType) {
+    createCompany.mutate(values);
   }
 
   function handleDelete(id: string) {
