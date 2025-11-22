@@ -1,6 +1,6 @@
 import { eq } from "@ziron/db";
 import { db } from "@ziron/db/client";
-import { Company, cards, emails, links, phones } from "@ziron/db/schema";
+import { CardType, Company, cards, emails, links, phones } from "@ziron/db/schema";
 import { slugify } from "@ziron/utils";
 import { cardSchema, z } from "@ziron/validators";
 
@@ -139,6 +139,35 @@ export const listCards = protectedProcedure
         cards: true,
       },
     });
+
+    return data;
+  });
+
+export const getCard = protectedProcedure
+  .route({
+    method: "GET",
+    path: "/card/:id",
+    summary: "Get a card by ID",
+    description: "Get a card by ID",
+    tags: ["card"],
+  })
+  .input(z.object({ id: z.string() }))
+  .output(z.custom<CardType>())
+  .handler(async ({ input, errors }) => {
+    const data = await db.query.cards.findFirst({
+      where: (companies, { eq, isNull }) => eq(companies.id, input.id) && isNull(companies.deletedAt),
+      with: {
+        emails: true,
+        phones: true,
+        links: true,
+        company: true,
+        styles: true,
+      },
+    });
+
+    if (!data) {
+      throw errors.NOT_FOUND();
+    }
 
     return data;
   });

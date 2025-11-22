@@ -5,6 +5,12 @@ const nextConfig: NextConfig = {
 
   images: {
     qualities: [25, 80],
+    remotePatterns: [
+      {
+        hostname: "avatar.vercel.sh",
+        protocol: "https",
+      },
+    ],
   },
   typedRoutes: true,
   reactCompiler: true,

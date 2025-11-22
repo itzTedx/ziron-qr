@@ -1,6 +1,6 @@
-import { getCardById } from "@/features/card/actions/queries";
 import { CardForm } from "@/features/card/components/card-form";
 import { getCompanies } from "@/features/company/actions/queries";
+import { client } from "@/lib/orpc/client";
 
 type Params = Promise<{ id: string }>;
 
@@ -13,7 +13,7 @@ export default async function CardPage({ params }: Props) {
   const companies = await getCompanies();
 
   // Fetching the card based on the ID
-  const card = await getCardById(id);
+  const card = await client.card.get({ id });
 
   if (!companies) return null;
 

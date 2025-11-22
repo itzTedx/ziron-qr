@@ -18,6 +18,7 @@ import { cardSchema, zCardSchema } from "@ziron/validators";
 import { orpc, queryClient } from "@/lib/orpc/client";
 
 import { customizeFields, generalFields, hasFieldErrors, linksFields } from "../detect-errors";
+import { transformCardData } from "../utils/transform-card-data";
 import { CardCustomize } from "./form-sections/customize";
 import { CardGeneral } from "./form-sections/general";
 import { CardLinks } from "./form-sections/links";
@@ -32,54 +33,22 @@ interface Props {
 
 export function CardForm({ companies, isEditMode, initialData }: Props) {
   const router = useRouter();
-  const [cardData, setCardData] = useState<Partial<zCardSchema> | null>(null);
   const [tab, setTab] = useQueryState("tab");
   const defaultTab = tab || "general";
   const [companyId, _] = useQueryState("companyId");
+  const transformedInitialData = useMemo(() => transformCardData(initialData, companyId), [initialData, companyId]);
+  const [cardData, setCardData] = useState<Partial<zCardSchema> | null>(transformedInitialData ?? null);
 
   const form = useForm<zCardSchema>({
     resolver: zodResolver(cardSchema),
-    defaultValues: {
-      id: initialData?.id ?? undefined,
-      name: initialData?.name ?? "",
-      emails: initialData?.emails
-        ? initialData?.emails.map((email) => ({
-            id: email.id ?? undefined,
-            email: email.email ?? undefined,
-            label:
-              email.label === "Primary" || email.label === "Work" || email.label === "Personal"
-                ? email.label
-                : "Primary",
-          }))
-        : [{ email: undefined, label: "Primary" }],
-      phones: initialData?.phones
-        ? initialData?.phones.map((phone) => ({
-            id: phone.id ?? undefined,
-            phone: phone.phone ?? undefined,
-            label:
-              phone.label === "Primary" || phone.label === "Work" || phone.label === "Personal"
-                ? phone.label
-                : "Primary",
-          }))
-        : [{ phone: undefined, label: "Primary" }],
-      address: initialData?.address ?? undefined,
-      mapUrl: initialData?.mapUrl ?? undefined,
-      companyId: initialData?.companyId ?? companyId ?? "",
-      designation: initialData?.designation ?? "",
-      bio: initialData?.bio ?? "",
-      appearance: {
-        template: initialData?.styles?.template ?? "default",
-        theme: initialData?.styles?.theme ?? "#4938ff",
-        btnColor: initialData?.styles?.btnColor ?? "#4938ff",
-        isDarkMode: initialData?.styles?.isDarkMode ?? false,
-      },
-    },
+    defaultValues: transformedInitialData,
     mode: "onBlur",
   });
 
   // const validation = validateForm(formdata, cardSchema);
 
   // console.log(validation);
+  console.log("form data", form.getValues());
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 

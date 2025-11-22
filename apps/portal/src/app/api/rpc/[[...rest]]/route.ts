@@ -20,6 +20,15 @@ const apiHandler = new OpenAPIHandler(router, {
   plugins: [
     new OpenAPIReferencePlugin({
       schemaConverters: [new ZodToJsonSchemaConverter()],
+      docsTitle: "Ziron API Documentation",
+
+      specGenerateOptions: {
+        info: {
+          title: "Ziron API",
+          version: "1.0.0",
+          summary: "Ziron API",
+        },
+      },
     }),
   ],
   interceptors: [

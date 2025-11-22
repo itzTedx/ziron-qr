@@ -8,6 +8,7 @@ import { Button } from "@ziron/ui/components/button";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 import { zCardSchema } from "@ziron/validators";
 
+import { AvatarImageClient } from "@/components/avatar-image-client";
 import { ActionButton } from "@/components/ui/action-button";
 import { ResponsiveModal } from "@/components/ui/responsive-modal";
 
@@ -27,7 +28,8 @@ export const ProfileDashboard = ({ isPending, companyName, data }: Props) => {
   return (
     <div>
       <div className="group relative h-72 bg-secondary">
-        <Image
+        <AvatarImageClient name={"ziron.svg"} rounded={0} size={256} />
+        {/* <Image
           alt="cover image"
           className="object-cover transition-[filter] group-hover:brightness-90"
           fill
@@ -36,7 +38,7 @@ export const ProfileDashboard = ({ isPending, companyName, data }: Props) => {
           sizes="100vw"
           src={"/images/placeholder-cover.jpg"}
           title="Cover Image"
-        />
+        /> */}
       </div>
       <section className="-mt-16 mx-auto max-w-7xl">
         <div className="relative grid grid-cols-10 rounded-lg border-background border-t bg-background/80 px-6 py-4 shadow-muted/30 backdrop-blur-xl sm:border sm:shadow-lg md:divide-x">

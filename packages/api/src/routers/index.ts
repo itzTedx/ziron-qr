@@ -1,6 +1,7 @@
 import type { RouterClient as AppRouterClient } from "@orpc/server";
 
-import { createCard, listCards } from "./card";
+import { getAvatar, getAvatarV1 } from "./avatar";
+import { createCard, getCard, listCards } from "./card";
 import { createCompany, listCompanies } from "./company";
 
 export const router = {
@@ -11,6 +12,13 @@ export const router = {
   card: {
     create: createCard,
     list: listCards,
+    get: getCard,
+  },
+  avatar: {
+    get: {
+      v1: getAvatarV1,
+      v2: getAvatar,
+    },
   },
 };
 
