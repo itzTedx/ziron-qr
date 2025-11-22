@@ -23,7 +23,7 @@ type OrderByOperators = {
   desc: (column: SQLWrapper | AnyColumn) => SQL;
 };
 
-export const getOrder = (orderBy: (typeof COMPANY_ORDERINGS)[number]) => {
+export const getOrder = (orderBy?: (typeof COMPANY_ORDERINGS)[number]) => {
   switch (orderBy) {
     case "name_asc":
       return (fields: CompanyFields, { asc }: OrderByOperators) => asc(fields.name);

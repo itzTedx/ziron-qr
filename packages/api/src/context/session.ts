@@ -17,6 +17,7 @@ export async function createContext(req: NextRequest) {
   }
 
   return {
+    request: req,
     session: session.session,
   };
 }

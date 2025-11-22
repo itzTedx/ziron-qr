@@ -2,6 +2,7 @@ import { z } from "zod/v4";
 
 export const companySchema = z
   .object({
+    id: z.uuid().optional(),
     name: z.string().min(2, { message: "Please enter company name" }).max(100, { message: "Company name too long" }),
     phone: z
       .string()

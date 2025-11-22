@@ -11,6 +11,7 @@ catalog:
   "@orpc/client": ^1.11.3
   "@orpc/openapi": ^1.11.3
   "@orpc/zod": ^1.11.3
+  "@orpc/tanstack-query": ^1.10.0
 catalogs:
   react19:
     react: 19.2.0

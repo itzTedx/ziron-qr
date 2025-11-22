@@ -3,16 +3,14 @@ import { Company, companies } from "@ziron/db/schema";
 import { slugify } from "@ziron/utils";
 import { companySchema, z } from "@ziron/validators";
 
-import { COMPANY_ORDERINGS, getOrder } from "@/utils/company-ordering";
-
 import { protectedProcedure } from "..";
+import { COMPANY_ORDERINGS, getOrder } from "../utils/company-ordering";
 
 export const createCompany = protectedProcedure
   .route({ method: "POST", path: "/company", summary: "Create a new company", tags: ["company"] })
   .input(companySchema)
   .output(
     z.object({
-      success: z.boolean(),
       companyName: z.string(),
     })
   )
@@ -31,7 +29,6 @@ export const createCompany = protectedProcedure
         });
 
       return {
-        success: true,
         companyName: company?.name ?? "",
       };
     } catch {
@@ -48,7 +45,7 @@ export const listCompanies = protectedProcedure
   })
   .input(
     z.object({
-      orderBy: z.enum(COMPANY_ORDERINGS),
+      orderBy: z.enum(COMPANY_ORDERINGS).optional(),
     })
   )
   .output(z.array(z.custom<Company>()))
