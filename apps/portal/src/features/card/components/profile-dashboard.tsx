@@ -44,7 +44,7 @@ export const ProfileDashboard = ({ isPending, companyName, data }: Props) => {
                 fill
                 quality={25}
                 sizes="10vw"
-                src="/images/placeholder-cover.jpg"
+                src={data.image ?? "/images/placeholder-cover.jpg"}
               />
               <ResponsiveModal
                 //   isOpen={openPhoto}
