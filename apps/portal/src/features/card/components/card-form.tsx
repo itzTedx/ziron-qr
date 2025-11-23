@@ -48,7 +48,7 @@ export function CardForm({ companies, isEditMode, initialData }: Props) {
   // const validation = validateForm(formdata, cardSchema);
 
   // console.log(validation);
-  console.log("form data", form.getValues());
+  // console.log("form data", form.getValues());
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -104,8 +104,35 @@ export function CardForm({ companies, isEditMode, initialData }: Props) {
     })
   );
 
+  const updateCard = useMutation(
+    orpc.card.update.mutationOptions({
+      onSuccess: (updatedCard) => {
+        toast.success(`Card: ${updatedCard.cardName} has been updated`);
+        queryClient.invalidateQueries({
+          queryKey: orpc.card.list.queryKey(),
+        });
+        router.push("/");
+      },
+      onError: (error) => {
+        if (isDefinedError(error)) {
+          if (error.code === "NOT_FOUND") {
+            toast.error("Card not found", { description: error.message });
+            return;
+          }
+          toast.error("Failed to update card, try again later!", { description: error.message });
+          return;
+        }
+        toast.error(error.message);
+      },
+    })
+  );
+
   function onSubmit(values: zCardSchema) {
-    createCard.mutate(values);
+    if (isEditMode) {
+      updateCard.mutate({ id: initialData?.id, ...values });
+    } else {
+      createCard.mutate(values);
+    }
   }
 
   // Check for errors in each tab

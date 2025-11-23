@@ -1,14 +1,17 @@
 import Image from "next/image";
 
 import { IconArrowsMaximize, IconCamera, IconShare, IconTrash } from "@tabler/icons-react";
+import { Copy } from "lucide-react";
 
 import { Icons } from "@ziron/ui/assets/icons";
 import { Badge } from "@ziron/ui/components/badge";
 import { Button } from "@ziron/ui/components/button";
+import { ButtonGroup } from "@ziron/ui/components/button-group";
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@ziron/ui/components/input-group";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@ziron/ui/components/tooltip";
 import { zCardSchema } from "@ziron/validators";
 
-import { AvatarImageClient } from "@/components/avatar-image-client";
 import { ActionButton } from "@/components/ui/action-button";
 import { ResponsiveModal } from "@/components/ui/responsive-modal";
 
@@ -28,8 +31,7 @@ export const ProfileDashboard = ({ isPending, companyName, data }: Props) => {
   return (
     <div>
       <div className="group relative h-72 bg-secondary">
-        <AvatarImageClient name={"ziron.svg"} rounded={0} size={256} />
-        {/* <Image
+        <Image
           alt="cover image"
           className="object-cover transition-[filter] group-hover:brightness-90"
           fill
@@ -38,7 +40,7 @@ export const ProfileDashboard = ({ isPending, companyName, data }: Props) => {
           sizes="100vw"
           src={"/images/placeholder-cover.jpg"}
           title="Cover Image"
-        /> */}
+        />
       </div>
       <section className="-mt-16 mx-auto max-w-7xl">
         <div className="relative grid grid-cols-10 rounded-lg border-background border-t bg-background/80 px-6 py-4 shadow-muted/30 backdrop-blur-xl sm:border sm:shadow-lg md:divide-x">
@@ -116,21 +118,39 @@ export const ProfileDashboard = ({ isPending, companyName, data }: Props) => {
                 <h3 className="max-md:text-xs">Link</h3>
                 {/* {customizeUrlModal} */}
               </div>
-              <div className="flex items-center gap-2">
+              <ButtonGroup className="w-full">
+                <ButtonGroup className="w-full">
+                  <InputGroup className="h-10">
+                    <InputGroupInput placeholder="Enter link" />
+                    <InputGroupAddon align="inline-end">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <InputGroupButton size="icon-sm">
+                            <Copy className="size-4 stroke-[1.5]" />
+                          </InputGroupButton>
+                        </TooltipTrigger>
+                        <TooltipContent>Copy link</TooltipContent>
+                      </Tooltip>
+                    </InputGroupAddon>
+                  </InputGroup>
+                </ButtonGroup>
+
                 {/* <CopyButton link={shareLink} /> */}
-                <Button
-                  className="hidden items-center gap-1.5 md:flex"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    //   handleShare();
-                  }}
-                  type="button"
-                  variant="outline"
-                >
-                  <Icons.share className="size-4 stroke-[1.5]" />
-                  <span className="hidden lg:block">Share</span>
-                </Button>
-              </div>
+                <ButtonGroup>
+                  <Button
+                    className="hidden items-center gap-1.5 md:flex"
+                    onClick={() => {
+                      //   handleShare();
+                    }}
+                    size="lg"
+                    type="button"
+                    variant="outline"
+                  >
+                    <Icons.share className="size-4 stroke-[1.5]" />
+                    <span className="hidden lg:block">Share</span>
+                  </Button>
+                </ButtonGroup>
+              </ButtonGroup>
             </div>
           </div>
 

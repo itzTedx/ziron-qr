@@ -10,7 +10,7 @@ import { Icons } from "../assets/icons";
 import SaveContactButton from "../components/save-contact-button";
 
 interface TemplateProps {
-  card?: CardType;
+  card?: Partial<CardType>;
   company?: Company[];
   imageBase64URI?: string;
 }

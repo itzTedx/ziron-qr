@@ -7,7 +7,7 @@ import { Button } from "./button";
 
 interface SaveContactButtonProps {
   style?: React.CSSProperties;
-  data: CardType;
+  data: Partial<CardType>;
   imageBase64?: string;
   className?: string;
 }
