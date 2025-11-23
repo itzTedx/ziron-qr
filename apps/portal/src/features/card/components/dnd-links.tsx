@@ -5,7 +5,7 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 
 import { IconGripVertical, IconPlus, IconTrash } from "@tabler/icons-react";
-import { Reorder } from "motion/react";
+import { Reorder, useDragControls } from "motion/react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 import { Button } from "@ziron/ui/components/button";
@@ -33,10 +33,11 @@ interface LinkItemProps {
   loading: boolean;
   onRemove: (index: number) => void;
   form: ReturnType<typeof useFormContext<zCardSchema>>;
+  dragControls: ReturnType<typeof useDragControls>;
 }
 
 // Memoized Link Item Component
-const LinkItem = ({ data, index, loading, onRemove, form }: LinkItemProps) => {
+const LinkItem = ({ data, index, loading, onRemove, form, dragControls }: LinkItemProps) => {
   const isGeneral = data.category === "General";
 
   return (
@@ -99,8 +100,8 @@ const LinkItem = ({ data, index, loading, onRemove, form }: LinkItemProps) => {
         <IconTrash size={16} />
       </Button>
       <button
-        className="text-gray-400 hover:bg-transparent hover:text-foreground"
-        onClick={(e) => e.preventDefault()}
+        className="cursor-grab text-gray-400 hover:bg-transparent hover:text-foreground active:cursor-grabbing"
+        onPointerDown={(e) => dragControls.start(e)}
         title="Drag to Re-Order"
         type="button"
       >
@@ -137,6 +138,53 @@ const SuggestionCard = ({ link, item, onAppend }: SuggestionCardProps) => (
 );
 
 SuggestionCard.displayName = "SuggestionCard";
+
+// Wrapper component for Reorder.Item with drag controls
+interface ReorderItemWrapperProps {
+  data: {
+    id?: string;
+    category?: string;
+    label?: string;
+    url?: string;
+    icon?: string;
+  };
+  index: number;
+  dragRef: React.RefObject<HTMLDivElement | null>;
+  onDragStart: () => void;
+  onRemove: (index: number) => void;
+  form: ReturnType<typeof useFormContext<zCardSchema>>;
+}
+
+const ReorderItemWrapper = ({ data, index, dragRef, onDragStart, onRemove, form }: ReorderItemWrapperProps) => {
+  const dragControls = useDragControls();
+
+  return (
+    <Reorder.Item
+      as="div"
+      dragConstraints={dragRef}
+      dragControls={dragControls}
+      dragListener={false}
+      id={data.id}
+      onDragStart={onDragStart}
+      value={data}
+    >
+      <LinkItem
+        data={{
+          category: data.category || "",
+          label: data.label || "",
+          url: data.url || "",
+          icon: data.icon || "",
+          id: data.id,
+        }}
+        dragControls={dragControls}
+        form={form}
+        index={index}
+        loading={false}
+        onRemove={onRemove}
+      />
+    </Reorder.Item>
+  );
+};
 
 export const DndLinks = () => {
   const form = useFormContext<zCardSchema>();
@@ -204,28 +252,15 @@ export const DndLinks = () => {
       <div className="flex flex-col gap-8 pt-3" ref={dragRef}>
         <Reorder.Group as="div" className="w-full space-y-4" onReorder={handleReorder} values={fields}>
           {fields.map((data, index) => (
-            <Reorder.Item
-              as="div"
-              dragConstraints={dragRef}
-              id={data.id}
+            <ReorderItemWrapper
+              data={data}
+              dragRef={dragRef}
+              form={form}
+              index={index}
               key={data.id}
               onDragStart={() => setActive(index)}
-              value={data}
-            >
-              <LinkItem
-                data={{
-                  category: data.category || "",
-                  label: data.label || "",
-                  url: data.url || "",
-                  icon: data.icon || "",
-                  id: data.id,
-                }}
-                form={form}
-                index={index}
-                loading={false}
-                onRemove={handleRemove}
-              />
-            </Reorder.Item>
+              onRemove={handleRemove}
+            />
           ))}
         </Reorder.Group>
       </div>
@@ -296,16 +331,16 @@ export const DndLinks = () => {
               onAppend={handleAppend}
             />
           ))}
-          <Card
-            className="flex flex-col items-center justify-center font-medium text-muted-foreground text-sm transition-colors hover:border-primary hover:bg-muted/20"
-            onClick={(e) => {
-              e.preventDefault();
+          <button
+            className="flex cursor-pointer flex-col items-center justify-center rounded-md border font-medium text-muted-foreground text-sm transition-colors hover:border-primary hover:bg-muted/20"
+            onClick={() => {
               setOpen(true);
             }}
             role="button"
+            type="button"
           >
             View More
-          </Card>
+          </button>
         </div>
       </section>
     </>

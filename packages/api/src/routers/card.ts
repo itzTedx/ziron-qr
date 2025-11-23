@@ -50,31 +50,40 @@ export const createCard = protectedProcedure
             input.links &&
               input.links.length > 0 &&
               tx.insert(links).values(
-                input.links.map((link, i) => ({
-                  ...link,
-                  cardId: newCard.id,
-                  order: i,
-                }))
+                input.links.map((link, i) => {
+                  const { id: _id, ...linkData } = link;
+                  return {
+                    ...linkData,
+                    cardId: newCard.id,
+                    order: i,
+                  };
+                })
               ),
 
             input.emails &&
               input.emails.length > 0 &&
               tx.insert(emails).values(
-                input.emails.map((email, i) => ({
-                  ...email,
-                  cardId: newCard.id,
-                  order: i,
-                }))
+                input.emails.map((email, i) => {
+                  const { id: _id, ...emailData } = email;
+                  return {
+                    ...emailData,
+                    cardId: newCard.id,
+                    order: i,
+                  };
+                })
               ),
 
             input.phones &&
               input.phones.length > 0 &&
               tx.insert(phones).values(
-                input.phones.map((phone, i) => ({
-                  ...phone,
-                  cardId: newCard.id,
-                  order: i,
-                }))
+                input.phones.map((phone, i) => {
+                  const { id: _id, ...phoneData } = phone;
+                  return {
+                    ...phoneData,
+                    cardId: newCard.id,
+                    order: i,
+                  };
+                })
               ),
           ].filter(Boolean)
         );
@@ -154,20 +163,25 @@ export const updateCard = protectedProcedure
       const uniqueSlug = await generateSlug(input.name);
       const { id, ...updateData } = input;
 
+      const cardData = {
+        name: input.name,
+        address: input.address,
+        mapUrl: input.mapUrl,
+        bio: input.bio,
+        designation: input.designation,
+        companyId: input.companyId,
+        slug: updateData.slug ?? uniqueSlug,
+        image: getAvatar(updateData.name, updateData.image),
+        cover: updateData.cover ?? placeholderCover,
+        attachmentFileName: input.attachmentFileName,
+        attachmentUrl: input.attachmentUrl,
+      };
+
       const card = await db.transaction(async (tx) => {
-        const [updatedCard] = await tx
-          .update(cards)
-          .set({
-            ...updateData,
-            slug: updateData.slug ?? uniqueSlug,
-            image: getAvatar(updateData.name, updateData.image),
-            cover: updateData.cover ?? placeholderCover,
-          })
-          .where(eq(cards.id, id))
-          .returning({
-            id: cards.id,
-            name: cards.name,
-          });
+        const [updatedCard] = await tx.update(cards).set(cardData).where(eq(cards.id, id)).returning({
+          id: cards.id,
+          name: cards.name,
+        });
 
         if (!updatedCard) {
           throw errors.INTERNAL_SERVER_ERROR();
@@ -185,31 +199,40 @@ export const updateCard = protectedProcedure
             updateData.links &&
               updateData.links.length > 0 &&
               tx.insert(links).values(
-                updateData.links.map((link, i) => ({
-                  ...link,
-                  cardId: updatedCard.id,
-                  order: i,
-                }))
+                updateData.links.map((link, i) => {
+                  const { id: _id, ...linkData } = link;
+                  return {
+                    ...linkData,
+                    cardId: updatedCard.id,
+                    order: i,
+                  };
+                })
               ),
 
             updateData.emails &&
               updateData.emails.length > 0 &&
               tx.insert(emails).values(
-                updateData.emails.map((email, i) => ({
-                  ...email,
-                  cardId: updatedCard.id,
-                  order: i,
-                }))
+                updateData.emails.map((email, i) => {
+                  const { id: _id, ...emailData } = email;
+                  return {
+                    ...emailData,
+                    cardId: updatedCard.id,
+                    order: i,
+                  };
+                })
               ),
 
             updateData.phones &&
               updateData.phones.length > 0 &&
               tx.insert(phones).values(
-                updateData.phones.map((phone, i) => ({
-                  ...phone,
-                  cardId: updatedCard.id,
-                  order: i,
-                }))
+                updateData.phones.map((phone, i) => {
+                  const { id: _id, ...phoneData } = phone;
+                  return {
+                    ...phoneData,
+                    cardId: updatedCard.id,
+                    order: i,
+                  };
+                })
               ),
           ].filter(Boolean)
         );

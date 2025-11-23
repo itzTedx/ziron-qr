@@ -5,6 +5,7 @@ import { IconArrowsMaximize, IconCamera, IconShare } from "@tabler/icons-react";
 import { Badge } from "@ziron/ui/components/badge";
 import { Button } from "@ziron/ui/components/button";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ziron/ui/components/tooltip";
 import { zCardSchema } from "@ziron/validators";
 
 import { ResponsiveModal } from "@/components/ui/responsive-modal";
@@ -96,7 +97,19 @@ export const ProfileDashboard = ({ isPending, companyName, data }: Props) => {
                   </Button>
                 </span>
               </div>
-              <h2 className="font-semibold text-lg lg:text-2xl">{data && data.name ? data.name : "Untitled Card"}</h2>
+              <TooltipProvider delayDuration={1000}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <h2 className="line-clamp-1 font-semibold text-lg lg:text-2xl">
+                      {data && data.name ? data.name : "Untitled Card"}
+                    </h2>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="text-muted-foreground text-sm">{data && data.name ? data.name : "Untitled Card"}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
               <p className="text-muted-foreground text-sm">
                 {data && data.designation ? data.designation : "Designation"}
               </p>

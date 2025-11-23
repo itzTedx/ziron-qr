@@ -5,7 +5,7 @@ function nullToUndefined<T>(value: T | null | undefined): T | undefined {
   return value === null ? undefined : value;
 }
 
-export function transformCardData(initialData?: CardType, companyId?: string | null): Partial<zCardSchema> {
+export function transformCardData(initialData?: CardType, companyId?: string | null): zCardSchema {
   return {
     id: initialData?.id ?? undefined,
     name: initialData?.name ?? "",
@@ -25,11 +25,20 @@ export function transformCardData(initialData?: CardType, companyId?: string | n
             phone.label === "Primary" || phone.label === "Work" || phone.label === "Personal" ? phone.label : "Primary",
         }))
       : [{ phone: undefined, label: "Primary" }],
-    address: nullToUndefined(initialData?.address),
-    mapUrl: nullToUndefined(initialData?.mapUrl),
+    links: initialData?.links
+      ? initialData.links.map((link) => ({
+          id: link.id ?? undefined,
+          label: link.label,
+          url: link.url,
+          icon: link.icon,
+          category: link.category ?? undefined,
+        }))
+      : [],
+    address: initialData?.address ?? "",
+    mapUrl: initialData?.mapUrl ?? "",
     companyId: initialData?.companyId ?? companyId ?? "",
-    designation: nullToUndefined(initialData?.designation),
-    bio: nullToUndefined(initialData?.bio),
+    designation: initialData?.designation ?? "",
+    bio: initialData?.bio ?? "",
     appearance: {
       template: initialData?.styles?.template ?? "default",
       theme: initialData?.styles?.theme ?? "#4938ff",
@@ -38,8 +47,8 @@ export function transformCardData(initialData?: CardType, companyId?: string | n
     },
     image: initialData?.image ?? undefined,
     cover: initialData?.cover ?? undefined,
-    attachmentUrl: nullToUndefined(initialData?.attachmentUrl),
-    attachmentFileName: nullToUndefined(initialData?.attachmentFileName),
-    slug: initialData?.slug ?? undefined,
+    attachmentUrl: initialData?.attachmentUrl ?? null,
+    attachmentFileName: initialData?.attachmentFileName ?? null,
+    slug: initialData?.slug ?? "",
   };
 }

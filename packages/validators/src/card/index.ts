@@ -51,21 +51,21 @@ export const cardSchema = z
     // Core card information
     id: z.string().optional(),
     name: z.string().min(2, { message: "Please enter full name" }).max(256, { message: "Name is too long" }),
-    bio: z.string().optional(),
-    designation: z.string().optional(),
+    bio: z.string().nullable(),
+    designation: z.string().nullable(),
     companyId: z.string(),
 
     // Contact information
     phones: phonesSchema.optional(),
     emails: emailsSchema.nullish(),
-    address: z.string().optional(),
-    mapUrl: z.string().optional(),
+    address: z.string().nullable(),
+    mapUrl: z.string().nullable(),
 
     // Media and attachments
     image: z.string().optional(),
     cover: z.string().optional(),
-    attachmentUrl: z.url().optional().nullish(),
-    attachmentFileName: z.string().optional().nullish(),
+    attachmentUrl: z.url().nullable(),
+    attachmentFileName: z.string().nullable(),
 
     // SEO and routing
     slug: z
