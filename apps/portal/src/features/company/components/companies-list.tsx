@@ -19,6 +19,9 @@ import { companyCollapsibleStateAtom } from "../atom";
 import { EditCompanyButton } from "./edit-company-button";
 import { EmptyCompany } from "./empty-company";
 
+const COMPANY_COLLAPSIBLE_COOKIE_NAME = "company-collapsible-state";
+const COMPANY_COLLAPSIBLE_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
+
 export const CompaniesList = () => {
   const [collapsibleState, setCollapsibleState] = useAtom(companyCollapsibleStateAtom);
   const { data: companies, isLoading } = useSuspenseQuery(orpc.company.list.queryOptions());
@@ -26,10 +29,15 @@ export const CompaniesList = () => {
   if (isLoading) return <Skeleton className="h-10 w-full" />;
 
   const handleOpenChange = (companyId: string, open: boolean) => {
-    setCollapsibleState((prev) => ({
-      ...prev,
+    const newState = {
+      ...collapsibleState,
       [companyId]: open,
-    }));
+    };
+    setCollapsibleState(newState);
+
+    // This sets the cookie to keep the collapsible state.
+    const encodedValue = encodeURIComponent(JSON.stringify(newState));
+    document.cookie = `${COMPANY_COLLAPSIBLE_COOKIE_NAME}=${encodedValue}; path=/; max-age=${COMPANY_COLLAPSIBLE_COOKIE_MAX_AGE}`;
   };
 
   return (
@@ -76,7 +84,7 @@ export const CompaniesList = () => {
               {company.cards.length === 0 ? (
                 <EmptyCompany id={company.id} />
               ) : (
-                company.cards.map((card) => <PersonCard card={card} key={card.id} />)
+                company.cards.map((card) => <PersonCard card={card} company={company} key={card.id} />)
               )}
             </CollapsibleContent>
           </Collapsible>

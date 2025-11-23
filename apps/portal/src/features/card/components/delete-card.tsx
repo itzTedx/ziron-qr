@@ -49,6 +49,7 @@ export const DeleteCard = ({ id }: Props) => {
       action={deleteCardAction}
       actionButton="Delete"
       areYouSureDescription="This action cannot be undone."
+      className="w-full"
       requireAreYouSure
       size="lg"
       variant="destructive"

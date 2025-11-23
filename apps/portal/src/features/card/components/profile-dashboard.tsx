@@ -36,8 +36,8 @@ export const ProfileDashboard = ({ isPending, companyName, data }: Props) => {
       </div>
       <section className="-mt-16 mx-auto max-w-7xl">
         <div className="relative grid grid-cols-10 rounded-lg border-background border-t bg-background/80 px-6 py-4 shadow-muted/30 backdrop-blur-xl sm:border sm:shadow-lg md:grid-cols-12 md:divide-x">
-          <div className="col-span-10 flex md:col-span-4 md:px-3 lg:px-6">
-            <div className="group -translate-y-20 max-md:-translate-x-1/2 md:-top-[60%] absolute left-1/2 size-28 md:left-5 md:size-36 md:translate-y-[30%]">
+          <div className="col-span-10 flex md:col-span-5 md:pr-3 lg:pr-6">
+            <div className="group relative aspect-square h-full">
               <Image
                 alt="Profile Image"
                 className="overflow-clip rounded-full border-4 border-background object-cover transition-[filter] group-hover:brightness-90"
@@ -71,7 +71,7 @@ export const ProfileDashboard = ({ isPending, companyName, data }: Props) => {
             /> */}
               </ResponsiveModal>
             </div>
-            <div className="w-full max-md:mt-3 md:ml-36">
+            <div className="w-full max-md:mt-3 md:ml-3">
               <div className="flex items-center justify-between gap-3">
                 <Badge className="gap-1.5" variant="secondary">
                   {companyName}
@@ -120,10 +120,10 @@ export const ProfileDashboard = ({ isPending, companyName, data }: Props) => {
             <SlugField data={data.slug} />
           </div>
 
-          <div className="col-span-2 hidden items-center gap-3 px-6 md:flex">
+          <div className="col-span-2 hidden flex-col items-center gap-3 px-6 md:flex">
             {data.id && <DeleteCard id={data.id} />}
 
-            <Button size="lg" type="submit">
+            <Button className="w-full" size="lg" type="submit">
               <LoadingSwap isLoading={isPending}>Save Changes</LoadingSwap>
             </Button>
           </div>
