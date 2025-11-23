@@ -1,0 +1,210 @@
+import { useEffect, useState } from "react";
+
+import { useMutation } from "@tanstack/react-query";
+import { CheckCircle, Edit, Loader, X, XCircle } from "lucide-react";
+import { useFormContext } from "react-hook-form";
+import { toast } from "sonner";
+
+import { Icons } from "@ziron/ui/assets/icons";
+import { Button } from "@ziron/ui/components/button";
+import { ButtonGroup } from "@ziron/ui/components/button-group";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ziron/ui/components/form";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+  InputGroupText,
+} from "@ziron/ui/components/input-group";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@ziron/ui/components/tooltip";
+import { transformSlug, zCardSchema } from "@ziron/validators";
+
+import { useDebounce } from "@/hooks/debounce";
+import { env } from "@/lib/env/client";
+import { orpc } from "@/lib/orpc/client";
+
+interface Props {
+  data?: string;
+}
+
+type SlugValidationState = "idle" | "validating" | "valid" | "invalid";
+
+export const SlugField = ({ data }: Props) => {
+  const form = useFormContext<zCardSchema>();
+  const [slug, setSlug] = useState(data ?? "");
+  const [isEditingSlug, setIsEditingSlug] = useState(false);
+  const [validationState, setValidationState] = useState<SlugValidationState>("idle");
+
+  // Transform slug as user types
+  const transformedSlug = transformSlug(slug);
+  const debouncedSlug = useDebounce(transformedSlug, 500);
+
+  const validateSlug = useMutation(
+    orpc.card.checkSlug.mutationOptions({
+      onSuccess: (data) => {
+        if (!data.isAvailable) {
+          setValidationState("invalid");
+          toast.error("Slug is not available", { description: "Please enter a different slug" });
+          return;
+        }
+
+        setValidationState("valid");
+        setSlug(data.slug);
+        form.setValue("slug", data.slug, { shouldValidate: true });
+        toast.success("Slug is available", { description: "You can now use this slug to access your card" });
+      },
+      onError: () => {
+        setValidationState("invalid");
+      },
+    })
+  );
+
+  // Automatically validate when debounced slug changes
+  useEffect(() => {
+    if (!isEditingSlug) return;
+
+    const slugToValidate = debouncedSlug.trim();
+
+    // Skip validation if slug is empty or too short
+    if (!slugToValidate || slugToValidate.length < 2) {
+      setValidationState("idle");
+      return;
+    }
+
+    // Skip validation if slug hasn't changed from the original
+    if (slugToValidate === data) {
+      setValidationState("valid");
+      form.setValue("slug", slugToValidate, { shouldValidate: true });
+      return;
+    }
+
+    // Validate the slug
+    setValidationState("validating");
+    validateSlug.mutate({ slug: slugToValidate });
+  }, [debouncedSlug, data]);
+
+  function handleSlugChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const newValue = e.target.value;
+    setSlug(newValue);
+    setValidationState("idle");
+  }
+
+  function handleEditClick() {
+    setIsEditingSlug(true);
+    setValidationState("idle");
+  }
+
+  function saveSlug() {
+    const slugToValidate = transformedSlug.trim();
+    if (!slugToValidate || slugToValidate.length < 2) {
+      toast.error("Please enter a slug (at least 2 characters)");
+      return;
+    }
+    setIsEditingSlug(false);
+  }
+
+  return (
+    <FormField
+      control={form.control}
+      name="designation"
+      render={() => (
+        <FormItem>
+          <FormLabel>Link</FormLabel>
+          <FormControl>
+            <ButtonGroup className="w-full">
+              <ButtonGroup className="w-full">
+                <InputGroup className="h-10">
+                  <InputGroupAddon>
+                    <InputGroupText>{env.NEXT_PUBLIC_BASE_URL}/</InputGroupText>
+                  </InputGroupAddon>
+                  <InputGroupInput
+                    className="pl-0.5!"
+                    disabled={!isEditingSlug}
+                    onChange={handleSlugChange}
+                    placeholder="untitled-card"
+                    value={slug}
+                  />
+                  <InputGroupAddon align="inline-end">
+                    {isEditingSlug ? (
+                      <div className="flex items-center gap-1">
+                        {validationState === "idle" && (
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <InputGroupButton
+                                className="mr-[-0.45rem]"
+                                onClick={() => setIsEditingSlug(false)}
+                                size="icon-sm"
+                              >
+                                <X className="size-4" />
+                              </InputGroupButton>
+                            </TooltipTrigger>
+                            <TooltipContent>Cancel</TooltipContent>
+                          </Tooltip>
+                        )}
+                        {validationState === "validating" && <Loader className="size-4 animate-spin" />}
+                        {validationState === "valid" && (
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <InputGroupButton className="mr-[-0.45rem]" onClick={saveSlug} size="icon-sm">
+                                <CheckCircle className="size-4 text-green-500" />
+                              </InputGroupButton>
+                            </TooltipTrigger>
+                            <TooltipContent>Slug is available</TooltipContent>
+                          </Tooltip>
+                        )}
+                        {validationState === "invalid" && (
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <XCircle className="size-4 text-red-500" />
+                            </TooltipTrigger>
+                            <TooltipContent>Slug is not available</TooltipContent>
+                          </Tooltip>
+                        )}
+                        {/* <Tooltip>
+                          <TooltipTrigger asChild>
+                            <InputGroupButton onClick={validateSlugAction} size="icon-sm">
+                              <LoadingSwap isLoading={validateSlug.isPending}>
+                                <Check className="size-4 stroke-[1.5]" />
+                              </LoadingSwap>
+                            </InputGroupButton>
+                          </TooltipTrigger>
+                          <TooltipContent>Validate slug</TooltipContent>
+                        </Tooltip> */}
+                      </div>
+                    ) : (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <InputGroupButton onClick={handleEditClick} size="icon-sm">
+                            <Edit className="size-4 stroke-[1.5]" />
+                          </InputGroupButton>
+                        </TooltipTrigger>
+                        <TooltipContent>Edit slug</TooltipContent>
+                      </Tooltip>
+                    )}
+                  </InputGroupAddon>
+                </InputGroup>
+              </ButtonGroup>
+              {/* <CopyButton link={shareLink} /> */}
+              <ButtonGroup>
+                <Button
+                  className="hidden items-center gap-1.5 md:flex"
+                  onClick={() => {
+                    //   handleShare();
+                  }}
+                  size="lg"
+                  type="button"
+                  variant="outline"
+                >
+                  <Icons.share className="size-4 stroke-[1.5]" />
+                  <span className="hidden lg:block">Share</span>
+                </Button>
+              </ButtonGroup>
+            </ButtonGroup>
+          </FormControl>
+
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+};

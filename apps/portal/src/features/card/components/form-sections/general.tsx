@@ -10,7 +10,7 @@ import { PhonesField } from "../fields/phone-field";
 
 interface Props {
   data: {
-    companies: Company[];
+    companies?: Company[];
     emails?: EmailsType;
     phones?: PhonesType;
     companyId?: string;

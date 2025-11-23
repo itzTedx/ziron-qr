@@ -21,7 +21,7 @@ import { cn } from "@ziron/utils";
 import { zCardSchema } from "@ziron/validators";
 
 interface Props {
-  data: Company[];
+  data?: Company[];
   companyId?: string;
 }
 
@@ -35,7 +35,7 @@ export const CompanyField = ({ data: data, companyId }: Props) => {
 
   // Memoize company lookup
   const selectedCompany = useMemo(() => {
-    return data.find((cat) => cat.id === companyId);
+    return data?.find((cat) => cat.id === companyId);
   }, [data, companyId]);
 
   // Memoize selection handler
@@ -99,7 +99,7 @@ export const CompanyField = ({ data: data, companyId }: Props) => {
                 <CommandEmpty>Company not found</CommandEmpty>
                 <CommandList className="max-h-[300px] overflow-auto">
                   <CommandGroup heading="Companies">
-                    {data.map((cat) => (
+                    {data?.map((cat) => (
                       <CommandItem
                         className="cursor-pointer gap-2.5 px-4 py-2.5 font-medium"
                         key={cat.id}

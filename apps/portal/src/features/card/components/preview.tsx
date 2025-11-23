@@ -14,7 +14,7 @@ import PhoneMockup from "@/components/ui/phone-mockup";
 import { ResponsiveModal } from "@/components/ui/responsive-modal";
 
 interface Props {
-  companies: Company[];
+  companies?: Company[];
   cardData: Partial<zCardSchema>;
 }
 
@@ -24,7 +24,7 @@ export const Preview = ({ companies, cardData }: Props) => {
   // const cardData = form.watch();
 
   // Find the selected company based on cardData.companyId
-  const company = companies.filter((c) => c.id === cardData.companyId);
+  const company = companies?.filter((c) => c.id === cardData.companyId);
 
   // Transform cardData to match CardType structure (appearance -> styles)
   const transformedCardData = cardData

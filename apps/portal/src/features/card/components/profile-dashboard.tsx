@@ -1,33 +1,24 @@
 import Image from "next/image";
 
-import { IconArrowsMaximize, IconCamera, IconShare, IconTrash } from "@tabler/icons-react";
-import { Copy } from "lucide-react";
+import { IconArrowsMaximize, IconCamera, IconShare } from "@tabler/icons-react";
 
-import { Icons } from "@ziron/ui/assets/icons";
 import { Badge } from "@ziron/ui/components/badge";
 import { Button } from "@ziron/ui/components/button";
-import { ButtonGroup } from "@ziron/ui/components/button-group";
-import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@ziron/ui/components/input-group";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@ziron/ui/components/tooltip";
 import { zCardSchema } from "@ziron/validators";
 
-import { ActionButton } from "@/components/ui/action-button";
 import { ResponsiveModal } from "@/components/ui/responsive-modal";
+
+import { DeleteCard } from "./delete-card";
+import { SlugField } from "./fields/slug-field";
 
 interface Props {
   isPending: boolean;
-  data: Partial<Pick<zCardSchema, "name" | "designation" | "slug" | "image" | "cover">>;
+  data: Partial<Pick<zCardSchema, "id" | "name" | "designation" | "slug" | "image" | "cover">>;
   companyName?: string;
 }
 
 export const ProfileDashboard = ({ isPending, companyName, data }: Props) => {
-  const serverAction = async () => {
-    // Simulate a server action
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    return { error: false };
-  };
-
   return (
     <div>
       <div className="group relative h-72 bg-secondary">
@@ -43,7 +34,7 @@ export const ProfileDashboard = ({ isPending, companyName, data }: Props) => {
         />
       </div>
       <section className="-mt-16 mx-auto max-w-7xl">
-        <div className="relative grid grid-cols-10 rounded-lg border-background border-t bg-background/80 px-6 py-4 shadow-muted/30 backdrop-blur-xl sm:border sm:shadow-lg md:divide-x">
+        <div className="relative grid grid-cols-10 rounded-lg border-background border-t bg-background/80 px-6 py-4 shadow-muted/30 backdrop-blur-xl sm:border sm:shadow-lg md:grid-cols-12 md:divide-x">
           <div className="col-span-10 flex md:col-span-4 md:px-3 lg:px-6">
             <div className="group -translate-y-20 max-md:-translate-x-1/2 md:-top-[60%] absolute left-1/2 size-28 md:left-5 md:size-36 md:translate-y-[30%]">
               <Image
@@ -112,59 +103,12 @@ export const ProfileDashboard = ({ isPending, companyName, data }: Props) => {
             </div>
           </div>
 
-          <div className="col-span-10 flex items-center justify-between gap-4 md:col-span-4 md:px-3 lg:px-6">
-            <div className="w-full space-y-2 max-md:hidden">
-              <div className="flex items-center justify-between">
-                <h3 className="max-md:text-xs">Link</h3>
-                {/* {customizeUrlModal} */}
-              </div>
-              <ButtonGroup className="w-full">
-                <ButtonGroup className="w-full">
-                  <InputGroup className="h-10">
-                    <InputGroupInput placeholder="Enter link" />
-                    <InputGroupAddon align="inline-end">
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <InputGroupButton size="icon-sm">
-                            <Copy className="size-4 stroke-[1.5]" />
-                          </InputGroupButton>
-                        </TooltipTrigger>
-                        <TooltipContent>Copy link</TooltipContent>
-                      </Tooltip>
-                    </InputGroupAddon>
-                  </InputGroup>
-                </ButtonGroup>
-
-                {/* <CopyButton link={shareLink} /> */}
-                <ButtonGroup>
-                  <Button
-                    className="hidden items-center gap-1.5 md:flex"
-                    onClick={() => {
-                      //   handleShare();
-                    }}
-                    size="lg"
-                    type="button"
-                    variant="outline"
-                  >
-                    <Icons.share className="size-4 stroke-[1.5]" />
-                    <span className="hidden lg:block">Share</span>
-                  </Button>
-                </ButtonGroup>
-              </ButtonGroup>
-            </div>
+          <div className="col-span-10 flex items-center justify-between gap-4 md:col-span-5 md:px-3 lg:px-6">
+            <SlugField data={data.slug} />
           </div>
 
-          <div className="col-span-2 hidden flex-col gap-3 px-6 md:flex">
-            <ActionButton
-              action={serverAction}
-              actionButton="Delete"
-              areYouSureDescription="This action cannot be undone."
-              requireAreYouSure
-              variant="destructive"
-            >
-              <IconTrash className="size-4" />
-              Delete
-            </ActionButton>
+          <div className="col-span-2 hidden items-center gap-3 px-6 md:flex">
+            {data.id && <DeleteCard id={data.id} />}
 
             <Button size="lg" type="submit">
               <LoadingSwap isLoading={isPending}>Save Changes</LoadingSwap>

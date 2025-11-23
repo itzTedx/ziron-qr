@@ -26,7 +26,7 @@ import { Preview } from "./preview";
 import { ProfileDashboard } from "./profile-dashboard";
 
 interface Props {
-  companies: Company[];
+  companies?: Company[];
   isEditMode: boolean;
   initialData?: CardType;
 }
@@ -45,7 +45,7 @@ export function CardForm({ companies, isEditMode, initialData }: Props) {
     mode: "onBlur",
   });
 
-  // const validation = validateForm(formdata, cardSchema);
+  // const validation = validateForm(form.watch(), cardSchema);
 
   // console.log(validation);
   // console.log("form data", form.getValues());
@@ -128,7 +128,7 @@ export function CardForm({ companies, isEditMode, initialData }: Props) {
   );
 
   function onSubmit(values: zCardSchema) {
-    if (isEditMode) {
+    if (isEditMode && initialData?.id) {
       updateCard.mutate({ id: initialData?.id, ...values });
     } else {
       createCard.mutate(values);
@@ -145,8 +145,9 @@ export function CardForm({ companies, isEditMode, initialData }: Props) {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <ProfileDashboard
-          companyName={companies.find((c) => c.id === data.companyId)?.name}
+          companyName={companies?.find((c) => c.id === data.companyId)?.name}
           data={{
+            id: data.id,
             name: data.name,
             designation: data.designation,
             slug: data.slug,

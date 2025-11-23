@@ -1,3 +1,5 @@
+import { notFound } from "next/navigation";
+
 import { CardForm } from "@/features/card/components/card-form";
 import { getCompanies } from "@/features/company/actions/queries";
 import { client } from "@/lib/orpc/client";
@@ -14,8 +16,9 @@ export default async function CardPage({ params }: Props) {
 
   // Fetching the card based on the ID
   const card = await client.card.get({ id });
-
-  if (!companies) return null;
+  if (!card && id !== "new") {
+    return notFound();
+  }
 
   const isEditMode = id !== "new";
 

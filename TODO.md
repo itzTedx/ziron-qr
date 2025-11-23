@@ -20,19 +20,19 @@ This document contains a comprehensive list of improvements and tasks for the Zi
 
 ## 🔒 Security
 
-- [ ] Implement rate limiting for API endpoints (especially auth and card creation)
+- [-] Implement rate limiting for API endpoints (especially auth and card creation)
 - [ ] Add input sanitization for user-generated content (XSS prevention)
 - [ ] Implement CSRF protection for API routes
 - [ ] Add security headers middleware (CSP, HSTS, X-Frame-Options, etc.)
-- [ ] Review and secure environment variable handling (no secrets in client code)
+- [x] Review and secure environment variable handling (no secrets in client code)
 
 ## 🔐 Authentication
 
 - [ ] Implement email OTP sending functionality (currently empty in packages/auth/src/server.ts)
-- [ ] Fix hardcoded app name 'Foneflip' to 'Ziron' in auth configuration
+- [x] Fix hardcoded app name 'Foneflip' to 'Ziron' in auth configuration
 - [ ] Add email verification flow for new user registrations
 - [ ] Implement password reset functionality
-- [ ] Add session management and refresh token rotation
+- [x] Add session management and refresh token rotation
 
 ## 💾 Database
 
@@ -44,7 +44,6 @@ This document contains a comprehensive list of improvements and tasks for the Zi
 
 ## ⚡ Performance
 
-- [ ] Remove typescript.ignoreBuildErrors from next.config.ts and fix type errors
 - [ ] Implement proper image optimization (WebP format, lazy loading, proper sizes)
 - [ ] Add React.memo for expensive components (templates, card preview)
 - [ ] Implement code splitting for large components and routes
@@ -126,7 +125,7 @@ This document contains a comprehensive list of improvements and tasks for the Zi
 
 ## 🔌 API
 
-- [ ] Improve OpenAPI documentation with better descriptions and examples
+- [x] Improve OpenAPI documentation with better descriptions and examples
 - [ ] Add API versioning strategy
 - [ ] Implement pagination for list endpoints (cards, companies)
 - [ ] Add filtering and sorting options for list endpoints

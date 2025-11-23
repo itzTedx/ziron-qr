@@ -2,7 +2,7 @@ import type { BetterAuthOptions } from "better-auth";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
-import { emailOTP, twoFactor } from "better-auth/plugins";
+import { twoFactor } from "better-auth/plugins";
 
 import { db } from "@ziron/db/client";
 import redis from "@ziron/redis";
@@ -14,7 +14,7 @@ export function initAuth(options: { baseUrl: string; productionUrl: string; secr
       usePlural: true,
     }),
 
-    appName: "Foneflip",
+    appName: "Ziron QR",
     emailAndPassword: {
       enabled: true,
     },
@@ -31,15 +31,14 @@ export function initAuth(options: { baseUrl: string; productionUrl: string; secr
       },
     },
 
-    plugins: [
-      nextCookies(),
-      twoFactor(),
-      emailOTP({
-        async sendVerificationOTP({ email, otp, type }) {
-          // Implement the sendVerificationOTP method to send the OTP to the user's email address
-        },
-      }),
-    ],
+    plugins: [nextCookies(), twoFactor()],
+
+    rateLimit: {
+      enabled: true,
+      window: 60, // time window in seconds
+      max: 100, // max requests in the window
+    },
+
     secondaryStorage: {
       get: async (key) => {
         const value = await redis.get(key);

@@ -2,7 +2,7 @@ import { eq } from "@ziron/db";
 import { db } from "@ziron/db/client";
 import { CardType, Company, cards, emails, links, phones } from "@ziron/db/schema";
 import { slugify } from "@ziron/utils";
-import { cardSchema, z } from "@ziron/validators";
+import { cardSchema, transformSlug, ZodError, z } from "@ziron/validators";
 
 import { protectedProcedure } from "..";
 import { getAvatar } from "../utils/get-avatar";
@@ -94,6 +94,37 @@ export const createCard = protectedProcedure
     }
   });
 
+export const checkSlugAvailability = protectedProcedure
+  .route({
+    method: "POST",
+    path: "/card/check-slug",
+    summary: "Check if a slug is available",
+    description: "Check if a slug is available",
+    tags: ["card"],
+  })
+  .input(z.object({ slug: z.string() }))
+  .output(
+    z.object({
+      isAvailable: z.boolean(),
+      slug: z.string(),
+    })
+  )
+  .handler(async ({ input, errors }) => {
+    try {
+      const isAvailable = await db.query.cards.findFirst({
+        where: eq(cards.slug, input.slug),
+      });
+
+      return {
+        isAvailable: !isAvailable,
+        slug: transformSlug(input.slug),
+      };
+    } catch (error) {
+      console.log("Error in checkSlugAvailability", error);
+      throw errors.INTERNAL_SERVER_ERROR({ message: error instanceof ZodError ? error.message : "Unknown error" });
+    }
+  });
+
 export const updateCard = protectedProcedure
   .route({
     method: "PUT",
@@ -102,7 +133,11 @@ export const updateCard = protectedProcedure
     description: "Update a card with the given name, phone, website, address, and logo",
     tags: ["card"],
   })
-  .input(cardSchema)
+  .input(
+    cardSchema.extend({
+      id: z.string(),
+    })
+  )
   .output(
     z.object({
       cardName: z.string(),
@@ -111,62 +146,75 @@ export const updateCard = protectedProcedure
   .handler(async ({ input, errors }) => {
     const placeholderCover = "/images/placeholder-cover.jpg";
 
+    const { error } = cardSchema.safeParse(input);
+    console.log("Validation Error", error);
+    if (error) throw errors.BAD_REQUEST({ message: error.message });
+
     try {
       const uniqueSlug = await generateSlug(input.name);
+      const { id, ...updateData } = input;
 
       const card = await db.transaction(async (tx) => {
-        const [newCard] = await db
-          .insert(cards)
-          .values({
-            ...input,
-            slug: input.slug ?? uniqueSlug,
-            image: getAvatar(input.name, input.image),
-            cover: input.cover ?? placeholderCover,
+        const [updatedCard] = await tx
+          .update(cards)
+          .set({
+            ...updateData,
+            slug: updateData.slug ?? uniqueSlug,
+            image: getAvatar(updateData.name, updateData.image),
+            cover: updateData.cover ?? placeholderCover,
           })
+          .where(eq(cards.id, id))
           .returning({
             id: cards.id,
             name: cards.name,
           });
 
-        if (!newCard) {
+        if (!updatedCard) {
           throw errors.INTERNAL_SERVER_ERROR();
         }
 
+        // Batch delete operations
+        await Promise.all([
+          tx.delete(links).where(eq(links.cardId, updatedCard.id)),
+          tx.delete(phones).where(eq(phones.cardId, updatedCard.id)),
+          tx.delete(emails).where(eq(emails.cardId, updatedCard.id)),
+        ]);
+
         await Promise.all(
           [
-            input.links &&
-              input.links.length > 0 &&
+            updateData.links &&
+              updateData.links.length > 0 &&
               tx.insert(links).values(
-                input.links.map((link, i) => ({
+                updateData.links.map((link, i) => ({
                   ...link,
-                  cardId: newCard.id,
+                  cardId: updatedCard.id,
                   order: i,
                 }))
               ),
 
-            input.emails &&
-              input.emails.length > 0 &&
+            updateData.emails &&
+              updateData.emails.length > 0 &&
               tx.insert(emails).values(
-                input.emails.map((email, i) => ({
+                updateData.emails.map((email, i) => ({
                   ...email,
-                  cardId: newCard.id,
+                  cardId: updatedCard.id,
                   order: i,
                 }))
               ),
 
-            input.phones &&
-              input.phones.length > 0 &&
+            updateData.phones &&
+              updateData.phones.length > 0 &&
               tx.insert(phones).values(
-                input.phones.map((phone, i) => ({
+                updateData.phones.map((phone, i) => ({
                   ...phone,
-                  cardId: newCard.id,
+                  cardId: updatedCard.id,
                   order: i,
                 }))
               ),
           ].filter(Boolean)
         );
 
-        return newCard;
+        return updatedCard;
       });
 
       if (!card) {
@@ -176,8 +224,9 @@ export const updateCard = protectedProcedure
       return {
         cardName: card.name,
       };
-    } catch {
-      throw errors.INTERNAL_SERVER_ERROR();
+    } catch (error) {
+      console.log("Error in updateCard", error);
+      throw errors.INTERNAL_SERVER_ERROR({ message: error instanceof Error ? error.message : "Unknown error" });
     }
   });
 
@@ -210,6 +259,37 @@ async function generateSlug(name: string) {
   return slug;
 }
 
+export const deleteCard = protectedProcedure
+  .route({
+    method: "DELETE",
+    path: "/card/:id",
+    summary: "Delete a card",
+    description: "Delete a card by ID",
+    tags: ["card"],
+  })
+  .input(z.object({ id: z.string() }))
+  .output(z.object({ success: z.boolean(), cardName: z.string() }))
+  .handler(async ({ input, errors }) => {
+    try {
+      const [data] = await Promise.all([
+        db.update(cards).set({ deletedAt: new Date() }).where(eq(cards.id, input.id)).returning({
+          name: cards.name,
+        }),
+        db.update(links).set({ deletedAt: new Date() }).where(eq(links.cardId, input.id)),
+        db.update(emails).set({ deletedAt: new Date() }).where(eq(emails.cardId, input.id)),
+        db.update(phones).set({ deletedAt: new Date() }).where(eq(phones.cardId, input.id)),
+      ]);
+
+      if (!data[0]) {
+        throw errors.NOT_FOUND();
+      }
+      return { success: true, cardName: data[0].name };
+    } catch (error) {
+      console.log("Error in deleteCard", error);
+      throw errors.INTERNAL_SERVER_ERROR();
+    }
+  });
+
 export const listCards = protectedProcedure
   .route({
     method: "GET",
@@ -221,11 +301,13 @@ export const listCards = protectedProcedure
   .output(z.array(z.custom<Company>()))
   .handler(async () => {
     const data = await db.query.companies.findMany({
-      where: (companies, { isNull }) => isNull(companies.deletedAt),
+      where: (cards, { isNull }) => isNull(cards.deletedAt),
       with: {
         cards: true,
       },
     });
+
+    console.log("Data from listCards", data);
 
     return data;
   });
@@ -239,10 +321,10 @@ export const getCard = protectedProcedure
     tags: ["card"],
   })
   .input(z.object({ id: z.string() }))
-  .output(z.custom<CardType>())
-  .handler(async ({ input, errors }) => {
+  .output(z.custom<CardType>().optional())
+  .handler(async ({ input }) => {
     const data = await db.query.cards.findFirst({
-      where: (companies, { eq, isNull }) => eq(companies.id, input.id) && isNull(companies.deletedAt),
+      where: (cards, { eq, isNull }) => eq(cards.id, input.id) && isNull(cards.deletedAt),
       with: {
         emails: true,
         phones: true,
@@ -251,10 +333,6 @@ export const getCard = protectedProcedure
         styles: true,
       },
     });
-
-    if (!data) {
-      throw errors.NOT_FOUND();
-    }
 
     return data;
   });

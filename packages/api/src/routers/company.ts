@@ -56,7 +56,9 @@ export const listCompanies = protectedProcedure
     const data = await db.query.companies.findMany({
       where: (companies, { isNull }) => isNull(companies.deletedAt),
       with: {
-        cards: true,
+        cards: {
+          where: (cards, { isNull }) => isNull(cards.deletedAt),
+        },
       },
       // orderBy: getOrder(input.orderBy),
     });

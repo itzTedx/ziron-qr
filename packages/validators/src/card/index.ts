@@ -68,7 +68,22 @@ export const cardSchema = z
     attachmentFileName: z.string().optional().nullish(),
 
     // SEO and routing
-    slug: z.string().optional(),
+    slug: z
+      .string()
+      .min(2, { message: "Slug is too short" })
+      .max(100, { message: "Slug is too long" })
+      .transform((name, ctx) => {
+        const transformed = transformSlug(name);
+        if (transformed.length < 2) {
+          ctx.addIssue({
+            code: "custom",
+            message: "Channel name must be at least 2 characters",
+          });
+
+          return z.NEVER;
+        }
+        return transformed;
+      }),
 
     // Social and business links
     links: linksSchema.optional(),
@@ -81,3 +96,11 @@ export const cardSchema = z
   );
 
 export type zCardSchema = z.infer<typeof cardSchema>;
+
+export const transformSlug = (name: string) => {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+};
