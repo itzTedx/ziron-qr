@@ -1,12 +1,9 @@
-import { NextRequest } from "next/server";
-
 import { onError } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
 
-import { createContext } from "@ziron/api/context/session";
-import { router } from "@ziron/api/routers/index";
+import { clientRouter } from "@ziron/api/routers/index";
 
-const rpcHandler = new RPCHandler(router, {
+const handler = new RPCHandler(clientRouter, {
   interceptors: [
     onError((error) => {
       console.error(error);
@@ -14,14 +11,15 @@ const rpcHandler = new RPCHandler(router, {
   ],
 });
 
-async function handleRequest(req: NextRequest) {
-  const rpcResult = await rpcHandler.handle(req, {
-    prefix: "/api/rpc",
-    context: await createContext(req),
+async function handleRequest(request: Request) {
+  const { response } = await handler.handle(request, {
+    prefix: "/rpc",
+    context: {
+      request,
+    },
   });
-  if (rpcResult.response) return rpcResult.response;
 
-  return new Response("Not found", { status: 404 });
+  return response ?? new Response("Not found", { status: 404 });
 }
 
 export const GET = handleRequest;
