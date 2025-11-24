@@ -20,16 +20,16 @@ export default function ModernTemplate({ card, company, imageBase64URI }: Templa
 
   const companyData = company?.find((c) => c.id === card.companyId);
 
-  const textColor = getTextColorByBackground(card.styles?.btnColor || "#4938ff");
+  const textColor = getTextColorByBackground(card.appearance?.btnColor || "#4938ff");
 
-  const theme = card.styles?.theme || "#4938ff";
-  const btnColor = card.styles?.btnColor || "#4938ff";
+  const theme = card.appearance?.theme || "#4938ff";
+  const btnColor = card.appearance?.btnColor || "#4938ff";
   return (
     <div className="relative flex @sm:h-dvh h-full w-full flex-col justify-between">
       <div
         className={cn(
           "no-scrollbar md:overflow-y-scroll",
-          card.styles?.isDarkMode ? "dark bg-background text-foreground" : "bg-white text-black"
+          card.appearance?.isDarkMode ? "dark bg-background text-foreground" : "bg-white text-black"
         )}
       >
         <header className="mb-9 w-full">

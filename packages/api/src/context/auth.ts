@@ -4,7 +4,7 @@ import { authEnv } from "@ziron/auth/env";
 import { base } from "./base";
 
 export const requireAuth = base.middleware(async ({ context, next, errors }) => {
-  const session = await getSession(context.request);
+  const session = await getSession(context.headers);
 
   if (!session?.session) {
     throw errors.UNAUTHORIZED();
@@ -21,9 +21,9 @@ export const auth = initAuth({
   secret: authEnv().BETTER_AUTH_SECRET,
 });
 
-async function getSession(request: Request) {
+async function getSession(request: Headers) {
   const session = await auth.api.getSession({
-    headers: request.headers,
+    headers: request,
   });
 
   return session;

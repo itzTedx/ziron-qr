@@ -8,6 +8,13 @@
       "when": 1763792886797,
       "tag": "0000_rare_wasp",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1763966777311,
+      "tag": "0001_mean_hiroim",
+      "breakpoints": true
     }
   ]
 }

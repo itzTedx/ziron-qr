@@ -8,6 +8,9 @@ const appearanceSchema = z.object({
   btnColor: z.string().optional(),
   isDarkMode: z.boolean().optional(),
 });
+
+export type AppearanceType = z.infer<typeof appearanceSchema>;
+
 const phonesSchema = z
   .array(
     z.object({

@@ -19,18 +19,18 @@ export default function CardTemplate({ card, company, imageBase64URI }: Template
 
   const companyData = company?.find((c) => c.id === card.companyId);
 
-  const textColor = getTextColorByBackground(card.styles?.theme || "#4938ff");
-  const btnTextColor = getTextColorByBackground(card.styles?.btnColor || "#4938ff");
+  const textColor = getTextColorByBackground(card.appearance?.theme || "#4938ff");
+  const btnTextColor = getTextColorByBackground(card.appearance?.btnColor || "#4938ff");
 
-  const theme = card.styles?.theme || "#4938ff";
-  const btnColor = card.styles?.btnColor || "#4938ff";
+  const theme = card.appearance?.theme || "#4938ff";
+  const btnColor = card.appearance?.btnColor || "#4938ff";
 
   return (
     <div className="relative flex h-full @sm:max-h-[700px] w-full flex-col justify-between">
       <div
         className={cn(
           "no-scrollbar pb-6",
-          card.styles?.isDarkMode ? "dark bg-background text-foreground" : "bg-white text-black"
+          card.appearance?.isDarkMode ? "dark bg-background text-foreground" : "bg-white text-black"
         )}
       >
         <header className="w-full">

@@ -1,3 +1,3 @@
-export const OrganizationPage = () => {
-  return <div>OrganizationPage</div>;
-};
+export default function OrganizationsPage() {
+  return <div>OrganizationsPage</div>;
+}

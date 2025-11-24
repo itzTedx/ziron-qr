@@ -20,7 +20,7 @@ This document contains a comprehensive list of improvements and tasks for the Zi
 
 ## 🔒 Security
 
-- [-] Implement rate limiting for API endpoints (especially auth and card creation)
+- [x] Implement rate limiting for API endpoints (especially auth and card creation)
 - [ ] Add input sanitization for user-generated content (XSS prevention)
 - [ ] Implement CSRF protection for API routes
 - [ ] Add security headers middleware (CSP, HSTS, X-Frame-Options, etc.)
@@ -36,7 +36,7 @@ This document contains a comprehensive list of improvements and tasks for the Zi
 
 ## 💾 Database
 
-- [ ] Fix updateCard router - currently uses INSERT instead of UPDATE (packages/api/src/routers/card.ts line 118)
+- [x] Fix updateCard router - currently uses INSERT instead of UPDATE (packages/api/src/routers/card.ts line 118)
 - [ ] Add database indexes for frequently queried fields (slug, companyId, deletedAt)
 - [ ] Implement soft delete properly for cards and companies
 - [ ] Add database connection pooling configuration and monitoring
@@ -47,7 +47,7 @@ This document contains a comprehensive list of improvements and tasks for the Zi
 - [ ] Implement proper image optimization (WebP format, lazy loading, proper sizes)
 - [ ] Add React.memo for expensive components (templates, card preview)
 - [ ] Implement code splitting for large components and routes
-- [ ] Add caching strategies for API responses (React Query cache configuration)
+- [x] Add caching strategies for API responses (React Query cache configuration)
 - [ ] Optimize bundle size (analyze and remove unused dependencies)
 - [ ] Implement service worker for offline support and caching
 
@@ -55,8 +55,8 @@ This document contains a comprehensive list of improvements and tasks for the Zi
 
 - [ ] Replace default Next.js template in apps/client with actual card viewer implementation
 - [ ] Implement public card viewing page with slug-based routing
-- [ ] Add QR code generation and display for cards
-- [ ] Implement share functionality (social media, copy link, download vCard)
+- [x] Add QR code generation and display for cards
+- [x] Implement share functionality (social media, copy link, download vCard)
 - [ ] Add analytics tracking for card views and interactions
 
 ## ♿ Accessibility
@@ -117,7 +117,7 @@ This document contains a comprehensive list of improvements and tasks for the Zi
 - [ ] Improve loading states and skeletons for better UX
 - [ ] Add empty states for cards, companies, and other lists
 - [ ] Implement optimistic updates for better perceived performance
-- [ ] Add toast notifications for all user actions (success, error, info)
+- [x] Add toast notifications for all user actions (success, error, info)
 - [ ] Improve form validation feedback and error messages
 - [ ] Add confirmation dialogs for destructive actions
 - [ ] Implement drag-and-drop improvements for link ordering
@@ -134,8 +134,8 @@ This document contains a comprehensive list of improvements and tasks for the Zi
 
 ## 💨 Caching
 
-- [ ] Implement Redis caching strategy for frequently accessed data
-- [ ] Add cache invalidation strategies for card and company updates
+- [x] Implement Redis caching strategy for frequently accessed data
+- [x] Add cache invalidation strategies for card and company updates
 - [ ] Implement cache warming for critical data
 - [ ] Add cache hit/miss metrics and monitoring
 

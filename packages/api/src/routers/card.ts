@@ -1,10 +1,10 @@
 import { eq } from "@ziron/db";
 import { db } from "@ziron/db/client";
-import { CardType, Company, cards, emails, links, phones } from "@ziron/db/schema";
+import { appearance, CardType, Company, cards, emails, links, phones } from "@ziron/db/schema";
 import { slugify } from "@ziron/utils";
 import { cardSchema, transformSlug, ZodError, z } from "@ziron/validators";
 
-import { protectedProcedure } from "..";
+import { protectedProcedure, publicProcedure } from "..";
 import { getAvatar } from "../utils/get-avatar";
 
 export const createCard = protectedProcedure
@@ -87,6 +87,14 @@ export const createCard = protectedProcedure
               ),
           ].filter(Boolean)
         );
+
+        await tx.insert(appearance).values({
+          cardId: newCard.id,
+          template: input.appearance.template,
+          theme: input.appearance.theme ?? "#4938ff",
+          btnColor: input.appearance.btnColor ?? "#4938ff",
+          isDarkMode: input.appearance.isDarkMode ?? false,
+        });
 
         return newCard;
       });
@@ -192,6 +200,7 @@ export const updateCard = protectedProcedure
           tx.delete(links).where(eq(links.cardId, updatedCard.id)),
           tx.delete(phones).where(eq(phones.cardId, updatedCard.id)),
           tx.delete(emails).where(eq(emails.cardId, updatedCard.id)),
+          tx.delete(appearance).where(eq(appearance.cardId, updatedCard.id)),
         ]);
 
         await Promise.all(
@@ -236,6 +245,14 @@ export const updateCard = protectedProcedure
               ),
           ].filter(Boolean)
         );
+
+        await tx.insert(appearance).values({
+          cardId: updatedCard.id,
+          template: updateData.appearance.template,
+          theme: updateData.appearance.theme ?? "#4938ff",
+          btnColor: updateData.appearance.btnColor ?? "#4938ff",
+          isDarkMode: updateData.appearance.isDarkMode ?? false,
+        });
 
         return updatedCard;
       });
@@ -313,7 +330,7 @@ export const deleteCard = protectedProcedure
     }
   });
 
-export const listCards = protectedProcedure
+export const listCards = publicProcedure
   .route({
     method: "GET",
     path: "/card",
@@ -354,7 +371,34 @@ export const getCard = protectedProcedure
           phones: true,
           links: true,
           company: true,
-          styles: true,
+          appearance: true,
+        },
+      });
+
+      return data;
+    }
+  });
+
+export const getCardBySlug = publicProcedure
+  .route({
+    method: "GET",
+    path: "/card/:slug",
+    summary: "Get a card by Slug",
+    description: "Get a card by Slug",
+    tags: ["card"],
+  })
+  .input(z.object({ slug: z.string() }))
+  .output(z.custom<CardType>().optional())
+  .handler(async ({ input }) => {
+    if (input.slug !== "new") {
+      const data = await db.query.cards.findFirst({
+        where: (cards, { eq, isNull, and }) => and(eq(cards.slug, input.slug), isNull(cards.deletedAt)),
+        with: {
+          emails: true,
+          phones: true,
+          links: true,
+          company: true,
+          appearance: true,
         },
       });
 

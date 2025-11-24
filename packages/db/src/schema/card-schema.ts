@@ -48,8 +48,8 @@ export const cards = pgTable(
 );
 
 // New card_styles table
-export const cardStyles = pgTable(
-  "card_styles",
+export const appearance = pgTable(
+  "card_appearance",
   {
     id: uuid("id").primaryKey().defaultRandom().notNull(),
     cardId: uuid("card_id")
@@ -66,11 +66,11 @@ export const cardStyles = pgTable(
     deletedAt: timestamp("deleted_at", { withTimezone: true }),
   },
   (table) => [
-    index("card_styles_card_id_idx").on(table.cardId),
-    uniqueIndex("card_styles_card_id_unique_idx").on(table.cardId),
-    index("card_styles_template_idx").on(table.template),
-    index("card_styles_created_at_idx").on(table.createdAt),
-    index("card_styles_deleted_at_idx").on(table.deletedAt),
+    index("appearance_card_id_idx").on(table.cardId),
+    uniqueIndex("appearance_card_id_unique_idx").on(table.cardId),
+    index("appearance_template_idx").on(table.template),
+    index("appearance_created_at_idx").on(table.createdAt),
+    index("appearance_deleted_at_idx").on(table.deletedAt),
   ]
 );
 
@@ -163,19 +163,19 @@ export const cardsRelations = relations(cards, ({ one, many }) => ({
   links: many(links),
   emails: many(emails),
   phones: many(phones),
-  styles: one(cardStyles, {
+  appearance: one(appearance, {
     fields: [cards.id],
-    references: [cardStyles.cardId],
-    relationName: "cardStyles",
+    references: [appearance.cardId],
+    relationName: "appearance",
   }),
   // attachments: one(attachments),
 }));
 
-export const cardStylesRelations = relations(cardStyles, ({ one }) => ({
+export const appearanceRelations = relations(appearance, ({ one }) => ({
   card: one(cards, {
-    fields: [cardStyles.cardId],
+    fields: [appearance.cardId],
     references: [cards.id],
-    relationName: "cardStylesCard",
+    relationName: "appearanceCard",
   }),
 }));
 
@@ -210,6 +210,6 @@ export type CardType = InferResultType<
     phones: true;
     company: true;
     links: true;
-    styles: true;
+    appearance: true;
   }
 >;

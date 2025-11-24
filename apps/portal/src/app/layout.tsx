@@ -4,6 +4,8 @@ import { Providers } from "@/components/providers";
 
 import "@ziron/ui/globals.css";
 
+// import "../lib/orpc/server"; // for pre-rendering
+
 import { Metadata } from "next";
 
 const fontSans = Geist({

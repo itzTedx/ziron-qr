@@ -1,7 +1,14 @@
+import { ScrollArea } from "@ziron/ui/components/scroll-area";
+
+import Footer from "@/components/footer";
+import { ThemeProvider } from "@/components/providers/theme";
 import "@ziron/ui/globals.css";
+import "../lib/orpc/server"; // for pre-rendering
 
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+
+import { cn } from "@ziron/utils";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,8 +31,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta content="yes" name="apple-mobile-web-app-capable" />
+      </head>
+      <body
+        className={cn(
+          "@container flex min-h-dvh antialiased sm:items-center sm:justify-center",
+          geistSans.className,
+          geistMono.variable
+        )}
+      >
+        <ThemeProvider>
+          <ScrollArea className="h-svh sm:h-[700px] sm:overflow-hidden sm:rounded-xl sm:shadow-xl md:max-w-lg">
+            <main className="relative">{children}</main>
+          </ScrollArea>
+          <Footer />
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

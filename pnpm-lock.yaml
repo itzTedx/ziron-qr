@@ -66,22 +66,52 @@ importers:
 
   apps/client:
     dependencies:
+      '@orpc/client':
+        specifier: 'catalog:'
+        version: 1.11.3
+      '@orpc/server':
+        specifier: 'catalog:'
+        version: 1.11.3(ws@8.18.3(bufferutil@4.0.9))
+      '@orpc/tanstack-query':
+        specifier: 'catalog:'
+        version: 1.11.3(@orpc/client@1.11.3)(@tanstack/query-core@5.90.10)
+      '@tanstack/react-query':
+        specifier: ^5.90.10
+        version: 5.90.10(react@19.2.0)
+      '@ziron/api':
+        specifier: workspace:*
+        version: link:../../packages/api
       '@ziron/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@ziron/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       next:
         specifier: 'catalog:'
         version: 16.0.3(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      next-themes:
+        specifier: ^0.4.4
+        version: 0.4.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      pg:
+        specifier: ^8.16.3
+        version: 8.16.3
       react:
         specifier: catalog:react19
         version: 19.2.0
       react-dom:
         specifier: catalog:react19
         version: 19.2.0(react@19.2.0)
+      sonner:
+        specifier: ^2.0.7
+        version: 2.0.7(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
     devDependencies:
       '@biomejs/biome':
         specifier: 'catalog:'
         version: 2.3.6
+      '@tanstack/react-query-devtools':
+        specifier: ^5.91.0
+        version: 5.91.0(@tanstack/react-query@5.90.10(react@19.2.0))(react@19.2.0)
       '@types/node':
         specifier: ^20
         version: 20.19.25
@@ -97,6 +127,9 @@ importers:
       babel-plugin-react-compiler:
         specifier: ^1.0.0
         version: 1.0.0
+      dotenv-cli:
+        specifier: ^8.0.0
+        version: 8.0.0
       typescript:
         specifier: 'catalog:'
         version: 5.7.3

@@ -20,15 +20,15 @@ export default function DefaultTemplate({ card, company, imageBase64URI }: Templ
 
   const companyData = company?.find((c) => c.id === card.companyId);
 
-  const textColor = getTextColorByBackground(card.styles?.btnColor || "#4938ff");
+  const textColor = getTextColorByBackground(card.appearance?.btnColor || "#4938ff");
 
-  const theme = card.styles?.theme || "#4938ff";
+  const theme = card.appearance?.theme || "#4938ff";
 
   return (
     <div
       className={cn(
         "relative flex h-full w-full flex-col justify-between",
-        card.styles?.isDarkMode ? "dark bg-background text-foreground" : "bg-white text-black"
+        card.appearance?.isDarkMode ? "dark bg-background text-foreground" : "bg-white text-black"
       )}
     >
       <div className="no-scrollbar">
@@ -160,7 +160,7 @@ export default function DefaultTemplate({ card, company, imageBase64URI }: Templ
       <div
         className={cn(
           "sticky bottom-0 mt-auto h-20 w-full max-w-screen-sm p-4",
-          card.styles?.isDarkMode ? "bg-background" : "bg-white"
+          card.appearance?.isDarkMode ? "bg-background" : "bg-white"
         )}
       >
         <SaveContactButton

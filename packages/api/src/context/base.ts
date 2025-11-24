@@ -1,6 +1,6 @@
 import { os } from "@orpc/server";
 
-export const base = os.$context<{ request: Request }>().errors({
+export const base = os.$context<{ request: Request; headers: Headers }>().errors({
   UNAUTHORIZED: {
     message: "You are not authorized to access this endpoint.",
     status: 401,
