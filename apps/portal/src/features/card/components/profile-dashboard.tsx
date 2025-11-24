@@ -36,7 +36,7 @@ export const ProfileDashboard = ({ isPending, companyName, data }: Props) => {
       </div>
       <section className="-mt-16 mx-auto max-w-7xl">
         <div className="relative grid grid-cols-10 rounded-lg border-background border-t bg-background/80 px-6 py-4 shadow-muted/30 backdrop-blur-xl sm:border sm:shadow-lg md:grid-cols-12 md:divide-x">
-          <div className="col-span-10 flex md:col-span-5 md:pr-3 lg:pr-6">
+          <div className="col-span-10 flex md:col-span-5 md:px-3 lg:pr-6">
             <div className="group relative aspect-square h-full">
               <Image
                 alt="Profile Image"
@@ -100,7 +100,7 @@ export const ProfileDashboard = ({ isPending, companyName, data }: Props) => {
               <TooltipProvider delayDuration={1000}>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <h2 className="line-clamp-1 font-semibold text-lg lg:text-2xl">
+                    <h2 className="line-clamp-1 w-fit font-semibold text-lg lg:text-2xl">
                       {data && data.name ? data.name : "Untitled Card"}
                     </h2>
                   </TooltipTrigger>

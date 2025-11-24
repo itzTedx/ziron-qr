@@ -16,5 +16,5 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
-  "cSpell.words": ["Foneflip", "nuqs", "ziron", "orpc", "useCallback", "useMemo"]
+  "cSpell.words": ["FGCOLOR", "Foneflip", "nuqs", "orpc", "qrcodegen", "useCallback", "useMemo", "ziron", "codegen"]
 }

@@ -60,7 +60,7 @@ export const ResponsiveModal = ({
   return (
     <Dialog onOpenChange={closeModal} open={isOpen}>
       {trigger && <DialogTrigger asChild={asChild}>{trigger}</DialogTrigger>}
-      <DialogContent className={cn("p-0", "max-w-xl", className)}>
+      <DialogContent className={cn("p-0", "sm:max-w-xl", className)}>
         <DialogHeader className="border-b p-6">
           <DialogTitle>{title}</DialogTitle>
           {description && <DialogDescription className="sr-only">{title}</DialogDescription>}

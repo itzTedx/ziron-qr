@@ -2,28 +2,114 @@
 
 import * as React from "react";
 
-import { Switch as SwitchPrimitive } from "radix-ui";
+import {
+  type HTMLMotionProps,
+  type LegacyAnimationControls,
+  motion,
+  type TargetAndTransition,
+  type VariantLabels,
+} from "motion/react";
+import { Switch as SwitchPrimitives } from "radix-ui";
 
-import { cn } from "@ziron/utils";
+import { useControlledState } from "../hooks/use-controlled-state";
+import { getStrictContext } from "../lib/get-strict-context";
 
-function Switch({ className, ...props }: React.ComponentProps<typeof SwitchPrimitive.Root>) {
+type SwitchContextType = {
+  isChecked: boolean;
+  setIsChecked: (isChecked: boolean) => void;
+  isPressed: boolean;
+  setIsPressed: (isPressed: boolean) => void;
+};
+
+const [SwitchProvider, useSwitch] = getStrictContext<SwitchContextType>("SwitchContext");
+
+type SwitchProps = Omit<React.ComponentProps<typeof SwitchPrimitives.Root>, "asChild"> & HTMLMotionProps<"button">;
+
+function Switch(props: SwitchProps) {
+  const [isPressed, setIsPressed] = React.useState(false);
+  const [isChecked, setIsChecked] = useControlledState({
+    value: props.checked,
+    defaultValue: props.defaultChecked,
+    onChange: props.onCheckedChange,
+  });
+
   return (
-    <SwitchPrimitive.Root
-      className={cn(
-        "peer inline-flex h-[1.15rem] w-8 shrink-0 items-center rounded-full border border-transparent shadow-xs outline-none transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80",
-        className
-      )}
-      data-slot="switch"
-      {...props}
-    >
-      <SwitchPrimitive.Thumb
-        className={cn(
-          "pointer-events-none block size-4 rounded-full bg-background ring-0 transition-transform data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0 dark:data-[state=checked]:bg-primary-foreground dark:data-[state=unchecked]:bg-foreground"
-        )}
-        data-slot="switch-thumb"
-      />
-    </SwitchPrimitive.Root>
+    <SwitchProvider value={{ isChecked, setIsChecked, isPressed, setIsPressed }}>
+      <SwitchPrimitives.Root {...props} asChild onCheckedChange={setIsChecked}>
+        <motion.button
+          data-slot="switch"
+          initial={false}
+          onTap={() => setIsPressed(false)}
+          onTapCancel={() => setIsPressed(false)}
+          onTapStart={() => setIsPressed(true)}
+          whileTap="tap"
+          {...props}
+        />
+      </SwitchPrimitives.Root>
+    </SwitchProvider>
   );
 }
 
-export { Switch };
+type SwitchThumbProps = Omit<React.ComponentProps<typeof SwitchPrimitives.Thumb>, "asChild"> &
+  HTMLMotionProps<"div"> & {
+    pressedAnimation?: TargetAndTransition | VariantLabels | boolean | LegacyAnimationControls;
+  };
+
+function SwitchThumb({
+  pressedAnimation,
+  transition = { type: "spring", stiffness: 300, damping: 25 },
+  ...props
+}: SwitchThumbProps) {
+  const { isPressed } = useSwitch();
+
+  return (
+    <SwitchPrimitives.Thumb asChild>
+      <motion.div
+        animate={isPressed ? pressedAnimation : undefined}
+        data-slot="switch-thumb"
+        layout
+        transition={transition}
+        whileTap="tab"
+        {...props}
+      />
+    </SwitchPrimitives.Thumb>
+  );
+}
+
+type SwitchIconPosition = "left" | "right" | "thumb";
+
+type SwitchIconProps = HTMLMotionProps<"div"> & {
+  position: SwitchIconPosition;
+};
+
+function SwitchIcon({ position, transition = { type: "spring", bounce: 0 }, ...props }: SwitchIconProps) {
+  const { isChecked } = useSwitch();
+
+  const isAnimated = React.useMemo(() => {
+    if (position === "right") return !isChecked;
+    if (position === "left") return isChecked;
+    if (position === "thumb") return true;
+    return false;
+  }, [position, isChecked]);
+
+  return (
+    <motion.div
+      animate={isAnimated ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+      data-slot={`switch-${position}-icon`}
+      transition={transition}
+      {...props}
+    />
+  );
+}
+
+export {
+  Switch,
+  SwitchThumb,
+  SwitchIcon,
+  useSwitch,
+  type SwitchProps,
+  type SwitchThumbProps,
+  type SwitchIconProps,
+  type SwitchIconPosition,
+  type SwitchContextType,
+};

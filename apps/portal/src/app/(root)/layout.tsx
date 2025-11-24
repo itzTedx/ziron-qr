@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 
-import { ScrollArea } from "@ziron/ui/components/scroll-area";
+import { ScrollArea, ScrollBar } from "@ziron/ui/components/scroll-area";
 import { SidebarInset, SidebarProvider } from "@ziron/ui/components/sidebar";
 
 import Header from "@/components/layout/header";
@@ -10,6 +10,7 @@ import { AppSidebar } from "@/components/layout/sidebar/app-sidebar";
 import { getCurrentUser } from "@/features/auth/actions/user";
 import { getCompanies } from "@/features/company/actions/queries";
 import CompanyFormModal from "@/features/company/components/modal";
+import { ShareModal } from "@/features/modal/share-modal";
 
 export const metadata: Metadata = {
   title: "QR Code Generator",
@@ -45,7 +46,11 @@ export default async function RootLayout({
         <SidebarInset>
           <Header />
 
-          <ScrollArea className="-mt-20">{children}</ScrollArea>
+          <ScrollArea className="-mt-20">
+            {children}
+            <ScrollBar />
+          </ScrollArea>
+          <ShareModal />
         </SidebarInset>
       </SidebarProvider>
       <CompanyFormModal />

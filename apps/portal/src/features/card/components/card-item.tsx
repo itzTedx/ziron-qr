@@ -10,10 +10,10 @@ import { Card, CardContent, CardFooter } from "@ziron/ui/components/card";
 
 import ShareButton from "./share-button";
 
-type PersonCardFields = Pick<CardType, "id" | "name" | "designation" | "slug">;
+type PersonCardFields = Pick<CardType, "id" | "name" | "designation" | "slug" | "image">;
 
 interface PersonCardProps {
-  card: PersonCardFields & Partial<Pick<CardType, "designation">>;
+  card: PersonCardFields;
   company: Company;
 }
 
@@ -50,13 +50,7 @@ export const PersonCard = ({ card, company }: PersonCardProps) => {
           </Link>
         </Button>
 
-        <ShareButton
-          data={{
-            url: card.slug!,
-            name: card.name,
-            logo: company.logo,
-          }}
-        />
+        <ShareButton company={company} data={card} />
       </CardFooter>
     </Card>
   );

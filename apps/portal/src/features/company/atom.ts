@@ -1,6 +1,8 @@
 import { atom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 
+import { CardType, Company } from "@ziron/db/schema";
+
 import { createJsonCookieStorage } from "@/lib/storage/cookie-storage";
 
 // Create a JSON-aware cookie storage for storing the collapsible state object
@@ -22,10 +24,10 @@ export const companyCollapsibleStateAtom = atomWithStorage("company-collapsible-
 });
 
 // Share modal data type
+type PersonCard = Pick<CardType, "id" | "name" | "designation" | "slug" | "image">;
+
 export interface ShareModalData {
-  url: string;
-  name: string;
-  logo?: string;
+  data: PersonCard & { company: Pick<Company, "logo" | "name">; url: string };
 }
 
 // Base atom for modal state and data

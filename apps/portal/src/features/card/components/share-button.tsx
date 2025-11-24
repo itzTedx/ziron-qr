@@ -3,25 +3,30 @@
 import { IconShare } from "@tabler/icons-react";
 import { useSetAtom } from "jotai";
 
+import { CardType, Company } from "@ziron/db/schema";
 import { Button } from "@ziron/ui/components/button";
 
-import { openShareModalAtom } from "@/features/company/atom";
+import { openShareModalAtom, type ShareModalData } from "@/features/company/atom";
+import { env } from "@/lib/env/client";
 
+type PersonCardFields = Pick<CardType, "id" | "name" | "designation" | "slug" | "image">;
 interface ShareButtonProps {
-  data: {
-    url: string;
-    name: string;
-    logo: string | null; // Ensure logo can be null
-  };
+  data: PersonCardFields;
+  company: Company;
 }
 
-export default function ShareButton({ data }: ShareButtonProps) {
-  const shareLink = `${process.env.NEXT_PUBLIC_BASE_PATH}/${data.url}`;
+export default function ShareButton({ data, company }: ShareButtonProps) {
+  const shareLink = `${env.NEXT_PUBLIC_BASE_URL}/${data.slug}`;
 
-  const shareData = {
-    url: shareLink,
-    name: data.name,
-    logo: data.logo || undefined,
+  const shareData: ShareModalData = {
+    data: {
+      ...data,
+      company: {
+        logo: company.logo ?? null,
+        name: company.name,
+      },
+      url: shareLink,
+    },
   };
 
   const openModal = useSetAtom(openShareModalAtom);
