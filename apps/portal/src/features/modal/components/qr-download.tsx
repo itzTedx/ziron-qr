@@ -10,12 +10,13 @@ import { Icons } from "@ziron/ui/assets/icons";
 import { Button } from "@ziron/ui/components/button";
 import { Label } from "@ziron/ui/components/label";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ziron/ui/components/tooltip";
-import { getQRAsCanvas, getQRAsSVGDataUri, getQRData } from "@ziron/utils/src/qr";
 
 import { QRCode } from "@/components/ui/qr-code";
 import { ResponsivePopover } from "@/components/ui/responsive-popover";
 import { ShimmerDots } from "@/components/ui/shimmer-dots";
 import { Switch } from "@/components/ui/switch";
+
+import { getQRAsCanvas, getQRAsSVGDataUri, getQRData } from "@/lib/qr";
 
 // Import the new function
 

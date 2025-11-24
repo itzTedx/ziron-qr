@@ -346,16 +346,18 @@ export const getCard = protectedProcedure
   .input(z.object({ id: z.string() }))
   .output(z.custom<CardType>().optional())
   .handler(async ({ input }) => {
-    const data = await db.query.cards.findFirst({
-      where: (cards, { eq, isNull }) => eq(cards.id, input.id) && isNull(cards.deletedAt),
-      with: {
-        emails: true,
-        phones: true,
-        links: true,
-        company: true,
-        styles: true,
-      },
-    });
+    if (input.id !== "new") {
+      const data = await db.query.cards.findFirst({
+        where: (cards, { eq, isNull, and }) => and(eq(cards.id, input.id), isNull(cards.deletedAt)),
+        with: {
+          emails: true,
+          phones: true,
+          links: true,
+          company: true,
+          styles: true,
+        },
+      });
 
-    return data;
+      return data;
+    }
   });

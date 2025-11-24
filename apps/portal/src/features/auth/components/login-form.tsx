@@ -4,9 +4,9 @@ import { useTransition } from "react";
 
 import { useRouter } from "next/navigation";
 
+import { APIError } from "better-auth";
 import { toast } from "sonner";
 
-import { authClient } from "@ziron/auth/client";
 import { Button } from "@ziron/ui/components/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, useForm } from "@ziron/ui/components/form";
 import { Input } from "@ziron/ui/components/input";
@@ -14,6 +14,8 @@ import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 import { LoginUserType, loginUserSchema, zodResolver } from "@ziron/validators";
 
 import { PasswordInput } from "@/components/ui/password-input";
+
+import { authClient } from "@/lib/auth/client";
 
 export function LoginForm() {
   const router = useRouter();
@@ -29,24 +31,62 @@ export function LoginForm() {
 
   function onSubmit(values: LoginUserType) {
     startTransition(async () => {
-      await authClient.signIn.email({
-        email: values.email,
-        password: values.password,
-        callbackURL: "/",
-        fetchOptions: {
-          onSuccess: () => {
-            toast.success("Signed in...");
-            router.push("/");
+      try {
+        await authClient.signIn.email({
+          email: values.email,
+          password: values.password,
+          callbackURL: "/",
+          fetchOptions: {
+            onSuccess: () => {
+              toast.success("Signed in...");
+              router.push("/");
+            },
+            onError: (ctx) => {
+              const { error } = ctx;
+              const status = error.status;
+              const message = error.message;
+
+              // Handle specific status codes
+              switch (status) {
+                case 400:
+                  toast.error("Invalid request. Please check your email and password.");
+                  break;
+                case 401:
+                  toast.error("Invalid email or password. Please try again.");
+                  break;
+                case 403:
+                  toast.error("Access denied.", {
+                    description: "Please verify your email address",
+                  });
+                  break;
+                case 404:
+                  toast.error("Account not found. Please check your email or sign up.");
+                  break;
+                case 429:
+                  toast.error("Too many login attempts. Please try again later.");
+                  break;
+                case 500:
+                  toast.error("Server error. Please try again later.");
+                  break;
+                case 503:
+                  toast.error("Service temporarily unavailable. Please try again later.");
+                  break;
+                default:
+                  // Use the error message if available, otherwise show a generic message
+                  toast.error(message || "An unexpected error occurred. Please try again.");
+              }
+
+              console.error("Login error:", error);
+            },
           },
-          onError: (ctx) => {
-            toast.error(ctx.error.message);
-            if (ctx.error.status === 403) {
-              toast.info("Please verify your email address");
-            }
-            console.error(ctx.error);
-          },
-        },
-      });
+        });
+      } catch (error) {
+        if (error instanceof APIError) {
+          console.log(error.message, error.status);
+        }
+
+        console.error("Login error:", error);
+      }
     });
   }
 

@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 
-import { getQRData, QRCodeSVG } from "@ziron/utils/src/qr";
-import { DEFAULT_MARGIN } from "@ziron/utils/src/qr/constants";
-import { ImageSettings } from "@ziron/utils/src/qr/types";
+import { getQRData, QRCodeSVG } from "@/lib/qr";
+import { DEFAULT_MARGIN } from "@/lib/qr/constants";
+import { ImageSettings } from "@/lib/qr/types";
 
 export function QRCode({
   url,
