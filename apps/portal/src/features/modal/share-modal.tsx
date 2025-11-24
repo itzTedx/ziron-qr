@@ -1,12 +1,16 @@
 "use client";
 
+import { Route } from "next";
 import Image from "next/image";
+import Link from "next/link";
 
+import { IconExternalLink } from "@tabler/icons-react";
 import { useAtomValue, useSetAtom } from "jotai";
 
 import { Button } from "@ziron/ui/components/button";
+import { Label } from "@ziron/ui/components/label";
 
-import CopyButton from "@/components/ui/copy-button";
+import { CopyButton } from "@/components/ui/copy-button";
 import { ResponsiveModal } from "@/components/ui/responsive-modal";
 
 import { closeShareModalAtom, shareModalAtom } from "../company/atom";
@@ -52,8 +56,8 @@ export const ShareModal = () => {
       isOpen={modalState.open}
       title="Share digital card"
     >
-      <div className="grid grid-cols-2">
-        <div className="space-y-3 p-6">
+      <div className="grid grid-cols-7">
+        <div className="col-span-3 space-y-3 p-6">
           <div className="flex aspect-3/4 flex-col justify-between gap-2 rounded-lg bg-linear-45 from-primary to-brand-secondary p-6">
             {data.company.logo ? (
               <div className="flex size-12 shrink-0 items-center justify-center rounded-sm border bg-white p-2">
@@ -76,9 +80,8 @@ export const ShareModal = () => {
               <p>{data.designation}</p>
             </div>
           </div>
-          <p className="truncate text-muted-foreground text-sm">{data.url}</p>
         </div>
-        <div className="flex flex-col gap-6 border-l p-6">
+        <div className="col-span-4 flex flex-col gap-6 border-l p-6">
           <QRCodeDownload
             data={{
               name: data.name,
@@ -86,33 +89,28 @@ export const ShareModal = () => {
               logo: data.company.logo ?? undefined,
             }}
           />
-          {/* Card Preview */}
-          <div className="flex items-center gap-4 rounded-lg border bg-card p-4">
-            {data.company.logo && (
-              <div className="flex size-12 shrink-0 items-center justify-center rounded-sm border bg-white p-2">
-                <Image
-                  alt={`${data.name}'s Logo`}
-                  className="size-8 object-contain"
-                  height={48}
-                  src={data.company.logo}
-                  width={48}
-                />
-              </div>
-            )}
-            <div className="min-w-0 flex-1">
-              <h3 className="truncate font-semibold">{data.name}</h3>
-            </div>
-          </div>
 
           {/* Copy Link */}
-          <div className="space-y-2">
-            <label className="font-medium text-muted-foreground text-sm">Share link</label>
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <Label>Link</Label>
+
+              <Link
+                className="flex items-center gap-1.5 text-muted-foreground text-xs hover:underline"
+                href={data.url as Route}
+                target="_blank"
+              >
+                Open in new tab
+                <IconExternalLink className="size-3" />
+              </Link>
+            </div>
             <CopyButton link={data.url} />
           </div>
 
           {/* Social Share Buttons */}
-          <div className="space-y-2">
-            <label className="font-medium text-muted-foreground text-sm">Share on</label>
+          <div className="flex flex-col gap-2">
+            <Label>Share on</Label>
+
             <div className="grid grid-cols-4 gap-2">
               <Button
                 className="flex h-auto flex-col gap-2 py-3"

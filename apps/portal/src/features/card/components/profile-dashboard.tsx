@@ -17,9 +17,10 @@ interface Props {
   isPending: boolean;
   data: Partial<Pick<zCardSchema, "id" | "name" | "designation" | "slug" | "image" | "cover">>;
   companyName?: string;
+  company?: { logo: string | null; name: string };
 }
 
-export const ProfileDashboard = ({ isPending, companyName, data }: Props) => {
+export const ProfileDashboard = ({ isPending, companyName, data, company }: Props) => {
   return (
     <div>
       <div className="group relative h-72 bg-secondary">
@@ -117,7 +118,7 @@ export const ProfileDashboard = ({ isPending, companyName, data }: Props) => {
           </div>
 
           <div className="col-span-10 flex items-center justify-between gap-4 md:col-span-5 md:px-3 lg:px-6">
-            <SlugField data={data.slug} />
+            <SlugField company={company} data={data} />
           </div>
 
           <div className="col-span-2 hidden flex-col items-center gap-3 px-6 md:flex">

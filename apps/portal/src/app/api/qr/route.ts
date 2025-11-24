@@ -14,7 +14,7 @@ const CORS_HEADERS = new Headers({
 });
 
 const qrCodeQuerySchema = z.object({
-  url: z.string().url("Invalid URL format"),
+  url: z.url("Invalid URL format"),
   size: z.coerce.number().int().min(100).max(2000).optional().default(600),
   level: z.enum(["L", "M", "Q", "H"]).optional().default(DEFAULT_LEVEL),
   fgColor: z

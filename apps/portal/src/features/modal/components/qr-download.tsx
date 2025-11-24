@@ -54,8 +54,8 @@ export default function QRCodeDownload({ data }: QRCodeDownloadProps) {
           <CopyQrButton qrData={qrData} />
         </div>
       </div>
-      <div className="relative flex items-center justify-center gap-6 rounded-lg border bg-background p-6 dark:bg-muted/20">
-        <ShimmerDots className="mask-[radial-gradient(40%_80%,transparent_50%,black)] opacity-30 dark:opacity-20" />
+      <div className="relative flex items-center justify-center gap-6 rounded-lg border bg-background p-4 dark:bg-muted/20">
+        <ShimmerDots className="mask-[radial-gradient(40%_80%,transparent_50%,black)] opacity-50 dark:opacity-30" />
         <AnimatePresence mode="wait">
           <motion.div
             animate={{ filter: "blur(0px)", opacity: 1 }}

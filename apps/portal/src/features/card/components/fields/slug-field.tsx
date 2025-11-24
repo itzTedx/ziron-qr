@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { useMutation } from "@tanstack/react-query";
+import { useSetAtom } from "jotai";
 import { CheckCircle, Edit, Loader, X, XCircle } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { toast } from "sonner";
@@ -19,21 +20,24 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ziron/ui/components/tooltip";
 import { transformSlug, zCardSchema } from "@ziron/validators";
 
+import { openShareModalAtom, ShareModalData } from "@/features/company/atom";
 import { useDebounce } from "@/hooks/debounce";
 import { env } from "@/lib/env/client";
 import { orpc } from "@/lib/orpc/client";
 
 interface Props {
-  data?: string;
+  data: Partial<Pick<zCardSchema, "id" | "name" | "designation" | "slug" | "image" | "cover">>;
+  company?: { logo: string | null; name: string };
 }
 
 type SlugValidationState = "idle" | "validating" | "valid" | "invalid";
 
-export const SlugField = ({ data }: Props) => {
+export const SlugField = ({ data, company }: Props) => {
   const form = useFormContext<zCardSchema>();
-  const [slug, setSlug] = useState(data ?? "");
+  const [slug, setSlug] = useState(data.slug ?? "");
   const [isEditingSlug, setIsEditingSlug] = useState(false);
   const [validationState, setValidationState] = useState<SlugValidationState>("idle");
+  const openModal = useSetAtom(openShareModalAtom);
 
   // Transform slug as user types
   const transformedSlug = transformSlug(slug);
@@ -41,16 +45,17 @@ export const SlugField = ({ data }: Props) => {
 
   const validateSlug = useMutation(
     orpc.card.checkSlug.mutationOptions({
-      onSuccess: (data) => {
-        if (!data.isAvailable) {
+      onSuccess: (response) => {
+        if (!response.isAvailable) {
           setValidationState("invalid");
           toast.error("Slug is not available", { description: "Please enter a different slug" });
           return;
         }
 
         setValidationState("valid");
-        setSlug(data.slug);
-        form.setValue("slug", data.slug, { shouldValidate: true });
+        const validatedSlug = response.slug ?? "";
+        setSlug(validatedSlug);
+        form.setValue("slug", validatedSlug, { shouldValidate: true });
         toast.success("Slug is available", { description: "You can now use this slug to access your card" });
       },
       onError: () => {
@@ -58,6 +63,13 @@ export const SlugField = ({ data }: Props) => {
       },
     })
   );
+
+  // Sync slug state when data.slug changes
+  useEffect(() => {
+    if (data.slug !== undefined && !isEditingSlug) {
+      setSlug(data.slug);
+    }
+  }, [data.slug, isEditingSlug]);
 
   // Automatically validate when debounced slug changes
   useEffect(() => {
@@ -72,7 +84,7 @@ export const SlugField = ({ data }: Props) => {
     }
 
     // Skip validation if slug hasn't changed from the original
-    if (slugToValidate === data) {
+    if (slugToValidate === (data.slug ?? "")) {
       setValidationState("valid");
       form.setValue("slug", slugToValidate, { shouldValidate: true });
       return;
@@ -81,7 +93,7 @@ export const SlugField = ({ data }: Props) => {
     // Validate the slug
     setValidationState("validating");
     validateSlug.mutate({ slug: slugToValidate });
-  }, [debouncedSlug, data]);
+  }, [debouncedSlug, data.slug]);
 
   function handleSlugChange(e: React.ChangeEvent<HTMLInputElement>) {
     const newValue = e.target.value;
@@ -100,7 +112,35 @@ export const SlugField = ({ data }: Props) => {
       toast.error("Please enter a slug (at least 2 characters)");
       return;
     }
-    setIsEditingSlug(false);
+    if (validationState === "valid") {
+      setIsEditingSlug(false);
+    }
+  }
+
+  function handleShare() {
+    if (!data.id || !data.slug || !company) {
+      toast.error("Unable to share", { description: "Please ensure the card has been saved with a valid slug" });
+      return;
+    }
+
+    const shareLink = `${env.NEXT_PUBLIC_BASE_URL}/${data.slug}`;
+
+    const shareData: ShareModalData = {
+      data: {
+        id: data.id,
+        name: data.name ?? "",
+        designation: data.designation ?? null,
+        slug: data.slug,
+        image: data.image ?? "",
+        company: {
+          logo: company.logo ?? null,
+          name: company.name,
+        },
+        url: shareLink,
+      },
+    };
+
+    openModal(shareData);
   }
 
   return (
@@ -189,7 +229,7 @@ export const SlugField = ({ data }: Props) => {
                 <Button
                   className="hidden items-center gap-1.5 md:flex"
                   onClick={() => {
-                    //   handleShare();
+                    handleShare();
                   }}
                   size="lg"
                   type="button"
