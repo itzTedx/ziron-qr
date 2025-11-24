@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { IconArrowsMaximize, IconCamera, IconShare } from "@tabler/icons-react";
+import { IconArrowsMaximize, IconShare } from "@tabler/icons-react";
 
 import { Badge } from "@ziron/ui/components/badge";
 import { Button } from "@ziron/ui/components/button";
@@ -8,9 +8,8 @@ import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ziron/ui/components/tooltip";
 import { zCardSchema } from "@ziron/validators";
 
-import { ResponsiveModal } from "@/components/ui/responsive-modal";
-
 import { DeleteCard } from "./delete-card";
+import { PhotoUploadModal } from "./fields/photo-upload-modal";
 import { SlugField } from "./fields/slug-field";
 
 interface Props {
@@ -47,30 +46,7 @@ export const ProfileDashboard = ({ isPending, companyName, data, company }: Prop
                 sizes="10vw"
                 src={data.image ?? "/images/placeholder-cover.jpg"}
               />
-              <ResponsiveModal
-                //   isOpen={openPhoto}
-                //   closeModal={setOpenPhoto}
-                asChild
-                title="Update Profile Picture"
-                trigger={
-                  <Button
-                    className="absolute right-1 bottom-1 z-10 flex items-center justify-center rounded-full"
-                    size="icon"
-                    variant="outline"
-                  >
-                    <IconCamera className="size-5" />
-                  </Button>
-                }
-              >
-                Hello
-                {/* <ImageUploadField
-            control={control}
-            setError={setError}
-            setValue={setValue}
-            onSuccess={() => setOpenPhoto(false)}
-            endpoint="photo"
-            /> */}
-              </ResponsiveModal>
+              <PhotoUploadModal />
             </div>
             <div className="w-full max-md:mt-3 md:ml-3">
               <div className="flex items-center justify-between gap-3">

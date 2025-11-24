@@ -1,15 +1,17 @@
-import { useState } from "react";
+import { useState, useTransition } from "react";
 
 import { Route } from "next";
 import Link from "next/link";
 
 import { useUploadFiles } from "@better-upload/client";
+import { formatBytes } from "@better-upload/client/helpers";
 import { IconArrowRight, IconExternalLink, IconX } from "@tabler/icons-react";
 import { toast } from "sonner";
 
 import { Button } from "@ziron/ui/components/button";
 import { Card } from "@ziron/ui/components/card";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage, useFormContext } from "@ziron/ui/components/form";
+import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 import { removeExtension } from "@ziron/utils";
 import { zCardSchema } from "@ziron/validators";
 
@@ -17,9 +19,18 @@ import { FileIcon, UploadDropzoneProgress } from "@/components/ui/upload-dropzon
 
 import { UPLOAD_ROUTES } from "@/lib/constants/upload";
 
-export const AttachmentUpload = ({ attachment }: { attachment: { url: string; filename?: string } | null }) => {
+import { deleteFile } from "../../actions/s3";
+
+export const AttachmentUpload = ({
+  attachment,
+}: {
+  attachment: { url: string; filename?: string; objectKey?: string } | null;
+}) => {
   const form = useFormContext<zCardSchema>();
-  const [uploadedData, setUploadedData] = useState<{ url: string; filename?: string } | null>(attachment);
+  const [uploadedData, setUploadedData] = useState<{ url: string; filename?: string; objectKey?: string } | null>(
+    attachment
+  );
+  const [isDeleting, startTransition] = useTransition();
 
   const { control } = useUploadFiles({
     route: UPLOAD_ROUTES.attachment,
@@ -34,15 +45,28 @@ export const AttachmentUpload = ({ attachment }: { attachment: { url: string; fi
 
     onUploadComplete: ({ files, metadata }) => {
       form.setValue("attachmentUrl", (metadata?.url as string) ?? null);
-      form.setValue("attachmentFileName", files[0]?.raw.name ?? null);
-      toast.success("Upload Successful", { description: `File: ${files[0]?.raw.name ?? null}` });
-      setUploadedData({ url: metadata?.url as string, filename: files[0]?.raw.name });
+      form.setValue("attachmentFileName", files[0]?.raw.name);
+      toast.success("Upload Successful", {
+        description: `File: ${files[0]?.raw.name ?? null}, Size: ${formatBytes(files[0]?.raw.size ?? 0)}`,
+      });
+      setUploadedData({
+        url: metadata?.url as string,
+        filename: files[0]?.raw.name,
+        objectKey: files[0]?.objectInfo.key,
+      });
     },
   });
 
   function handleDelete() {
-    form.setValue("attachmentUrl", null);
-    form.setValue("attachmentFileName", null);
+    startTransition(async () => {
+      if (uploadedData && uploadedData.objectKey) {
+        await deleteFile(uploadedData.objectKey);
+        form.setValue("attachmentUrl", null);
+        form.setValue("attachmentFileName", undefined);
+        form.setValue("attachmentObjectKey", undefined);
+        setUploadedData(null);
+      }
+    });
   }
 
   return (
@@ -85,11 +109,14 @@ export const AttachmentUpload = ({ attachment }: { attachment: { url: string; fi
               </Link>
               <Button
                 className="hover:bg-red-600 hover:text-red-100"
+                disabled={isDeleting}
                 onClick={handleDelete}
                 size="icon"
                 variant="outline"
               >
-                <IconX className="size-5" />
+                <LoadingSwap isLoading={isDeleting}>
+                  <IconX className="size-5" />
+                </LoadingSwap>
               </Button>
             </Card>
           )}

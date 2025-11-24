@@ -24,6 +24,7 @@ export const cards = pgTable(
     cover: text("cover").notNull(),
     attachmentUrl: text("attachment_url"),
     attachmentFileName: varchar("attachment_file_name", { length: 255 }),
+    attachmentObjectKey: varchar("attachment_object_key", { length: 255 }),
 
     // Company relationship
     companyId: uuid("company_id")

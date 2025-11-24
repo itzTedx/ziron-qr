@@ -48,7 +48,8 @@ export function transformCardData(initialData?: CardType, companyId?: string | n
     image: initialData?.image ?? undefined,
     cover: initialData?.cover ?? undefined,
     attachmentUrl: initialData?.attachmentUrl ?? null,
-    attachmentFileName: initialData?.attachmentFileName ?? null,
+    attachmentFileName: initialData?.attachmentFileName ?? undefined,
+    attachmentObjectKey: initialData?.attachmentObjectKey ?? undefined,
     slug: initialData?.slug ?? "",
   };
 }

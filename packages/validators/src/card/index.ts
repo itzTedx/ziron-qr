@@ -68,8 +68,8 @@ export const cardSchema = z
     image: z.string().optional(),
     cover: z.string().optional(),
     attachmentUrl: z.url().nullable(),
-    attachmentFileName: z.string().nullable(),
-
+    attachmentFileName: z.string().optional(),
+    attachmentObjectKey: z.string().optional(),
     // SEO and routing
     slug: z
       .string()

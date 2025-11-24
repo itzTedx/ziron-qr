@@ -15,6 +15,13 @@
       "when": 1763966777311,
       "tag": "0001_mean_hiroim",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1763995255921,
+      "tag": "0002_nappy_king_cobra",
+      "breakpoints": true
     }
   ]
 }

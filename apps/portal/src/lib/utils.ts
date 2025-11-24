@@ -1,5 +1,7 @@
 import { z } from "@ziron/validators";
 
+import { env } from "./env/server";
+
 /**
  * Generic form validation utility that accepts any Zod schema
  * @param data - The form data to validate
@@ -18,3 +20,7 @@ export function createLog(label = "App") {
     error: (...args: unknown[]) => console.error(`%c[❌] [${label}]`, "color: #d32f2f; font-weight: bold;", ...args),
   };
 }
+
+export const generatePublicUrl = (objectKey: string) => {
+  return `https://${env.AWS_BUCKET_NAME}.s3.${env.AWS_BUCKET_REGION}.amazonaws.com/${objectKey}`;
+};
