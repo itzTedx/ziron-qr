@@ -18,9 +18,10 @@
     "@t3-oss/env-nextjs": "^0.13.8",
     "@ziron/auth": "workspace:*",
     "@ziron/db": "workspace:*",
-    "@ziron/validators": "workspace:*",
     "@ziron/utils": "workspace:*",
+    "@ziron/validators": "workspace:*",
     "next": "catalog:",
+    "sharp": "^0.34.5",
     "zod": "catalog:"
   },
   "devDependencies": {

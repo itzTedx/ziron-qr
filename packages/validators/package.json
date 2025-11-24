@@ -21,6 +21,7 @@
   "devDependencies": {
     "@biomejs/biome": "catalog:",
     "@ziron/typescript-config": "workspace:*",
+    "tsup": "^8.5.1",
     "typescript": "catalog:"
   }
 }

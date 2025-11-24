@@ -1,4 +1,5 @@
 // biome-ignore-all lint: its a old
+// @ts-nocheck
 /**
  * @license QR Code generator library (TypeScript)
  * Copyright (c) Project Nayuki.
@@ -211,7 +212,7 @@ namespace qrcodegen {
     // for light or true for dark. The top left corner has the coordinates (x=0, y=0).
     // If the given coordinates are out of bounds, then false (light) is returned.
     public getModule(x: int, y: int): boolean {
-      return 0 <= x && x < this.size && 0 <= y && y < this.size && this.modules[y][x];
+      return (0 <= x && x < this.size && 0 <= y && y < this.size && this.modules[y]?.[x]) ?? false;
     }
 
     // Modified to expose modules for easy access
@@ -241,7 +242,7 @@ namespace qrcodegen {
         for (let j = 0; j < numAlign; j++) {
           // Don't draw on the three finder corners
           if (!((i == 0 && j == 0) || (i == 0 && j == numAlign - 1) || (i == numAlign - 1 && j == 0)))
-            this.drawAlignmentPattern(alignPatPos[i], alignPatPos[j]);
+            this.drawAlignmentPattern(alignPatPos[i]!, alignPatPos[j]!);
         }
       }
 

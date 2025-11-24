@@ -8,6 +8,7 @@
   "files": ["dist/**"],
   "scripts": {
     "build": "tsup",
+    "dev": "tsup --watch",
     "lint": "biome check .",
     "check-types": "tsc --noEmit"
   },
