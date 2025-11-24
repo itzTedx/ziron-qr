@@ -24,7 +24,7 @@ const THEME_ITEMS = [
 const imageContainerStyles = "relative aspect-[7/15] h-60 md:h-96 lg:h-[30rem]";
 const radioItemStyles = "peer sr-only after:absolute after:inset-0";
 const radioWrapperStyles =
-  "relative shrink-0 cursor-pointer overflow-hidden rounded-2xl border border-input p-1 shadow-sm shadow-black/5 outline-offset-2 transition-colors peer-[:focus-visible]:outline peer-[:focus-visible]:outline-2 peer-[:focus-visible]:outline-ring/70 peer-data-[disabled]:cursor-not-allowed peer-data-[state=checked]:border-ring peer-data-[state=checked]:bg-accent peer-data-[disabled]:opacity-50 md:p-2";
+  "relative shrink-0 cursor-pointer overflow-hidden rounded-2xl border border-input p-1 shadow-sm shadow-black/5 outline-offset-2 transition-colors peer-[:focus-visible]:outline peer-[:focus-visible]:outline-2 peer-[:focus-visible]:outline-ring/70 peer-data-[disabled]:cursor-not-allowed peer-data-[state=checked]:border-ring peer-data-[state=checked]:bg-brand-secondary/60 peer-data-[disabled]:opacity-50 ";
 
 export const ThemeSelector = ({ onChange, value }: Props) => {
   const id = useId();
@@ -49,13 +49,8 @@ export const ThemeSelector = ({ onChange, value }: Props) => {
           </div>
 
           <span className="group mt-2 flex items-center justify-center gap-2">
-            <div className="flex aspect-square size-5 items-center justify-center rounded-full border border-primary text-background shadow-none ring-offset-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 disabled:cursor-not-allowed disabled:opacity-50 peer-data-[state=checked]:group-[]:border-primary peer-data-[state=checked]:group-[]:bg-primary peer-data-[state=checked]:group-[]:ring-1 peer-data-[state=checked]:group-[]:ring-foreground">
-              <IconCheck
-                aria-hidden="true"
-                className="peer-data-[state=unchecked]:group-[]:hidden"
-                size={16}
-                strokeWidth={2}
-              />
+            <div className="flex aspect-square size-5 items-center justify-center rounded-full border border-primary text-background shadow-none ring-offset-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 disabled:cursor-not-allowed disabled:opacity-50 peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary peer-data-[state=checked]:ring-1 peer-data-[state=checked]:ring-foreground">
+              <IconCheck aria-hidden="true" className="peer-data-[state=unchecked]:hidden" size={16} strokeWidth={2} />
             </div>
             <span className="font-medium text-xs">{item.label}</span>
           </span>

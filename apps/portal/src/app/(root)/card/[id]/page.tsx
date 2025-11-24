@@ -1,16 +1,46 @@
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { CardForm } from "@/features/card/components/card-form";
 import { getCompanies } from "@/features/company/actions/queries";
 import { client } from "@/lib/orpc/client";
 
-type Params = Promise<{ id: string }>;
+export async function generateMetadata({ params }: PageProps<"/card/[id]">): Promise<Metadata> {
+  const { id } = await params;
+  const card = await client.card.get({ id });
 
-interface Props {
-  params: Params;
+  if (!card && id === "new")
+    return {
+      title: "Create New Card | Ziron Digital Card",
+      description: "Create a new card to showcase your professional information",
+    };
+
+  if (!card)
+    return {
+      title: "Card Not Found | Ziron Digital Card",
+      description: "Card not found",
+    };
+
+  const data = {
+    title: `${card.name} - ${card.company.name} | Ziron Digital Card`,
+    description: card.bio ?? "",
+    icon: card.company.logo ?? undefined,
+    twitterHandler: card.links.find((l) => l.label === "Twitter")?.url?.replace(/.*\.com\//, "@"),
+  };
+
+  return {
+    title: data.title,
+    description: data.description,
+
+    openGraph: {
+      title: data.title,
+      description: data.description,
+      images: [card.image ?? ""],
+    },
+  };
 }
 
-export default async function CardPage({ params }: Props) {
+export default async function CardPage({ params }: PageProps<"/card/[id]">) {
   const { id } = await params;
   const companies = await getCompanies();
 
