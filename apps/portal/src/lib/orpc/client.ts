@@ -7,10 +7,6 @@ import { toast } from "sonner";
 
 import { router } from "@ziron/api/routers/index";
 
-declare global {
-  var $client: RouterClient<typeof router> | undefined;
-}
-
 export const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (error) => {

@@ -14,7 +14,7 @@ export const router = {
     create: createCard,
     list: listCards,
     get: getCard,
-    getBySlug: getCardBySlug,
+
     update: updateCard,
     checkSlug: checkSlugAvailability,
     delete: deleteCard,
@@ -30,5 +30,15 @@ export const router = {
   },
 };
 
+export const clientRouter = {
+  card: {
+    getBySlug: getCardBySlug,
+    list: listCards,
+  },
+};
+
 export type Router = typeof router;
 export type RouterClient = AppRouterClient<typeof router>;
+
+export type ClientRouter = typeof clientRouter;
+export type ClientRouterClient = AppRouterClient<typeof clientRouter>;

@@ -1,14 +1,13 @@
 import { createORPCClient } from "@orpc/client";
 import { RPCLink } from "@orpc/client/fetch";
-import type { RouterClient } from "@orpc/server";
 import { createTanstackQueryUtils } from "@orpc/tanstack-query";
 import { QueryCache, QueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { router } from "@ziron/api/routers/index";
+import { ClientRouterClient } from "@ziron/api/routers/index";
 
 declare global {
-  var $client: RouterClient<typeof router> | undefined;
+  var $client: ClientRouterClient | undefined;
 }
 
 export const queryClient = new QueryClient({
@@ -33,6 +32,6 @@ const link = new RPCLink({
 /**
  * Fallback to client-side client if server-side client is not available.
  */
-export const client: RouterClient<typeof router> = globalThis.$client ?? createORPCClient(link);
+export const client: ClientRouterClient = globalThis.$client ?? createORPCClient(link);
 
 export const orpc = createTanstackQueryUtils(client);

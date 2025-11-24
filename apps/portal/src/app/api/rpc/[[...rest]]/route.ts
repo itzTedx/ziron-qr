@@ -6,7 +6,6 @@ import { onError } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 
-import { createContext } from "@ziron/api/context/session";
 import { router } from "@ziron/api/routers/index";
 
 const rpcHandler = new RPCHandler(router, {
@@ -38,16 +37,16 @@ const apiHandler = new OpenAPIHandler(router, {
   ],
 });
 
-async function handleRequest(req: NextRequest) {
-  const rpcResult = await rpcHandler.handle(req, {
+async function handleRequest(request: NextRequest) {
+  const rpcResult = await rpcHandler.handle(request, {
     prefix: "/api/rpc",
-    context: await createContext(req),
+    context: { request, headers: request.headers },
   });
   if (rpcResult.response) return rpcResult.response;
 
-  const apiResult = await apiHandler.handle(req, {
+  const apiResult = await apiHandler.handle(request, {
     prefix: "/api/rpc/docs",
-    context: await createContext(req),
+    context: { request, headers: request.headers },
   });
   if (apiResult.response) return apiResult.response;
 

@@ -1,10 +1,12 @@
+import { os } from "@orpc/server";
+
 import { eq } from "@ziron/db";
 import { db } from "@ziron/db/client";
 import { appearance, CardType, Company, cards, emails, links, phones } from "@ziron/db/schema";
 import { slugify } from "@ziron/utils";
 import { cardSchema, transformSlug, ZodError, z } from "@ziron/validators";
 
-import { protectedProcedure, publicProcedure } from "..";
+import { protectedProcedure } from "..";
 import { getAvatar } from "../utils/get-avatar";
 
 export const createCard = protectedProcedure
@@ -330,7 +332,7 @@ export const deleteCard = protectedProcedure
     }
   });
 
-export const listCards = publicProcedure
+export const listCards = os
   .route({
     method: "GET",
     path: "/card",
@@ -379,7 +381,7 @@ export const getCard = protectedProcedure
     }
   });
 
-export const getCardBySlug = publicProcedure
+export const getCardBySlug = os
   .route({
     method: "GET",
     path: "/card/:slug",
