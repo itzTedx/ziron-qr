@@ -11,14 +11,6 @@ import { client } from "@/lib/orpc/client";
 
 import { CardType } from "../../../../../packages/db/src/schema/card-schema";
 
-export async function generateStaticParams() {
-  const cards = await client.card.list();
-
-  return cards.map((card) => ({
-    slug: card.slug,
-  }));
-}
-
 export async function generateMetadata({ params }: PageProps<"/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const card = await client.card.getBySlug({ slug });

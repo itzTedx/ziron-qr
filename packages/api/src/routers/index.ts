@@ -33,7 +33,6 @@ export const router = {
 export const clientRouter = {
   card: {
     getBySlug: getCardBySlug,
-    list: listCards,
   },
 };
 
