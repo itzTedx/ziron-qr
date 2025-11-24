@@ -3,8 +3,8 @@ import { NextRequest } from "next/server";
 
 import { z } from "@ziron/validators";
 
-import { QRCodeSVG } from "@/lib/qr";
-import { DEFAULT_BGCOLOR, DEFAULT_FGCOLOR, DEFAULT_LEVEL, DEFAULT_MARGIN, DEFAULT_SIZE } from "@/lib/qr/constants";
+import { DEFAULT_BGCOLOR, DEFAULT_FGCOLOR, DEFAULT_LEVEL, DEFAULT_MARGIN } from "@/lib/qr/constants";
+import { QRCodeSVG } from "@/lib/qr/utils";
 
 export const runtime = "edge";
 
@@ -15,7 +15,7 @@ const CORS_HEADERS = new Headers({
 
 const qrCodeQuerySchema = z.object({
   url: z.string().url("Invalid URL format"),
-  size: z.coerce.number().int().min(100).max(2000).optional().default(DEFAULT_SIZE),
+  size: z.coerce.number().int().min(100).max(2000).optional().default(600),
   level: z.enum(["L", "M", "Q", "H"]).optional().default(DEFAULT_LEVEL),
   fgColor: z
     .string()
@@ -28,7 +28,7 @@ const qrCodeQuerySchema = z.object({
     .optional()
     .default(DEFAULT_BGCOLOR),
   margin: z.coerce.number().int().min(0).max(10).optional().default(DEFAULT_MARGIN),
-  logo: z.string().url().optional(),
+  logo: z.url().optional(),
   hideLogo: z.coerce.boolean().optional().default(false),
 });
 
