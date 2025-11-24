@@ -168,7 +168,13 @@ export function CardForm({ companies, isEditMode, initialData }: Props) {
               <CardGeneral data={data} />
             </TabsContent>
             <TabsContent value="links">
-              <CardLinks />
+              <CardLinks
+                attachment={
+                  data.attachmentUrl
+                    ? { url: data.attachmentUrl, filename: data.attachmentFileName ?? undefined }
+                    : null
+                }
+              />
             </TabsContent>
             <TabsContent value="customize">
               <CardCustomize template={data.template} />

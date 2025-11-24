@@ -19,6 +19,11 @@ export const env = createEnv({
     REDIS_PORT: z.string().min(1),
     REDIS_PASSWORD: z.string().min(1),
 
+    AWS_BUCKET_NAME: z.string().min(1),
+    AWS_BUCKET_REGION: z.string().min(1),
+    AWS_ACCESS_KEY_ID: z.string().min(1),
+    AWS_SECRET_ACCESS_KEY: z.string().min(1),
+
     PRODUCTION_URL: z.url(),
   },
 

@@ -13,6 +13,7 @@ import { Card } from "@ziron/ui/components/card";
 import { DialogClose } from "@ziron/ui/components/dialog";
 import { FormControl, FormField, FormItem, FormMessage } from "@ziron/ui/components/form";
 import { Input } from "@ziron/ui/components/input";
+import { Label } from "@ziron/ui/components/label";
 import { cn } from "@ziron/utils";
 import { zCardSchema } from "@ziron/validators";
 
@@ -311,7 +312,7 @@ export const DndLinks = () => {
 
       <section>
         <div className="flex items-center justify-between">
-          <h3>Suggestions</h3>
+          <Label>Suggestions</Label>
           <Button
             onClick={useCallback(() => {
               setOpen(true);
