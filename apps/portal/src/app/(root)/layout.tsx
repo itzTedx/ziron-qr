@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 
-import { ScrollArea, ScrollBar } from "@ziron/ui/components/scroll-area";
 import { SidebarInset, SidebarProvider } from "@ziron/ui/components/sidebar";
 
-import Header from "@/components/layout/header";
 import { AppSidebar } from "@/components/layout/sidebar/app-sidebar";
 
 import { getCurrentUser } from "@/features/auth/actions/user";
@@ -42,14 +40,12 @@ export default async function RootLayout({
           } as React.CSSProperties
         }
       >
-        <AppSidebar data={companies} user={session.user} />
+        <AppSidebar className="py-2" data={companies} user={session.user} />
         <SidebarInset>
-          <Header />
+          {/* <Header /> */}
 
-          <ScrollArea className="-mt-20">
-            {children}
-            <ScrollBar />
-          </ScrollArea>
+          {children}
+
           <ShareModal />
         </SidebarInset>
       </SidebarProvider>
