@@ -1,11 +1,14 @@
 import Image from "next/image";
 
 import { IconArrowsMaximize, IconShare } from "@tabler/icons-react";
+import { useFormContext } from "react-hook-form";
 
 import { Badge } from "@ziron/ui/components/badge";
 import { Button } from "@ziron/ui/components/button";
+import { Kbd, KbdGroup } from "@ziron/ui/components/kbd";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ziron/ui/components/tooltip";
+import { useHotkey } from "@ziron/ui/hooks/use-hotkey";
 import { zCardSchema } from "@ziron/validators";
 
 import { DeleteCard } from "./delete-card";
@@ -21,6 +24,23 @@ interface Props {
 }
 
 export const ProfileDashboard = ({ isPending, companyName, data, company }: Props) => {
+  const form = useFormContext<zCardSchema>();
+
+  // Handle Ctrl+S keyboard shortcut
+  useHotkey({
+    combos: [
+      { key: "s", ctrl: true },
+      { key: "s", meta: true },
+    ],
+
+    enabled: true,
+    condition: () => !form.formState.isSubmitting,
+    callback: () => {
+      form.trigger();
+    },
+    throttleMs: 300,
+  });
+
   return (
     <div>
       <div className="group relative h-72 bg-secondary">
@@ -106,7 +126,13 @@ export const ProfileDashboard = ({ isPending, companyName, data, company }: Prop
             {data.id && <DeleteCard id={data.id} />}
 
             <Button className="w-full" size="lg" type="submit">
-              <LoadingSwap isLoading={isPending}>Save Changes</LoadingSwap>
+              <LoadingSwap className="flex items-center gap-1.5" isLoading={isPending}>
+                Save
+                <KbdGroup>
+                  <Kbd>Ctrl</Kbd>
+                  <Kbd>S</Kbd>
+                </KbdGroup>
+              </LoadingSwap>
             </Button>
           </div>
         </div>

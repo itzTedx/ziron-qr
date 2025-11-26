@@ -17,7 +17,9 @@ import {
   InputGroupInput,
   InputGroupText,
 } from "@ziron/ui/components/input-group";
+import { Kbd } from "@ziron/ui/components/kbd";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ziron/ui/components/tooltip";
+import { useHotkey } from "@ziron/ui/hooks/use-hotkey";
 import { transformSlug, zCardSchema } from "@ziron/validators";
 
 import { openShareModalAtom, ShareModalData } from "@/features/company/atom";
@@ -143,6 +145,16 @@ export const SlugField = ({ data, company }: Props) => {
     openModal(shareData);
   }
 
+  // Handle s keyboard shortcut
+  useHotkey({
+    combos: [{ key: "s" }],
+    enabled: true,
+    callback: () => {
+      handleShare();
+    },
+    throttleMs: 300,
+  });
+
   return (
     <FormField
       control={form.control}
@@ -224,7 +236,7 @@ export const SlugField = ({ data, company }: Props) => {
                   </InputGroupAddon>
                 </InputGroup>
               </ButtonGroup>
-              {/* <CopyButton link={shareLink} /> */}
+
               <ButtonGroup>
                 <Button
                   className="hidden items-center gap-1.5 md:flex"
@@ -237,6 +249,7 @@ export const SlugField = ({ data, company }: Props) => {
                 >
                   <Icons.share className="size-4 stroke-[1.5]" />
                   <span className="hidden lg:block">Share</span>
+                  <Kbd>S</Kbd>
                 </Button>
               </ButtonGroup>
             </ButtonGroup>

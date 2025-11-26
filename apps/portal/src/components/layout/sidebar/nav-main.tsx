@@ -12,11 +12,23 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@ziron/ui/components/sidebar";
+import { useHotkey } from "@ziron/ui/hooks/use-hotkey";
 
 export function NavMain() {
   const [, setCompanyModal] = useQueryStates({
     modal: parseAsString,
   });
+
+  // Handle C keyboard shortcut
+  useHotkey({
+    combos: [{ key: "d" }],
+    enabled: true,
+    callback: () => {
+      setCompanyModal({ modal: "company" });
+    },
+    throttleMs: 200,
+  });
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel className="truncate">Digital Card</SidebarGroupLabel>

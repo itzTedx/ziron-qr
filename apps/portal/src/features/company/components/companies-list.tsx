@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { IconPlus } from "@tabler/icons-react";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -10,6 +11,7 @@ import { useAtom } from "jotai";
 import { Button } from "@ziron/ui/components/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@ziron/ui/components/collapsible";
 import { Skeleton } from "@ziron/ui/components/skeleton";
+import { useHotkey } from "@ziron/ui/hooks/use-hotkey";
 import { cn } from "@ziron/utils";
 
 import { PersonCard } from "@/features/card/components/card-item";
@@ -25,6 +27,17 @@ const COMPANY_COLLAPSIBLE_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 export const CompaniesList = () => {
   const [collapsibleState, setCollapsibleState] = useAtom(companyCollapsibleStateAtom);
   const { data: companies, isLoading } = useSuspenseQuery(orpc.company.list.queryOptions());
+  const router = useRouter();
+
+  // Handle C keyboard shortcut
+  useHotkey({
+    combos: [{ key: "c" }],
+    enabled: true,
+    callback: () => {
+      router.push("/card/new");
+    },
+    throttleMs: 300,
+  });
 
   if (isLoading) return <Skeleton className="h-10 w-full" />;
 
