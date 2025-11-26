@@ -34,7 +34,7 @@ export const createCard = protectedProcedure
           .insert(cards)
           .values({
             ...input,
-            slug: input.slug ?? uniqueSlug,
+            slug: uniqueSlug,
             image: getAvatar(input.name, input.image),
             cover: input.cover ?? placeholderCover,
           })

@@ -47,13 +47,42 @@ const router: Router = {
       },
     }),
     [UPLOAD_ROUTES.photo]: route({
-      fileTypes: UPLOAD_FILE_TYPES.photo,
+      fileTypes: UPLOAD_FILE_TYPES.image,
       multipleFiles: false,
-      maxFileSize: UPLOAD_MAX_FILE_SIZE.md,
+      maxFileSize: UPLOAD_MAX_FILE_SIZE.lg,
 
       onBeforeUpload: async ({ file }) => {
         try {
           const objectKey = generateObjectKey(file, UPLOAD_ROUTES.photo);
+          return {
+            objectInfo: {
+              key: objectKey,
+            },
+          };
+        } catch (error) {
+          throw error;
+        }
+      },
+
+      onAfterSignedUrl: async ({ file }) => {
+        try {
+          const url = generatePublicUrl(file.objectInfo.key);
+
+          return { metadata: { url } };
+        } catch (error) {
+          console.error(error);
+          throw error;
+        }
+      },
+    }),
+    [UPLOAD_ROUTES.cover]: route({
+      fileTypes: UPLOAD_FILE_TYPES.image,
+      multipleFiles: false,
+      maxFileSize: UPLOAD_MAX_FILE_SIZE["2xl"],
+
+      onBeforeUpload: async ({ file }) => {
+        try {
+          const objectKey = generateObjectKey(file, UPLOAD_ROUTES.cover);
           return {
             objectInfo: {
               key: objectKey,

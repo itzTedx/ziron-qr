@@ -1,4 +1,5 @@
 export * from "./cn";
+export * from "./compose-refs";
 export * from "./format-date";
 export * from "./get-strict-context";
 export * from "./pluralize";

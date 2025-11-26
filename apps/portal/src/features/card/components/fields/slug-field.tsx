@@ -123,7 +123,7 @@ export const SlugField = ({ data, company }: Props) => {
       return;
     }
 
-    const shareLink = `${env.NEXT_PUBLIC_BASE_URL}/${data.slug}`;
+    const shareLink = `${env.NEXT_PUBLIC_CLIENT_URL}/${data.slug}`;
 
     const shareData: ShareModalData = {
       data: {
@@ -155,7 +155,7 @@ export const SlugField = ({ data, company }: Props) => {
               <ButtonGroup className="w-full">
                 <InputGroup className="h-10">
                   <InputGroupAddon>
-                    <InputGroupText>{env.NEXT_PUBLIC_BASE_URL}/</InputGroupText>
+                    <InputGroupText>{env.NEXT_PUBLIC_CLIENT_URL}/</InputGroupText>
                   </InputGroupAddon>
                   <InputGroupInput
                     className="pl-0.5!"

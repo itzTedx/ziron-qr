@@ -10,7 +10,7 @@ import { Card, CardContent, CardFooter } from "@ziron/ui/components/card";
 
 import ShareButton from "./share-button";
 
-type PersonCardFields = Pick<CardType, "id" | "name" | "designation" | "slug" | "image">;
+type PersonCardFields = Pick<CardType, "id" | "name" | "designation" | "slug" | "image" | "cover">;
 
 interface PersonCardProps {
   card: PersonCardFields;
@@ -26,7 +26,7 @@ export const PersonCard = ({ card, company }: PersonCardProps) => {
           className="absolute top-0 h-24 w-full object-cover md:h-28"
           height={112}
           quality={70}
-          src={"/images/placeholder-cover.jpg"}
+          src={card.cover ?? "/images/placeholder-cover.jpg"}
           width={260}
         />
         <div className="z-10 flex flex-col items-center pb-3 text-center">
@@ -34,7 +34,7 @@ export const PersonCard = ({ card, company }: PersonCardProps) => {
             alt={`${card.name}'s Photo`}
             className="size-24 rounded-full border-4 border-background object-cover md:size-28"
             height={112}
-            src={"/images/placeholder-cover.jpg"}
+            src={card.image}
             title={`${card.name}'s Photo`}
             width={112}
           />

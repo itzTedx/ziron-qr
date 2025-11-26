@@ -1,11 +1,12 @@
 export const UPLOAD_ROUTES = {
   attachment: "attachment",
   photo: "photo",
+  cover: "cover",
 } as const;
 
 export const UPLOAD_FILE_TYPES = {
   attachment: ["image/*", "application/pdf,"],
-  photo: ["image/*"],
+  image: ["image/*"],
 };
 
 export const UPLOAD_MAX_FILE_SIZE = {

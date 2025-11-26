@@ -10,6 +10,10 @@ const nextConfig: NextConfig = {
         hostname: "avatar.vercel.sh",
         protocol: "https",
       },
+      {
+        hostname: "zm-deals-local.s3.us-east-1.amazonaws.com",
+        protocol: "https",
+      },
     ],
   },
   typedRoutes: true,

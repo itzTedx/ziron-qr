@@ -16,7 +16,7 @@ interface ShareButtonProps {
 }
 
 export default function ShareButton({ data, company }: ShareButtonProps) {
-  const shareLink = `${env.NEXT_PUBLIC_BASE_URL}/${data.slug}`;
+  const shareLink = `${env.NEXT_PUBLIC_CLIENT_URL}/${data.slug}`;
 
   const shareData: ShareModalData = {
     data: {

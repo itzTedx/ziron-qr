@@ -71,22 +71,7 @@ export const cardSchema = z
     attachmentFileName: z.string().optional(),
     attachmentObjectKey: z.string().optional(),
     // SEO and routing
-    slug: z
-      .string()
-      .min(2, { message: "Slug is too short" })
-      .max(100, { message: "Slug is too long" })
-      .transform((name, ctx) => {
-        const transformed = transformSlug(name);
-        if (transformed.length < 2) {
-          ctx.addIssue({
-            code: "custom",
-            message: "Channel name must be at least 2 characters",
-          });
-
-          return z.NEVER;
-        }
-        return transformed;
-      }),
+    slug: z.string().max(100, { message: "Slug is too long" }).optional(),
 
     // Social and business links
     links: linksSchema.optional(),

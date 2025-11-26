@@ -2,6 +2,7 @@ import { useEffect, useId, useRef } from "react";
 
 import type { UploadHookControl } from "@better-upload/client";
 import { formatBytes } from "@better-upload/client/helpers";
+import { IconX } from "@tabler/icons-react";
 import { Dot, File, Upload } from "lucide-react";
 import { useDropzone } from "react-dropzone";
 import { toast } from "sonner";
@@ -84,7 +85,7 @@ export function UploadDropzoneProgress({
         toast.custom(
           () => (
             <div
-              className={cn("flex w-[356px] items-center gap-2 rounded-lg border bg-accent p-3", {
+              className={cn("relative flex w-[356px] items-center gap-2 rounded-lg border bg-accent p-3", {
                 "border-red-500/60 bg-red-500/4!": progress.status === "failed",
               })}
             >
@@ -107,6 +108,14 @@ export function UploadDropzoneProgress({
                   )}
                 </div>
               </div>
+              <Button
+                className="absolute top-2 right-2 z-10"
+                onClick={() => toast.dismiss(progress.objectInfo.key)}
+                size="icon-sm"
+                variant="ghost"
+              >
+                <IconX className="size-4" />
+              </Button>
             </div>
           ),
           {
