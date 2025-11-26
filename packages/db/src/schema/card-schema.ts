@@ -2,6 +2,7 @@ import { relations } from "drizzle-orm";
 import { boolean, index, pgTable, real, text, timestamp, uniqueIndex, uuid, varchar } from "drizzle-orm/pg-core";
 
 import { InferResultType } from "../client";
+import { events, pageVisits } from "./analytics-schema";
 import { companies } from "./company-schema";
 
 export const cards = pgTable(
@@ -169,6 +170,8 @@ export const cardsRelations = relations(cards, ({ one, many }) => ({
     references: [appearance.cardId],
     relationName: "appearance",
   }),
+  pageVisits: many(pageVisits),
+  events: many(events),
   // attachments: one(attachments),
 }));
 

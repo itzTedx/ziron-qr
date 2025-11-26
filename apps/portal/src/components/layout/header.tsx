@@ -13,7 +13,7 @@ interface Props {
   children?: React.ReactNode;
 }
 
-export default async function Header({ title, currentPage, children }: Props) {
+export default function Header({ title, currentPage, children }: Props) {
   return (
     <header className="sticky top-0 z-50 flex h-14 w-full items-center justify-between gap-3 border-b bg-card px-4 py-2 sm:px-8">
       <Breadcrumb>

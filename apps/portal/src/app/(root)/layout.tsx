@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import type { Metadata, Route } from "next";
 import Link from "next/link";
 
@@ -82,9 +84,13 @@ export default function RootLayout({
       </div>
       {children}
 
-      <ShareModal />
+      <Suspense>
+        <ShareModal />
+      </Suspense>
 
-      <CompanyFormModal />
+      <Suspense>
+        <CompanyFormModal />
+      </Suspense>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import CardTemplate from "@ziron/ui/templates/card-template";
 import DefaultTemplate from "@ziron/ui/templates/default-template";
 import ModernTemplate from "@ziron/ui/templates/modern-template";
 
+import { CardTracker } from "@/components/card-tracker";
 import { Providers } from "@/components/providers";
 
 import { client } from "@/lib/orpc/client";
@@ -51,7 +52,9 @@ export default async function DigitalCardPage({ params }: PageProps<"/[slug]">) 
   if (!card) return notFound();
   return (
     <>
-      <Template data={card} />
+      <CardTracker cardId={card.id}>
+        <Template data={card} />
+      </CardTracker>
       <Providers isDarkMode={card.appearance.isDarkMode} />
     </>
   );

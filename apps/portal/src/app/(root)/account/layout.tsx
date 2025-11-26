@@ -8,7 +8,7 @@ import { IconShield } from "@ziron/ui/assets/icons/shield";
 import { Label } from "@ziron/ui/components/label";
 import { ScrollArea, ScrollBar } from "@ziron/ui/components/scroll-area";
 
-export default function AccountLayout({ children }: LayoutProps<"/account">) {
+export default function AccountLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative grid h-full grid-cols-[230px_1fr]">
       <aside className="sticky top-4 m-3 ml-0 h-full flex-1 rounded-lg bg-sidebar p-3">

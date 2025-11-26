@@ -1,16 +1,16 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { IconCopy } from "@tabler/icons-react";
-
-import { Button } from "@ziron/ui/components/button";
-import { Kbd } from "@ziron/ui/components/kbd";
-
 import Header from "@/components/layout/header";
 
 import { CardForm } from "@/features/card/components/card-form";
-import { getCompanies } from "@/features/company/actions/queries";
 import { client } from "@/lib/orpc/client";
+import { getQueryClient, HydrateClient } from "@/lib/orpc/query/hydration";
+
+import { ClicksVisits } from "../_components/clicks-visits";
+import { CopyLinkButton } from "../_components/copy-link-button";
+
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: PageProps<"/card/[id]">): Promise<Metadata> {
   const { id } = await params;
@@ -49,8 +49,10 @@ export async function generateMetadata({ params }: PageProps<"/card/[id]">): Pro
 
 export default async function CardPage({ params }: PageProps<"/card/[id]">) {
   const { id } = await params;
-  const companies = await getCompanies();
 
+  const queryClient = getQueryClient();
+
+  const companies = await client.company.list();
   // Fetching the card based on the ID
   const card = await client.card.get({ id });
   if (!card && id !== "new") {
@@ -63,10 +65,12 @@ export default async function CardPage({ params }: PageProps<"/card/[id]">) {
     <div>
       <Header currentPage={isEditMode ? `${card?.company.name} / ${card?.name}` : "Create New Card"} title="Cards">
         {isEditMode ? (
-          <Button className="font-medium" size="sm" type="button" variant="outline">
-            <IconCopy />
-            Copy Link <Kbd>C</Kbd>
-          </Button>
+          <>
+            <CopyLinkButton slug={card?.slug} />
+            <HydrateClient client={queryClient}>
+              <ClicksVisits cardId={id} />
+            </HydrateClient>
+          </>
         ) : (
           "Create Card"
         )}

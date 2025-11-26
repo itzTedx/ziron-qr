@@ -17,8 +17,7 @@ function formatNumber(num: number): string {
 export const UsageMetrics = () => {
   const { data: metrics } = useSuspenseQuery(orpc.metrics.get.queryOptions());
 
-  // For now, using placeholder values until we have actual event and link tracking
-  const eventsUsed = 0;
+  const eventsUsed = metrics?.totalEvents ?? 0;
   const eventsLimit = 1000;
   const linksUsed = metrics?.totalCards ?? 0;
   const linksLimit = 25;

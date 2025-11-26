@@ -1,5 +1,6 @@
 import type { RouterClient as AppRouterClient } from "@orpc/server";
 
+import { getCardAnalytics, trackEvent, trackPageVisit } from "./analytics";
 import { getAvatar, getAvatarV1 } from "./avatar";
 import { checkSlugAvailability, createCard, deleteCard, getCard, getCardBySlug, listCards, updateCard } from "./card";
 import { createCompany, listCompanies } from "./company";
@@ -32,11 +33,18 @@ export const router = {
   qr: {
     generate: generateQR,
   },
+  analytics: {
+    getCardAnalytics: getCardAnalytics,
+  },
 };
 
 export const clientRouter = {
   card: {
     getBySlug: getCardBySlug,
+  },
+  analytics: {
+    trackPageVisit: trackPageVisit,
+    trackEvent: trackEvent,
   },
 };
 

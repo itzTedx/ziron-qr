@@ -1,3 +1,5 @@
+import { NextRequest } from "next/server";
+
 import { onError } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
 
@@ -11,11 +13,12 @@ const handler = new RPCHandler(clientRouter, {
   ],
 });
 
-async function handleRequest(request: Request) {
+async function handleRequest(request: NextRequest) {
   const { response } = await handler.handle(request, {
-    prefix: "/rpc",
+    prefix: "/api/rpc",
     context: {
       request,
+      headers: request.headers,
     },
   });
 

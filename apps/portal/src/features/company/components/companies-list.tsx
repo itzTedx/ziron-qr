@@ -91,9 +91,7 @@ export const CompaniesList = () => {
               </div>
             </div>
 
-            <CollapsibleContent
-              className={cn("grid grid-cols-2 gap-4 pt-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5")}
-            >
+            <CollapsibleContent className={cn("grid grid-cols-2 gap-4 pt-3 sm:grid-cols-3 md:grid-cols-4")}>
               {company.cards.length === 0 ? (
                 <EmptyCompany id={company.id} />
               ) : (

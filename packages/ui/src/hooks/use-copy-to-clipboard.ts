@@ -14,7 +14,9 @@ export function useCopyToClipboard({ timeout = 2000, onCopy }: { timeout?: numbe
 
     navigator.clipboard.writeText(value).then(() => {
       setIsCopied(true);
-      toast.success("Copied");
+      toast.success("Copied", {
+        description: "Copied to clipboard",
+      });
 
       if (onCopy) {
         onCopy();

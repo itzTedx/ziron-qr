@@ -22,6 +22,13 @@
       "when": 1763995255921,
       "tag": "0002_nappy_king_cobra",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1764196814320,
+      "tag": "0003_unique_blue_shield",
+      "breakpoints": true
     }
   ]
 }
