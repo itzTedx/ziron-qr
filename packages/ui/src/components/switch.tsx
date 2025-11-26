@@ -11,8 +11,9 @@ import {
 } from "motion/react";
 import { Switch as SwitchPrimitives } from "radix-ui";
 
+import { getStrictContext } from "@ziron/utils";
+
 import { useControlledState } from "../hooks/use-controlled-state";
-import { getStrictContext } from "../lib/get-strict-context";
 
 type SwitchContextType = {
   isChecked: boolean;

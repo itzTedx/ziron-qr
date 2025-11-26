@@ -12,6 +12,7 @@ import { Label } from "@ziron/ui/components/label";
 
 import { CopyButton } from "@/components/ui/copy-button";
 import { ResponsiveModal } from "@/components/ui/responsive-modal";
+import { Tilt, TiltContent } from "@/components/ui/tilt";
 
 import { closeShareModalAtom, shareModalAtom } from "../company/atom";
 import QRCodeDownload from "./components/qr-download";
@@ -57,30 +58,39 @@ export const ShareModal = () => {
       title="Share digital card"
     >
       <div className="grid grid-cols-7">
-        <div className="col-span-3 space-y-3 p-6">
-          <div className="flex aspect-3/4 flex-col justify-between gap-2 rounded-lg bg-linear-45 from-primary to-brand-secondary p-6">
-            {data.company.logo ? (
-              <div className="flex size-12 shrink-0 items-center justify-center rounded-sm border bg-white p-2">
+        <Tilt className="col-span-3 m-6 space-y-3" perspective={1200}>
+          <TiltContent asChild>
+            <div className="flex aspect-3/4 flex-col justify-between gap-2 rounded-lg border bg-linear-45 from-primary to-brand-secondary p-6">
+              {data.company.logo ? (
+                <div className="flex size-12 shrink-0 items-center justify-center rounded-sm border bg-white p-2">
+                  <Image
+                    alt={`${data.name}'s Logo`}
+                    className="size-8 object-contain"
+                    height={48}
+                    src={data.company.logo}
+                    width={48}
+                  />
+                </div>
+              ) : (
+                <p>{data.company.name}</p>
+              )}
+              <div className="flex items-center justify-center">
                 <Image
-                  alt={`${data.name}'s Logo`}
-                  className="size-8 object-contain"
-                  height={48}
-                  src={data.company.logo}
-                  width={48}
+                  alt={`${data.name}'s Photo`}
+                  className="rounded-full"
+                  height={120}
+                  src={data.image}
+                  width={120}
                 />
               </div>
-            ) : (
-              <p>{data.company.name}</p>
-            )}
-            <div className="flex items-center justify-center">
-              <Image alt={`${data.name}'s Photo`} className="rounded-full" height={250} src={data.image} width={250} />
+              <div>
+                <h2 className="truncate font-bold text-xl">{data.name}</h2>
+                <p className="text-foreground/80 text-sm">{data.designation}</p>
+              </div>
             </div>
-            <div>
-              <h2>{data.name}</h2>
-              <p>{data.designation}</p>
-            </div>
-          </div>
-        </div>
+          </TiltContent>
+        </Tilt>
+
         <div className="col-span-4 flex flex-col gap-6 border-l p-6">
           <QRCodeDownload
             data={{
