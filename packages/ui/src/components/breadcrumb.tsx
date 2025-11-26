@@ -12,10 +12,7 @@ function Breadcrumb({ ...props }: React.ComponentProps<"nav">) {
 function BreadcrumbList({ className, ...props }: React.ComponentProps<"ol">) {
   return (
     <ol
-      className={cn(
-        "wrap-break-words flex flex-wrap items-center gap-1.5 text-muted-foreground text-sm sm:gap-2.5",
-        className
-      )}
+      className={cn("wrap-break-words flex flex-wrap items-center gap-1.5 font-medium text-sm sm:gap-2.5", className)}
       data-slot="breadcrumb-list"
       {...props}
     />
@@ -36,7 +33,11 @@ function BreadcrumbLink({
   const Comp = asChild ? SlotPrimitive.Slot : "a";
 
   return (
-    <Comp className={cn("transition-colors hover:text-foreground", className)} data-slot="breadcrumb-link" {...props} />
+    <Comp
+      className={cn("transition-colors hover:text-muted-foreground", className)}
+      data-slot="breadcrumb-link"
+      {...props}
+    />
   );
 }
 

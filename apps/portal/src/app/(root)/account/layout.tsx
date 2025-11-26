@@ -11,7 +11,7 @@ import { ScrollArea, ScrollBar } from "@ziron/ui/components/scroll-area";
 export default function AccountLayout({ children }: LayoutProps<"/account">) {
   return (
     <div className="relative grid h-full grid-cols-[230px_1fr]">
-      <aside className="sticky top-4 m-3 ml-0 h-full flex-1 rounded-lg bg-sidebar-accent p-3">
+      <aside className="sticky top-4 m-3 ml-0 h-full flex-1 rounded-lg bg-sidebar p-3">
         <Link className="group mb-2 flex items-center gap-3 px-3 py-2" href="/">
           <div className="group-hover:-translate-x-0.5 flex size-6 items-center justify-center rounded-md bg-muted text-muted-foreground transition-[transform_background-color_color] duration-150 group-hover:bg-muted-foreground/20 group-hover:text-foreground">
             <IconChevronLeft className="size-3" />

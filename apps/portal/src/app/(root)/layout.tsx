@@ -1,12 +1,14 @@
-import type { Metadata } from "next";
-import { cookies } from "next/headers";
+import type { Metadata, Route } from "next";
+import Link from "next/link";
 
-import { SidebarInset, SidebarProvider } from "@ziron/ui/components/sidebar";
+import { IconCard } from "@ziron/ui/assets/icons/card";
+import { IconSettings } from "@ziron/ui/assets/icons/settings";
+import { IconLogo } from "@ziron/ui/assets/logo";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@ziron/ui/components/tooltip";
 
-import { AppSidebar } from "@/components/layout/sidebar/app-sidebar";
+import { NavUser } from "@/components/layout/sidebar/nav-user";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
-import { getCurrentUser } from "@/features/auth/actions/user";
-import { getCompanies } from "@/features/company/actions/queries";
 import CompanyFormModal from "@/features/company/components/modal";
 import { ShareModal } from "@/features/modal/share-modal";
 
@@ -19,36 +21,69 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookieStore = await cookies();
-  const defaultOpen = cookieStore.get("sidebar:state")?.value === "true";
-  const session = await getCurrentUser();
-  const companies = await getCompanies();
-
   return (
-    <div className="w-full flex-1 bg-background" vaul-drawer-wrapper="">
-      <SidebarProvider
-        defaultOpen={defaultOpen}
-        style={
-          {
-            "--sidebar-width": "calc(var(--spacing) * 52)",
-            "--header-height": "calc(var(--spacing) * 12)",
-          } as React.CSSProperties
-        }
-      >
-        <AppSidebar className="py-2" data={companies} user={session.user} />
-        <SidebarInset>
-          {/* <Header /> */}
+    <div className="grid w-full flex-1 grid-cols-[auto_230px_1fr]" vaul-drawer-wrapper="">
+      <div className="fixed top-0 left-0 z-50 h-dvh w-screen bg-transparent transition-[background-color,backdrop-filter] max-md:pointer-events-none md:sticky md:z-auto md:w-full">
+        <div className="scrollbar-hide relative flex h-full w-[calc(var(--sidebar-areas-width)-0.5rem)] flex-col">
+          <div className="flex flex-1 grow flex-col items-center justify-between">
+            <div className="flex flex-col items-center p-2">
+              <div className="pt-2 pb-2">
+                <Link
+                  className="block rounded-lg px-1 py-2 outline-none transition-opacity focus-visible:ring-2 focus-visible:ring-black/50"
+                  href="/"
+                >
+                  <IconLogo className="size-8" />
+                </Link>
+              </div>
 
-          {children}
+              <div className="flex flex-col items-center gap-4">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      className="relative flex size-11 items-center justify-center rounded-lg bg-card outline-none transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-black/50"
+                      href={"/card" as Route}
+                    >
+                      <IconCard className="size-5" />
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    <p>Digital Card</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            </div>
+            <div className="flex flex-col items-center gap-3 pb-3">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    className="group relative flex size-11 items-center justify-center rounded-lg outline-none transition-colors duration-150 hover:bg-muted focus-visible:ring-2 focus-visible:ring-black/50"
+                    href={"/card" as Route}
+                  >
+                    <IconSettings className="size-5 transition-transform duration-300 group-hover:rotate-45" />
+                    <span className="sr-only">Settings</span>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p>Settings</p>
+                </TooltipContent>
+              </Tooltip>
 
-          <ShareModal />
-        </SidebarInset>
-      </SidebarProvider>
+              <ThemeToggle />
+
+              <NavUser />
+            </div>
+          </div>
+        </div>
+      </div>
+      {children}
+
+      <ShareModal />
+
       <CompanyFormModal />
     </div>
   );

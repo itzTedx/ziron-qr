@@ -14,9 +14,9 @@ const buttonVariants = cva(
           "relative cursor-pointer rounded-md bg-gradient-to-bl bg-white from-primary to-brand-secondary text-center text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset] transition duration-200",
         destructive:
           "relative cursor-pointer rounded-md bg-gradient-to-b bg-white from-red-700 to-destructive text-center text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset] transition duration-200 hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40",
-        outline: "border border-input bg-background shadow-xs hover:bg-accent hover:text-accent-foreground",
-        secondary: "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
+        outline: "border border-input bg-transparent shadow-xs hover:bg-accent hover:text-accent-foreground",
+        secondary: "bg-foreground text-background shadow-xs hover:bg-foreground/80",
+        ghost: "hover:bg-muted hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
@@ -25,7 +25,7 @@ const buttonVariants = cva(
         lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
         icon: "size-9",
         "icon-sm": "size-8",
-        "icon-lg": "size-10",
+        "icon-lg": "size-11",
       },
     },
     defaultVariants: {

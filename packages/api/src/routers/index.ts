@@ -3,9 +3,13 @@ import type { RouterClient as AppRouterClient } from "@orpc/server";
 import { getAvatar, getAvatarV1 } from "./avatar";
 import { checkSlugAvailability, createCard, deleteCard, getCard, getCardBySlug, listCards, updateCard } from "./card";
 import { createCompany, listCompanies } from "./company";
+import { getMetrics } from "./metrics";
 import { generateQR } from "./qr";
 
 export const router = {
+  metrics: {
+    get: getMetrics,
+  },
   company: {
     create: createCompany,
     list: listCompanies,

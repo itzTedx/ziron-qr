@@ -1,6 +1,13 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { IconCopy } from "@tabler/icons-react";
+
+import { Button } from "@ziron/ui/components/button";
+import { Kbd } from "@ziron/ui/components/kbd";
+
+import Header from "@/components/layout/header";
+
 import { CardForm } from "@/features/card/components/card-form";
 import { getCompanies } from "@/features/company/actions/queries";
 import { client } from "@/lib/orpc/client";
@@ -54,6 +61,16 @@ export default async function CardPage({ params }: PageProps<"/card/[id]">) {
 
   return (
     <div>
+      <Header currentPage={isEditMode ? `${card?.company.name} / ${card?.name}` : "Create New Card"} title="Cards">
+        {isEditMode ? (
+          <Button className="font-medium" size="sm" type="button" variant="outline">
+            <IconCopy />
+            Copy Link <Kbd>C</Kbd>
+          </Button>
+        ) : (
+          "Create Card"
+        )}
+      </Header>
       <CardForm companies={companies} initialData={card} isEditMode={isEditMode} />
     </div>
   );
