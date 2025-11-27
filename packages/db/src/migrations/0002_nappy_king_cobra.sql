@@ -1,1 +1,0 @@
-ALTER TABLE "cards" ADD COLUMN "attachment_object_key" varchar(255);

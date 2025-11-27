@@ -5,7 +5,7 @@ import { cn } from "@ziron/utils";
 function Card({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("flex flex-col gap-0 rounded-md border bg-card py-3 text-card-foreground shadow-sm", className)}
+      className={cn("flex flex-col gap-0 rounded-xl border bg-card py-3 text-card-foreground shadow-sm", className)}
       data-slot="card"
       {...props}
     />

@@ -56,4 +56,4 @@ function Button({
   return <Comp className={cn(buttonVariants({ variant, size, className }))} data-slot="button" {...props} />;
 }
 
-export { Button, buttonVariants };
+export { Button, buttonVariants, SlotPrimitive };

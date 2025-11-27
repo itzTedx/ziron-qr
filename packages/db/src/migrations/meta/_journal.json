@@ -5,43 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1763792886797,
-      "tag": "0000_rare_wasp",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1763966777311,
-      "tag": "0001_mean_hiroim",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1763995255921,
-      "tag": "0002_nappy_king_cobra",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1764196814320,
-      "tag": "0003_unique_blue_shield",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1764206289476,
-      "tag": "0004_acoustic_nekra",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1764208126358,
-      "tag": "0005_opposite_vengeance",
+      "when": 1764265082161,
+      "tag": "0000_burly_vulture",
       "breakpoints": true
     }
   ]

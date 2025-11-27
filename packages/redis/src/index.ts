@@ -8,23 +8,19 @@ if (!process.env.REDIS_PORT) {
   throw new Error("Missing REDIS_PORT");
 }
 
-const redisUrl = process.env.REDIS_URL;
+// const redisUrl = process.env.REDIS_URL;
 
-if (!redisUrl) {
-  throw new Error("REDIS_URL environment variable is not set.");
-}
+// if (!redisUrl) {
+//   throw new Error("REDIS_URL environment variable is not set.");
+// }
 
-const redis = new Redis(`${redisUrl}?family=0`);
+// const redis = new Redis(`${redisUrl}`);
 
-// const redis = new Redis({
-//   host: process.env.REDIS_HOST,
-//   port: Number(process.env.REDIS_PORT),
-//   lazyConnect: true,
-//   maxRetriesPerRequest: null,
-// });
-
-redis.on("connect", () => {
-  console.log("Connected to Redis!");
+const redis = new Redis({
+  host: process.env.REDIS_HOST,
+  port: Number(process.env.REDIS_PORT),
+  lazyConnect: true,
+  maxRetriesPerRequest: null,
 });
 
 redis.on("error", (err) => {

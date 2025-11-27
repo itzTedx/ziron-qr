@@ -1,7 +1,7 @@
 import type { RouterClient as AppRouterClient } from "@orpc/server";
 
-import { getCardAnalytics, trackEvent, trackPageVisit } from "./analytics";
-import { getAvatar, getAvatarV1 } from "./avatar";
+import { getCardAnalytics, trackEvent, trackPageVisit } from "./analytics-router";
+import { getAvatar, getAvatarV1 } from "./avatar-router";
 import {
   archiveCard,
   checkSlugAvailability,
@@ -12,10 +12,10 @@ import {
   getCardBySlug,
   listCards,
   updateCard,
-} from "./card";
-import { createCompany, getCompany, listCompanies } from "./company";
-import { getMetrics } from "./metrics";
-import { generateQR } from "./qr";
+} from "./card-router";
+import { createCompany, getCompany, listCompanies } from "./company-router";
+import { getMetrics } from "./metrics-router";
+import { generateQR } from "./qr-router";
 
 export const router = {
   metrics: {

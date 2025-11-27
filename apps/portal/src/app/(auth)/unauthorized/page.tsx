@@ -1,9 +1,10 @@
-import Link from "next/link";
-
+import { IconLogout } from "@tabler/icons-react";
 import { ShieldX } from "lucide-react";
 
 import { Button } from "@ziron/ui/components/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@ziron/ui/components/card";
+
+import { LogoutButton } from "@/components/ui/logout-button";
 
 export default function UnauthorizedPage() {
   return (
@@ -31,13 +32,13 @@ export default function UnauthorizedPage() {
             </CardHeader>
 
             {/* Actions */}
-            <div className="flex flex-col gap-3">
-              <Button asChild>
-                <Link href="/login">Go to Login</Link>
-              </Button>
-              <Button asChild variant="outline">
-                <Link href="/">Go to Home</Link>
-              </Button>
+            <div className="flex items-center justify-center">
+              <LogoutButton asChild className="w-fit">
+                <Button variant="outline">
+                  <IconLogout />
+                  Logout
+                </Button>
+              </LogoutButton>
             </div>
           </CardContent>
         </Card>

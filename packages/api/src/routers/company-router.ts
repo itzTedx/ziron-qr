@@ -74,10 +74,10 @@ export const getCompany = protectedProcedure
     description: "Get a company by ID",
     tags: ["company"],
   })
-  .input(z.object({ id: z.string().optional() }))
-  .output(z.custom<Company>())
+  .input(z.object({ id: z.string().optional().or(z.literal("new")) }))
+  .output(z.custom<Company>().nullable())
   .handler(async ({ input, errors }) => {
-    if (input.id) {
+    if (input.id && input.id !== "new") {
       const data = await db.query.companies.findFirst({
         where: (companies, { eq }) => eq(companies.id, input.id as string),
       });
@@ -87,5 +87,5 @@ export const getCompany = protectedProcedure
       return data;
     }
 
-    throw errors.BAD_REQUEST();
+    return null;
   });
