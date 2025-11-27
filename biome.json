@@ -127,6 +127,9 @@
               [":PACKAGE:", "!@ziron", "!@ziron/**"],
               ":BLANK_LINE:",
 
+              ["@ziron", "@ziron/ui/**"],
+              ":BLANK_LINE:",
+
               ["@ziron", "@ziron/**"],
               ":BLANK_LINE:",
 

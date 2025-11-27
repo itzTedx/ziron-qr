@@ -17,6 +17,7 @@ import {
   DrawerTrigger,
 } from "@ziron/ui/components/drawer";
 import { useIsMobile } from "@ziron/ui/hooks/use-mobile";
+
 import { cn } from "@ziron/utils";
 
 interface Props {
@@ -24,7 +25,7 @@ interface Props {
   isOpen?: boolean;
   asChild?: boolean;
   trigger?: React.ReactNode;
-  closeModal?: (value: boolean) => void;
+  onOpenChange?: (value: boolean) => void;
   title: string;
   description?: string;
   className?: string;
@@ -34,7 +35,7 @@ export const ResponsiveModal = ({
   children,
   className,
   isOpen,
-  closeModal,
+  onOpenChange,
   trigger,
   asChild,
   title,
@@ -44,7 +45,7 @@ export const ResponsiveModal = ({
 
   if (isMobile) {
     return (
-      <Drawer onOpenChange={closeModal} open={isOpen}>
+      <Drawer onOpenChange={onOpenChange} open={isOpen}>
         {trigger && <DrawerTrigger asChild={asChild}>{trigger}</DrawerTrigger>}
         <DrawerContent>
           <DrawerHeader>
@@ -58,7 +59,7 @@ export const ResponsiveModal = ({
   }
 
   return (
-    <Dialog onOpenChange={closeModal} open={isOpen}>
+    <Dialog onOpenChange={onOpenChange} open={isOpen}>
       {trigger && <DialogTrigger asChild={asChild}>{trigger}</DialogTrigger>}
       <DialogContent className={cn("p-0", "sm:max-w-3xl", className)}>
         <DialogHeader className="border-b p-6">

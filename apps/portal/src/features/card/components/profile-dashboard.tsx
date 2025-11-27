@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import Image from "next/image";
 
 import { IconArrowsMaximize, IconShare } from "@tabler/icons-react";
@@ -9,6 +11,7 @@ import { Kbd, KbdGroup } from "@ziron/ui/components/kbd";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ziron/ui/components/tooltip";
 import { useHotkey } from "@ziron/ui/hooks/use-hotkey";
+
 import { zCardSchema } from "@ziron/validators";
 
 import { DeleteCard } from "./delete-card";
@@ -25,6 +28,7 @@ interface Props {
 
 export const ProfileDashboard = ({ isPending, companyName, data, company }: Props) => {
   const form = useFormContext<zCardSchema>();
+  const [isCoverUploadOpen, setIsCoverUploadOpen] = useState(false);
 
   // Handle Ctrl+S keyboard shortcut
   useHotkey({
@@ -43,7 +47,11 @@ export const ProfileDashboard = ({ isPending, companyName, data, company }: Prop
 
   return (
     <div>
-      <div className="group relative h-48 bg-secondary">
+      <div
+        className="group relative h-48 border-b bg-secondary"
+        onClick={() => setIsCoverUploadOpen(true)}
+        role="button"
+      >
         <Image
           alt="cover image"
           className="object-cover transition-[filter] group-hover:brightness-75"
@@ -54,10 +62,13 @@ export const ProfileDashboard = ({ isPending, companyName, data, company }: Prop
           src={data.cover ?? "/images/placeholder-cover.jpg"}
           title="Cover Image"
         />
-        <div className="-translate-x-1/2 absolute top-1/2 left-1/2 z-10 flex items-center gap-2">
-          <CoverUpload data={data.cover} />
-          {/* <Button variant='destructive'>Remove</Button> */}
-        </div>
+
+        <CoverUpload
+          className="absolute top-3 right-4 z-10 flex items-center gap-2"
+          data={data.cover}
+          isOpen={isCoverUploadOpen}
+          onOpenChange={setIsCoverUploadOpen}
+        />
       </div>
       <section className="-mt-16 container mx-auto">
         <div className="relative grid grid-cols-10 rounded-lg border-background border-t bg-background/80 px-6 py-4 shadow-muted/30 backdrop-blur-xl sm:border sm:shadow-lg md:grid-cols-12 md:divide-x">

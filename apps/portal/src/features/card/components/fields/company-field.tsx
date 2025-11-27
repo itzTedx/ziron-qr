@@ -5,7 +5,6 @@ import Image from "next/image";
 import { IconCaretUpDownFilled } from "@tabler/icons-react";
 import { parseAsString, useQueryStates } from "nuqs";
 
-import { Company } from "@ziron/db/schema";
 import { Button } from "@ziron/ui/components/button";
 import {
   Command,
@@ -17,6 +16,8 @@ import {
 } from "@ziron/ui/components/command";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage, useFormContext } from "@ziron/ui/components/form";
 import { Popover, PopoverContent, PopoverTrigger } from "@ziron/ui/components/popover";
+
+import { Company } from "@ziron/db/schema";
 import { cn } from "@ziron/utils";
 import { zCardSchema } from "@ziron/validators";
 

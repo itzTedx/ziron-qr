@@ -2,14 +2,16 @@ import Image from "next/image";
 
 import { useUploadFiles } from "@better-upload/client";
 import { formatBytes } from "@better-upload/client/helpers";
-import { IconLink, IconPhoto, IconX } from "@tabler/icons-react";
+import { IconLink, IconX } from "@tabler/icons-react";
 import { useFormContext } from "react-hook-form";
 import { toast } from "sonner";
 
+import { IconEdit } from "@ziron/ui/assets/icons/edit";
 import { Button } from "@ziron/ui/components/button";
 import { ButtonGroup } from "@ziron/ui/components/button-group";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ziron/ui/components/form";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ziron/ui/components/tooltip";
+
 import { cn } from "@ziron/utils";
 import { zCardSchema } from "@ziron/validators";
 
@@ -21,9 +23,11 @@ import { UPLOAD_ROUTES } from "@/lib/constants/upload";
 interface Props {
   className?: string;
   data?: string;
+  isOpen?: boolean;
+  onOpenChange?: (value: boolean) => void;
 }
 
-export const CoverUpload = ({ className, data }: Props) => {
+export const CoverUpload = ({ className, data, isOpen, onOpenChange }: Props) => {
   const form = useFormContext<zCardSchema>();
 
   const { control } = useUploadFiles({
@@ -45,10 +49,17 @@ export const CoverUpload = ({ className, data }: Props) => {
   return (
     <ResponsiveModal
       asChild
-      title="Upload Cover Image"
+      isOpen={isOpen}
+      onOpenChange={onOpenChange}
+      title={data ? "Change Cover Image" : "Upload Cover Image"}
       trigger={
-        <Button className={cn(className, "bg-background/80 backdrop-blur-lg")} type="button" variant="outline">
-          <IconPhoto /> <span>{data ? "Upload" : "Change"} Cover</span>
+        <Button
+          className={cn(className, "bg-card/90 text-foreground backdrop-blur-lg hover:bg-card")}
+          size="icon"
+          type="button"
+          variant="secondary"
+        >
+          <IconEdit className="size-4" /> <span className="sr-only">{data ? "Upload" : "Change"} Cover</span>
         </Button>
       }
     >
