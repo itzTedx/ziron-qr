@@ -5,7 +5,6 @@ import { Card, CardContent } from "@ziron/ui/components/card";
 
 import { getSession } from "@/features/auth/actions/user";
 import { LoginForm } from "@/features/auth/components/login-form";
-import { env } from "@/lib/env/server";
 
 export default async function LoginPage() {
   const session = await getSession();
@@ -20,8 +19,6 @@ export default async function LoginPage() {
           <div className="-top-1/2 -translate-y-[10%] absolute inset-x-0 h-full w-full bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-size-[24px_24px]">
             <div className="absolute top-0 right-0 left-0 m-auto h-[310px] w-[310px] rounded-full bg-brand-secondary opacity-20 blur-[100px]" />
           </div>
-
-          {env.PRODUCTION_URL}
 
           <CardContent className="z-10 p-6 px-9">
             {/* Logo */}
