@@ -114,6 +114,7 @@
     "actions": {
       "source": {
         "useSortedAttributes": "on",
+        "useSortedProperties": "on",
         "organizeImports": {
           "level": "on",
           "options": {

@@ -6,6 +6,7 @@ import useEmblaCarousel, { type UseEmblaCarouselType } from "embla-carousel-reac
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import { Button } from "@ziron/ui/components/button";
+
 import { cn } from "@ziron/utils";
 
 type CarouselApi = UseEmblaCarouselType[1];

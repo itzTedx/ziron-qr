@@ -13,11 +13,11 @@ async function hue(str: string): Promise<number> {
 }
 
 function hslToHex(h: number, s: number, l: number): string {
-  l /= 100;
-  const a = (s * Math.min(l, 1 - l)) / 100;
+  const lightness = l / 100;
+  const a = (s * Math.min(lightness, 1 - lightness)) / 100;
   const f = (n: number) => {
     const k = (n + h / 30) % 12;
-    const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+    const color = lightness - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
     return Math.round(255 * color)
       .toString(16)
       .padStart(2, "0");

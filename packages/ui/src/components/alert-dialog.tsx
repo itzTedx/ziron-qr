@@ -6,6 +6,7 @@ import type { VariantProps } from "class-variance-authority";
 import { AlertDialog as AlertDialogPrimitive } from "radix-ui";
 
 import { buttonVariants } from "@ziron/ui/components/button";
+
 import { cn } from "@ziron/utils";
 
 function AlertDialog({ ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Root>) {

@@ -6,6 +6,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { Label } from "@ziron/ui/components/label";
 import { Separator } from "@ziron/ui/components/separator";
+
 import { cn } from "@ziron/utils";
 
 function FieldSet({ className, ...props }: React.ComponentProps<"fieldset">) {
@@ -192,7 +193,9 @@ function FieldError({
 
     return (
       <ul className="ml-4 flex list-disc flex-col gap-1">
-        {uniqueErrors.map((error, index) => error?.message && <li key={index}>{error.message}</li>)}
+        {uniqueErrors.map(
+          (error, index) => error?.message && <li key={`field-error-${index.toString()}`}>{error.message}</li>
+        )}
       </ul>
     );
   }, [children, errors]);

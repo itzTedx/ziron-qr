@@ -155,36 +155,36 @@
 }
 
 @utility container {
-  margin-inline: auto;
   padding-inline: 1.5rem;
+  margin-inline: auto;
 
   @media (width >= 64rem /* 1024px */) {
-    padding-inline: 0.5rem;
     max-width: 68rem;
+    padding-inline: 0.5rem;
   }
 
   @media (width >= 80rem /* 1280px */) {
-    padding-inline: 3.5rem;
     max-width: 82rem;
+    padding-inline: 3.5rem;
   }
   @media (width >= 96rem /* 1536px */) {
-    padding-inline: 6rem;
     max-width: 98rem;
+    padding-inline: 6rem;
   }
 }
 
 ::selection {
-  background-color: var(--brand-secondary);
   color: #fff;
   text-shadow:
     0 0 1px #fff,
     0 0 1px #fff;
+  background-color: var(--brand-secondary);
 }
 
 ::-moz-selection {
-  background-color: var(--brand-secondary);
   color: #fff;
   text-shadow:
     0 0 1px #fff,
     0 0 1px #fff;
+  background-color: var(--brand-secondary);
 }
