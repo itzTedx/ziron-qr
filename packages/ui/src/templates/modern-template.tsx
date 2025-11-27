@@ -11,14 +11,12 @@ import SaveContactButton from "../components/save-contact-button";
 
 interface TemplateProps {
   card?: Partial<CardType>;
-  company?: Company[];
+  company?: Company;
   imageBase64URI?: string;
 }
 
 export default function ModernTemplate({ card, company, imageBase64URI }: TemplateProps) {
   if (!card) return null;
-
-  const companyData = company?.find((c) => c.id === card.companyId);
 
   const textColor = getTextColorByBackground(card.appearance?.btnColor || "#4938ff");
 
@@ -76,14 +74,14 @@ export default function ModernTemplate({ card, company, imageBase64URI }: Templa
 
           <section className={cn("space-y-0.5 px-8 py-4 text-center")}>
             {card.name && <h1 className="font-bold @sm:text-2xl text-xl">{card.name}</h1>}
-            {card.company || companyData ? (
+            {card.company || company ? (
               <h2
                 className="font-medium"
                 style={{
                   color: theme,
                 }}
               >
-                {companyData?.name || card.company?.name}
+                {company?.name || card.company?.name}
               </h2>
             ) : null}
             {card.designation && <h2 className="@sm:text-sm text-xs">{card.designation}</h2>}

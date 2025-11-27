@@ -4,6 +4,7 @@ import * as React from "react";
 
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -12,6 +13,7 @@ import {
 } from "@ziron/ui/components/dialog";
 import {
   Drawer,
+  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerHeader,
@@ -106,6 +108,15 @@ function ResponsiveModalDescription({ className, ...props }: React.ComponentProp
   return <DialogDescription className={cn("sr-only", className)} data-slot="responsive-modal-description" {...props} />;
 }
 
+function ResponsiveModalClose({ ...props }: React.ComponentProps<typeof DialogClose>) {
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return <DrawerClose data-slot="responsive-modal-close" {...props} />;
+  }
+
+  return <DialogClose data-slot="responsive-modal-close" {...props} />;
+}
 // Backward-compatible wrapper component (maintains old API)
 interface ResponsiveModalWrapperProps {
   children: React.ReactNode;
@@ -157,4 +168,5 @@ export {
   ResponsiveModalHeader,
   ResponsiveModalTitle,
   ResponsiveModalDescription,
+  ResponsiveModalClose,
 };

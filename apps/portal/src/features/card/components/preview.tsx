@@ -1,4 +1,5 @@
 import { IconArrowsMaximize } from "@tabler/icons-react";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { parseAsBoolean, useQueryState } from "nuqs";
 
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@ziron/ui/components/card";
@@ -7,7 +8,7 @@ import CardTemplate from "@ziron/ui/templates/card-template";
 import DefaultTemplate from "@ziron/ui/templates/default-template";
 import ModernTemplate from "@ziron/ui/templates/modern-template";
 
-import { CardType, Company } from "@ziron/db/schema";
+import { CardType } from "@ziron/db/schema";
 import { cn } from "@ziron/utils";
 import { zCardSchema } from "@ziron/validators";
 
@@ -20,18 +21,20 @@ import {
   ResponsiveModalTrigger,
 } from "@/components/ui/responsive-modal";
 
+import { orpc } from "@/lib/orpc/client";
+
 interface Props {
-  companies?: Company[];
+  // companies?: Company[];
   cardData: Partial<zCardSchema>;
 }
 
-export const Preview = ({ companies, cardData }: Props) => {
+export const Preview = ({ cardData }: Props) => {
   const [preview, setPreview] = useQueryState("preview", parseAsBoolean.withDefault(false));
   // const form = useFormContext<zCardSchema>();
   // const cardData = form.watch();
 
   // Find the selected company based on cardData.companyId
-  const company = companies?.filter((c) => c.id === cardData.companyId);
+  const { data: company } = useSuspenseQuery(orpc.company.get.queryOptions({ input: { id: cardData.companyId } }));
 
   // Transform cardData to match CardType structure (appearance -> styles)
   const transformedCardData = cardData

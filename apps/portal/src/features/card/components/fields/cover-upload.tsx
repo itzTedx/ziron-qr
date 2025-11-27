@@ -6,6 +6,7 @@ import { IconLink, IconX } from "@tabler/icons-react";
 import { useFormContext } from "react-hook-form";
 import { toast } from "sonner";
 
+import { IconUnsplash } from "@ziron/ui/assets/icons/brands";
 import { IconEdit } from "@ziron/ui/assets/icons/edit";
 import { Button } from "@ziron/ui/components/button";
 import { ButtonGroup } from "@ziron/ui/components/button-group";
@@ -77,16 +78,38 @@ export const CoverUpload = ({ className, data, isOpen, onOpenChange }: Props) =>
                 <FormItem>
                   <FormLabel className="flex items-center justify-between">
                     Cover
-                    <ButtonGroup>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button size="icon-sm" variant="ghost">
-                            <IconLink className="size-4" />
+                    <div className="inline-flex gap-2">
+                      <ButtonGroup>
+                        <ButtonGroup>
+                          <Button
+                            onClick={() => {
+                              form.setValue("cover", undefined);
+                            }}
+                            size="sm"
+                            variant="ghost"
+                          >
+                            Remove
                           </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>Paste an URL to an image</TooltipContent>
-                      </Tooltip>
-                    </ButtonGroup>
+                        </ButtonGroup>
+
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button size="icon-sm" variant="ghost">
+                              <IconLink className="size-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Paste an URL to an image</TooltipContent>
+                        </Tooltip>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button size="icon-sm" variant="ghost">
+                              <IconUnsplash className="size-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Paste an URL to an image</TooltipContent>
+                        </Tooltip>
+                      </ButtonGroup>
+                    </div>
                   </FormLabel>
                   <FormControl>
                     {field.value ? (

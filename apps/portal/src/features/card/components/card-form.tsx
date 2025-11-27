@@ -11,9 +11,9 @@ import { useFormState } from "react-hook-form";
 import { toast } from "sonner";
 
 import { Form, useForm, zodResolver } from "@ziron/ui/components/form";
-import { Tabs, TabsContent } from "@ziron/ui/components/tabs";
+import { TabsContent } from "@ziron/ui/components/tabs";
 
-import { CardType, Company } from "@ziron/db/schema";
+import { CardType } from "@ziron/db/schema";
 import { cn } from "@ziron/utils";
 import { cardSchema, zCardSchema } from "@ziron/validators";
 
@@ -30,15 +30,14 @@ import { ProfileDashboard } from "./profile-dashboard";
 import { TabsLists } from "./tabs-lists";
 
 interface Props {
-  companies?: Company[];
+  // companies?: Company[];
   isEditMode: boolean;
   initialData?: CardType;
 }
 
-export function CardForm({ companies, isEditMode, initialData }: Props) {
+export function CardForm({ isEditMode, initialData }: Props) {
   const router = useRouter();
-  const [tab, setTab] = useQueryState("tab");
-  const defaultTab = tab || "general";
+
   const [companyId, _] = useQueryState("companyId");
   const transformedInitialData = useMemo(() => transformCardData(initialData, companyId), [initialData, companyId]);
   const [cardData, setCardData] = useState<Partial<zCardSchema> | null>(transformedInitialData ?? null);
@@ -78,7 +77,7 @@ export function CardForm({ companies, isEditMode, initialData }: Props) {
 
   const data = {
     ...cardData,
-    companies,
+    // companies,
     emails: cardData?.emails ?? undefined,
 
     template: cardData?.appearance?.template ?? "default",
@@ -194,15 +193,16 @@ export function CardForm({ companies, isEditMode, initialData }: Props) {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <ProfileDashboard
-          company={
-            companies?.find((c) => c.id === data.companyId)
-              ? {
-                  logo: companies.find((c) => c.id === data.companyId)?.logo ?? null,
-                  name: companies.find((c) => c.id === data.companyId)?.name ?? "",
-                }
-              : undefined
-          }
-          companyName={companies?.find((c) => c.id === data.companyId)?.name}
+          companyId={data.companyId}
+          // company={
+          //   companies?.find((c) => c.id === data.companyId)
+          //     ? {
+          //         logo: companies.find((c) => c.id === data.companyId)?.logo ?? null,
+          //         name: companies.find((c) => c.id === data.companyId)?.name ?? "",
+          //       }
+          //     : undefined
+          // }
+          // companyName={companies?.find((c) => c.id === data.companyId)?.name}
           data={{
             id: data.id,
             name: data.name,
@@ -214,12 +214,7 @@ export function CardForm({ companies, isEditMode, initialData }: Props) {
           isPending={isPending}
         />
         <div className={cn("mx-auto grid max-w-7xl grid-cols-3 gap-4 pb-6", shouldShowBar && "pb-20")}>
-          <Tabs
-            className="relative col-span-2 mt-6 w-full px-6"
-            defaultValue={defaultTab}
-            onValueChange={(value) => setTab(value)}
-          >
-            <TabsLists form={form} />
+          <TabsLists form={form}>
             <TabsContent value="general">
               <CardGeneral data={data} />
             </TabsContent>
@@ -241,8 +236,9 @@ export function CardForm({ companies, isEditMode, initialData }: Props) {
               onSave={handleSave}
               show={shouldShowBar}
             />
-          </Tabs>
-          <Preview cardData={data} companies={companies} />
+          </TabsLists>
+
+          <Preview cardData={data} />
         </div>
       </form>
     </Form>

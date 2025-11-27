@@ -1,22 +1,38 @@
+import { cva, VariantProps } from "class-variance-authority";
+
 import { cn } from "@ziron/utils";
 
-function Kbd({ className, ...props }: React.ComponentProps<"kbd">) {
-  return (
-    <kbd
-      className={cn(
-        "pointer-events-none inline-flex h-5 w-fit min-w-5 select-none items-center justify-center gap-1 rounded-sm bg-muted/50 px-1 font-medium font-sans text-foreground/80 text-xs",
-        "[&_svg:not([class*='size-'])]:size-3",
-        "in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10",
-        className
-      )}
-      data-slot="kbd"
-      {...props}
-    />
-  );
+const kbdVariants = cva(
+  [
+    "inline-flex w-fit select-none items-center justify-center gap-1 rounded-sm px-1 font-medium font-sans transition-colors duration-200",
+    "in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10",
+  ],
+  {
+    variants: {
+      variant: {
+        default: "bg-muted/50 text-foreground/80",
+        secondary: "bg-foreground text-background shadow-xs hover:bg-foreground/80",
+        outline: "border border-input bg-muted/10 shadow-xs hover:bg-muted/50 hover:text-accent-foreground",
+        destructive: "bg-destructive text-destructive-foreground",
+      },
+      size: {
+        default: "h-5 min-w-5 text-xs [&_svg:not([class*='size-'])]:size-3",
+        lg: "h-7 min-w-7 text-sm [&_svg:not([class*='size-'])]:size-3.5",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+);
+
+function Kbd({ className, variant, size, ...props }: React.ComponentProps<"kbd"> & VariantProps<typeof kbdVariants>) {
+  return <kbd className={cn(kbdVariants({ variant, size, className }))} data-slot="kbd" {...props} />;
 }
 
 function KbdGroup({ className, ...props }: React.ComponentProps<"div">) {
   return <kbd className={cn("inline-flex items-center gap-0.5", className)} data-slot="kbd-group" {...props} />;
 }
 
-export { Kbd, KbdGroup };
+export { Kbd, KbdGroup, kbdVariants };

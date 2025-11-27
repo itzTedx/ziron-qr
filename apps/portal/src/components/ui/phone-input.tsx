@@ -136,6 +136,7 @@ type CountrySelectProps = {
 const CountrySelect = ({ disabled, value, onChange }: CountrySelectProps) => {
   const [open, setOpen] = React.useState(false);
   const [search, setSearch] = React.useState("");
+  const deferredSearch = React.useDeferredValue(search);
   const selected = value;
 
   // Reset search when popover closes
@@ -174,7 +175,7 @@ const CountrySelect = ({ disabled, value, onChange }: CountrySelectProps) => {
                 onChange(code as RPNInput.Country);
                 setOpen(false);
               }}
-              search={search}
+              search={deferredSearch}
             />
           </CommandList>
         </Command>

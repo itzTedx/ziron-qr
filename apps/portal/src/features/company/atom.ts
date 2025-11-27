@@ -24,7 +24,7 @@ export const companyCollapsibleStateAtom = atomWithStorage("company-collapsible-
 });
 
 // Share modal data type
-type PersonCard = Pick<CardType, "id" | "name" | "designation" | "slug" | "image">;
+type PersonCard = Pick<CardType, "id" | "name" | "designation" | "slug" | "image" | "cover">;
 
 export interface ShareModalData {
   data: PersonCard & { company: Pick<Company, "logo" | "name">; url: string };

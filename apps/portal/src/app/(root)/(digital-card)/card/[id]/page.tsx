@@ -55,7 +55,7 @@ export default async function CardPage({ params }: PageProps<"/card/[id]">) {
 
   const queryClient = getQueryClient();
 
-  const companies = await client.company.list();
+  // const companies = await client.company.list();
   // Fetching the card based on the ID
   const card = await client.card.get({ id });
   if (!card && id !== "new") {
@@ -81,7 +81,7 @@ export default async function CardPage({ params }: PageProps<"/card/[id]">) {
           </>
         ) : null}
       </Header>
-      <CardForm companies={companies} initialData={card} isEditMode={isEditMode} />
+      <CardForm initialData={card} isEditMode={isEditMode} />
     </div>
   );
 }

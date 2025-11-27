@@ -13,7 +13,7 @@ import {
   listCards,
   updateCard,
 } from "./card";
-import { createCompany, listCompanies } from "./company";
+import { createCompany, getCompany, listCompanies } from "./company";
 import { getMetrics } from "./metrics";
 import { generateQR } from "./qr";
 
@@ -24,6 +24,7 @@ export const router = {
   company: {
     create: createCompany,
     list: listCompanies,
+    get: getCompany,
   },
   card: {
     create: createCard,

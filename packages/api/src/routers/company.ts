@@ -65,3 +65,27 @@ export const listCompanies = protectedProcedure
 
     return data;
   });
+
+export const getCompany = protectedProcedure
+  .route({
+    method: "GET",
+    path: "/company/:id",
+    summary: "Get a company by ID",
+    description: "Get a company by ID",
+    tags: ["company"],
+  })
+  .input(z.object({ id: z.string().optional() }))
+  .output(z.custom<Company>())
+  .handler(async ({ input, errors }) => {
+    if (input.id) {
+      const data = await db.query.companies.findFirst({
+        where: (companies, { eq }) => eq(companies.id, input.id as string),
+      });
+
+      if (!data) throw errors.NOT_FOUND();
+
+      return data;
+    }
+
+    throw errors.BAD_REQUEST();
+  });

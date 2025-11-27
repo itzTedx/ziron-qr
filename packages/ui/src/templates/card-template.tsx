@@ -10,14 +10,12 @@ import SaveContactButton from "../components/save-contact-button";
 
 interface TemplateProps {
   card?: Partial<CardType>;
-  company?: Company[];
+  company?: Company;
   imageBase64URI?: string;
 }
 
 export default function CardTemplate({ card, company, imageBase64URI }: TemplateProps) {
   if (!card) return null;
-
-  const companyData = company?.find((c) => c.id === card.companyId);
 
   const textColor = getTextColorByBackground(card.appearance?.theme || "#4938ff");
   const btnTextColor = getTextColorByBackground(card.appearance?.btnColor || "#4938ff");
@@ -133,14 +131,14 @@ export default function CardTemplate({ card, company, imageBase64URI }: Template
             <h2 className="pb-3 font-medium @sm:text-sm text-gray-600 text-xs">Contact Info</h2>
 
             <div className="@sm:space-y-4 space-y-3">
-              {card.company || companyData ? (
+              {card.company || company ? (
                 <Link
                   className="flex items-center gap-2 @sm:text-base text-sm"
                   href={card.company && card.company.website ? card.company.website : "#"}
                   target="_blank"
                 >
                   <IconBuildingSkyscraper className="@sm:size-5 size-4 shrink-0 stroke-[1.5]" />
-                  {companyData?.name || card.company?.name}
+                  {company?.name || card.company?.name}
                 </Link>
               ) : null}
 

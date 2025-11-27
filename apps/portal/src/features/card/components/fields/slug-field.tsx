@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
 import { CheckCircle, Edit, Loader, X, XCircle } from "lucide-react";
 import { useFormContext } from "react-hook-form";
@@ -30,17 +30,19 @@ import { orpc } from "@/lib/orpc/client";
 
 interface Props {
   data: Partial<Pick<zCardSchema, "id" | "name" | "designation" | "slug" | "image" | "cover">>;
-  company?: { logo: string | null; name: string };
+  companyId?: string;
 }
 
 type SlugValidationState = "idle" | "validating" | "valid" | "invalid";
 
-export const SlugField = ({ data, company }: Props) => {
+export const SlugField = ({ data, companyId }: Props) => {
   const form = useFormContext<zCardSchema>();
   const [slug, setSlug] = useState(data.slug ?? "");
   const [isEditingSlug, setIsEditingSlug] = useState(false);
   const [validationState, setValidationState] = useState<SlugValidationState>("idle");
   const openModal = useSetAtom(openShareModalAtom);
+
+  const { data: company } = useSuspenseQuery(orpc.company.get.queryOptions({ input: { id: companyId } }));
 
   // Transform slug as user types
   const transformedSlug = transformSlug(slug);
@@ -135,8 +137,9 @@ export const SlugField = ({ data, company }: Props) => {
         designation: data.designation ?? null,
         slug: data.slug,
         image: data.image ?? "",
+        cover: data.cover ?? "",
         company: {
-          logo: company.logo ?? null,
+          logo: company?.logo ?? null,
           name: company.name,
         },
         url: shareLink,
@@ -213,16 +216,6 @@ export const SlugField = ({ data, company }: Props) => {
                             <TooltipContent>Slug is not available</TooltipContent>
                           </Tooltip>
                         )}
-                        {/* <Tooltip>
-                          <TooltipTrigger asChild>
-                            <InputGroupButton onClick={validateSlugAction} size="icon-sm">
-                              <LoadingSwap isLoading={validateSlug.isPending}>
-                                <Check className="size-4 stroke-[1.5]" />
-                              </LoadingSwap>
-                            </InputGroupButton>
-                          </TooltipTrigger>
-                          <TooltipContent>Validate slug</TooltipContent>
-                        </Tooltip> */}
                       </div>
                     ) : (
                       <Tooltip>

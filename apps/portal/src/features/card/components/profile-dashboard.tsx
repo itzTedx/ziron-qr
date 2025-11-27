@@ -23,10 +23,10 @@ interface Props {
   isPending: boolean;
   data: Partial<Pick<zCardSchema, "id" | "name" | "designation" | "slug" | "image" | "cover">>;
   companyName?: string;
-  company?: { logo: string | null; name: string };
+  companyId?: string;
 }
 
-export const ProfileDashboard = ({ isPending, companyName, data, company }: Props) => {
+export const ProfileDashboard = ({ isPending, companyName, data, companyId }: Props) => {
   const form = useFormContext<zCardSchema>();
   const [isCoverUploadOpen, setIsCoverUploadOpen] = useState(false);
 
@@ -132,7 +132,7 @@ export const ProfileDashboard = ({ isPending, companyName, data, company }: Prop
           </div>
 
           <div className="col-span-10 flex items-center justify-between gap-4 md:col-span-5 md:px-3 lg:px-6">
-            <SlugField company={company} data={data} />
+            <SlugField companyId={companyId} data={data} />
           </div>
 
           <div className="col-span-2 hidden flex-col items-center gap-3 px-6 md:flex">
