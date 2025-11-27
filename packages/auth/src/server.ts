@@ -7,7 +7,14 @@ import { twoFactor } from "better-auth/plugins";
 import { db } from "@ziron/db/client";
 import redis from "@ziron/redis";
 
-export function initAuth(options: { baseUrl: string; productionUrl: string; secret: string | undefined }) {
+import { authEnv } from "../env";
+
+export function initAuth(options: {
+  baseUrl: string;
+  productionUrl: string;
+  secret: string | undefined;
+  trustedOrigins?: string[];
+}) {
   const config = {
     database: drizzleAdapter(db, {
       provider: "pg",
@@ -58,7 +65,13 @@ export function initAuth(options: { baseUrl: string; productionUrl: string; secr
         generateId: false,
       },
     },
-    trustedOrigins: ["expo://", "http://localhost:3000", "http://192.168.0.206:3000"],
+    trustedOrigins: [
+      "http://localhost:3000",
+      "http://192.168.0.206:3000",
+      "https://ziron-qr-portal.vercel.app",
+      authEnv().PRODUCTION_URL,
+      ...(options.trustedOrigins || []),
+    ],
   } satisfies BetterAuthOptions;
 
   return betterAuth(config);
