@@ -72,7 +72,7 @@ export const ProfileDashboard = ({ isPending, companyName, data, company }: Prop
       </div>
       <section className="-mt-16 container mx-auto">
         <div className="relative grid grid-cols-10 rounded-lg border-background border-t bg-background/80 px-6 py-4 shadow-muted/30 backdrop-blur-xl sm:border sm:shadow-lg md:grid-cols-12 md:divide-x">
-          <div className="col-span-10 flex md:col-span-5 md:px-3 lg:pr-6">
+          <div className="col-span-10 flex items-center md:col-span-5 md:px-3 lg:pr-6">
             <div className="group relative size-24 shrink-0">
               <Image
                 alt="Profile Image"
@@ -86,9 +86,11 @@ export const ProfileDashboard = ({ isPending, companyName, data, company }: Prop
             </div>
             <div className="w-full max-md:mt-3 md:ml-3">
               <div className="flex items-center justify-between gap-3">
-                <Badge className="gap-1.5" variant="secondary">
-                  {companyName}
-                </Badge>
+                {companyName && (
+                  <Badge className="gap-1.5" variant="secondary">
+                    {companyName}
+                  </Badge>
+                )}
                 <span className="flex gap-2 text-primary md:hidden">
                   <Button
                     size="icon"

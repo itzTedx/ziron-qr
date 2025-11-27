@@ -12,7 +12,13 @@ import { cn } from "@ziron/utils";
 import { zCardSchema } from "@ziron/validators";
 
 import PhoneMockup from "@/components/ui/phone-mockup";
-import { ResponsiveModal } from "@/components/ui/responsive-modal";
+import {
+  ResponsiveModal,
+  ResponsiveModalContent,
+  ResponsiveModalHeader,
+  ResponsiveModalTitle,
+  ResponsiveModalTrigger,
+} from "@/components/ui/responsive-modal";
 
 interface Props {
   companies?: Company[];
@@ -47,31 +53,31 @@ export const Preview = ({ companies, cardData }: Props) => {
       <CardHeader className="border-b">
         <CardTitle>Preview</CardTitle>
         <CardAction className="row-span-1">
-          <ResponsiveModal
-            className="max-w-sm gap-0"
-            closeModal={() => setPreview(null)}
-            isOpen={preview}
-            title="Preview"
-            trigger={
-              <IconArrowsMaximize className="size-4 cursor-pointer text-gray-600" onClick={() => setPreview(true)} />
-            }
-          >
-            <CardContent className={cn("relative p-0", cardData.appearance?.isDarkMode ? "dark" : "light")}>
-              <ScrollArea className="h-[640px]">
-                {(() => {
-                  switch (cardData.appearance?.template) {
-                    case "default":
-                      return <DefaultTemplate card={transformedCardData} company={company} />;
-                    case "modern":
-                      return <ModernTemplate card={transformedCardData} company={company} />;
-                    case "card":
-                      return <CardTemplate card={transformedCardData} company={company} />;
-                    default:
-                      return <DefaultTemplate card={transformedCardData} company={company} />;
-                  }
-                })()}
-              </ScrollArea>
-            </CardContent>
+          <ResponsiveModal onOpenChange={(open) => setPreview(open ?? false)} open={preview}>
+            <ResponsiveModalTrigger asChild>
+              <IconArrowsMaximize className="size-4 cursor-pointer text-gray-600" />
+            </ResponsiveModalTrigger>
+            <ResponsiveModalContent className="max-w-sm gap-0">
+              <ResponsiveModalHeader>
+                <ResponsiveModalTitle>Preview</ResponsiveModalTitle>
+              </ResponsiveModalHeader>
+              <CardContent className={cn("relative p-0", cardData.appearance?.isDarkMode ? "dark" : "light")}>
+                <ScrollArea className="h-[640px]">
+                  {(() => {
+                    switch (cardData.appearance?.template) {
+                      case "default":
+                        return <DefaultTemplate card={transformedCardData} company={company} />;
+                      case "modern":
+                        return <ModernTemplate card={transformedCardData} company={company} />;
+                      case "card":
+                        return <CardTemplate card={transformedCardData} company={company} />;
+                      default:
+                        return <DefaultTemplate card={transformedCardData} company={company} />;
+                    }
+                  })()}
+                </ScrollArea>
+              </CardContent>
+            </ResponsiveModalContent>
           </ResponsiveModal>
         </CardAction>
       </CardHeader>

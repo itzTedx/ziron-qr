@@ -26,7 +26,13 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@ziron/ui/components/to
 
 import { zCardSchema } from "@ziron/validators";
 
-import { ResponsiveModal } from "@/components/ui/responsive-modal";
+import {
+  ResponsiveModal,
+  ResponsiveModalContent,
+  ResponsiveModalHeader,
+  ResponsiveModalTitle,
+  ResponsiveModalTrigger,
+} from "@/components/ui/responsive-modal";
 import { UploadDropzoneProgress } from "@/components/ui/upload-dropzone-progress";
 
 import { UPLOAD_ROUTES } from "@/lib/constants/upload";
@@ -112,152 +118,151 @@ export const PhotoUploadModal = ({ currentImage }: { currentImage?: string }) =>
   }, [isOpen, currentImage, selectedFile, onCropReset]);
 
   return (
-    <ResponsiveModal
-      asChild
-      className="sm:max-w-xl"
-      closeModal={handleModalOpenChange}
-      isOpen={isOpen}
-      title="Update Profile Picture"
-      trigger={
+    <ResponsiveModal onOpenChange={handleModalOpenChange} open={isOpen}>
+      <ResponsiveModalTrigger asChild>
         <Button
           className="absolute right-1 bottom-1 z-10 flex items-center justify-center rounded-full"
-          size="icon"
-          variant="outline"
+          size="icon-sm"
+          variant="secondary"
         >
-          <IconCamera className="size-5" />
+          <IconCamera className="size-4" />
         </Button>
-      }
-    >
-      <div className="p-6 pt-0">
-        <FormField
-          control={form.control}
-          name="image"
-          render={({ field }) => {
-            // Use previewUrl if a new file is selected, otherwise use the existing image from form
-            const activeImage = previewUrl ?? currentImage ?? null;
+      </ResponsiveModalTrigger>
+      <ResponsiveModalContent className="sm:max-w-xl">
+        <ResponsiveModalHeader>
+          <ResponsiveModalTitle>Update Profile Picture</ResponsiveModalTitle>
+        </ResponsiveModalHeader>
+        <div className="p-6 pt-0">
+          <FormField
+            control={form.control}
+            name="image"
+            render={({ field }) => {
+              // Use previewUrl if a new file is selected, otherwise use the existing image from form
+              const activeImage = previewUrl ?? currentImage ?? null;
 
-            const handleUploadOverride = (files: File[] | FileList, _options?: unknown) => {
-              const incomingFiles = Array.isArray(files) ? files : Array.from(files);
-              const [file] = incomingFiles;
-              if (!file) return;
-              setSelectedFile(file);
-              onCropReset();
-              field.onChange(null);
-            };
+              const handleUploadOverride = (files: File[] | FileList, _options?: unknown) => {
+                const incomingFiles = Array.isArray(files) ? files : Array.from(files);
+                const [file] = incomingFiles;
+                if (!file) return;
+                setSelectedFile(file);
+                onCropReset();
+                field.onChange(null);
+              };
 
-            const handleCropApply = async () => {
-              if (!croppedArea || !activeImage) return;
-              try {
-                const croppedFile = await createCroppedImage(
-                  activeImage,
-                  croppedArea,
-                  selectedFile?.name ?? "profile-image.png"
-                );
-                upload([croppedFile]);
-              } catch (error) {
-                toast.error(error instanceof Error ? error.message : "Failed to crop image");
-              }
-            };
+              const handleCropApply = async () => {
+                if (!croppedArea || !activeImage) return;
+                try {
+                  const croppedFile = await createCroppedImage(
+                    activeImage,
+                    croppedArea,
+                    selectedFile?.name ?? "profile-image.png"
+                  );
+                  upload([croppedFile]);
+                } catch (error) {
+                  toast.error(error instanceof Error ? error.message : "Failed to crop image");
+                }
+              };
 
-            return (
-              <FormItem>
-                <FormLabel className="flex items-center justify-between">
-                  Image
-                  <ButtonGroup>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button size="icon-sm" variant="ghost">
-                          <IconLink className="size-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Paste an URL to an image</TooltipContent>
-                    </Tooltip>
-                  </ButtonGroup>
-                </FormLabel>
-                <FormControl>
-                  {activeImage ? (
-                    <div className="relative flex flex-col gap-2">
-                      {selectedFile && (
-                        <HoverCard>
-                          <HoverCardTrigger asChild>
-                            <Button className="absolute top-2 left-2 z-10" size="icon-sm" variant="ghost">
-                              <IconInfoCircle />
-                            </Button>
-                          </HoverCardTrigger>
-                          <HoverCardContent>
-                            <p>{selectedFile.name}</p>
-                            <p>{formatBytes(selectedFile.size)}</p>
-                            <p>{selectedFile.type}</p>
-                          </HoverCardContent>
-                        </HoverCard>
-                      )}
+              return (
+                <FormItem>
+                  <FormLabel className="flex items-center justify-between">
+                    Image
+                    <ButtonGroup>
                       <Tooltip>
-                        <Button
-                          className="absolute top-2 right-2 z-10"
-                          onClick={() => {
-                            form.setValue("image", undefined);
-                            setSelectedFile(null);
-                            resetAll();
-                          }}
-                          size="icon-sm"
-                          variant="destructive"
-                        >
-                          <IconX />
-                        </Button>
+                        <TooltipTrigger asChild>
+                          <Button size="icon-sm" variant="ghost">
+                            <IconLink className="size-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Paste an URL to an image</TooltipContent>
                       </Tooltip>
-                      <Cropper
-                        aspectRatio={1}
-                        className="h-80"
-                        crop={crop}
-                        key={activeImage}
-                        onCropAreaChange={onCropAreaChange}
-                        onCropChange={setCrop}
-                        onCropComplete={onCropComplete}
-                        onZoomChange={setZoom}
-                        shape="circle"
-                        zoom={zoom}
-                      >
-                        <CropperImage alt="cropped image" crossOrigin="anonymous" src={activeImage} />
-                        <CropperArea />
-                      </Cropper>
-                      <div className="flex items-center gap-2">
-                        <div className="flex grow flex-col gap-2">
-                          <Label className="text-sm">Zoom: {zoom.toFixed(2)}</Label>
-                          <Slider
-                            className="w-full"
-                            max={3}
-                            min={1}
-                            onValueChange={(value) => setZoom(value[0] ?? 1)}
-                            step={0.1}
-                            value={[zoom]}
-                          />
-                        </div>
-                        <div className="flex gap-2">
-                          <Button disabled={isPending} onClick={onCropReset} variant="outline">
-                            Reset
+                    </ButtonGroup>
+                  </FormLabel>
+                  <FormControl>
+                    {activeImage ? (
+                      <div className="relative flex flex-col gap-2">
+                        {selectedFile && (
+                          <HoverCard>
+                            <HoverCardTrigger asChild>
+                              <Button className="absolute top-2 left-2 z-10" size="icon-sm" variant="ghost">
+                                <IconInfoCircle />
+                              </Button>
+                            </HoverCardTrigger>
+                            <HoverCardContent>
+                              <p>{selectedFile.name}</p>
+                              <p>{formatBytes(selectedFile.size)}</p>
+                              <p>{selectedFile.type}</p>
+                            </HoverCardContent>
+                          </HoverCard>
+                        )}
+                        <Tooltip>
+                          <Button
+                            className="absolute top-2 right-2 z-10"
+                            onClick={() => {
+                              form.setValue("image", undefined);
+                              setSelectedFile(null);
+                              resetAll();
+                            }}
+                            size="icon-sm"
+                            variant="destructive"
+                          >
+                            <IconX />
                           </Button>
-                          <Button disabled={!croppedArea || isPending} onClick={handleCropApply}>
-                            Save Image
-                          </Button>
+                        </Tooltip>
+                        <Cropper
+                          aspectRatio={1}
+                          className="h-80"
+                          crop={crop}
+                          key={activeImage}
+                          onCropAreaChange={onCropAreaChange}
+                          onCropChange={setCrop}
+                          onCropComplete={onCropComplete}
+                          onZoomChange={setZoom}
+                          shape="circle"
+                          zoom={zoom}
+                        >
+                          <CropperImage alt="cropped image" crossOrigin="anonymous" src={activeImage} />
+                          <CropperArea />
+                        </Cropper>
+                        <div className="flex items-center gap-2">
+                          <div className="flex grow flex-col gap-2">
+                            <Label className="text-sm">Zoom: {zoom.toFixed(2)}</Label>
+                            <Slider
+                              className="w-full"
+                              max={3}
+                              min={1}
+                              onValueChange={(value) => setZoom(value[0] ?? 1)}
+                              step={0.1}
+                              value={[zoom]}
+                            />
+                          </div>
+                          <div className="flex gap-2">
+                            <Button disabled={isPending} onClick={onCropReset} variant="outline">
+                              Reset
+                            </Button>
+                            <Button disabled={!croppedArea || isPending} onClick={handleCropApply}>
+                              Save Image
+                            </Button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ) : (
-                    <UploadDropzoneProgress
-                      accept="image/*"
-                      control={control}
-                      description="Recommended: 1200 x 1200 pixels."
-                      uploadOverride={handleUploadOverride}
-                      {...field}
-                    />
-                  )}
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            );
-          }}
-        />
-      </div>
+                    ) : (
+                      <UploadDropzoneProgress
+                        accept="image/*"
+                        control={control}
+                        description="Recommended: 1200 x 1200 pixels."
+                        uploadOverride={handleUploadOverride}
+                        {...field}
+                      />
+                    )}
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+        </div>
+      </ResponsiveModalContent>
     </ResponsiveModal>
   );
 };

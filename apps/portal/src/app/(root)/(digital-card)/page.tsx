@@ -1,8 +1,8 @@
+import type { Route } from "next";
 import { redirect } from "next/navigation";
 
-import { Button } from "@ziron/ui/components/button";
-
 import Header from "@/components/layout/header";
+import { CreateButton } from "@/components/ui/create-button";
 
 import { isAdminUser } from "@/features/auth/actions/user";
 import { CompaniesList } from "@/features/company/components/companies-list";
@@ -19,7 +19,7 @@ export default async function Page() {
   return (
     <>
       <Header title="Cards">
-        <Button>Create Card</Button>
+        <CreateButton href={"/card/new" as Route} label="Create Card" />
       </Header>
       <section className="container">
         <HydrateClient client={queryClient}>

@@ -24,6 +24,8 @@ export const env = createEnv({
     AWS_ACCESS_KEY_ID: z.string().min(1),
     AWS_SECRET_ACCESS_KEY: z.string().min(1),
 
+    UNSPLASH_ACCESS_KEY: z.string().min(1),
+
     PRODUCTION_URL: z.url(),
   },
 

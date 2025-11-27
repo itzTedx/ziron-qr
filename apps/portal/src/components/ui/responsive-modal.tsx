@@ -1,5 +1,7 @@
 "use client";
 
+import * as React from "react";
+
 import {
   Dialog,
   DialogContent,
@@ -20,7 +22,92 @@ import { useIsMobile } from "@ziron/ui/hooks/use-mobile";
 
 import { cn } from "@ziron/utils";
 
-interface Props {
+function ResponsiveModal({ ...props }: React.ComponentProps<typeof Dialog>) {
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return <Drawer data-slot="responsive-modal" {...props} />;
+  }
+
+  return <Dialog data-slot="responsive-modal" {...props} />;
+}
+
+function ResponsiveModalTrigger({ ...props }: React.ComponentProps<typeof DialogTrigger>) {
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return <DrawerTrigger data-slot="responsive-modal-trigger" {...props} />;
+  }
+
+  return <DialogTrigger data-slot="responsive-modal-trigger" {...props} />;
+}
+
+interface ResponsiveModalContentProps extends React.ComponentProps<typeof DialogContent> {
+  showCloseButton?: boolean;
+}
+
+function ResponsiveModalContent({
+  className,
+  children,
+  showCloseButton = false,
+  ...props
+}: ResponsiveModalContentProps) {
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return (
+      <DrawerContent className={className} data-slot="responsive-modal-content" {...props}>
+        {children}
+      </DrawerContent>
+    );
+  }
+
+  return (
+    <DialogContent
+      className={cn("p-0", "sm:max-w-3xl", className)}
+      data-slot="responsive-modal-content"
+      showCloseButton={showCloseButton}
+      {...props}
+    >
+      {children}
+    </DialogContent>
+  );
+}
+
+function ResponsiveModalHeader({ className, ...props }: React.ComponentProps<"div">) {
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return <DrawerHeader className={cn(className)} data-slot="responsive-modal-header" {...props} />;
+  }
+
+  return <DialogHeader className={cn("border-b p-6", className)} data-slot="responsive-modal-header" {...props} />;
+}
+
+function ResponsiveModalTitle({ className, ...props }: React.ComponentProps<typeof DialogTitle>) {
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return <DrawerTitle className={cn(className)} data-slot="responsive-modal-title" {...props} />;
+  }
+
+  return <DialogTitle className={cn(className)} data-slot="responsive-modal-title" {...props} />;
+}
+
+function ResponsiveModalDescription({ className, ...props }: React.ComponentProps<typeof DialogDescription>) {
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return (
+      <DrawerDescription className={cn("sr-only", className)} data-slot="responsive-modal-description" {...props} />
+    );
+  }
+
+  return <DialogDescription className={cn("sr-only", className)} data-slot="responsive-modal-description" {...props} />;
+}
+
+// Backward-compatible wrapper component (maintains old API)
+interface ResponsiveModalWrapperProps {
   children: React.ReactNode;
   isOpen?: boolean;
   asChild?: boolean;
@@ -32,7 +119,7 @@ interface Props {
   showCloseButton?: boolean;
 }
 
-export const ResponsiveModal = ({
+function ResponsiveModalWrapper({
   children,
   className,
   isOpen,
@@ -42,34 +129,32 @@ export const ResponsiveModal = ({
   title,
   description,
   showCloseButton = false,
-}: Props) => {
-  const isMobile = useIsMobile();
-
-  if (isMobile) {
-    return (
-      <Drawer onOpenChange={onOpenChange} open={isOpen}>
-        {trigger && <DrawerTrigger asChild={asChild}>{trigger}</DrawerTrigger>}
-        <DrawerContent>
-          <DrawerHeader>
-            <DrawerTitle>{title}</DrawerTitle>
-            {description && <DrawerDescription className="sr-only">{title}</DrawerDescription>}
-          </DrawerHeader>
-          {children}
-        </DrawerContent>
-      </Drawer>
-    );
-  }
-
+}: ResponsiveModalWrapperProps) {
   return (
-    <Dialog onOpenChange={onOpenChange} open={isOpen}>
-      {trigger && <DialogTrigger asChild={asChild}>{trigger}</DialogTrigger>}
-      <DialogContent className={cn("p-0", "sm:max-w-3xl", className)} showCloseButton={showCloseButton}>
-        <DialogHeader className="border-b p-6">
-          <DialogTitle>{title}</DialogTitle>
-          {description && <DialogDescription className="sr-only">{title}</DialogDescription>}
-        </DialogHeader>
+    <ResponsiveModalRoot onOpenChange={onOpenChange} open={isOpen}>
+      {trigger && <ResponsiveModalTrigger asChild={asChild}>{trigger}</ResponsiveModalTrigger>}
+      <ResponsiveModalContent className={className} showCloseButton={showCloseButton}>
+        <ResponsiveModalHeader>
+          <ResponsiveModalTitle>{title}</ResponsiveModalTitle>
+          {description && <ResponsiveModalDescription>{description}</ResponsiveModalDescription>}
+        </ResponsiveModalHeader>
         {children}
-      </DialogContent>
-    </Dialog>
+      </ResponsiveModalContent>
+    </ResponsiveModalRoot>
   );
+}
+
+// Rename the root component to avoid naming conflict
+const ResponsiveModalRoot = ResponsiveModal;
+
+// Export the wrapper as the default ResponsiveModal for backward compatibility
+// and export individual components for the new component-based API
+export {
+  ResponsiveModal,
+  ResponsiveModalWrapper as ResponsiveModalLegacy,
+  ResponsiveModalTrigger,
+  ResponsiveModalContent,
+  ResponsiveModalHeader,
+  ResponsiveModalTitle,
+  ResponsiveModalDescription,
 };

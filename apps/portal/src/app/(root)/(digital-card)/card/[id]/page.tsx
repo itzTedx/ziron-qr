@@ -64,20 +64,13 @@ export default async function CardPage({ params }: PageProps<"/card/[id]">) {
 
   const isEditMode = id !== "new";
 
+  const PAGE_TITLE = isEditMode
+    ? (`${truncate(card?.company.name!, 5, { mobileOnly: true })} / ${card?.name}` as const)
+    : ("Create New Card" as const);
+
   return (
     <div>
-      <Header
-        backHref="/"
-        currentPage={
-          isEditMode
-            ? `${truncate(card?.company.name!, 5, {
-                mobileOnly: true,
-              })} / ${card?.name}`
-            : "Create New Card"
-        }
-        showBackButton
-        title="Cards"
-      >
+      <Header backHref="/" currentPage={PAGE_TITLE} showBackButton title="Cards">
         {isEditMode ? (
           <>
             <CopyLinkButton slug={card?.slug} />
@@ -86,9 +79,7 @@ export default async function CardPage({ params }: PageProps<"/card/[id]">) {
             </HydrateClient>
             <CardActionsDropdown cardId={id} />
           </>
-        ) : (
-          "Create Card"
-        )}
+        ) : null}
       </Header>
       <CardForm companies={companies} initialData={card} isEditMode={isEditMode} />
     </div>

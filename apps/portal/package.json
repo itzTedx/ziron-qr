@@ -51,7 +51,8 @@
     "react-phone-number-input": "^3.4.12",
     "react-window": "^2.2.3",
     "sonner": "^2.0.6",
-    "tinycolor2": "^1.6.0"
+    "tinycolor2": "^1.6.0",
+    "unsplash-js": "^7.0.20"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
