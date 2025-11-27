@@ -75,7 +75,7 @@ export function formatDate(date: Date | string | number, options: FormatDateOpti
   let dateString = "";
 
   if (showDayOfWeek) {
-    dateString += dateObj.toLocaleDateString(locale, { weekday: "long" }) + ", ";
+    dateString += `${dateObj.toLocaleDateString(locale, { weekday: "long" })}, `;
   }
 
   if (isToday) {

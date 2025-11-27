@@ -15,7 +15,7 @@
     "dev:old": "concurrently \"pnpm with-env drizzle-kit studio --config=drizzle.config.ts --verbose\" \"tsc --watch\"",
     "dev": "pnpm with-env drizzle-kit studio --config=drizzle.config.ts --verbose",
     "format": "biome check .",
-    "format:fix": "biome check --write ./src/**/*.{ts,tsx}",
+    "format:fix": "biome check --write .",
     "lint": "biome check .",
     "generate": "pnpm with-env drizzle-kit generate",
     "migrate": "pnpm with-env drizzle-kit migrate",
