@@ -6,7 +6,7 @@ import { z } from "@ziron/validators";
 import { DEFAULT_BGCOLOR, DEFAULT_FGCOLOR, DEFAULT_LEVEL, DEFAULT_MARGIN } from "@/lib/qr/constants";
 import { QRCodeSVG } from "@/lib/qr/utils";
 
-export const runtime = "edge";
+// export const runtime = "edge";
 
 const CORS_HEADERS = new Headers({
   "Access-Control-Allow-Origin": "*",
