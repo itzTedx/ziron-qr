@@ -5,6 +5,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { IconMouse } from "@ziron/ui/assets/icons/mouse";
 import { Button } from "@ziron/ui/components/button";
 import { Skeleton } from "@ziron/ui/components/skeleton";
+
 import { pluralize } from "@ziron/utils";
 
 import { orpc } from "@/lib/orpc/client";

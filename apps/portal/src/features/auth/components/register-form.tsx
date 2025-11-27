@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 
-import { authClient } from "@ziron/auth/client";
 import { Button } from "@ziron/ui/components/button";
 import {
   Form,
@@ -21,6 +20,8 @@ import {
 import { Input } from "@ziron/ui/components/input";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 import { toast } from "@ziron/ui/components/sonner";
+
+import { authClient } from "@ziron/auth/client";
 import { RegisterUserType, registerUserSchema } from "@ziron/validators";
 
 export const RegisterForm = () => {

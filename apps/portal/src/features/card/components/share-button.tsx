@@ -3,8 +3,9 @@
 import { IconShare } from "@tabler/icons-react";
 import { useSetAtom } from "jotai";
 
-import { CardType, Company } from "@ziron/db/schema";
 import { Button } from "@ziron/ui/components/button";
+
+import { CardType, Company } from "@ziron/db/schema";
 
 import { openShareModalAtom, type ShareModalData } from "@/features/company/atom";
 import { env } from "@/lib/env/client";

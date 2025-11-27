@@ -1,7 +1,8 @@
-import { Company } from "@ziron/db/schema";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage, useFormContext } from "@ziron/ui/components/form";
 import { Input } from "@ziron/ui/components/input";
 import { Textarea } from "@ziron/ui/components/textarea";
+
+import { Company } from "@ziron/db/schema";
 import { EmailsType, PhonesType, zCardSchema } from "@ziron/validators";
 
 import { CompanyField } from "../fields/company-field";

@@ -29,8 +29,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="grid w-full flex-1 grid-cols-[auto_230px_1fr]" vaul-drawer-wrapper="">
-      <div className="fixed top-0 left-0 z-50 h-dvh w-screen bg-transparent transition-[background-color,backdrop-filter] max-md:pointer-events-none md:sticky md:z-auto md:w-full">
+    <div className="grid w-full flex-1 md:grid-cols-[auto_230px_1fr]" vaul-drawer-wrapper="">
+      <div className="fixed top-0 left-0 z-50 hidden h-dvh w-screen bg-transparent transition-[background-color,backdrop-filter] max-md:pointer-events-none md:sticky md:z-auto md:block md:w-full">
         <div className="scrollbar-hide relative flex h-full w-[calc(var(--sidebar-areas-width)-0.5rem)] flex-col">
           <div className="flex flex-1 grow flex-col items-center justify-between">
             <div className="flex flex-col items-center p-2">

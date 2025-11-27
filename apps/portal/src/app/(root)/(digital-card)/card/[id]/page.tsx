@@ -1,6 +1,8 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { truncate } from "@ziron/utils";
+
 import Header from "@/components/layout/header";
 
 import { CardForm } from "@/features/card/components/card-form";
@@ -64,7 +66,18 @@ export default async function CardPage({ params }: PageProps<"/card/[id]">) {
 
   return (
     <div>
-      <Header currentPage={isEditMode ? `${card?.company.name} / ${card?.name}` : "Create New Card"} title="Cards">
+      <Header
+        backHref="/"
+        currentPage={
+          isEditMode
+            ? `${truncate(card?.company.name!, 5, {
+                mobileOnly: true,
+              })} / ${card?.name}`
+            : "Create New Card"
+        }
+        showBackButton
+        title="Cards"
+      >
         {isEditMode ? (
           <>
             <CopyLinkButton slug={card?.slug} />

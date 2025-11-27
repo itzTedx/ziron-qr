@@ -3,8 +3,9 @@
 import { IconEdit } from "@tabler/icons-react";
 import { parseAsString, useQueryStates } from "nuqs";
 
-import { Company } from "@ziron/db/schema";
 import { Button } from "@ziron/ui/components/button";
+
+import { Company } from "@ziron/db/schema";
 
 interface EditButtonProps {
   initialData: Company;

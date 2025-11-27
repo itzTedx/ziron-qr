@@ -6,14 +6,16 @@ import { Button } from "@ziron/ui/components/button";
 import { Kbd } from "@ziron/ui/components/kbd";
 import { useCopyToClipboard } from "@ziron/ui/hooks/use-copy-to-clipboard";
 import { useHotkey } from "@ziron/ui/hooks/use-hotkey";
+
 import { cn } from "@ziron/utils";
 
 import { env } from "@/lib/env/client";
 
-export const CopyLinkButton = ({ slug }: { slug?: string }) => {
+export const CopyLinkButton = ({ slug }: { slug?: string | null }) => {
   const { isCopied, copyToClipboard } = useCopyToClipboard();
 
   function handleCopyLink() {
+    if (!slug) return;
     copyToClipboard(`${env.NEXT_PUBLIC_CLIENT_URL}/${slug}`);
   }
 
@@ -23,8 +25,16 @@ export const CopyLinkButton = ({ slug }: { slug?: string }) => {
     callback: handleCopyLink,
   });
 
+  if (!slug) return null;
+
   return (
-    <Button className="group pl-2 font-medium" onClick={handleCopyLink} size="sm" type="button" variant="outline">
+    <Button
+      className="group font-medium max-md:size-8 md:pl-2"
+      onClick={handleCopyLink}
+      size="sm"
+      type="button"
+      variant="outline"
+    >
       {isCopied ? (
         <div className="inline-flex h-5 w-fit min-w-5 items-center justify-center rounded-sm bg-success-foreground transition-colors group-hover:hidden">
           <IconCheck className="fade-in-0 slide-in-from-bottom slide-out-to-top size-4 animate-in text-success" />
@@ -37,7 +47,7 @@ export const CopyLinkButton = ({ slug }: { slug?: string }) => {
           <Kbd className="hidden group-hover:inline-flex">C</Kbd>
         </>
       )}
-      Copy Link
+      <span className="hidden sm:block">Copy Link</span>
     </Button>
   );
 };

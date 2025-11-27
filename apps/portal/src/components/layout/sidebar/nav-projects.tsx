@@ -1,7 +1,6 @@
 // import { CompanyType } from "@/server/schema";
 import { IconPlus } from "@tabler/icons-react";
 
-import { Company } from "@ziron/db/schema";
 import { Avatar, AvatarFallback, AvatarImage } from "@ziron/ui/components/avatar";
 import {
   SidebarGroup,
@@ -11,6 +10,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@ziron/ui/components/sidebar";
+
+import { Company } from "@ziron/db/schema";
 
 interface Props {
   data?: Company[];

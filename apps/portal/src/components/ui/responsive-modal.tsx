@@ -29,6 +29,7 @@ interface Props {
   title: string;
   description?: string;
   className?: string;
+  showCloseButton?: boolean;
 }
 
 export const ResponsiveModal = ({
@@ -40,6 +41,7 @@ export const ResponsiveModal = ({
   asChild,
   title,
   description,
+  showCloseButton = false,
 }: Props) => {
   const isMobile = useIsMobile();
 
@@ -61,7 +63,7 @@ export const ResponsiveModal = ({
   return (
     <Dialog onOpenChange={onOpenChange} open={isOpen}>
       {trigger && <DialogTrigger asChild={asChild}>{trigger}</DialogTrigger>}
-      <DialogContent className={cn("p-0", "sm:max-w-3xl", className)}>
+      <DialogContent className={cn("p-0", "sm:max-w-3xl", className)} showCloseButton={showCloseButton}>
         <DialogHeader className="border-b p-6">
           <DialogTitle>{title}</DialogTitle>
           {description && <DialogDescription className="sr-only">{title}</DialogDescription>}

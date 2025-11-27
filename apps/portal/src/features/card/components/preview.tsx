@@ -1,12 +1,13 @@
 import { IconArrowsMaximize } from "@tabler/icons-react";
 import { parseAsBoolean, useQueryState } from "nuqs";
 
-import { CardType, Company } from "@ziron/db/schema";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@ziron/ui/components/card";
 import { ScrollArea } from "@ziron/ui/components/scroll-area";
 import CardTemplate from "@ziron/ui/templates/card-template";
 import DefaultTemplate from "@ziron/ui/templates/default-template";
 import ModernTemplate from "@ziron/ui/templates/modern-template";
+
+import { CardType, Company } from "@ziron/db/schema";
 import { cn } from "@ziron/utils";
 import { zCardSchema } from "@ziron/validators";
 

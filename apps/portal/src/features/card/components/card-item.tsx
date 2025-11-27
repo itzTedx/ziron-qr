@@ -4,9 +4,10 @@ import Link from "next/link";
 
 import { IconEdit } from "@tabler/icons-react";
 
-import type { CardType, Company } from "@ziron/db/schema";
 import { Button } from "@ziron/ui/components/button";
 import { Card, CardContent, CardFooter } from "@ziron/ui/components/card";
+
+import type { CardType, Company } from "@ziron/db/schema";
 
 import ShareButton from "./share-button";
 

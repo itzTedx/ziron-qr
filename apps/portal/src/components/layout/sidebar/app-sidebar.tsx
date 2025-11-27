@@ -4,8 +4,6 @@ import * as React from "react";
 
 import Link from "next/link";
 
-import { User } from "@ziron/auth";
-import type { Company } from "@ziron/db/schema";
 import { IconLogo } from "@ziron/ui/assets/logo";
 import {
   Sidebar,
@@ -17,6 +15,9 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@ziron/ui/components/sidebar";
+
+import { User } from "@ziron/auth";
+import type { Company } from "@ziron/db/schema";
 
 import { NavMain } from "@/components/layout/sidebar/nav-main";
 import { NavUser } from "@/components/layout/sidebar/nav-user";
