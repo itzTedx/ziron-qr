@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 
 import { isDefinedError } from "@orpc/client";
-import { IconCopy } from "@tabler/icons-react";
+import { IconCopyPlus } from "@tabler/icons-react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -65,7 +65,7 @@ export const DuplicateCard = ({ cardId }: Props) => {
       role="button"
     >
       <LoadingSwap isLoading={duplicateCard.isPending}>
-        <IconCopy className="size-4" />
+        <IconCopyPlus className="size-4" />
       </LoadingSwap>
       <span>Duplicate Card</span>
 

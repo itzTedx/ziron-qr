@@ -11,6 +11,7 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ziron/ui/components/tooltip";
 
 import { ArchiveCard } from "./card-actions/archive-card";
+import { CopyCardId } from "./card-actions/copy-card-id";
 import { DeleteCard } from "./card-actions/delete-card";
 import { DuplicateCard } from "./card-actions/duplicate-card";
 
@@ -34,8 +35,9 @@ export const CardActionsDropdown = ({ cardId }: Props) => {
         </TooltipContent>
       </Tooltip>
 
-      <DropdownMenuContent align="end" className="min-w-48">
+      <DropdownMenuContent align="end" className="min-w-48 font-medium">
         <DropdownMenuGroup>
+          <CopyCardId cardId={cardId} />
           <DuplicateCard cardId={cardId} />
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

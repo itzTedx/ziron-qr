@@ -2,7 +2,16 @@ import { useState } from "react";
 
 import { toast } from "sonner";
 
-export function useCopyToClipboard({ timeout = 2000, onCopy }: { timeout?: number; onCopy?: () => void } = {}) {
+interface Props {
+  timeout?: number;
+  onCopy?: () => void;
+  customToast?: {
+    title?: string;
+    description?: string;
+  };
+}
+
+export function useCopyToClipboard({ timeout = 2000, onCopy, customToast }: Props = {}) {
   const [isCopied, setIsCopied] = useState(false);
 
   const copyToClipboard = (value: string) => {
@@ -14,8 +23,8 @@ export function useCopyToClipboard({ timeout = 2000, onCopy }: { timeout?: numbe
 
     navigator.clipboard.writeText(value).then(() => {
       setIsCopied(true);
-      toast.success("Copied", {
-        description: "Copied to clipboard",
+      toast.success(customToast?.title ?? "Copied", {
+        description: customToast?.description ?? "Copied to clipboard",
       });
 
       if (onCopy) {
