@@ -9,9 +9,9 @@
     "lint": "turbo lint",
     "db:generate": "pnpm -F @ziron/db generate",
     "db:migrate": "turbo -F @ziron/db migrate",
-    "format": "biome check .",
-    "format:fix": "biome check --write .",
-    "ui-add": "turbo run ui-add"
+    "format": "turbo format",
+    "format:fix": "turbo format:fix",
+    "ui:add": "pnpm -F @ziron/ui ui:add --"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",

@@ -29,9 +29,15 @@
       "cache": false,
       "persistent": true
     },
-    "ui-add": {
+    "ui:add": {
       "cache": false,
       "interactive": true
+    },
+    "format": {
+      "dependsOn": ["^format"]
+    },
+    "format:fix": {
+      "dependsOn": ["^format:fix"]
     }
   }
 }

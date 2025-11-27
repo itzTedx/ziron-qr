@@ -7,8 +7,9 @@
     "clean": "git clean -xdf .cache .turbo dist node_modules",
     "lint": "biome check .",
     "format": "biome check .",
+    "format:fix": "biome check --write .",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
-    "ui-add": "pnpm dlx shadcn@latest add && biome check --write src"
+    "ui:add": "pnpm dlx shadcn@latest add"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",

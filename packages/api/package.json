@@ -9,7 +9,11 @@
     }
   },
   "type": "module",
-  "scripts": {},
+  "scripts": {
+    "format": "biome check .",
+    "format:fix": "biome check --write .",
+    "lint": "biome check ."
+  },
   "dependencies": {
     "@orpc/client": "catalog:",
     "@orpc/openapi": "catalog:",

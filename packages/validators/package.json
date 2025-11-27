@@ -11,6 +11,7 @@
     "build": "tsup --clean",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
     "format": "biome check .",
+    "format:fix": "biome check --write .",
     "lint": "biome check .",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
