@@ -7,6 +7,7 @@ import { CardForm } from "@/features/card/components/card-form";
 import { client } from "@/lib/orpc/client";
 import { getQueryClient, HydrateClient } from "@/lib/orpc/query/hydration";
 
+import { CardActionsDropdown } from "../_components/card-actions-dropdown";
 import { ClicksVisits } from "../_components/clicks-visits";
 import { CopyLinkButton } from "../_components/copy-link-button";
 
@@ -70,6 +71,7 @@ export default async function CardPage({ params }: PageProps<"/card/[id]">) {
             <HydrateClient client={queryClient}>
               <ClicksVisits cardId={id} />
             </HydrateClient>
+            <CardActionsDropdown cardId={id} />
           </>
         ) : (
           "Create Card"

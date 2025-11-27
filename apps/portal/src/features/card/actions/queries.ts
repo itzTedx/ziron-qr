@@ -30,7 +30,7 @@ export async function getCards(orderBy: CardOrdering = "name_asc") {
     }
 
     const data = await db.query.cards.findMany({
-      where: (cards, { isNull }) => isNull(cards.deletedAt),
+      where: (cards, { isNull, and }) => and(isNull(cards.deletedAt), isNull(cards.archivedAt)),
       orderBy: orderFn,
       with: {
         emails: true,
@@ -57,7 +57,8 @@ export async function getCardById(cardId: string) {
     }
 
     const data = await db.query.cards.findFirst({
-      where: (cards, { eq, isNull }) => eq(cards.id, cardId) && isNull(cards.deletedAt),
+      where: (cards, { eq, isNull, and }) =>
+        and(eq(cards.id, cardId), isNull(cards.deletedAt), isNull(cards.archivedAt)),
       with: {
         emails: true,
         phones: true,

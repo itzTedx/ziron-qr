@@ -29,7 +29,7 @@ export const getMetrics = protectedProcedure
           },
         }),
         db.query.cards.findMany({
-          where: (cards, { isNull }) => isNull(cards.deletedAt),
+          where: (cards, { isNull, and }) => and(isNull(cards.deletedAt), isNull(cards.archivedAt)),
           columns: {
             id: true,
           },

@@ -166,7 +166,7 @@ export const updateCard = protectedProcedure
     const placeholderCover = "/images/placeholder-cover.jpg";
 
     const { error } = cardSchema.safeParse(input);
-    console.log("Validation Error", error);
+
     if (error) throw errors.BAD_REQUEST({ message: error.message });
 
     try {
@@ -301,6 +301,172 @@ async function generateSlug(name: string) {
   return slug;
 }
 
+export const duplicateCard = protectedProcedure
+  .route({
+    method: "POST",
+    path: "/card/:id/duplicate",
+    summary: "Duplicate a card",
+    description: "Create a duplicate of an existing card with all its data",
+    tags: ["card"],
+  })
+  .input(z.object({ id: z.string() }))
+  .output(
+    z.object({
+      cardId: z.string(),
+      cardName: z.string(),
+    })
+  )
+  .handler(async ({ input, errors }) => {
+    const placeholderCover = "/images/placeholder-cover.jpg";
+
+    try {
+      // Fetch the original card with all relations
+      const originalCard = await db.query.cards.findFirst({
+        where: (cards, { eq, isNull, and }) =>
+          and(eq(cards.id, input.id), isNull(cards.deletedAt), isNull(cards.archivedAt)),
+        with: {
+          emails: true,
+          phones: true,
+          links: true,
+          appearance: true,
+        },
+      });
+
+      if (!originalCard) {
+        throw errors.NOT_FOUND();
+      }
+
+      // Generate a unique slug for the duplicate
+      const uniqueSlug = await generateSlug(originalCard.name);
+
+      const duplicatedCard = await db.transaction(async (tx) => {
+        // Create the new card
+        const [newCard] = await tx
+          .insert(cards)
+          .values({
+            name: originalCard.name,
+            slug: uniqueSlug,
+            bio: originalCard.bio,
+            designation: originalCard.designation,
+            companyId: originalCard.companyId,
+            address: originalCard.address,
+            mapUrl: originalCard.mapUrl,
+            image: originalCard.image,
+            cover: originalCard.cover ?? placeholderCover,
+            attachmentUrl: originalCard.attachmentUrl,
+            attachmentFileName: originalCard.attachmentFileName,
+            attachmentObjectKey: originalCard.attachmentObjectKey,
+          })
+          .returning({
+            id: cards.id,
+            name: cards.name,
+          });
+
+        if (!newCard) {
+          throw errors.INTERNAL_SERVER_ERROR();
+        }
+
+        // Copy all related data
+        await Promise.all(
+          [
+            originalCard.links &&
+              originalCard.links.length > 0 &&
+              tx.insert(links).values(
+                originalCard.links.map((link, i) => ({
+                  label: link.label,
+                  url: link.url,
+                  icon: link.icon,
+                  category: link.category,
+                  cardId: newCard.id,
+                  order: i,
+                }))
+              ),
+
+            originalCard.emails &&
+              originalCard.emails.length > 0 &&
+              tx.insert(emails).values(
+                originalCard.emails.map((email, i) => ({
+                  email: email.email,
+                  label: email.label,
+                  cardId: newCard.id,
+                  order: i,
+                }))
+              ),
+
+            originalCard.phones &&
+              originalCard.phones.length > 0 &&
+              tx.insert(phones).values(
+                originalCard.phones.map((phone, i) => ({
+                  phone: phone.phone,
+                  label: phone.label,
+                  cardId: newCard.id,
+                  order: i,
+                }))
+              ),
+          ].filter(Boolean)
+        );
+
+        // Copy appearance settings
+        if (originalCard.appearance) {
+          await tx.insert(appearance).values({
+            cardId: newCard.id,
+            template: originalCard.appearance.template,
+            theme: originalCard.appearance.theme ?? "#4938ff",
+            btnColor: originalCard.appearance.btnColor ?? "#4938ff",
+            isDarkMode: originalCard.appearance.isDarkMode ?? false,
+          });
+        }
+
+        return newCard;
+      });
+
+      if (!duplicatedCard) {
+        throw errors.INTERNAL_SERVER_ERROR();
+      }
+
+      return {
+        cardId: duplicatedCard.id,
+        cardName: duplicatedCard.name,
+      };
+    } catch (error) {
+      console.log("Error in duplicateCard", error);
+      if (error instanceof Error && error.message.includes("NOT_FOUND")) {
+        throw error;
+      }
+      throw errors.INTERNAL_SERVER_ERROR({ message: error instanceof Error ? error.message : "Unknown error" });
+    }
+  });
+
+export const archiveCard = protectedProcedure
+  .route({
+    method: "POST",
+    path: "/card/:id/archive",
+    summary: "Archive a card",
+    description: "Archive a card by ID",
+    tags: ["card"],
+  })
+  .input(z.object({ id: z.string() }))
+  .output(z.object({ success: z.boolean(), cardName: z.string() }))
+  .handler(async ({ input, errors }) => {
+    try {
+      const [data] = await db
+        .update(cards)
+        .set({ archivedAt: new Date(), slug: null })
+        .where(eq(cards.id, input.id))
+        .returning({
+          name: cards.name,
+        });
+
+      if (!data) {
+        throw errors.NOT_FOUND();
+      }
+      return { success: true, cardName: data.name };
+    } catch (error) {
+      console.log("Error in archiveCard", error);
+      throw errors.INTERNAL_SERVER_ERROR();
+    }
+  });
+
 export const deleteCard = protectedProcedure
   .route({
     method: "DELETE",
@@ -314,7 +480,7 @@ export const deleteCard = protectedProcedure
   .handler(async ({ input, errors }) => {
     try {
       const [data] = await Promise.all([
-        db.update(cards).set({ deletedAt: new Date() }).where(eq(cards.id, input.id)).returning({
+        db.update(cards).set({ deletedAt: new Date(), slug: null }).where(eq(cards.id, input.id)).returning({
           name: cards.name,
         }),
         db.update(links).set({ deletedAt: new Date() }).where(eq(links.cardId, input.id)),
@@ -343,13 +509,13 @@ export const listCards = os
   .output(z.array(z.custom<Company>()))
   .handler(async () => {
     const data = await db.query.companies.findMany({
-      where: (cards, { isNull }) => isNull(cards.deletedAt),
+      where: (companies, { isNull }) => isNull(companies.deletedAt),
       with: {
-        cards: true,
+        cards: {
+          where: (cards, { isNull, and }) => and(isNull(cards.deletedAt), isNull(cards.archivedAt)),
+        },
       },
     });
-
-    console.log("Data from listCards", data);
 
     return data;
   });
@@ -367,7 +533,8 @@ export const getCard = protectedProcedure
   .handler(async ({ input }) => {
     if (input.id !== "new") {
       const data = await db.query.cards.findFirst({
-        where: (cards, { eq, isNull, and }) => and(eq(cards.id, input.id), isNull(cards.deletedAt)),
+        where: (cards, { eq, isNull, and }) =>
+          and(eq(cards.id, input.id), isNull(cards.deletedAt), isNull(cards.archivedAt)),
         with: {
           emails: true,
           phones: true,
@@ -394,7 +561,8 @@ export const getCardBySlug = os
   .handler(async ({ input }) => {
     if (input.slug !== "new") {
       const data = await db.query.cards.findFirst({
-        where: (cards, { eq, isNull, and }) => and(eq(cards.slug, input.slug), isNull(cards.deletedAt)),
+        where: (cards, { eq, isNull, and }) =>
+          and(eq(cards.slug, input.slug), isNull(cards.deletedAt), isNull(cards.archivedAt)),
         with: {
           emails: true,
           phones: true,

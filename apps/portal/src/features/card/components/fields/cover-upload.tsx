@@ -57,7 +57,6 @@ export const CoverUpload = ({ className, data }: Props) => {
           control={form.control}
           name="cover"
           render={({ field }) => {
-            console.log("cover image", field.value);
             return (
               <FormItem>
                 <FormLabel className="flex items-center justify-between">

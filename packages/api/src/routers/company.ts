@@ -57,7 +57,7 @@ export const listCompanies = protectedProcedure
       where: (companies, { isNull }) => isNull(companies.deletedAt),
       with: {
         cards: {
-          where: (cards, { isNull }) => isNull(cards.deletedAt),
+          where: (cards, { isNull, and }) => and(isNull(cards.deletedAt), isNull(cards.archivedAt)),
         },
       },
       // orderBy: getOrder(input.orderBy),

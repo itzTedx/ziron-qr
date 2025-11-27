@@ -12,7 +12,7 @@ export const cards = pgTable(
 
     // Core card information
     name: varchar("name", { length: 255 }).notNull(),
-    slug: varchar("slug", { length: 100 }).unique().notNull(),
+    slug: varchar("slug", { length: 100 }).unique(),
     bio: text("bio"),
     designation: varchar("designation", { length: 255 }),
 
@@ -38,6 +38,7 @@ export const cards = pgTable(
       .defaultNow()
       .$onUpdate(() => new Date()),
     deletedAt: timestamp("deleted_at", { withTimezone: true }),
+    archivedAt: timestamp("archived_at", { withTimezone: true }),
   },
   (table) => [
     index("cards_name_idx").on(table.name),
@@ -45,6 +46,7 @@ export const cards = pgTable(
     index("cards_company_id_idx").on(table.companyId),
     index("cards_created_at_idx").on(table.createdAt),
     index("cards_deleted_at_idx").on(table.deletedAt),
+    index("cards_archived_at_idx").on(table.archivedAt),
     uniqueIndex("cards_slug_unique_idx").on(table.slug),
   ]
 );

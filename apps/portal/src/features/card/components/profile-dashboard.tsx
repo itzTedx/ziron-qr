@@ -43,7 +43,7 @@ export const ProfileDashboard = ({ isPending, companyName, data, company }: Prop
 
   return (
     <div>
-      <div className="group relative h-72 bg-secondary">
+      <div className="group relative h-48 bg-secondary">
         <Image
           alt="cover image"
           className="object-cover transition-[filter] group-hover:brightness-75"
@@ -59,7 +59,7 @@ export const ProfileDashboard = ({ isPending, companyName, data, company }: Prop
           {/* <Button variant='destructive'>Remove</Button> */}
         </div>
       </div>
-      <section className="-mt-16 mx-auto max-w-7xl">
+      <section className="-mt-16 container mx-auto">
         <div className="relative grid grid-cols-10 rounded-lg border-background border-t bg-background/80 px-6 py-4 shadow-muted/30 backdrop-blur-xl sm:border sm:shadow-lg md:grid-cols-12 md:divide-x">
           <div className="col-span-10 flex md:col-span-5 md:px-3 lg:pr-6">
             <div className="group relative size-24 shrink-0">

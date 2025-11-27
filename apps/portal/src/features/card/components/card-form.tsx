@@ -15,7 +15,6 @@ import { Tabs, TabsContent } from "@ziron/ui/components/tabs";
 import { cardSchema, zCardSchema } from "@ziron/validators";
 
 import { orpc, queryClient } from "@/lib/orpc/client";
-import { validateForm } from "@/lib/utils";
 
 import { transformCardData } from "../utils/transform-card-data";
 import { CardCustomize } from "./form-sections/customize";
@@ -45,10 +44,10 @@ export function CardForm({ companies, isEditMode, initialData }: Props) {
     mode: "onBlur",
   });
 
-  const validation = validateForm(form.watch(), cardSchema);
+  // const validation = validateForm(form.watch(), cardSchema);
 
-  console.log(validation);
-  console.log("form data", form.getValues());
+  // console.log(validation);
+  // console.log("form data", form.getValues());
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
