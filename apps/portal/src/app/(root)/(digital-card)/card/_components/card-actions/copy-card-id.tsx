@@ -1,6 +1,6 @@
 "use client";
 
-import { IconCopy } from "@tabler/icons-react";
+import { IconCheck, IconCopy } from "@tabler/icons-react";
 
 import { DropdownMenuItem, DropdownMenuShortcut } from "@ziron/ui/components/dropdown-menu";
 import { Kbd } from "@ziron/ui/components/kbd";
@@ -37,7 +37,7 @@ export const CopyCardId = ({ cardId }: Props) => {
       }}
       role="button"
     >
-      <LoadingSwap isLoading={isCopied}>
+      <LoadingSwap icon={<IconCheck className="size-4" />} isLoading={isCopied}>
         <IconCopy className="size-4" />
       </LoadingSwap>
       <span>Copy Card ID</span>
