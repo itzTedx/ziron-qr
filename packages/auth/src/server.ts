@@ -1,8 +1,7 @@
-import type { BetterAuthOptions } from "better-auth";
-import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import type { BetterAuthOptions } from "better-auth/minimal";
+import { betterAuth } from "better-auth/minimal";
 import { nextCookies } from "better-auth/next-js";
-import { twoFactor } from "better-auth/plugins";
 
 import { db } from "@ziron/db/client";
 import redis from "@ziron/redis";
@@ -11,8 +10,8 @@ import { authEnv } from "../env";
 
 export function initAuth(options: {
   baseUrl: string;
-
   secret: string | undefined;
+  plugins?: BetterAuthOptions["plugins"];
   trustedOrigins?: string[];
 }) {
   const config = {
@@ -38,7 +37,7 @@ export function initAuth(options: {
       },
     },
 
-    plugins: [nextCookies(), twoFactor()],
+    plugins: [nextCookies(), ...(options.plugins || [])],
 
     rateLimit: {
       enabled: true,
@@ -48,21 +47,27 @@ export function initAuth(options: {
 
     secondaryStorage: {
       get: async (key) => {
-        const value = await redis.get(key);
-        return value ? value : null;
+        const value = await redis.get(`session:${key}`);
+        return value ?? null;
       },
       set: async (key, value, ttl) => {
-        if (ttl) await redis.setex(key, ttl, value);
-        else await redis.set(key, value);
+        if (ttl) await redis.setex(`session:${key}`, ttl, value);
+        else await redis.set(`session:${key}`, value);
       },
       delete: async (key) => {
-        await redis.del(key);
+        await redis.del(`session:${key}`);
       },
     },
     advanced: {
       cookiePrefix: "ziron",
       database: {
         generateId: false,
+      },
+    },
+    session: {
+      cookieCache: {
+        enabled: true,
+        maxAge: 5 * 60, // Cache duration in seconds
       },
     },
     trustedOrigins: [

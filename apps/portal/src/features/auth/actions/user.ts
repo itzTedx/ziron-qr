@@ -12,7 +12,7 @@ import { auth } from "@/lib/auth/server";
 export const getSession = cache(async () => auth.api.getSession({ headers: await headers() }));
 
 export const getCurrentUser = cache(async () => {
-  "use server";
+  "use cache";
 
   const session = await getSession();
 

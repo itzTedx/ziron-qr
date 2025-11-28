@@ -12,9 +12,6 @@ export const env = createEnv({
     DB_USER: z.string().min(1),
     DB_NAME: z.string().min(1),
 
-    BETTER_AUTH_SECRET: z.string().min(1),
-    BETTER_AUTH_URL: z.url(),
-
     REDIS_HOST: z.string().min(1),
     REDIS_PORT: z.string().min(1),
     REDIS_PASSWORD: z.string().min(1),

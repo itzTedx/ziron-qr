@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-import { initAuth } from "@ziron/auth";
+import { Auth, initAuth } from "@ziron/auth";
 import { authEnv } from "@ziron/auth/env";
 
 import { base } from "./base";
@@ -18,7 +18,7 @@ export const requireAuth = base.middleware(async ({ context, next }) => {
   });
 });
 
-export const auth = initAuth({
+export const auth: Auth = initAuth({
   baseUrl: authEnv().BETTER_AUTH_URL,
   secret: authEnv().BETTER_AUTH_SECRET,
 });
