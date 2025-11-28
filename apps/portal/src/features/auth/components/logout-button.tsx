@@ -6,8 +6,9 @@ import { useRouter } from "next/navigation";
 
 import { SlotPrimitive } from "@ziron/ui/components/button";
 
-import { authClient } from "@ziron/auth/client";
 import { cn } from "@ziron/utils";
+
+import { authClient } from "@/lib/auth/client";
 
 export const LogoutButton = ({
   className,

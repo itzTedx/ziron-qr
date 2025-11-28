@@ -1,3 +1,5 @@
+"use client";
+
 import { Route } from "next";
 import Link from "next/link";
 
@@ -15,12 +17,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@ziron/ui/components/dropdown-menu";
+import { Skeleton } from "@ziron/ui/components/skeleton";
 
-import { getCurrentUser } from "@/features/auth/actions/user";
 import { LogoutButton } from "@/features/auth/components/logout-button";
+import { useSession } from "@/lib/auth/client";
 
-export async function NavUser() {
-  const { user } = await getCurrentUser();
+export function NavUser() {
+  const { data, isPending } = useSession();
+  const user = data?.user;
 
   return (
     <>
@@ -28,8 +32,14 @@ export async function NavUser() {
         <DropdownMenuTrigger asChild>
           <Button size="icon-lg" variant="ghost">
             <Avatar className="size-8 rounded-lg">
-              <AvatarImage alt={user.name} src={user.image ?? undefined} />
-              <AvatarFallback className="rounded-lg">{user.name.slice(0, 2)}</AvatarFallback>
+              {isPending ? (
+                <Skeleton className="size-full rounded-[inherit]" />
+              ) : (
+                <>
+                  <AvatarImage alt={user?.name ?? ""} src={user?.image ?? undefined} />
+                  <AvatarFallback className="rounded-lg">{user?.name?.slice(0, 2) ?? ""}</AvatarFallback>
+                </>
+              )}
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
@@ -41,8 +51,8 @@ export async function NavUser() {
           <DropdownMenuLabel className="px-2 py-1 font-normal">
             <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.name}</span>
-                <span className="truncate text-muted-foreground text-xs">{user.email}</span>
+                <span className="truncate font-medium">{user?.name ?? ""}</span>
+                <span className="truncate text-muted-foreground text-xs">{user?.email ?? ""}</span>
               </div>
             </div>
           </DropdownMenuLabel>

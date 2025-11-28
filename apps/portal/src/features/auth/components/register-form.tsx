@@ -21,8 +21,9 @@ import { Input } from "@ziron/ui/components/input";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 import { toast } from "@ziron/ui/components/sonner";
 
-import { authClient } from "@ziron/auth/client";
 import { RegisterUserType, registerUserSchema } from "@ziron/validators";
+
+import { authClient } from "@/lib/auth/client";
 
 export const RegisterForm = () => {
   const router = useRouter();
