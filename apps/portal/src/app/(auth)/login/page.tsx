@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { IconLogoMono } from "@ziron/ui/assets/logo";
 import { Card, CardContent } from "@ziron/ui/components/card";
 
+import { redirectUser } from "@/features/auth/actions/redirect";
 import { LoginForm } from "@/features/auth/components/login-form";
 
 export const metadata: Metadata = {
@@ -10,13 +11,15 @@ export const metadata: Metadata = {
   description: "Sign in to your account",
 };
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  await redirectUser();
+
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-card">
-      <Card className="relative overflow-hidden rounded-xl border shadow-lg sm:mx-auto sm:w-full sm:max-w-md">
+    <div className="relative flex min-h-screen items-center justify-center bg-card/50">
+      <Card className="relative overflow-hidden rounded-xl border-0 bg-muted/50 shadow-card shadow-lg sm:mx-auto sm:w-full sm:max-w-md">
         {/* Background effects */}
         <div className="-top-1/2 -translate-y-[10%] absolute inset-x-0 h-full w-full bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-size-[24px_24px]">
-          <div className="absolute top-0 right-0 left-0 m-auto h-[200px] w-[200px] rounded-full bg-brand-secondary opacity-40 blur-[100px] dark:opacity-20" />
+          <div className="absolute top-0 right-0 left-0 m-auto h-[200px] w-[200px] rounded-full bg-brand-secondary opacity-40 blur-[100px] dark:opacity-100" />
         </div>
 
         <CardContent className="z-10 px-10 py-12">
