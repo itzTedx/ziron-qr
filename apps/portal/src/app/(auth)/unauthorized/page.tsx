@@ -4,7 +4,7 @@ import { ShieldX } from "lucide-react";
 import { Button } from "@ziron/ui/components/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@ziron/ui/components/card";
 
-import { LogoutButton } from "@/components/ui/logout-button";
+import { LogoutButton } from "@/features/auth/components/logout-button";
 
 export default function UnauthorizedPage() {
   return (

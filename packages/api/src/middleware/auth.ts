@@ -1,13 +1,16 @@
+import { redirect } from "next/navigation";
+
 import { initAuth } from "@ziron/auth";
 import { authEnv } from "@ziron/auth/env";
 
 import { base } from "./base";
 
-export const requireAuth = base.middleware(async ({ context, next, errors }) => {
+export const requireAuth = base.middleware(async ({ context, next }) => {
   const session = await getSession(context.headers);
 
   if (!session?.session) {
-    throw errors.UNAUTHORIZED();
+    redirect("/unauthorized");
+    // throw errors.UNAUTHORIZED();
   }
 
   return next({
@@ -17,7 +20,6 @@ export const requireAuth = base.middleware(async ({ context, next, errors }) => 
 
 export const auth = initAuth({
   baseUrl: authEnv().BETTER_AUTH_URL,
-  productionUrl: authEnv().PRODUCTION_URL,
   secret: authEnv().BETTER_AUTH_SECRET,
 });
 

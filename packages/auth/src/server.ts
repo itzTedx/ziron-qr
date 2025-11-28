@@ -11,7 +11,7 @@ import { authEnv } from "../env";
 
 export function initAuth(options: {
   baseUrl: string;
-  productionUrl: string;
+
   secret: string | undefined;
   trustedOrigins?: string[];
 }) {
@@ -66,9 +66,9 @@ export function initAuth(options: {
       },
     },
     trustedOrigins: [
+      "https://ziron-qr-portal.vercel.app",
       "http://localhost:3000",
       "http://192.168.0.206:3000",
-      "https://ziron-qr-portal.vercel.app",
       authEnv().PRODUCTION_URL,
       ...(options.trustedOrigins || []),
     ],

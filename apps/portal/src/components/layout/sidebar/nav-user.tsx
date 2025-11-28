@@ -16,9 +16,8 @@ import {
   DropdownMenuTrigger,
 } from "@ziron/ui/components/dropdown-menu";
 
-import { LogoutButton } from "@/components/ui/logout-button";
-
 import { getCurrentUser } from "@/features/auth/actions/user";
+import { LogoutButton } from "@/features/auth/components/logout-button";
 
 export async function NavUser() {
   const { user } = await getCurrentUser();
