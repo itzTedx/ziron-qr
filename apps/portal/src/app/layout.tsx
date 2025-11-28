@@ -8,6 +8,8 @@ import "../lib/orpc/server"; // for pre-rendering
 
 import { Metadata } from "next";
 
+import { env } from "@/lib/env/server";
+
 const fontSans = Geist({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -30,9 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <script src="https://unpkg.com/react-scan/dist/auto.global.js" />
-      </head>
+      <head>{env.NODE_ENV === "development" && <script src="https://unpkg.com/react-scan/dist/auto.global.js" />}</head>
       <body className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased`}>
         <Providers>{children}</Providers>
       </body>
