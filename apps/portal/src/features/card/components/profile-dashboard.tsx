@@ -46,9 +46,9 @@ export const ProfileDashboard = ({ isPending, companyName, data, companyId }: Pr
   });
 
   return (
-    <div>
+    <div className="p-1">
       <div
-        className="group relative h-48 border-b bg-secondary"
+        className="group relative h-48 overflow-hidden border-b bg-secondary"
         onClick={() => setIsCoverUploadOpen(true)}
         role="button"
       >

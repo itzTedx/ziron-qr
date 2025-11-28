@@ -7,7 +7,6 @@ import { IconBuilding } from "@ziron/ui/assets/icons/building";
 import { IconCard2 } from "@ziron/ui/assets/icons/card";
 import { IconMouse } from "@ziron/ui/assets/icons/mouse";
 import { Label } from "@ziron/ui/components/label";
-import { ScrollArea, ScrollBar } from "@ziron/ui/components/scroll-area";
 
 import { getQueryClient, HydrateClient } from "@/lib/orpc/query/hydration";
 
@@ -115,10 +114,7 @@ export default function DigitalCardLayout({ children }: Props) {
         </div>
       </aside>
       <div className="h-screen md:pt-2 md:pr-2 md:pb-2">
-        <ScrollArea className="h-full bg-stone-950/80 backdrop-blur-lg md:rounded-xl">
-          <main className="">{children}</main>
-          <ScrollBar />
-        </ScrollArea>
+        <main className="h-full overflow-hidden bg-stone-950 md:rounded-xl">{children}</main>
       </div>
     </>
   );

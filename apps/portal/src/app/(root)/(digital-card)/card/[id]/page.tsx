@@ -69,7 +69,7 @@ export default async function CardPage({ params }: PageProps<"/card/[id]">) {
     : ("Create New Card" as const);
 
   return (
-    <div>
+    <>
       <Header backHref="/" currentPage={PAGE_TITLE} showBackButton title="Cards">
         {isEditMode ? (
           <>
@@ -82,6 +82,6 @@ export default async function CardPage({ params }: PageProps<"/card/[id]">) {
         ) : null}
       </Header>
       <CardForm initialData={card} isEditMode={isEditMode} />
-    </div>
+    </>
   );
 }
