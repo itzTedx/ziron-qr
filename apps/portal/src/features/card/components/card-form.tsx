@@ -194,15 +194,6 @@ export function CardForm({ isEditMode, initialData }: Props) {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <ProfileDashboard
           companyId={data.companyId}
-          // company={
-          //   companies?.find((c) => c.id === data.companyId)
-          //     ? {
-          //         logo: companies.find((c) => c.id === data.companyId)?.logo ?? null,
-          //         name: companies.find((c) => c.id === data.companyId)?.name ?? "",
-          //       }
-          //     : undefined
-          // }
-          // companyName={companies?.find((c) => c.id === data.companyId)?.name}
           data={{
             id: data.id,
             name: data.name,

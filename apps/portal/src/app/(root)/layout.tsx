@@ -78,7 +78,9 @@ export default function RootLayout({
 
               <ThemeToggle />
 
-              <NavUser />
+              <Suspense fallback={<div className="size-11" />}>
+                <NavUser />
+              </Suspense>
             </div>
           </div>
         </div>

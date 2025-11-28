@@ -11,10 +11,10 @@ import { auth } from "@/lib/auth/server";
 
 export const getSession = cache(async () => auth.api.getSession({ headers: await headers() }));
 
-export const getCurrentUser = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+export const getCurrentUser = cache(async () => {
+  "use server";
+
+  const session = await getSession();
 
   if (!session) {
     redirect("/login");
@@ -32,7 +32,7 @@ export const getCurrentUser = async () => {
     session: session.session,
     user,
   };
-};
+});
 
 export const signIn = async (email: string, password: string) => {
   try {
@@ -82,8 +82,8 @@ export const signUp = async (email: string, password: string, username: string) 
 };
 
 /**
- * Checks if the given user has the 'admin' role.
- * @param user - The user object to check.
+ * Checks if the current user has the 'admin' role.
+ * @param requestHeaders - Optional headers to use for authentication. If not provided, will fetch headers.
  * @returns True if the user is an admin, false otherwise.
  */
 export async function isAdminUser(): Promise<boolean> {

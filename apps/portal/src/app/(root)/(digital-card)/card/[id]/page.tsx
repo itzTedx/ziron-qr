@@ -13,8 +13,6 @@ import { CardActionsDropdown } from "../_components/card-actions-dropdown";
 import { ClicksVisits } from "../_components/clicks-visits";
 import { CopyLinkButton } from "../_components/copy-link-button";
 
-export const dynamic = "force-dynamic";
-
 export async function generateMetadata({ params }: PageProps<"/card/[id]">): Promise<Metadata> {
   const { id } = await params;
   const card = await client.card.get({ id });
