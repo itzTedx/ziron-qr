@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { IconBuildingSkyscraper, IconMail, IconPhone, IconPinned } from "@tabler/icons-react";
 
-import { CardType, Company } from "@ziron/db/schema";
+import { CardType, Organization } from "@ziron/db/schema";
 import { cn, getTextColorByBackground, removeExtension } from "@ziron/utils";
 
 import { Icons } from "../assets/icons";
@@ -11,11 +11,11 @@ import SaveContactButton from "../components/save-contact-button";
 
 interface TemplateProps {
   card?: Partial<CardType>;
-  company?: Company;
+  organization?: Organization;
   imageBase64URI?: string;
 }
 
-export default function DefaultTemplate({ card, company, imageBase64URI }: TemplateProps) {
+export default function DefaultTemplate({ card, organization, imageBase64URI }: TemplateProps) {
   if (!card) return null;
 
   const textColor = getTextColorByBackground(card.appearance?.btnColor || "#4938ff");
@@ -46,13 +46,13 @@ export default function DefaultTemplate({ card, company, imageBase64URI }: Templ
               <div className="-translate-x-1/2 absolute top-1/2 left-1/2 @sm:size-32 size-24 overflow-hidden rounded-full border-4 border-background bg-gray-100">
                 <Image alt="" className="object-cover" fill sizes="20vw" src={card.image} />
 
-                {card.company && card.company.logo && (
+                {card.organization && card.organization.logo && (
                   <>
                     <Image
                       alt="cover"
                       className="-translate-x-1/2 absolute bottom-3 left-1/2 z-30 h-5 object-contain"
                       height={100}
-                      src={card.company.logo}
+                      src={card.organization.logo}
                       width={100}
                     />
                     <div className="absolute inset-x-0 bottom-0 h-12 bg-linear-to-t from-background/50 to-transparent" />
@@ -68,19 +68,19 @@ export default function DefaultTemplate({ card, company, imageBase64URI }: Templ
           </section>
         </header>
 
-        {card.company || card.emails || card.phones || card.address ? (
+        {card.organization || card.emails || card.phones || card.address ? (
           <section className="border-y @sm:px-6 px-4 @sm:py-4 py-3">
             <h2 className="pb-3 font-medium @sm:text-sm text-gray-600 text-xs">Contact Info</h2>
 
             <div className="@sm:space-y-6 space-y-3">
-              {card.company || company ? (
+              {card.organization || organization ? (
                 <Link
                   className="flex items-center gap-2 @sm:text-base text-sm"
-                  href={card.company && card.company.website ? card.company.website : "#"}
+                  href={card.organization && card.organization.website ? card.organization.website : "#"}
                   target="_blank"
                 >
                   <IconBuildingSkyscraper className="@sm:size-5 size-4 shrink-0 stroke-[1.5]" />
-                  {company?.name || card.company?.name}
+                  {organization?.name || card.organization?.name}
                 </Link>
               ) : null}
               {card.emails &&

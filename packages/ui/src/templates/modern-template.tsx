@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { IconMail, IconPhone, IconPinned } from "@tabler/icons-react";
 
-import { CardType, Company } from "@ziron/db/schema";
+import { CardType, Organization } from "@ziron/db/schema";
 import { cn, getTextColorByBackground, removeExtension } from "@ziron/utils";
 
 import { Icons } from "../assets/icons";
@@ -11,11 +11,11 @@ import SaveContactButton from "../components/save-contact-button";
 
 interface TemplateProps {
   card?: Partial<CardType>;
-  company?: Company;
+  organization?: Organization;
   imageBase64URI?: string;
 }
 
-export default function ModernTemplate({ card, company, imageBase64URI }: TemplateProps) {
+export default function ModernTemplate({ card, organization, imageBase64URI }: TemplateProps) {
   if (!card) return null;
 
   const textColor = getTextColorByBackground(card.appearance?.btnColor || "#4938ff");
@@ -48,12 +48,12 @@ export default function ModernTemplate({ card, company, imageBase64URI }: Templa
               }}
             >
               <div className="absolute top-3 z-50 flex @sm:h-32 h-24 w-full items-start justify-center bg-center bg-cover bg-no-repeat pt-4">
-                {card.company && card.company.logo && (
+                {card.organization && card.organization.logo && (
                   <Image
                     alt="cover"
                     className="z-30 h-5 object-contain"
                     height={100}
-                    src={card.company.logo}
+                    src={card.organization.logo}
                     width={100}
                   />
                 )}
@@ -74,14 +74,14 @@ export default function ModernTemplate({ card, company, imageBase64URI }: Templa
 
           <section className={cn("space-y-0.5 px-8 py-4 text-center")}>
             {card.name && <h1 className="font-bold @sm:text-2xl text-xl">{card.name}</h1>}
-            {card.company || company ? (
+            {card.organization || organization ? (
               <h2
                 className="font-medium"
                 style={{
                   color: theme,
                 }}
               >
-                {company?.name || card.company?.name}
+                {organization?.name || card.organization?.name}
               </h2>
             ) : null}
             {card.designation && <h2 className="@sm:text-sm text-xs">{card.designation}</h2>}
@@ -113,7 +113,7 @@ export default function ModernTemplate({ card, company, imageBase64URI }: Templa
           </section>
         </header>
 
-        {card.company || card.emails || card.phones || card.address ? (
+        {card.organization || card.emails || card.phones || card.address ? (
           <section className="@sm:space-y-4 space-y-3 @sm:px-8 px-4">
             <h2 className="sr-only">Contact Info</h2>
 

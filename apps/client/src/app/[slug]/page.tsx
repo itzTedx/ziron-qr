@@ -26,9 +26,9 @@ export async function generateMetadata({ params }: PageProps<"/[slug]">): Promis
     };
 
   const data = {
-    title: `${card.name} - ${card.company.name} | Ziron Digital Card`,
+    title: `${card.name} - ${card.organization.name} | Ziron Digital Card`,
     description: card.bio ?? "",
-    icon: card.company.logo ?? undefined,
+    icon: card.organization.logo ?? undefined,
     twitterHandler: card.links.find((l) => l.label === "Twitter")?.url?.replace(/.*\.com\//, "@"),
   };
 
