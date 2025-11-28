@@ -235,7 +235,7 @@ export const SlugField = ({ data, organizationId }: Props) => {
 
               <ButtonGroup>
                 <Button
-                  className="hidden items-center gap-1.5 md:flex"
+                  className="hidden items-center gap-1.5 has-[>svg]:px-2 md:flex"
                   onClick={() => {
                     handleShare();
                   }}
@@ -245,7 +245,7 @@ export const SlugField = ({ data, organizationId }: Props) => {
                 >
                   <Icons.share className="size-4 stroke-[1.5]" />
                   <span className="hidden lg:block">Share</span>
-                  <Kbd>S</Kbd>
+                  <Kbd variant="outline">S</Kbd>
                 </Button>
               </ButtonGroup>
             </ButtonGroup>

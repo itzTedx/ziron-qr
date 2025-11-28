@@ -74,6 +74,11 @@ export const trackPageVisit = publicProcedure
   .handler(async ({ input, context }) => {
     try {
       const request = context.request;
+      if (!request) {
+        // If no request available, return success but skip tracking
+        console.warn("No request available for page visit tracking");
+        return { success: false };
+      }
       const userAgent = request.headers.get("user-agent");
       const ipAddress = getIpAddress(request);
       const deviceInfo = parseUserAgent(userAgent);
@@ -116,6 +121,11 @@ export const trackEvent = publicProcedure
   .handler(async ({ input, context }) => {
     try {
       const request = context.request;
+      if (!request) {
+        // If no request available, return success but skip tracking
+        console.warn("No request available for event tracking");
+        return { success: false };
+      }
       const userAgent = request.headers.get("user-agent");
       const ipAddress = getIpAddress(request);
       const deviceInfo = parseUserAgent(userAgent);

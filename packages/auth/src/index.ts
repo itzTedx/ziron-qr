@@ -77,6 +77,12 @@ export function initAuth(options: {
       authEnv().PRODUCTION_URL,
       ...(options.trustedOrigins || []),
     ],
+
+    onAPIError: {
+      onError(error, ctx) {
+        console.error("BETTER AUTH API ERROR", error, ctx);
+      },
+    },
   } satisfies BetterAuthOptions;
 
   return betterAuth(config);

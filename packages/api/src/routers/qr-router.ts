@@ -91,6 +91,11 @@ export const generateQR = protectedProcedure
   .output(z.string()) // Base64 encoded PNG
   .handler(async ({ input, context, errors }) => {
     try {
+      if (!context.request) {
+        throw errors.BAD_REQUEST({
+          message: "Request object is required for QR code generation",
+        });
+      }
       const baseUrl = getBaseUrl(context.request);
       const dataUrl = await fetchQRCodeFromAPI(
         baseUrl,

@@ -11,7 +11,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "relative cursor-pointer rounded-md bg-gradient-to-bl bg-white from-primary to-brand-secondary text-center text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset] transition duration-200",
+          "relative cursor-pointer rounded-md bg-gradient-to-bl bg-white from-primary to-brand-secondary text-center text-white transition duration-200",
         destructive:
           "relative cursor-pointer rounded-md bg-gradient-to-b bg-white from-red-700 to-destructive text-center text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset] transition duration-200 hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40",
         outline: "border border-input bg-transparent shadow-xs hover:bg-accent hover:text-accent-foreground",

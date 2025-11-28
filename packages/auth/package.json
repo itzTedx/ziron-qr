@@ -4,9 +4,7 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/server.ts",
-    "./middleware": "./src/middleware.ts",
-    "./client": "./src/client.ts",
+    ".": "./src/index.ts",
     "./env": "./env.ts"
   },
   "license": "MIT",

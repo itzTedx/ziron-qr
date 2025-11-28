@@ -1,13 +1,21 @@
-import { NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
-import { ORPCError, onError, ValidationError } from "@orpc/server";
+import { ORPCError, ValidationError, onError } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 
+import { createContext } from "@ziron/api/middleware/context";
 import { router } from "@ziron/api/routers/index";
-import * as z from "@ziron/validators";
+import { z } from "@ziron/validators";
+
+// const rpcHandler = new RPCHandler(router, {
+//   interceptors: [
+//     onError((error) => {
+//       console.error(error);
+//     }),
+//   ],
 
 const rpcHandler = new RPCHandler(router, {
   interceptors: [
@@ -41,19 +49,11 @@ const rpcHandler = new RPCHandler(router, {
     }),
   ],
 });
+
 const apiHandler = new OpenAPIHandler(router, {
   plugins: [
     new OpenAPIReferencePlugin({
       schemaConverters: [new ZodToJsonSchemaConverter()],
-      docsTitle: "Ziron API Documentation",
-
-      specGenerateOptions: {
-        info: {
-          title: "Ziron API",
-          version: "1.0.0",
-          summary: "Ziron API",
-        },
-      },
     }),
   ],
   interceptors: [
@@ -63,16 +63,16 @@ const apiHandler = new OpenAPIHandler(router, {
   ],
 });
 
-async function handleRequest(request: NextRequest) {
-  const rpcResult = await rpcHandler.handle(request, {
+async function handleRequest(req: NextRequest) {
+  const rpcResult = await rpcHandler.handle(req, {
     prefix: "/api/rpc",
-    context: { request, headers: request.headers },
+    context: await createContext(req),
   });
   if (rpcResult.response) return rpcResult.response;
 
-  const apiResult = await apiHandler.handle(request, {
-    prefix: "/api/rpc/docs",
-    context: { request, headers: request.headers },
+  const apiResult = await apiHandler.handle(req, {
+    prefix: "/api/rpc/api-reference",
+    context: await createContext(req),
   });
   if (apiResult.response) return apiResult.response;
 

@@ -1,21 +1,17 @@
 import "server-only";
 
-import { headers } from "next/headers";
-
 import { createRouterClient } from "@orpc/server";
 
+import { createContext } from "@ziron/api/middleware/context";
 import { router } from "@ziron/api/routers/index";
 
+/**
+ * Global client instance shared across all requests.
+ *
+ * Context is provided per-request using the request parameter passed to the context function.
+ * The route handler in apps/portal/src/app/api/rpc/[[...rest]]/route.ts also provides
+ * context at the handler level for HTTP requests.
+ */
 globalThis.$client = createRouterClient(router, {
-  /**
-   * Provide initial context if needed.
-   *
-   * Because this client instance is shared across all requests,
-   * only include context that's safe to reuse globally.
-   * For per-request context, use middleware context or pass a function as the initial context.
-   */
-  context: async ({ request }) => ({
-    headers: await headers(),
-    request,
-  }),
+  context: async ({ request }) => await createContext(request),
 });

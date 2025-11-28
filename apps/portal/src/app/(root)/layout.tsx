@@ -49,7 +49,7 @@ export default function RootLayout({
                   <TooltipTrigger asChild>
                     <Link
                       className="relative flex size-11 items-center justify-center rounded-lg bg-card outline-none transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-black/50"
-                      href={"/card" as Route}
+                      href={"/"}
                     >
                       <IconCard className="size-5" />
                     </Link>
