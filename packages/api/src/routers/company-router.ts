@@ -1,5 +1,5 @@
 import { db } from "@ziron/db/client";
-import { Company, companies } from "@ziron/db/schema";
+import { Company, CompanyWithCards, companies } from "@ziron/db/schema";
 import { slugify } from "@ziron/utils";
 import { companySchema, z } from "@ziron/validators";
 
@@ -51,7 +51,7 @@ export const listCompanies = protectedProcedure
     description: "List all companies with their cards",
     tags: ["company"],
   })
-  .output(z.array(z.custom<Company>()))
+  .output(z.array(z.custom<CompanyWithCards>()))
   .handler(async () => {
     const data = await db.query.companies.findMany({
       where: (companies, { isNull }) => isNull(companies.deletedAt),

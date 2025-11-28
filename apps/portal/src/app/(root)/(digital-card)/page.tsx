@@ -21,7 +21,7 @@ export default async function Page() {
       <Header title="Cards">
         <CreateButton href={"/card/new" as Route} label="Create Card" />
       </Header>
-      <section className="container">
+      <section className="container pt-3">
         <HydrateClient client={queryClient}>
           <CompaniesList />
         </HydrateClient>

@@ -21,9 +21,9 @@ export default function DigitalCardLayout({ children }: Props) {
   const queryClient = getQueryClient();
   return (
     <>
-      <aside className="fixed top-0 left-0 z-50 hidden h-dvh w-screen bg-transparent transition-[background-color,backdrop-filter] max-md:pointer-events-none md:sticky md:z-auto md:block md:w-full">
+      <aside className="fixed top-0 left-0 z-50 hidden h-dvh w-screen max-md:pointer-events-none md:sticky md:z-auto md:block md:w-full">
         <div className="size-full overflow-hidden py-2 pr-2 transition-opacity duration-300">
-          <div className="scrollbar-hide relative flex h-full flex-col overflow-y-auto overflow-x-hidden rounded-xl bg-sidebar">
+          <div className="scrollbar-hide relative flex h-full flex-col overflow-y-auto overflow-x-hidden rounded-xl bg-sidebar/70 backdrop-blur-lg">
             <div className="relative flex grow flex-col p-3 text-stone-500">
               <Link className="group mb-2 flex items-center gap-3 px-3 py-2" href="/">
                 <span className="font-semibold text-foreground text-lg transition-colors duration-150 group-hover:text-foreground">
@@ -115,7 +115,7 @@ export default function DigitalCardLayout({ children }: Props) {
         </div>
       </aside>
       <div className="h-screen md:pt-2 md:pr-2 md:pb-2">
-        <ScrollArea className="h-full bg-card md:rounded-xl">
+        <ScrollArea className="h-full bg-stone-950/80 backdrop-blur-lg md:rounded-xl">
           <main className="">{children}</main>
           <ScrollBar />
         </ScrollArea>

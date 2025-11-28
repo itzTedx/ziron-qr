@@ -1,17 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { getSession } from "./features/auth/actions/user";
+import { getSessionCookie } from "better-auth/cookies";
 
 export async function proxy(request: NextRequest) {
-  const session = await getSession();
-
+  const sessionCookie = getSessionCookie(request, {
+    cookiePrefix: "ziron",
+  });
   // THIS IS NOT SECURE!
   // This is the recommended approach to optimistically redirect users
   // We recommend handling auth checks in each page/route
-  if (!session) {
-    return NextResponse.redirect(new URL("/sign-in", request.url));
+  if (!sessionCookie) {
+    return NextResponse.redirect(new URL("/", request.url));
   }
-
   return NextResponse.next();
 }
 
