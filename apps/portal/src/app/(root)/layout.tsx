@@ -67,7 +67,7 @@ export default function RootLayout({
                 <TooltipTrigger asChild>
                   <Link
                     className="group relative flex size-11 items-center justify-center rounded-lg outline-none transition-colors duration-150 hover:bg-muted focus-visible:ring-2 focus-visible:ring-black/50"
-                    href={"/card" as Route}
+                    href={"/account/settings" as Route}
                   >
                     <IconSettings className="size-4 transition-transform duration-300 group-hover:rotate-45" />
                     <span className="sr-only">Settings</span>

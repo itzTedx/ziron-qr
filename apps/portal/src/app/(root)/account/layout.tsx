@@ -6,11 +6,10 @@ import { IconChevronLeft } from "@tabler/icons-react";
 import { IconSettings } from "@ziron/ui/assets/icons/settings";
 import { IconShield } from "@ziron/ui/assets/icons/shield";
 import { Label } from "@ziron/ui/components/label";
-import { ScrollArea, ScrollBar } from "@ziron/ui/components/scroll-area";
 
 export default function AccountLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative grid h-full grid-cols-[230px_1fr]">
+    <>
       <aside className="sticky top-4 m-3 ml-0 h-full flex-1 rounded-lg bg-sidebar p-3">
         <Link className="group mb-2 flex items-center gap-3 px-3 py-2" href="/">
           <div className="group-hover:-translate-x-0.5 flex size-6 items-center justify-center rounded-md bg-muted text-muted-foreground transition-[transform_background-color_color] duration-150 group-hover:bg-muted-foreground/20 group-hover:text-foreground">
@@ -44,11 +43,10 @@ export default function AccountLayout({ children }: { children: React.ReactNode 
           </li>
         </ul>
       </aside>
-      <ScrollArea className="m-3 ml-0 overflow-hidden rounded-lg bg-card">
-        {children}
 
-        <ScrollBar />
-      </ScrollArea>
-    </div>
+      <div className="h-screen md:pt-2 md:pr-2 md:pb-2">
+        <main className="h-full overflow-hidden bg-stone-50/80 sm:rounded-xl dark:bg-stone-950">{children}</main>
+      </div>
+    </>
   );
 }

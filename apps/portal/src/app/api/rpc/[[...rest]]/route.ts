@@ -2,16 +2,42 @@ import { NextRequest } from "next/server";
 
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
-import { onError } from "@orpc/server";
+import { ORPCError, onError, ValidationError } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 
 import { router } from "@ziron/api/routers/index";
+import * as z from "@ziron/validators";
 
 const rpcHandler = new RPCHandler(router, {
   interceptors: [
     onError((error) => {
       console.error(error);
+    }),
+  ],
+  clientInterceptors: [
+    onError((error) => {
+      if (error instanceof ORPCError && error.code === "BAD_REQUEST" && error.cause instanceof ValidationError) {
+        // If you only use Zod you can safely cast to ZodIssue[]
+        const zodError = new z.ZodError(error.cause.issues as z.core.$ZodIssue[]);
+
+        throw new ORPCError("INPUT_VALIDATION_FAILED", {
+          status: 422,
+          message: z.prettifyError(zodError),
+          data: z.flattenError(zodError),
+          cause: error.cause,
+        });
+      }
+
+      if (
+        error instanceof ORPCError &&
+        error.code === "INTERNAL_SERVER_ERROR" &&
+        error.cause instanceof ValidationError
+      ) {
+        throw new ORPCError("OUTPUT_VALIDATION_FAILED", {
+          cause: error.cause,
+        });
+      }
     }),
   ],
 });
