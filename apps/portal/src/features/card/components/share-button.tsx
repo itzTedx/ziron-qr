@@ -5,26 +5,26 @@ import { useSetAtom } from "jotai";
 
 import { Button } from "@ziron/ui/components/button";
 
-import { CardType, Company } from "@ziron/db/schema";
+import { CardType, Organization } from "@ziron/db/schema";
 
-import { openShareModalAtom, type ShareModalData } from "@/features/company/atom";
+import { openShareModalAtom, type ShareModalData } from "@/features/organization/atom";
 import { env } from "@/lib/env/client";
 
 type PersonCardFields = Pick<CardType, "id" | "name" | "designation" | "slug" | "image" | "cover">;
 interface ShareButtonProps {
   data: PersonCardFields;
-  company: Company;
+  organization: Organization;
 }
 
-export default function ShareButton({ data, company }: ShareButtonProps) {
+export default function ShareButton({ data, organization }: ShareButtonProps) {
   const shareLink = `${env.NEXT_PUBLIC_CLIENT_URL}/${data.slug}`;
 
   const shareData: ShareModalData = {
     data: {
       ...data,
-      company: {
-        logo: company.logo ?? null,
-        name: company.name,
+      organization: {
+        logo: organization.logo ?? null,
+        name: organization.name,
       },
       url: shareLink,
     },
@@ -34,7 +34,7 @@ export default function ShareButton({ data, company }: ShareButtonProps) {
 
   return (
     <Button className="w-full flex-1 gap-1.5" onClick={() => openModal(shareData)} size="sm" variant="ghost">
-      <IconShare className="size-4" /> <span className="hidden sm:block">Share</span>
+      <IconShare className="size-3.5 sm:size-4" /> <span className="text-xs sm:text-sm">Share</span>
     </Button>
   );
 }

@@ -11,8 +11,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@ziron/ui/components/to
 import { NavUser } from "@/components/layout/sidebar/nav-user";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 
-import CompanyFormModal from "@/features/company/components/modal";
 import { ShareModal } from "@/features/modal/share-modal";
+import CompanyFormModal from "@/features/organization/components/modal";
 
 export const metadata: Metadata = {
   title: "QR Code Generator",

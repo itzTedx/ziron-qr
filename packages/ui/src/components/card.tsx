@@ -5,7 +5,10 @@ import { cn } from "@ziron/utils";
 function Card({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("flex flex-col gap-0 rounded-xl border bg-card py-3 text-card-foreground shadow-sm", className)}
+      className={cn(
+        "flex flex-col gap-0 rounded-lg border bg-card py-1.5 text-card-foreground shadow-sm md:rounded-xl",
+        className
+      )}
       data-slot="card"
       {...props}
     />
@@ -49,7 +52,7 @@ function CardContent({ className, ...props }: React.ComponentProps<"div">) {
 
 function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div className={cn("flex items-center px-3 [.border-t]:pt-2", className)} data-slot="card-footer" {...props} />
+    <div className={cn("flex items-center px-1.5 [.border-t]:pt-1.5", className)} data-slot="card-footer" {...props} />
   );
 }
 

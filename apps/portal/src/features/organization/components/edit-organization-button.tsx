@@ -5,14 +5,14 @@ import { parseAsString, useQueryStates } from "nuqs";
 
 import { Button } from "@ziron/ui/components/button";
 
-import { Company } from "@ziron/db/schema";
+import { Organization } from "@ziron/db/schema";
 
 interface EditButtonProps {
-  initialData: Company;
+  initialData: Organization;
 }
 
-export function EditCompanyButton({ initialData }: EditButtonProps) {
-  const [, setCompanyModal] = useQueryStates({
+export function EditOrganizationButton({ initialData }: EditButtonProps) {
+  const [, setOrganizationModal] = useQueryStates({
     modal: parseAsString,
   });
 
@@ -28,7 +28,7 @@ export function EditCompanyButton({ initialData }: EditButtonProps) {
   return (
     <Button
       onClick={() => {
-        setCompanyModal({ modal: "company" });
+        setOrganizationModal({ modal: "organization" });
         setFields({
           id: initialData.id ?? "",
           name: initialData.name ?? "",

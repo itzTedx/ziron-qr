@@ -15,53 +15,53 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@ziron/ui/c
 import { Skeleton } from "@ziron/ui/components/skeleton";
 import { useHotkey } from "@ziron/ui/hooks/use-hotkey";
 
-import { CompanyWithCards } from "@ziron/db/schema";
+import { OrganizationWithCards } from "@ziron/db/schema";
 import { cn } from "@ziron/utils";
 
-import { PersonCard } from "@/features/card/components/card-item";
+import { PersonCard } from "@/features/card/components/person-card";
 import { orpc } from "@/lib/orpc/client";
 
+import { EmptyCard } from "../../card/components/empty-card";
 import { companyCollapsibleStateAtom } from "../atom";
-import { EditCompanyButton } from "./edit-company-button";
-import { EmptyCompany } from "./empty-company";
+import { EditOrganizationButton } from "./edit-organization-button";
 
-const COMPANY_COLLAPSIBLE_COOKIE_NAME = "company-collapsible-state";
-const COMPANY_COLLAPSIBLE_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
+const ORGANIZATION_COLLAPSIBLE_COOKIE_NAME = "organization-collapsible-state";
+const ORGANIZATION_COLLAPSIBLE_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 
 const MemoizedCollapsible = memo(Collapsible);
 const MemoizedCollapsibleTrigger = memo(CollapsibleTrigger);
 const MemoizedCollapsibleContent = memo(CollapsibleContent);
 
-interface CompanyItemProps {
-  company: CompanyWithCards;
+interface OrganizationItemProps {
+  organization: OrganizationWithCards;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-const CompanyItem = memo(({ company, isOpen, onOpenChange }: CompanyItemProps) => {
+const OrganizationItem = memo(({ organization, isOpen, onOpenChange }: OrganizationItemProps) => {
   return (
     <MemoizedCollapsible className="w-full" onOpenChange={onOpenChange} open={isOpen}>
       <div className="flex w-full cursor-pointer items-center justify-between">
         <MemoizedCollapsibleTrigger className="flex w-full cursor-pointer items-center gap-3">
-          {company.logo && (
+          {organization.logo && (
             <div className="flex size-8 items-center justify-center rounded-sm border bg-white p-1">
               <Image
-                alt={`${company.name}'s Logo`}
+                alt={`${organization.name}'s Logo`}
                 className="size-4 object-contain"
                 height={35}
-                src={company.logo}
-                title={`${company.name}'s Logo`}
+                src={organization.logo}
+                title={`${organization.name}'s Logo`}
                 width={35}
               />
             </div>
           )}
-          <h2 className="font-medium capitalize">{company.name}</h2>
+          <h2 className="font-medium capitalize">{organization.name}</h2>
         </MemoizedCollapsibleTrigger>
 
         <div className="flex gap-2">
-          <EditCompanyButton initialData={company} />
+          <EditOrganizationButton initialData={organization} />
           <Button asChild size="icon" variant="outline">
-            <Link href={`/card/new?companyId=${company.id}`}>
+            <Link href={`/card/new?organizationId=${organization.id}`}>
               <IconPlus className="size-4" />
             </Link>
           </Button>
@@ -71,21 +71,21 @@ const CompanyItem = memo(({ company, isOpen, onOpenChange }: CompanyItemProps) =
       <MemoizedCollapsibleContent
         className={cn("grid grid-cols-2 gap-2.5 pt-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4")}
       >
-        {company.cards.length === 0 ? (
-          <EmptyCompany id={company.id} />
+        {organization.cards.length === 0 ? (
+          <EmptyCard id={organization.id} />
         ) : (
-          company.cards.map((card) => <PersonCard card={card} company={company} key={card.id} />)
+          organization.cards.map((card) => <PersonCard card={card} key={card.id} organization={organization} />)
         )}
       </MemoizedCollapsibleContent>
     </MemoizedCollapsible>
   );
 });
 
-CompanyItem.displayName = "CompanyItem";
+OrganizationItem.displayName = "OrganizationItem";
 
-export const CompaniesList = () => {
+export const OrganizationsList = () => {
   const [collapsibleState, setCollapsibleState] = useAtom(companyCollapsibleStateAtom);
-  const { data: companies, isLoading } = useSuspenseQuery(orpc.company.list.queryOptions());
+  const { data: organizations, isLoading } = useSuspenseQuery(orpc.organization.list.queryOptions());
   const router = useRouter();
 
   // Handle C keyboard shortcut
@@ -99,25 +99,25 @@ export const CompaniesList = () => {
   });
 
   const handleOpenChange = useCallback(
-    (companyId: string, open: boolean) => {
+    (organizationId: string, open: boolean) => {
       // Use functional update to avoid depending on collapsibleState
       setCollapsibleState((prevState) => {
         const newState = {
           ...prevState,
-          [companyId]: open,
+          [organizationId]: open,
         };
 
         // Set cookie asynchronously to avoid blocking DOM commit
         if (typeof requestIdleCallback !== "undefined") {
           requestIdleCallback(() => {
             const encodedValue = encodeURIComponent(JSON.stringify(newState));
-            document.cookie = `${COMPANY_COLLAPSIBLE_COOKIE_NAME}=${encodedValue}; path=/; max-age=${COMPANY_COLLAPSIBLE_COOKIE_MAX_AGE}`;
+            document.cookie = `${ORGANIZATION_COLLAPSIBLE_COOKIE_NAME}=${encodedValue}; path=/; max-age=${ORGANIZATION_COLLAPSIBLE_COOKIE_MAX_AGE}`;
           });
         } else {
           // Fallback for browsers without requestIdleCallback
           setTimeout(() => {
             const encodedValue = encodeURIComponent(JSON.stringify(newState));
-            document.cookie = `${COMPANY_COLLAPSIBLE_COOKIE_NAME}=${encodedValue}; path=/; max-age=${COMPANY_COLLAPSIBLE_COOKIE_MAX_AGE}`;
+            document.cookie = `${ORGANIZATION_COLLAPSIBLE_COOKIE_NAME}=${encodedValue}; path=/; max-age=${ORGANIZATION_COLLAPSIBLE_COOKIE_MAX_AGE}`;
           }, 0);
         }
 
@@ -131,14 +131,14 @@ export const CompaniesList = () => {
 
   return (
     <div className="flex w-full flex-1 flex-col gap-8">
-      {companies.map((company) => {
-        const isOpen = collapsibleState[company.id] ?? false;
+      {organizations.map((organization) => {
+        const isOpen = collapsibleState[organization.id] ?? false;
         return (
-          <CompanyItem
-            company={company}
+          <OrganizationItem
             isOpen={isOpen}
-            key={company.id}
-            onOpenChange={(open) => handleOpenChange(company.id, open)}
+            key={organization.id}
+            onOpenChange={(open) => handleOpenChange(organization.id, open)}
+            organization={organization}
           />
         );
       })}

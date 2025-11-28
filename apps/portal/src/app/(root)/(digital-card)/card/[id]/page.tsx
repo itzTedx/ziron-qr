@@ -75,7 +75,7 @@ export default async function CardPage({ params }: PageProps<"/card/[id]">) {
           <>
             <CopyLinkButton slug={card?.slug} />
             <HydrateClient client={queryClient}>
-              <ClicksVisits cardId={id} />
+              <ClicksVisits cardId={id} className="max-md:hidden" />
             </HydrateClient>
             <CardActionsDropdown cardId={id} />
           </>

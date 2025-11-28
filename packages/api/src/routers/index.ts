@@ -13,18 +13,19 @@ import {
   listCards,
   updateCard,
 } from "./card-router";
-import { createCompany, getCompany, listCompanies } from "./company-router";
 import { getMetrics } from "./metrics-router";
+import { createOrganization, deleteOrganization, getOrganization, listOrganizations } from "./organization-router";
 import { generateQR } from "./qr-router";
 
 export const router = {
   metrics: {
     get: getMetrics,
   },
-  company: {
-    create: createCompany,
-    list: listCompanies,
-    get: getCompany,
+  organization: {
+    create: createOrganization,
+    list: listOrganizations,
+    get: getOrganization,
+    delete: deleteOrganization,
   },
   card: {
     create: createCard,

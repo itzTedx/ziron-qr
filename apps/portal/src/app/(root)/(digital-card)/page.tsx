@@ -5,7 +5,7 @@ import { ScrollArea, ScrollBar } from "@ziron/ui/components/scroll-area";
 import Header from "@/components/layout/header";
 import { CreateButton } from "@/components/ui/create-button";
 
-import { CompaniesList } from "@/features/company/components/companies-list";
+import { OrganizationsList } from "@/features/organization/components/organizations-list";
 
 export default async function Page() {
   return (
@@ -15,8 +15,10 @@ export default async function Page() {
       </Header>
 
       <section className="h-full flex-1">
-        <ScrollArea className="container h-full flex-1 overflow-y-auto sm:pt-3">
-          <CompaniesList />
+        <ScrollArea className="h-full flex-1 overflow-y-auto pt-2 sm:pt-3">
+          <div className="gradient container">
+            <OrganizationsList />
+          </div>
 
           <ScrollBar />
         </ScrollArea>

@@ -3,7 +3,7 @@ import { boolean, index, pgTable, real, text, timestamp, uniqueIndex, uuid, varc
 
 import { InferResultType } from "../client";
 import { events, pageVisits } from "./analytics-schema";
-import { companies } from "./company-schema";
+import { organizationTable } from "./organization-schema";
 
 export const cards = pgTable(
   "cards",
@@ -28,9 +28,9 @@ export const cards = pgTable(
     attachmentObjectKey: varchar("attachment_object_key", { length: 255 }),
 
     // Company relationship
-    companyId: uuid("company_id")
+    organizationId: uuid("organization_id")
       .notNull()
-      .references(() => companies.id, { onDelete: "cascade" }),
+      .references(() => organizationTable.id, { onDelete: "cascade" }),
 
     // Timestamps
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
@@ -43,7 +43,7 @@ export const cards = pgTable(
   (table) => [
     index("cards_name_idx").on(table.name),
     index("cards_slug_idx").on(table.slug),
-    index("cards_company_id_idx").on(table.companyId),
+    index("cards_organization_id_idx").on(table.organizationId),
     index("cards_created_at_idx").on(table.createdAt),
     index("cards_deleted_at_idx").on(table.deletedAt),
     index("cards_archived_at_idx").on(table.archivedAt),
@@ -160,9 +160,9 @@ export const links = pgTable(
 );
 
 export const cardsRelations = relations(cards, ({ one, many }) => ({
-  company: one(companies, {
-    fields: [cards.companyId],
-    references: [companies.id],
+  organization: one(organizationTable, {
+    fields: [cards.organizationId],
+    references: [organizationTable.id],
   }),
   links: many(links),
   emails: many(emails),
@@ -214,7 +214,7 @@ export type CardType = InferResultType<
   {
     emails: true;
     phones: true;
-    company: true;
+    organization: true;
     links: true;
     appearance: true;
   }

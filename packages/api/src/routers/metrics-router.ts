@@ -8,12 +8,12 @@ export const getMetrics = protectedProcedure
     method: "GET",
     path: "/metrics",
     summary: "Get usage metrics",
-    description: "Get usage metrics including total companies, cards, and events",
+    description: "Get usage metrics including total organizations, cards, and events",
     tags: ["metrics"],
   })
   .output(
     z.object({
-      totalCompanies: z.number(),
+      totalOrganizations: z.number(),
       totalCards: z.number(),
       totalEvents: z.number(),
       totalPageVisits: z.number(),
@@ -21,9 +21,9 @@ export const getMetrics = protectedProcedure
   )
   .handler(async ({ errors }) => {
     try {
-      const [companiesList, cardsList, eventsList, pageVisitsList] = await Promise.all([
-        db.query.companies.findMany({
-          where: (companies, { isNull }) => isNull(companies.deletedAt),
+      const [organizationsList, cardsList, eventsList, pageVisitsList] = await Promise.all([
+        db.query.organizationTable.findMany({
+          where: (organization, { isNull }) => isNull(organization.deletedAt),
           columns: {
             id: true,
           },
@@ -47,7 +47,7 @@ export const getMetrics = protectedProcedure
       ]);
 
       return {
-        totalCompanies: companiesList.length,
+        totalOrganizations: organizationsList.length,
         totalCards: cardsList.length,
         totalEvents: eventsList.length,
         totalPageVisits: pageVisitsList.length,

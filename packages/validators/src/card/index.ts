@@ -56,7 +56,7 @@ export const cardSchema = z
     name: z.string().min(2, { message: "Please enter full name" }).max(256, { message: "Name is too long" }),
     bio: z.string().nullable(),
     designation: z.string().nullable(),
-    companyId: z.string(),
+    organizationId: z.string(),
 
     // Contact information
     phones: phonesSchema.optional(),
@@ -80,7 +80,7 @@ export const cardSchema = z
     appearance: appearanceSchema,
   })
   .describe(
-    "Validates card data: core info (name, bio, designation, companyId), contact details (phones, emails, address), media (image, cover, attachments), links, and styling preferences."
+    "Validates card data: core info (name, bio, designation, organizationId), contact details (phones, emails, address), media (image, cover, attachments), links, and styling preferences."
   );
 
 export type zCardSchema = z.infer<typeof cardSchema>;

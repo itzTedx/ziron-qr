@@ -2,7 +2,7 @@ import { os } from "@orpc/server";
 
 import { eq } from "@ziron/db";
 import { db } from "@ziron/db/client";
-import { appearance, CardType, Company, cards, emails, links, phones } from "@ziron/db/schema";
+import { appearance, CardType, cards, emails, links, OrganizationWithCards, phones } from "@ziron/db/schema";
 import { slugify } from "@ziron/utils";
 import { cardSchema, transformSlug, ZodError, z } from "@ziron/validators";
 
@@ -179,7 +179,7 @@ export const updateCard = protectedProcedure
         mapUrl: input.mapUrl,
         bio: input.bio,
         designation: input.designation,
-        companyId: input.companyId,
+        organizationId: input.organizationId,
         slug: updateData.slug ?? uniqueSlug,
         image: getAvatar(updateData.name, updateData.image),
         cover: updateData.cover ?? placeholderCover,
@@ -348,7 +348,7 @@ export const duplicateCard = protectedProcedure
             slug: uniqueSlug,
             bio: originalCard.bio,
             designation: originalCard.designation,
-            companyId: originalCard.companyId,
+            organizationId: originalCard.organizationId,
             address: originalCard.address,
             mapUrl: originalCard.mapUrl,
             image: originalCard.image,
@@ -506,10 +506,10 @@ export const listCards = os
     description: "List all cards with their company",
     tags: ["card"],
   })
-  .output(z.array(z.custom<Company>()))
+  .output(z.array(z.custom<OrganizationWithCards>()))
   .handler(async () => {
-    const data = await db.query.companies.findMany({
-      where: (companies, { isNull }) => isNull(companies.deletedAt),
+    const data = await db.query.organizationTable.findMany({
+      where: (organization, { isNull }) => isNull(organization.deletedAt),
       with: {
         cards: {
           where: (cards, { isNull, and }) => and(isNull(cards.deletedAt), isNull(cards.archivedAt)),
@@ -539,7 +539,7 @@ export const getCard = protectedProcedure
           emails: true,
           phones: true,
           links: true,
-          company: true,
+          organization: true,
           appearance: true,
         },
       });
@@ -567,7 +567,7 @@ export const getCardBySlug = os
           emails: true,
           phones: true,
           links: true,
-          company: true,
+          organization: true,
           appearance: true,
         },
       });

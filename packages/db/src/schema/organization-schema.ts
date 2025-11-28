@@ -4,8 +4,8 @@ import { index, pgTable, text, timestamp, uniqueIndex, uuid, varchar } from "dri
 import { InferResultType } from "../client";
 import { cards } from "./card-schema";
 
-export const companies = pgTable(
-  "companies",
+export const organizationTable = pgTable(
+  "organization",
   {
     id: uuid("id").primaryKey().defaultRandom().notNull(),
 
@@ -32,23 +32,23 @@ export const companies = pgTable(
     deletedAt: timestamp("deleted_at", { withTimezone: true }),
   },
   (table) => [
-    index("companies_name_idx").on(table.name),
-    index("companies_email_idx").on(table.email),
-    index("companies_created_at_idx").on(table.createdAt),
-    index("companies_deleted_at_idx").on(table.deletedAt),
-    uniqueIndex("companies_slug_idx").on(table.slug),
+    index("organization_name_idx").on(table.name),
+    index("organization_email_idx").on(table.email),
+    index("organization_created_at_idx").on(table.createdAt),
+    index("organization_deleted_at_idx").on(table.deletedAt),
+    uniqueIndex("organization_slug_idx").on(table.slug),
   ]
 );
 
-export const companyRelations = relations(companies, ({ many }) => ({
+export const organizationRelations = relations(organizationTable, ({ many }) => ({
   cards: many(cards),
 }));
 
-export type CompanyWithCards = InferResultType<
-  "companies",
+export type OrganizationWithCards = InferResultType<
+  "organizationTable",
   {
     cards: true;
   }
 >;
 
-export type Company = InferResultType<"companies">;
+export type Organization = InferResultType<"organizationTable">;

@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/responsive-modal";
 import { Tilt, TiltContent } from "@/components/ui/tilt";
 
-import { closeShareModalAtom, ShareModalData, shareModalAtom } from "../company/atom";
+import { closeShareModalAtom, ShareModalData, shareModalAtom } from "../organization/atom";
 import QRCodeDownload from "./components/qr-download";
 
 export const ShareModal = () => {

@@ -8,6 +8,13 @@
       "when": 1764265082161,
       "tag": "0000_burly_vulture",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1764305155540,
+      "tag": "0001_massive_mentor",
+      "breakpoints": true
     }
   ]
 }

@@ -12,7 +12,7 @@ function Breadcrumb({ ...props }: React.ComponentProps<"nav">) {
 function BreadcrumbList({ className, ...props }: React.ComponentProps<"ol">) {
   return (
     <ol
-      className={cn("wrap-break-words flex items-center gap-1.5 font-medium sm:gap-2.5 sm:text-sm", className)}
+      className={cn("wrap-break-words flex items-center gap-1.5 font-medium text-sm sm:gap-2.5 sm:text-lg", className)}
       data-slot="breadcrumb-list"
       {...props}
     />
@@ -21,7 +21,7 @@ function BreadcrumbList({ className, ...props }: React.ComponentProps<"ol">) {
 
 function BreadcrumbItem({ className, ...props }: React.ComponentProps<"li">) {
   return (
-    <li className={cn("inline-flex items-center gap-1 sm:gap-1.5", className)} data-slot="breadcrumb-item" {...props} />
+    <li className={cn("inline-flex items-center gap-2 sm:gap-1.5", className)} data-slot="breadcrumb-item" {...props} />
   );
 }
 
@@ -48,7 +48,7 @@ function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
     <span
       aria-current="page"
       aria-disabled="true"
-      className={cn("font-normal text-foreground", className)}
+      className={cn("min-w-0 font-normal text-foreground", className)}
       data-slot="breadcrumb-page"
       role="link"
       {...props}

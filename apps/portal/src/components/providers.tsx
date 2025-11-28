@@ -19,7 +19,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
             {children}
             <ReactQueryDevtools />
           </ProgressProvider>
-          <Toaster closeButton richColors />
+          <Toaster position="bottom-center" richColors />
         </NuqsAdapter>
       </QueryClientProvider>
     </ThemeProvider>

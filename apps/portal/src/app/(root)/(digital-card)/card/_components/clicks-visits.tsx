@@ -12,9 +12,10 @@ import { orpc } from "@/lib/orpc/client";
 
 interface ClicksVisitsProps {
   cardId: string;
+  className?: string;
 }
 
-export const ClicksVisits = ({ cardId }: ClicksVisitsProps) => {
+export const ClicksVisits = ({ cardId, className }: ClicksVisitsProps) => {
   const {
     data: analytics,
     isLoading,
@@ -29,7 +30,7 @@ export const ClicksVisits = ({ cardId }: ClicksVisitsProps) => {
 
   if (isLoading || isLoadingError) {
     return (
-      <Button size="sm" type="button" variant="outline">
+      <Button className={className} size="sm" type="button" variant="outline">
         <IconMouse className="text-primary" />
         <Skeleton className="h-6 w-16" />
       </Button>
@@ -37,7 +38,7 @@ export const ClicksVisits = ({ cardId }: ClicksVisitsProps) => {
   }
 
   return (
-    <Button size="sm" type="button" variant="outline">
+    <Button className={className} size="sm" type="button" variant="outline">
       <IconMouse className="text-primary" />
       {analytics.totalVisits} {pluralize("click", analytics.totalVisits)}
     </Button>

@@ -1,11 +1,9 @@
 "use client";
 
-import { useState, useTransition } from "react";
-
-import Image from "next/image";
+import { useState } from "react";
 
 import { isDefinedError } from "@orpc/client";
-import { IconBuilding, IconEdit, IconLoader, IconPlus, IconTrash } from "@tabler/icons-react";
+import { IconEdit, IconPlus, IconTrash } from "@tabler/icons-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { parseAsString, useQueryStates } from "nuqs";
 import { useForm } from "react-hook-form";
@@ -28,25 +26,20 @@ import { Input } from "@ziron/ui/components/input";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 import { Textarea } from "@ziron/ui/components/textarea";
 
-import { CompanyType, companySchema } from "@ziron/validators";
+import { OrganizationType, organizationSchema } from "@ziron/validators";
 
 import { orpc } from "@/lib/orpc/client";
 
-import { deleteCompany } from "../actions/mutations";
-
 interface CompanyFormProps {
-  initialData: CompanyType;
+  initialData: OrganizationType;
   isEditMode: boolean;
 }
 
 export default function CompanyForm({ initialData, isEditMode }: CompanyFormProps) {
-  const [isPending, startTransition] = useTransition();
-  const [isDeletePending, startDeleteTransition] = useTransition();
-  const [uploading, setUploading] = useState(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   const queryClient = useQueryClient();
 
-  const [, setCompanyModal] = useQueryStates({
+  const [, setOrganizationModal] = useQueryStates({
     modal: parseAsString,
   });
   const [_, setFields] = useQueryStates({
@@ -60,21 +53,21 @@ export default function CompanyForm({ initialData, isEditMode }: CompanyFormProp
 
   const defaultValues = initialData ? { ...initialData } : {};
 
-  const form = useForm<CompanyType>({
-    resolver: zodResolver(companySchema),
+  const form = useForm<OrganizationType>({
+    resolver: zodResolver(organizationSchema),
     defaultValues,
   });
 
-  const createCompany = useMutation(
-    orpc.company.create.mutationOptions({
-      onSuccess: (newCompany) => {
-        toast.success(`Company: ${newCompany.companyName} created successfully`);
+  const createOrganization = useMutation(
+    orpc.organization.create.mutationOptions({
+      onSuccess: (newOrganization) => {
+        toast.success(`Organization: ${newOrganization.organizationName} created successfully`);
 
         queryClient.invalidateQueries({
-          queryKey: orpc.company.list.queryKey(),
+          queryKey: orpc.organization.list.queryKey(),
         });
 
-        setCompanyModal({ modal: null });
+        setOrganizationModal({ modal: null });
         setFields({
           id: null,
           name: null,
@@ -88,10 +81,10 @@ export default function CompanyForm({ initialData, isEditMode }: CompanyFormProp
       onError: (error) => {
         if (isDefinedError(error)) {
           if (error.code === "NOT_FOUND") {
-            toast.error("Company not found", { description: error.message });
+            toast.error("Organization not found", { description: error.message });
             return;
           }
-          toast.error("Failed to create company, try again later!", { description: error.message });
+          toast.error("Failed to create organization, try again later!", { description: error.message });
           return;
         }
         toast.error(error.message);
@@ -99,17 +92,14 @@ export default function CompanyForm({ initialData, isEditMode }: CompanyFormProp
     })
   );
 
-  function onSubmit(values: CompanyType) {
-    createCompany.mutate(values);
-  }
-
-  function handleDelete(id: string) {
-    startTransition(async () => {
-      const result = await deleteCompany(id);
-
-      if (result.success) {
-        toast.success(`Company: ${result.data?.name} has been ${isEditMode ? "Edited" : "Created"}`);
-        setCompanyModal({ modal: null });
+  const deleteOrganization = useMutation(
+    orpc.organization.delete.mutationOptions({
+      onSuccess: (result) => {
+        toast.success(`Organization: ${result.organizationName} has been deleted`);
+        queryClient.invalidateQueries({
+          queryKey: orpc.organization.list.queryKey(),
+        });
+        setOrganizationModal({ modal: null });
         setFields({
           id: null,
           name: null,
@@ -119,14 +109,25 @@ export default function CompanyForm({ initialData, isEditMode }: CompanyFormProp
           website: null,
         });
         form.reset(); // This will reset the form fields to their default values
-      }
+        setIsDeleteLoading(false);
+      },
+      onError: (error) => {
+        if (isDefinedError(error)) {
+          toast.error("Failed to delete organization, try again later!", { description: error.message });
+          return;
+        }
+        toast.error(error.message);
+        setIsDeleteLoading(false);
+      },
+    })
+  );
 
-      if (result.error) {
-        toast.error(result.error);
-        console.error(result.details);
-      }
-      setIsDeleteLoading(false);
-    });
+  function onSubmit(values: OrganizationType) {
+    createOrganization.mutate(values);
+  }
+
+  function handleDeleteOrganization(id: string) {
+    deleteOrganization.mutate({ id });
   }
 
   const logo = form.getValues("logo");
@@ -143,12 +144,12 @@ export default function CompanyForm({ initialData, isEditMode }: CompanyFormProp
                 <FormControl>
                   <div className="mt-2 flex flex-col items-center gap-2">
                     <div className="grid size-28 place-items-center rounded-md border bg-gray-50">
-                      {uploading && <IconLoader className="absolute animate-spin text-muted-foreground/50" />}
+                      {/* {uploading && <IconLoader className="absolute animate-spin text-muted-foreground/50" />}
                       {!uploading && logo ? (
                         <Image alt="Company Logo" height={70} src={logo} width={70} />
                       ) : (
                         <IconBuilding className="size-20 text-muted" />
-                      )}
+                      )} */}
                     </div>
                     {/* <UploadButton
                       endpoint="logoUploader"
@@ -259,7 +260,7 @@ export default function CompanyForm({ initialData, isEditMode }: CompanyFormProp
         <DialogFooter className="gap-3 sm:justify-start">
           {isEditMode && (
             <AlertDialog>
-              <AlertDialogTrigger asChild onClick={() => setIsDeleteLoading(true)}>
+              <AlertDialogTrigger asChild>
                 <Button variant="destructive">
                   <LoadingSwap isLoading={isDeleteLoading}>
                     <IconTrash className="size-4" />
@@ -276,22 +277,26 @@ export default function CompanyForm({ initialData, isEditMode }: CompanyFormProp
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel onClick={() => setIsDeleteLoading(false)}>Cancel</AlertDialogCancel>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
 
-                  <Button onClick={() => handleDelete(initialData.id ?? "")} type="button" variant={"destructive"}>
-                    <LoadingSwap isLoading={isDeletePending}>Yes, I&apos;m sure</LoadingSwap>
+                  <Button
+                    onClick={() => handleDeleteOrganization(initialData.id ?? "")}
+                    type="button"
+                    variant={"destructive"}
+                  >
+                    <LoadingSwap isLoading={deleteOrganization.isPending}>Yes, I&apos;m sure</LoadingSwap>
                   </Button>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
           )}
-          <Button className="w-full shrink" disabled={createCompany.isPending} type="submit">
+          <Button className="w-full shrink" disabled={createOrganization.isPending} type="submit">
             <LoadingSwap
               className="flex items-center justify-center gap-1.5 font-medium"
-              isLoading={createCompany.isPending}
+              isLoading={createOrganization.isPending}
             >
               {isEditMode ? <IconEdit className="size-4" /> : <IconPlus className="size-4" />}
-              {isEditMode ? "Save Changes" : "Add Company"}
+              {isEditMode ? "Save Changes" : "Add Organization"}
             </LoadingSwap>
           </Button>
         </DialogFooter>

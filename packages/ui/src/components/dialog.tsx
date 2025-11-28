@@ -27,7 +27,7 @@ function DialogOverlay({ className, ...props }: React.ComponentProps<typeof Dial
   return (
     <DialogPrimitive.Overlay
       className={cn(
-        "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-999 bg-card/80 backdrop-blur-lg data-[state=closed]:animate-out data-[state=open]:animate-in",
+        "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-999 bg-card/80 backdrop-blur-lg duration-700 data-[state=closed]:animate-out data-[state=open]:animate-in",
         className
       )}
       data-slot="dialog-overlay"

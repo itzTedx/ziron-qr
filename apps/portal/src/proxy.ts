@@ -16,8 +16,7 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  runtime: "nodejs", // Required for auth.api calls
-  matcher: ["/"], // Specify the routes the middleware applies to
+  matcher: ["/", "/((?!api|_next/static|_next/image|.*\\.png$).*)"], // Specify the routes the middleware applies to
 };
 
 // export const config = {

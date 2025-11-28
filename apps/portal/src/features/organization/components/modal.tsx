@@ -4,7 +4,7 @@ import { parseAsString, useQueryStates } from "nuqs";
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@ziron/ui/components/dialog";
 
-import CompanyForm from "./company-form";
+import CompanyForm from "./organization-form";
 
 export default function CompanyFormModal() {
   const [modal, setCompanyModal] = useQueryStates({

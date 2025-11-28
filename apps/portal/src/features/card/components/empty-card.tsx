@@ -10,7 +10,7 @@ interface Props {
   id: string;
 }
 
-export const EmptyCompany = ({ id }: Props) => {
+export const EmptyCard = ({ id }: Props) => {
   return (
     <Empty className="col-span-full border border-dashed">
       <EmptyHeader>
@@ -25,7 +25,7 @@ export const EmptyCompany = ({ id }: Props) => {
       <EmptyContent>
         <div className="flex gap-2">
           <Button asChild className="gap-2" size="sm">
-            <Link href={`/card/new?companyId=${id}`}>
+            <Link href={`/card/new?organizationId=${id}`}>
               <IconPlus /> Create a Card
             </Link>
           </Button>

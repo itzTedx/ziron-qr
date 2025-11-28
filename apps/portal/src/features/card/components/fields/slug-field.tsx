@@ -23,7 +23,7 @@ import { useHotkey } from "@ziron/ui/hooks/use-hotkey";
 
 import { transformSlug, zCardSchema } from "@ziron/validators";
 
-import { openShareModalAtom, ShareModalData } from "@/features/company/atom";
+import { openShareModalAtom, ShareModalData } from "@/features/organization/atom";
 import { useDebounce } from "@/hooks/debounce";
 import { env } from "@/lib/env/client";
 import { orpc } from "@/lib/orpc/client";
