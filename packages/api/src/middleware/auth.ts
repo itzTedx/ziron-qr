@@ -9,7 +9,7 @@ export const requireAuth = base.middleware(async ({ context, next }) => {
   const session = await getSession(context.headers);
 
   if (!session?.session) {
-    redirect("/unauthorized");
+    redirect("/login");
     // throw errors.UNAUTHORIZED();
   }
 
