@@ -18,7 +18,6 @@ const nextConfig: NextConfig = {
   },
   typedRoutes: true,
   reactCompiler: true,
-  cacheComponents: true,
 
   experimental: {
     viewTransition: true,

@@ -1,6 +1,6 @@
 import React from "react";
 
-export const EmptyCard = (props: React.SVGProps<SVGSVGElement>) => {
+export const IconEmptyCard = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg
       {...props}

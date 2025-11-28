@@ -15,7 +15,7 @@ export default async function Page() {
       </Header>
 
       <section className="h-full flex-1">
-        <ScrollArea className="container h-full flex-1 overflow-y-auto pt-3">
+        <ScrollArea className="container h-full flex-1 overflow-y-auto sm:pt-3">
           <CompaniesList />
 
           <ScrollBar />

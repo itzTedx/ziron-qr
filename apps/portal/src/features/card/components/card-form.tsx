@@ -50,9 +50,7 @@ export function CardForm({ isEditMode, initialData }: Props) {
   });
 
   // const validation = validateForm(form.watch(), cardSchema);
-
   // console.log(validation);
-  // console.log("form data", form.getValues());
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 

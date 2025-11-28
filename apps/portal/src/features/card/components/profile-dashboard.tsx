@@ -46,15 +46,15 @@ export const ProfileDashboard = ({ isPending, companyName, data, companyId }: Pr
   });
 
   return (
-    <div className="p-1">
+    <div>
       <div
-        className="group relative h-48 overflow-hidden border-b bg-secondary"
+        className="group relative h-48 cursor-pointer overflow-hidden border-b bg-secondary"
         onClick={() => setIsCoverUploadOpen(true)}
         role="button"
       >
         <Image
           alt="cover image"
-          className="object-cover transition-[filter] group-hover:brightness-75"
+          className="object-cover transition-[filter] duration-500 group-hover:brightness-75"
           fill
           priority
           quality={80}
@@ -71,8 +71,8 @@ export const ProfileDashboard = ({ isPending, companyName, data, companyId }: Pr
         />
       </div>
       <section className="-mt-16 container mx-auto">
-        <div className="relative grid grid-cols-10 rounded-lg border-background border-t bg-background/80 px-6 py-4 shadow-muted/30 backdrop-blur-xl sm:border sm:shadow-lg md:grid-cols-12 md:divide-x">
-          <div className="col-span-10 flex items-center md:col-span-5 md:px-3 lg:pr-6">
+        <div className="relative grid grid-cols-10 rounded-xl border-background border-t bg-card px-6 py-4 shadow-muted/30 backdrop-blur-xl sm:border sm:shadow-lg md:grid-cols-12 md:divide-x">
+          <div className="col-span-10 flex items-center md:col-span-4 md:px-3 lg:pr-6">
             <div className="group relative size-24 shrink-0">
               <Image
                 alt="Profile Image"
@@ -135,7 +135,7 @@ export const ProfileDashboard = ({ isPending, companyName, data, companyId }: Pr
             <SlugField companyId={companyId} data={data} />
           </div>
 
-          <div className="col-span-2 hidden flex-col items-center gap-3 px-6 md:flex">
+          <div className="col-span-3 hidden flex-col items-center gap-3 px-6 md:flex">
             {data.id && <DeleteCard id={data.id} />}
 
             <Button className="w-full" size="lg" type="submit">

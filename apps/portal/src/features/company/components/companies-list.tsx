@@ -41,7 +41,7 @@ interface CompanyItemProps {
 const CompanyItem = memo(({ company, isOpen, onOpenChange }: CompanyItemProps) => {
   return (
     <MemoizedCollapsible className="w-full" onOpenChange={onOpenChange} open={isOpen}>
-      <div className="flex w-full cursor-pointer items-center justify-between border-b pb-3">
+      <div className="flex w-full cursor-pointer items-center justify-between">
         <MemoizedCollapsibleTrigger className="flex w-full cursor-pointer items-center gap-3">
           {company.logo && (
             <div className="flex size-8 items-center justify-center rounded-sm border bg-white p-1">
@@ -68,7 +68,9 @@ const CompanyItem = memo(({ company, isOpen, onOpenChange }: CompanyItemProps) =
         </div>
       </div>
 
-      <MemoizedCollapsibleContent className={cn("grid grid-cols-2 gap-4 pt-3 sm:grid-cols-3 md:grid-cols-4")}>
+      <MemoizedCollapsibleContent
+        className={cn("grid grid-cols-2 gap-2.5 pt-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4")}
+      >
         {company.cards.length === 0 ? (
           <EmptyCompany id={company.id} />
         ) : (

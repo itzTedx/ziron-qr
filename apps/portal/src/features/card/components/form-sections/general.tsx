@@ -50,7 +50,12 @@ export const CardGeneral = ({ data }: Props) => {
               <FormItem>
                 <FormLabel>Address</FormLabel>
                 <FormControl>
-                  <Textarea className="min-h-fit" placeholder="Enter Full Address" {...field} />
+                  <Textarea
+                    className="min-h-fit"
+                    placeholder="Enter Full Address"
+                    {...field}
+                    value={field.value ?? ""}
+                  />
                 </FormControl>
 
                 <FormMessage />
@@ -64,7 +69,7 @@ export const CardGeneral = ({ data }: Props) => {
               <FormItem>
                 <FormLabel>Google Map Link</FormLabel>
                 <FormControl>
-                  <Input placeholder="https://maps.app.goo.gl/link" {...field} />
+                  <Input placeholder="https://maps.app.goo.gl/link" {...field} value={field.value ?? ""} />
                 </FormControl>
 
                 <FormMessage />
@@ -81,7 +86,7 @@ export const CardGeneral = ({ data }: Props) => {
               <FormItem>
                 <FormLabel>Designation</FormLabel>
                 <FormControl>
-                  <Input placeholder="Sales & Marketing" {...field} />
+                  <Input placeholder="Sales & Marketing" {...field} value={field.value ?? ""} />
                 </FormControl>
 
                 <FormMessage />
@@ -97,7 +102,7 @@ export const CardGeneral = ({ data }: Props) => {
           <FormItem>
             <FormLabel>Bio</FormLabel>
             <FormControl>
-              <Textarea placeholder="More about the person" {...field} />
+              <Textarea placeholder="More about the person" {...field} value={field.value ?? ""} />
             </FormControl>
 
             <FormMessage />

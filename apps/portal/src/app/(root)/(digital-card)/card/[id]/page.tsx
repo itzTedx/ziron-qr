@@ -1,6 +1,8 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { ScrollArea, ScrollBar } from "@ziron/ui/components/scroll-area";
+
 import { truncate } from "@ziron/utils";
 
 import Header from "@/components/layout/header";
@@ -63,7 +65,7 @@ export default async function CardPage({ params }: PageProps<"/card/[id]">) {
   const isEditMode = id !== "new";
 
   const PAGE_TITLE = isEditMode
-    ? (`${truncate(card?.company.name!, 5, { mobileOnly: true })} / ${card?.name}` as const)
+    ? (`${truncate(card?.company.name!, 5, { mobileOnly: true })}/${card?.name}` as const)
     : ("Create New Card" as const);
 
   return (
@@ -79,7 +81,13 @@ export default async function CardPage({ params }: PageProps<"/card/[id]">) {
           </>
         ) : null}
       </Header>
-      <CardForm initialData={card} isEditMode={isEditMode} />
+
+      <section className="h-full flex-1">
+        <ScrollArea className="h-full flex-1 overflow-y-auto">
+          <CardForm initialData={card} isEditMode={isEditMode} />
+          <ScrollBar />
+        </ScrollArea>
+      </section>
     </>
   );
 }

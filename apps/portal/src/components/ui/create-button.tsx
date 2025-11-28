@@ -19,7 +19,7 @@ export const CreateButton = ({ href, label }: { href: Route; label: string }) =>
   });
 
   return (
-    <Button asChild className="pr-2.5">
+    <Button asChild className="sm:pr-2.5">
       <Link href={href}>
         {label}
         <Kbd className="text-card">C</Kbd>

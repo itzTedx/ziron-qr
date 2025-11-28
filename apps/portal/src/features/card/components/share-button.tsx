@@ -10,7 +10,7 @@ import { CardType, Company } from "@ziron/db/schema";
 import { openShareModalAtom, type ShareModalData } from "@/features/company/atom";
 import { env } from "@/lib/env/client";
 
-type PersonCardFields = Pick<CardType, "id" | "name" | "designation" | "slug" | "image">;
+type PersonCardFields = Pick<CardType, "id" | "name" | "designation" | "slug" | "image" | "cover">;
 interface ShareButtonProps {
   data: PersonCardFields;
   company: Company;
@@ -33,7 +33,7 @@ export default function ShareButton({ data, company }: ShareButtonProps) {
   const openModal = useSetAtom(openShareModalAtom);
 
   return (
-    <Button className="w-full flex-1 gap-1.5 text-sm" onClick={() => openModal(shareData)} variant="ghost">
+    <Button className="w-full flex-1 gap-1.5" onClick={() => openModal(shareData)} size="sm" variant="ghost">
       <IconShare className="size-4" /> <span className="hidden sm:block">Share</span>
     </Button>
   );

@@ -23,7 +23,7 @@ interface Props {
 
 export default function Header({ title, currentPage, children, showBackButton = false, backHref }: Props) {
   return (
-    <header className="sticky top-0 z-50 flex h-14 w-full items-center justify-between gap-3 overflow-hidden border-b bg-stone-950 px-4 py-2 backdrop-blur-2xl sm:px-6">
+    <header className="sticky top-0 z-50 flex h-14 w-full items-center justify-between gap-3 overflow-hidden border-b bg-stone-50 px-6 py-2 backdrop-blur-2xl dark:bg-stone-950">
       <div className="flex items-center gap-3">
         <Breadcrumb>
           <BreadcrumbList
@@ -35,7 +35,9 @@ export default function Header({ title, currentPage, children, showBackButton = 
           >
             <BreadcrumbItem className={cn(backHref && "group")}>
               {showBackButton && <BackButton href={backHref} />}
-              <BreadcrumbLink href="/">{title}</BreadcrumbLink>
+              <BreadcrumbLink className="truncate" href="/">
+                {title}
+              </BreadcrumbLink>
             </BreadcrumbItem>
 
             {currentPage && (

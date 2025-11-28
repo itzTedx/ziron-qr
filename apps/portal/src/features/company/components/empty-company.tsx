@@ -1,7 +1,8 @@
 import Link from "next/link";
 
-import { IconFolderCode, IconPlus } from "@tabler/icons-react";
+import { IconPlus } from "@tabler/icons-react";
 
+import { IconEmptyCard } from "@ziron/ui/assets/icons/empty-card";
 import { Button } from "@ziron/ui/components/button";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@ziron/ui/components/empty";
 
@@ -13,8 +14,8 @@ export const EmptyCompany = ({ id }: Props) => {
   return (
     <Empty className="col-span-full border border-dashed">
       <EmptyHeader>
-        <EmptyMedia variant="icon">
-          <IconFolderCode />
+        <EmptyMedia>
+          <IconEmptyCard className="invert dark:invert-0" />
         </EmptyMedia>
         <EmptyTitle>No Cards Available</EmptyTitle>
         <EmptyDescription>
@@ -23,12 +24,14 @@ export const EmptyCompany = ({ id }: Props) => {
       </EmptyHeader>
       <EmptyContent>
         <div className="flex gap-2">
-          <Button asChild className="gap-2">
+          <Button asChild className="gap-2" size="sm">
             <Link href={`/card/new?companyId=${id}`}>
-              <IconPlus className="size-4" /> Create a Card
+              <IconPlus /> Create a Card
             </Link>
           </Button>
-          <Button variant="outline">Import Card</Button>
+          <Button size="sm" variant="outline">
+            Import Card
+          </Button>
         </div>
       </EmptyContent>
     </Empty>

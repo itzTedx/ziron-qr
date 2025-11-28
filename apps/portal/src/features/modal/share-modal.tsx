@@ -20,6 +20,7 @@ import {
   ResponsiveModal,
   ResponsiveModalClose,
   ResponsiveModalContent,
+  ResponsiveModalDescription,
   ResponsiveModalHeader,
   ResponsiveModalTitle,
 } from "@/components/ui/responsive-modal";
@@ -75,6 +76,7 @@ export const ShareModal = () => {
       <ResponsiveModalContent className="gap-0 sm:max-w-4xl">
         <ResponsiveModalHeader className="flex-row items-center justify-between">
           <ResponsiveModalTitle>Share digital card</ResponsiveModalTitle>
+          <ResponsiveModalDescription>Share the digital card with your friends and family.</ResponsiveModalDescription>
           <ResponsiveModalClose asChild>
             <Kbd className="group" size="lg" variant="outline">
               <span className="fade-out zoom-in-50 animate-in duration-200 group-hover:hidden">S</span>
@@ -170,8 +172,11 @@ interface ProfileCardProps {
 
 function ProfileCard({ data, className }: ProfileCardProps) {
   return (
-    <Tilt className={cn("space-y-3", className)} maxTilt={6} perspective={1200}>
-      <TiltContent asChild>
+    <Tilt className={cn(className)} maxTilt={6} perspective={1200}>
+      <TiltContent
+        asChild
+        className="fade-in-75 zoom-in-80 animate-in duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+      >
         <div className="relative aspect-3/4 overflow-hidden rounded-lg border bg-linear-45 from-primary to-brand-secondary">
           <div className="relative z-10 flex h-full flex-col justify-between gap-2 p-6">
             {data.company.logo ? (

@@ -61,13 +61,15 @@ export default function RootLayout({
               </div>
             </div>
             <div className="flex flex-col items-center gap-3 pb-3">
+              <ThemeToggle />
+
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Link
                     className="group relative flex size-11 items-center justify-center rounded-lg outline-none transition-colors duration-150 hover:bg-muted focus-visible:ring-2 focus-visible:ring-black/50"
                     href={"/card" as Route}
                   >
-                    <IconSettings className="size-5 transition-transform duration-300 group-hover:rotate-45" />
+                    <IconSettings className="size-4 transition-transform duration-300 group-hover:rotate-45" />
                     <span className="sr-only">Settings</span>
                   </Link>
                 </TooltipTrigger>
@@ -75,8 +77,6 @@ export default function RootLayout({
                   <p>Settings</p>
                 </TooltipContent>
               </Tooltip>
-
-              <ThemeToggle />
 
               <Suspense fallback={<div className="size-11" />}>
                 <NavUser />
