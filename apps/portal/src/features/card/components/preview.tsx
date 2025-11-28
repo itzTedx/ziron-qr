@@ -34,7 +34,9 @@ export const Preview = ({ cardData }: Props) => {
   // const cardData = form.watch();
 
   // Find the selected company based on cardData.companyId
-  const { data: company } = useSuspenseQuery(orpc.company.get.queryOptions({ input: { id: cardData.companyId } }));
+  const { data: organization } = useSuspenseQuery(
+    orpc.organization.get.queryOptions({ input: { id: cardData.organizationId } })
+  );
 
   // Transform cardData to match CardType structure (appearance -> styles)
   const transformedCardData = cardData
@@ -69,13 +71,13 @@ export const Preview = ({ cardData }: Props) => {
                   {(() => {
                     switch (cardData.appearance?.template) {
                       case "default":
-                        return <DefaultTemplate card={transformedCardData} company={company} />;
+                        return <DefaultTemplate card={transformedCardData} organization={organization} />;
                       case "modern":
-                        return <ModernTemplate card={transformedCardData} company={company} />;
+                        return <ModernTemplate card={transformedCardData} organization={organization} />;
                       case "card":
-                        return <CardTemplate card={transformedCardData} company={company} />;
+                        return <CardTemplate card={transformedCardData} organization={organization} />;
                       default:
-                        return <DefaultTemplate card={transformedCardData} company={company} />;
+                        return <DefaultTemplate card={transformedCardData} organization={organization} />;
                     }
                   })()}
                 </ScrollArea>
@@ -90,13 +92,13 @@ export const Preview = ({ cardData }: Props) => {
             {(() => {
               switch (cardData.appearance?.template) {
                 case "default":
-                  return <DefaultTemplate card={transformedCardData} company={company} />;
+                  return <DefaultTemplate card={transformedCardData} organization={organization} />;
                 case "modern":
-                  return <ModernTemplate card={transformedCardData} company={company} />;
+                  return <ModernTemplate card={transformedCardData} organization={organization} />;
                 case "card":
-                  return <CardTemplate card={transformedCardData} company={company} />;
+                  return <CardTemplate card={transformedCardData} organization={organization} />;
                 default:
-                  return <DefaultTemplate card={transformedCardData} company={company} />;
+                  return <DefaultTemplate card={transformedCardData} organization={organization} />;
               }
             })()}
           </ScrollArea>

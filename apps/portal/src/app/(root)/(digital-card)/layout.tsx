@@ -8,6 +8,7 @@ import { IconCard2 } from "@ziron/ui/assets/icons/card";
 import { IconMouse } from "@ziron/ui/assets/icons/mouse";
 import { Label } from "@ziron/ui/components/label";
 
+import { orpc } from "@/lib/orpc/client";
 import { getQueryClient, HydrateClient } from "@/lib/orpc/query/hydration";
 
 import { UsageMetrics } from "./_components/usage-metrics";
@@ -16,8 +17,10 @@ interface Props {
   children: React.ReactNode;
 }
 
-export default function DigitalCardLayout({ children }: Props) {
+export default async function DigitalCardLayout({ children }: Props) {
   const queryClient = getQueryClient();
+
+  await queryClient.prefetchQuery(orpc.metrics.get.queryOptions());
   return (
     <>
       <aside className="fixed top-0 left-0 z-50 hidden h-dvh w-screen max-md:pointer-events-none md:sticky md:z-auto md:block md:w-full">

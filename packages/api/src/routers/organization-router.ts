@@ -3,7 +3,7 @@ import { Organization, OrganizationWithCards, organizationTable } from "@ziron/d
 import { slugify } from "@ziron/utils";
 import { organizationSchema, z } from "@ziron/validators";
 
-import { protectedProcedure } from "..";
+import { protectedProcedure, publicProcedure } from "..";
 import { dbProvider } from "../middleware/db-provider";
 
 export const createOrganization = protectedProcedure
@@ -45,7 +45,7 @@ export const createOrganization = protectedProcedure
     }
   });
 
-export const listOrganizations = protectedProcedure
+export const listOrganizations = publicProcedure
   .use(dbProvider)
   .route({
     method: "GET",

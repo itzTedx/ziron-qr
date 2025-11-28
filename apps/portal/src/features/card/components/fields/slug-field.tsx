@@ -30,19 +30,21 @@ import { orpc } from "@/lib/orpc/client";
 
 interface Props {
   data: Partial<Pick<zCardSchema, "id" | "name" | "designation" | "slug" | "image" | "cover">>;
-  companyId?: string;
+  organizationId?: string;
 }
 
 type SlugValidationState = "idle" | "validating" | "valid" | "invalid";
 
-export const SlugField = ({ data, companyId }: Props) => {
+export const SlugField = ({ data, organizationId }: Props) => {
   const form = useFormContext<zCardSchema>();
   const [slug, setSlug] = useState(data.slug ?? "");
   const [isEditingSlug, setIsEditingSlug] = useState(false);
   const [validationState, setValidationState] = useState<SlugValidationState>("idle");
   const openModal = useSetAtom(openShareModalAtom);
 
-  const { data: company } = useSuspenseQuery(orpc.company.get.queryOptions({ input: { id: companyId } }));
+  const { data: organization } = useSuspenseQuery(
+    orpc.organization.get.queryOptions({ input: { id: organizationId } })
+  );
 
   // Transform slug as user types
   const transformedSlug = transformSlug(slug);
@@ -123,7 +125,7 @@ export const SlugField = ({ data, companyId }: Props) => {
   }
 
   function handleShare() {
-    if (!data.id || !data.slug || !company) {
+    if (!data.id || !data.slug || !organization) {
       toast.error("Unable to share", { description: "Please ensure the card has been saved with a valid slug" });
       return;
     }
@@ -138,9 +140,9 @@ export const SlugField = ({ data, companyId }: Props) => {
         slug: data.slug,
         image: data.image ?? "",
         cover: data.cover ?? "",
-        company: {
-          logo: company?.logo ?? null,
-          name: company.name,
+        organization: {
+          logo: organization?.logo ?? null,
+          name: organization.name,
         },
         url: shareLink,
       },

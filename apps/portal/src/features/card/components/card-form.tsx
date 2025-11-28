@@ -38,8 +38,11 @@ interface Props {
 export function CardForm({ isEditMode, initialData }: Props) {
   const router = useRouter();
 
-  const [companyId, _] = useQueryState("companyId");
-  const transformedInitialData = useMemo(() => transformCardData(initialData, companyId), [initialData, companyId]);
+  const [organization, _] = useQueryState("organization");
+  const transformedInitialData = useMemo(
+    () => transformCardData(initialData, organization),
+    [initialData, organization]
+  );
   const [cardData, setCardData] = useState<Partial<zCardSchema> | null>(transformedInitialData ?? null);
   const [hasBlurred, setHasBlurred] = useState(false);
 
@@ -79,7 +82,7 @@ export function CardForm({ isEditMode, initialData }: Props) {
     emails: cardData?.emails ?? undefined,
 
     template: cardData?.appearance?.template ?? "default",
-    companyId: cardData?.companyId ?? companyId ?? "",
+    organizationId: cardData?.organizationId ?? organization ?? "",
   };
 
   const createCard = useMutation(
@@ -191,7 +194,6 @@ export function CardForm({ isEditMode, initialData }: Props) {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <ProfileDashboard
-          companyId={data.companyId}
           data={{
             id: data.id,
             name: data.name,
@@ -201,6 +203,7 @@ export function CardForm({ isEditMode, initialData }: Props) {
             cover: data.cover,
           }}
           isPending={isPending}
+          organization={data.organizationId ? { id: data.organizationId, name: data.name ?? "" } : undefined}
         />
         <div className={cn("mx-auto grid max-w-7xl grid-cols-3 gap-4 pb-6", shouldShowBar && "pb-20")}>
           <TabsLists form={form}>

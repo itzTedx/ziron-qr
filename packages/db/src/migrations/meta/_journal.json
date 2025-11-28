@@ -15,6 +15,13 @@
       "when": 1764305155540,
       "tag": "0001_massive_mentor",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1764335955012,
+      "tag": "0002_deep_gorilla_man",
+      "breakpoints": true
     }
   ]
 }

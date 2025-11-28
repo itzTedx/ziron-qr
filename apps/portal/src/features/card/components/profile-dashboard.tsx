@@ -22,11 +22,13 @@ import { SlugField } from "./fields/slug-field";
 interface Props {
   isPending: boolean;
   data: Partial<Pick<zCardSchema, "id" | "name" | "designation" | "slug" | "image" | "cover">>;
-  companyName?: string;
-  companyId?: string;
+  organization?: {
+    id: string;
+    name: string;
+  };
 }
 
-export const ProfileDashboard = ({ isPending, companyName, data, companyId }: Props) => {
+export const ProfileDashboard = ({ isPending, organization, data }: Props) => {
   const form = useFormContext<zCardSchema>();
   const [isCoverUploadOpen, setIsCoverUploadOpen] = useState(false);
 
@@ -86,9 +88,9 @@ export const ProfileDashboard = ({ isPending, companyName, data, companyId }: Pr
             </div>
             <div className="w-full max-md:mt-3 md:ml-3">
               <div className="flex items-center justify-between gap-3">
-                {companyName && (
+                {organization?.name && (
                   <Badge className="gap-1.5" variant="secondary">
-                    {companyName}
+                    {organization.name}
                   </Badge>
                 )}
                 <span className="flex gap-2 text-primary md:hidden">
@@ -132,7 +134,7 @@ export const ProfileDashboard = ({ isPending, companyName, data, companyId }: Pr
           </div>
 
           <div className="col-span-10 flex items-center justify-between gap-4 md:col-span-5 md:px-3 lg:px-6">
-            <SlugField companyId={companyId} data={data} />
+            <SlugField data={data} organizationId={organization?.id} />
           </div>
 
           <div className="col-span-3 hidden flex-col items-center gap-3 px-6 md:flex">

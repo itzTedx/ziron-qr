@@ -11,7 +11,7 @@ import SaveContactButton from "../components/save-contact-button";
 
 interface TemplateProps {
   card?: Partial<CardType>;
-  organization?: Organization;
+  organization?: Organization | null;
   imageBase64URI?: string;
 }
 

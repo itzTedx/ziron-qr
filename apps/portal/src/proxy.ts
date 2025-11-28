@@ -3,7 +3,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSessionCookie } from "better-auth/cookies";
 
 export async function proxy(request: NextRequest) {
-  const publicPaths = ["/register", "/login", "/verify", "/api/auth", "/reset-password", "/forgot-password"];
+  const publicPaths = [
+    "/register",
+    "/login",
+    "/verify",
+    "/api/auth",
+    "/api/rpc",
+    "/reset-password",
+    "/forgot-password",
+  ];
   const { pathname } = new URL(request.url);
 
   // Allow unauthenticated access to public paths
