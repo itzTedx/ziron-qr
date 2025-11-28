@@ -8,7 +8,7 @@ import { truncate } from "@ziron/utils";
 import Header from "@/components/layout/header";
 
 import { CardForm } from "@/features/card/components/card-form";
-import { client } from "@/lib/orpc/client";
+import { client, orpc } from "@/lib/orpc/client";
 import { getQueryClient, HydrateClient } from "@/lib/orpc/query/hydration";
 
 import { CardActionsDropdown } from "../_components/card-actions-dropdown";
@@ -32,9 +32,9 @@ export async function generateMetadata({ params }: PageProps<"/card/[id]">): Pro
     };
 
   const data = {
-    title: `${card.name} - ${card.company.name} | Ziron Digital Card`,
+    title: `${card.name} - ${card.organization.name} | Ziron Digital Card`,
     description: card.bio ?? "",
-    icon: card.company.logo ?? undefined,
+    icon: card.organization.logo ?? undefined,
     twitterHandler: card.links.find((l) => l.label === "Twitter")?.url?.replace(/.*\.com\//, "@"),
   };
 
@@ -55,6 +55,8 @@ export default async function CardPage({ params }: PageProps<"/card/[id]">) {
 
   const queryClient = getQueryClient();
 
+  await queryClient.prefetchQuery(orpc.analytics.getCardAnalytics.queryOptions({ input: { cardId: id } }));
+
   // const companies = await client.company.list();
   // Fetching the card based on the ID
   const card = await client.card.get({ id });
@@ -65,7 +67,7 @@ export default async function CardPage({ params }: PageProps<"/card/[id]">) {
   const isEditMode = id !== "new";
 
   const PAGE_TITLE = isEditMode
-    ? (`${truncate(card?.company.name!, 5, { mobileOnly: true })}/${card?.name}` as const)
+    ? (`${truncate(card?.organization.name!, 5, { mobileOnly: true })}/${card?.name}` as const)
     : ("Create New Card" as const);
 
   return (
