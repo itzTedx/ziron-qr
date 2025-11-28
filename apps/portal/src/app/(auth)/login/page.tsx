@@ -19,7 +19,7 @@ export default function LoginPage() {
           <div className="absolute top-0 right-0 left-0 m-auto h-[200px] w-[200px] rounded-full bg-brand-secondary opacity-40 blur-[100px] dark:opacity-20" />
         </div>
 
-        <CardContent className="z-10 p-9 px-12">
+        <CardContent className="z-10 px-10 py-12">
           {/* Logo */}
           <div className="mx-auto grid size-14 place-content-center rounded-full border-background border-t bg-linear-to-tr bg-size-[120%_120%] from-primary to-brand-secondary shadow-lg shadow-primary/30 dark:border-foreground/60">
             <IconLogoMono aria-hidden={true} className="size-9 text-white" />

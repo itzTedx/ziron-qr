@@ -8,6 +8,7 @@ import { APIError } from "better-auth";
 import { toast } from "sonner";
 
 import { Button } from "@ziron/ui/components/button";
+import { Checkbox } from "@ziron/ui/components/checkbox";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, useForm } from "@ziron/ui/components/form";
 import { Input } from "@ziron/ui/components/input";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
@@ -27,6 +28,7 @@ export function LoginForm() {
     defaultValues: {
       email: "",
       password: "",
+      remember: false,
     },
   });
 
@@ -36,6 +38,7 @@ export function LoginForm() {
         await authClient.signIn.email({
           email: values.email,
           password: values.password,
+          rememberMe: values.remember,
           callbackURL: "/",
           fetchOptions: {
             onSuccess: (data) => {
@@ -117,6 +120,20 @@ export function LoginForm() {
                 <FormLabel>Password</FormLabel>
                 <FormControl>
                   <PasswordInput {...field} required />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="remember"
+            render={({ field }) => (
+              <FormItem className="-mt-2 flex flex-row-reverse items-center justify-end">
+                <FormLabel className="text-muted-foreground text-xs">Remember me</FormLabel>
+                <FormControl>
+                  <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

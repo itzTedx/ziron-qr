@@ -4,6 +4,7 @@ export const loginUserSchema = z
   .object({
     email: z.email({ message: "Invalid email address" }),
     password: z.string().min(4, { message: "Password must be at least 4 characters long" }),
+    remember: z.boolean(),
   })
   .describe("Validates user login data: valid email, and password (min 4 chars).");
 
