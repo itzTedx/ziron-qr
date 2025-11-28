@@ -38,9 +38,10 @@ export function LoginForm() {
           password: values.password,
           callbackURL: "/",
           fetchOptions: {
-            onSuccess: () => {
+            onSuccess: (data) => {
               toast.success("Signed in...");
               router.push("/");
+              console.log("Success login:", data);
             },
             onError: (ctx) => {
               const { error } = ctx;
@@ -85,7 +86,6 @@ export function LoginForm() {
         if (error instanceof APIError) {
           console.log(error.message, error.status);
         }
-
         console.error("Login error:", error);
       }
     });
@@ -108,8 +108,6 @@ export function LoginForm() {
               </FormItem>
             )}
           />
-
-          {/* <Button>hello</Button> */}
 
           <FormField
             control={form.control}

@@ -40,25 +40,6 @@ export interface SettingsProfileProps {
   showEmailVerification?: boolean;
 }
 
-const defaultSocialPlatforms = [
-  {
-    id: "twitter",
-    label: "Twitter/X",
-    placeholder: "https://x.com/preetsuthar17",
-  },
-  {
-    id: "github",
-    label: "GitHub",
-    placeholder: "https://github.com/preetsuthar17",
-  },
-  {
-    id: "linkedin",
-    label: "LinkedIn",
-    placeholder: "https://linkedin.com/in/preetsuthar17",
-  },
-  { id: "website", label: "Website", placeholder: "https://preetsuthar.me" },
-];
-
 export default function SettingsProfile({
   profile,
   onSave,
@@ -256,29 +237,6 @@ export default function SettingsProfile({
       setIsChangingEmail(false);
     }
   };
-
-  const updateSocialLink = (platform: string, url: string) => {
-    setFormData((prev) => {
-      const socialLinks = prev.socialLinks || [];
-      const existingIndex = socialLinks.findIndex((link) => link.platform === platform);
-      const updatedLinks = [...socialLinks];
-
-      if (url.trim()) {
-        if (existingIndex >= 0) {
-          updatedLinks[existingIndex] = { platform, url };
-        } else {
-          updatedLinks.push({ platform, url });
-        }
-      } else if (existingIndex >= 0) {
-        updatedLinks.splice(existingIndex, 1);
-      }
-
-      return { ...prev, socialLinks: updatedLinks };
-    });
-  };
-
-  const getSocialLink = (platform: string): string =>
-    formData.socialLinks?.find((link) => link.platform === platform)?.url || "";
 
   return (
     <Card className={cn("w-full shadow-xs", className)}>
