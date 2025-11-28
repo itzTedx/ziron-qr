@@ -7,9 +7,11 @@ import { slugify } from "@ziron/utils";
 import { cardSchema, transformSlug, ZodError, z } from "@ziron/validators";
 
 import { protectedProcedure } from "..";
+import { dbProvider } from "../middleware/db-provider";
 import { getAvatar } from "../utils/get-avatar";
 
 export const createCard = protectedProcedure
+  .use(dbProvider)
   .route({
     method: "POST",
     path: "/card",
@@ -23,14 +25,14 @@ export const createCard = protectedProcedure
       cardName: z.string(),
     })
   )
-  .handler(async ({ input, errors }) => {
+  .handler(async ({ input, errors, context }) => {
     const placeholderCover = "/images/placeholder-cover.jpg";
 
     try {
       const uniqueSlug = await generateSlug(input.name);
 
-      const card = await db.transaction(async (tx) => {
-        const [newCard] = await db
+      const card = await context.db.transaction(async (tx) => {
+        const [newCard] = await context.db
           .insert(cards)
           .values({
             ...input,
@@ -114,6 +116,7 @@ export const createCard = protectedProcedure
   });
 
 export const checkSlugAvailability = protectedProcedure
+  .use(dbProvider)
   .route({
     method: "POST",
     path: "/card/check-slug",
@@ -128,9 +131,9 @@ export const checkSlugAvailability = protectedProcedure
       slug: z.string(),
     })
   )
-  .handler(async ({ input, errors }) => {
+  .handler(async ({ input, errors, context }) => {
     try {
-      const isAvailable = await db.query.cards.findFirst({
+      const isAvailable = await context.db.query.cards.findFirst({
         where: eq(cards.slug, input.slug),
       });
 
@@ -145,6 +148,7 @@ export const checkSlugAvailability = protectedProcedure
   });
 
 export const updateCard = protectedProcedure
+  .use(dbProvider)
   .route({
     method: "PUT",
     path: "/card/:id",
@@ -162,7 +166,7 @@ export const updateCard = protectedProcedure
       cardName: z.string(),
     })
   )
-  .handler(async ({ input, errors }) => {
+  .handler(async ({ input, errors, context }) => {
     const placeholderCover = "/images/placeholder-cover.jpg";
 
     const { error } = cardSchema.safeParse(input);
@@ -187,7 +191,7 @@ export const updateCard = protectedProcedure
         attachmentUrl: input.attachmentUrl,
       };
 
-      const card = await db.transaction(async (tx) => {
+      const card = await context.db.transaction(async (tx) => {
         const [updatedCard] = await tx.update(cards).set(cardData).where(eq(cards.id, id)).returning({
           id: cards.id,
           name: cards.name,
@@ -302,6 +306,7 @@ async function generateSlug(name: string) {
 }
 
 export const duplicateCard = protectedProcedure
+  .use(dbProvider)
   .route({
     method: "POST",
     path: "/card/:id/duplicate",
@@ -316,12 +321,12 @@ export const duplicateCard = protectedProcedure
       cardName: z.string(),
     })
   )
-  .handler(async ({ input, errors }) => {
+  .handler(async ({ input, errors, context }) => {
     const placeholderCover = "/images/placeholder-cover.jpg";
 
     try {
       // Fetch the original card with all relations
-      const originalCard = await db.query.cards.findFirst({
+      const originalCard = await context.db.query.cards.findFirst({
         where: (cards, { eq, isNull, and }) =>
           and(eq(cards.id, input.id), isNull(cards.deletedAt), isNull(cards.archivedAt)),
         with: {
@@ -339,7 +344,7 @@ export const duplicateCard = protectedProcedure
       // Generate a unique slug for the duplicate
       const uniqueSlug = await generateSlug(originalCard.name);
 
-      const duplicatedCard = await db.transaction(async (tx) => {
+      const duplicatedCard = await context.db.transaction(async (tx) => {
         // Create the new card
         const [newCard] = await tx
           .insert(cards)
@@ -438,6 +443,7 @@ export const duplicateCard = protectedProcedure
   });
 
 export const archiveCard = protectedProcedure
+  .use(dbProvider)
   .route({
     method: "POST",
     path: "/card/:id/archive",
@@ -447,9 +453,9 @@ export const archiveCard = protectedProcedure
   })
   .input(z.object({ id: z.string() }))
   .output(z.object({ success: z.boolean(), cardName: z.string() }))
-  .handler(async ({ input, errors }) => {
+  .handler(async ({ input, errors, context }) => {
     try {
-      const [data] = await db
+      const [data] = await context.db
         .update(cards)
         .set({ archivedAt: new Date(), slug: null })
         .where(eq(cards.id, input.id))
@@ -468,6 +474,7 @@ export const archiveCard = protectedProcedure
   });
 
 export const deleteCard = protectedProcedure
+  .use(dbProvider)
   .route({
     method: "DELETE",
     path: "/card/:id",
@@ -477,15 +484,15 @@ export const deleteCard = protectedProcedure
   })
   .input(z.object({ id: z.string() }))
   .output(z.object({ success: z.boolean(), cardName: z.string() }))
-  .handler(async ({ input, errors }) => {
+  .handler(async ({ input, errors, context }) => {
     try {
       const [data] = await Promise.all([
-        db.update(cards).set({ deletedAt: new Date(), slug: null }).where(eq(cards.id, input.id)).returning({
+        context.db.update(cards).set({ deletedAt: new Date(), slug: null }).where(eq(cards.id, input.id)).returning({
           name: cards.name,
         }),
-        db.update(links).set({ deletedAt: new Date() }).where(eq(links.cardId, input.id)),
-        db.update(emails).set({ deletedAt: new Date() }).where(eq(emails.cardId, input.id)),
-        db.update(phones).set({ deletedAt: new Date() }).where(eq(phones.cardId, input.id)),
+        context.db.update(links).set({ deletedAt: new Date() }).where(eq(links.cardId, input.id)),
+        context.db.update(emails).set({ deletedAt: new Date() }).where(eq(emails.cardId, input.id)),
+        context.db.update(phones).set({ deletedAt: new Date() }).where(eq(phones.cardId, input.id)),
       ]);
 
       if (!data[0]) {
@@ -499,6 +506,7 @@ export const deleteCard = protectedProcedure
   });
 
 export const listCards = os
+  .use(dbProvider)
   .route({
     method: "GET",
     path: "/card",
@@ -507,8 +515,8 @@ export const listCards = os
     tags: ["card"],
   })
   .output(z.array(z.custom<OrganizationWithCards>()))
-  .handler(async () => {
-    const data = await db.query.organizationTable.findMany({
+  .handler(async ({ context }) => {
+    const data = await context.db.query.organizationTable.findMany({
       where: (organization, { isNull }) => isNull(organization.deletedAt),
       with: {
         cards: {
@@ -521,6 +529,7 @@ export const listCards = os
   });
 
 export const getCard = protectedProcedure
+  .use(dbProvider)
   .route({
     method: "GET",
     path: "/card/:id",
@@ -530,9 +539,9 @@ export const getCard = protectedProcedure
   })
   .input(z.object({ id: z.string() }))
   .output(z.custom<CardType>().optional())
-  .handler(async ({ input }) => {
+  .handler(async ({ input, context }) => {
     if (input.id !== "new") {
-      const data = await db.query.cards.findFirst({
+      const data = await context.db.query.cards.findFirst({
         where: (cards, { eq, isNull, and }) =>
           and(eq(cards.id, input.id), isNull(cards.deletedAt), isNull(cards.archivedAt)),
         with: {
@@ -549,6 +558,7 @@ export const getCard = protectedProcedure
   });
 
 export const getCardBySlug = os
+  .use(dbProvider)
   .route({
     method: "GET",
     path: "/card/:slug",
@@ -558,9 +568,9 @@ export const getCardBySlug = os
   })
   .input(z.object({ slug: z.string() }))
   .output(z.custom<CardType>().optional())
-  .handler(async ({ input }) => {
+  .handler(async ({ input, context }) => {
     if (input.slug !== "new") {
-      const data = await db.query.cards.findFirst({
+      const data = await context.db.query.cards.findFirst({
         where: (cards, { eq, isNull, and }) =>
           and(eq(cards.slug, input.slug), isNull(cards.deletedAt), isNull(cards.archivedAt)),
         with: {

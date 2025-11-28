@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { publicProcedure } from "..";
+import { protectedProcedure } from "..";
 
 /**
  * Get base URL from request
@@ -60,7 +60,7 @@ async function fetchQRCodeFromAPI(
   return `data:image/png;base64,${base64}`;
 }
 
-export const generateQR = publicProcedure
+export const generateQR = protectedProcedure
   .route({
     method: "GET",
     path: "/qr",

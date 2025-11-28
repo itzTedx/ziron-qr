@@ -1,8 +1,8 @@
-import { db } from "@ziron/db/client";
 import { events, pageVisits } from "@ziron/db/schema";
 import { z } from "@ziron/validators";
 
 import { publicProcedure } from "..";
+import { dbProvider } from "../middleware/db-provider";
 
 // Utility function to extract device info from user agent
 function parseUserAgent(userAgent: string | null) {
@@ -56,6 +56,7 @@ function getIpAddress(request: Request): string | null {
 
 // Track a page visit
 export const trackPageVisit = publicProcedure
+  .use(dbProvider)
   .route({
     method: "POST",
     path: "/analytics/page-visit",
@@ -77,7 +78,7 @@ export const trackPageVisit = publicProcedure
       const ipAddress = getIpAddress(request);
       const deviceInfo = parseUserAgent(userAgent);
 
-      await db.insert(pageVisits).values({
+      await context.db.insert(pageVisits).values({
         cardId: input.cardId,
         ipAddress,
         userAgent,
@@ -95,6 +96,7 @@ export const trackPageVisit = publicProcedure
 
 // Track an event
 export const trackEvent = publicProcedure
+  .use(dbProvider)
   .route({
     method: "POST",
     path: "/analytics/event",
@@ -118,7 +120,7 @@ export const trackEvent = publicProcedure
       const ipAddress = getIpAddress(request);
       const deviceInfo = parseUserAgent(userAgent);
 
-      await db.insert(events).values({
+      await context.db.insert(events).values({
         cardId: input.cardId,
         eventType: input.eventType,
         eventName: input.eventName ?? null,
@@ -138,6 +140,7 @@ export const trackEvent = publicProcedure
 
 // Get analytics for a card (protected - only card owners can view)
 export const getCardAnalytics = publicProcedure
+  .use(dbProvider)
   .route({
     method: "GET",
     path: "/analytics/card/:cardId",
@@ -179,13 +182,13 @@ export const getCardAnalytics = publicProcedure
       ),
     })
   )
-  .handler(async ({ input, errors }) => {
+  .handler(async ({ input, errors, context }) => {
     try {
       const startDate = input.startDate ? new Date(input.startDate) : undefined;
       const endDate = input.endDate ? new Date(input.endDate) : new Date();
 
       // Get all visits
-      const allVisits = await db.query.pageVisits.findMany({
+      const allVisits = await context.db.query.pageVisits.findMany({
         where: (visits, { eq, and, gte, lte }) => {
           const conditions = [eq(visits.cardId, input.cardId)];
           if (startDate) conditions.push(gte(visits.createdAt, startDate));
@@ -202,7 +205,7 @@ export const getCardAnalytics = publicProcedure
       });
 
       // Get all events
-      const allEvents = await db.query.events.findMany({
+      const allEvents = await context.db.query.events.findMany({
         where: (events, { eq, and, gte, lte }) => {
           const conditions = [eq(events.cardId, input.cardId)];
           if (startDate) conditions.push(gte(events.createdAt, startDate));

@@ -1,9 +1,10 @@
-import { db } from "@ziron/db/client";
 import { z } from "@ziron/validators";
 
 import { protectedProcedure } from "..";
+import { dbProvider } from "../middleware/db-provider";
 
 export const getMetrics = protectedProcedure
+  .use(dbProvider)
   .route({
     method: "GET",
     path: "/metrics",
@@ -19,27 +20,27 @@ export const getMetrics = protectedProcedure
       totalPageVisits: z.number(),
     })
   )
-  .handler(async ({ errors }) => {
+  .handler(async ({ errors, context }) => {
     try {
       const [organizationsList, cardsList, eventsList, pageVisitsList] = await Promise.all([
-        db.query.organizationTable.findMany({
+        context.db.query.organizationTable.findMany({
           where: (organization, { isNull }) => isNull(organization.deletedAt),
           columns: {
             id: true,
           },
         }),
-        db.query.cards.findMany({
+        context.db.query.cards.findMany({
           where: (cards, { isNull, and }) => and(isNull(cards.deletedAt), isNull(cards.archivedAt)),
           columns: {
             id: true,
           },
         }),
-        db.query.events.findMany({
+        context.db.query.events.findMany({
           columns: {
             id: true,
           },
         }),
-        db.query.pageVisits.findMany({
+        context.db.query.pageVisits.findMany({
           columns: {
             id: true,
           },

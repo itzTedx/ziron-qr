@@ -1,12 +1,13 @@
 import { eq } from "@ziron/db";
-import { db } from "@ziron/db/client";
 import { Organization, OrganizationWithCards, organizationTable } from "@ziron/db/schema";
 import { slugify } from "@ziron/utils";
 import { organizationSchema, z } from "@ziron/validators";
 
 import { protectedProcedure } from "..";
+import { dbProvider } from "../middleware/db-provider";
 
 export const createOrganization = protectedProcedure
+  .use(dbProvider)
   .route({
     method: "POST",
     path: "/organization",
@@ -22,11 +23,11 @@ export const createOrganization = protectedProcedure
       organizationName: z.string(),
     })
   )
-  .handler(async ({ input, errors }) => {
+  .handler(async ({ input, errors, context }) => {
     const slug = slugify(input.name);
 
     try {
-      const [organization] = await db
+      const [organization] = await context.db
         .insert(organizationTable)
         .values({
           ...input,
@@ -45,6 +46,7 @@ export const createOrganization = protectedProcedure
   });
 
 export const listOrganizations = protectedProcedure
+  .use(dbProvider)
   .route({
     method: "GET",
     path: "/organization",
@@ -53,8 +55,8 @@ export const listOrganizations = protectedProcedure
     tags: ["organization"],
   })
   .output(z.array(z.custom<OrganizationWithCards>()))
-  .handler(async () => {
-    const data = await db.query.organizationTable.findMany({
+  .handler(async ({ context }) => {
+    const data = await context.db.query.organizationTable.findMany({
       where: (organization, { isNull }) => isNull(organization.deletedAt),
       with: {
         cards: {
@@ -68,6 +70,7 @@ export const listOrganizations = protectedProcedure
   });
 
 export const getOrganization = protectedProcedure
+  .use(dbProvider)
   .route({
     method: "GET",
     path: "/organization/:id",
@@ -77,9 +80,9 @@ export const getOrganization = protectedProcedure
   })
   .input(z.object({ id: z.string().optional().or(z.literal("new")) }))
   .output(z.custom<Organization>().nullable())
-  .handler(async ({ input, errors }) => {
+  .handler(async ({ input, errors, context }) => {
     if (input.id && input.id !== "new") {
-      const data = await db.query.organizationTable.findFirst({
+      const data = await context.db.query.organizationTable.findFirst({
         where: (organization, { eq }) => eq(organization.id, input.id as string),
       });
 
@@ -92,6 +95,7 @@ export const getOrganization = protectedProcedure
   });
 
 export const deleteOrganization = protectedProcedure
+  .use(dbProvider)
   .route({
     method: "DELETE",
     path: "/organization/:id",
@@ -101,9 +105,9 @@ export const deleteOrganization = protectedProcedure
   })
   .input(z.object({ id: z.string() }))
   .output(z.object({ success: z.boolean(), organizationName: z.string() }))
-  .handler(async ({ input, errors }) => {
+  .handler(async ({ input, errors, context }) => {
     try {
-      const [data] = await db
+      const [data] = await context.db
         .update(organizationTable)
         .set({ deletedAt: new Date() })
         .where(eq(organizationTable.id, input.id))

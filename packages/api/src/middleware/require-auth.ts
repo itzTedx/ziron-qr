@@ -8,13 +8,12 @@ import { base } from "./base";
 export const requireAuth = base.middleware(async ({ context, next }) => {
   const session = await getSession(context.headers);
 
-  if (!session?.session) {
+  if (!session?.session || !session?.user) {
     redirect("/login");
-    // throw errors.UNAUTHORIZED();
   }
 
   return next({
-    context: { user: session.session },
+    context: { user: session.user },
   });
 });
 
