@@ -18,13 +18,13 @@ export default function SaveContactButton({ style, data, imageBase64, className 
     const vCardData = `BEGIN:VCARD
 VERSION:3.0
 FN:${data.name}
-ORG:${data.company && data.company.name}
+ORG:${data.organization && data.organization.name}
 TITLE:${data.designation && data.designation}
 ${data.phones && data.phones.map((phone) => `TEL;MEDIATYPE=WORK:${phone.phone && phone.phone.replace(/\s+/g, "")}`)}
 ${data.emails && data.emails.map((email) => `EMAIL:${email.email && email.email}`)}
 ADR:${data.address && data.address}
 PHOTO;ENCODING=BASE64;JPEG:${imageBase64}
-LOGO;TYPE=SVG;VALUE=URI:${data.company && data.company.logo}
+LOGO;TYPE=SVG;VALUE=URI:${data.organization && data.organization.logo}
 NOTE:${data.bio}
 END:VCARD`;
     return vCardData;
@@ -38,7 +38,7 @@ END:VCARD`;
     const a = document.createElement("a");
     a.style.display = "none";
     a.href = url;
-    a.download = `${data.name} - ${data.company?.name}.vcf`;
+    a.download = `${data.name} - ${data.organization?.name}.vcf`;
     document.body.appendChild(a);
     a.click();
     window.URL.revokeObjectURL(url);
