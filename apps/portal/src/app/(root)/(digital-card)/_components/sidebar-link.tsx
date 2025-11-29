@@ -7,12 +7,12 @@ import { usePathname } from "next/navigation";
 import { cn } from "@ziron/utils";
 
 interface Props {
-  href: Route;
+  href: string;
   children: React.ReactNode;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 }
 
-export function SidebarLink({ href, children, icon: Icon }: Props) {
+export function SidebarLinkItem({ href, children, icon: Icon }: Props) {
   const pathname = usePathname();
   const isActive = pathname === href;
   return (
@@ -21,7 +21,7 @@ export function SidebarLink({ href, children, icon: Icon }: Props) {
         "-m-px flex items-center gap-2 rounded-lg border border-transparent px-3 py-2 hover:bg-muted/50",
         isActive && "border-brand-secondary/10 bg-brand-secondary/10 text-brand-secondary"
       )}
-      href={href}
+      href={href as Route}
     >
       <Icon className="size-4" />
       <span className="text-sm">{children}</span>
