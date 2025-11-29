@@ -130,7 +130,7 @@ export default function CompanyForm({ initialData, isEditMode }: CompanyFormProp
     deleteOrganization.mutate({ id });
   }
 
-  const logo = form.getValues("logo");
+  const _logo = form.getValues("logo");
 
   return (
     <Form {...form}>

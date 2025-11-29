@@ -100,7 +100,7 @@ export const SlugField = ({ data, organizationId }: Props) => {
     // Validate the slug
     setValidationState("validating");
     validateSlug.mutate({ slug: slugToValidate });
-  }, [debouncedSlug, data.slug]);
+  }, [debouncedSlug, data.slug, form.setValue, isEditingSlug, validateSlug.mutate]);
 
   function handleSlugChange(e: React.ChangeEvent<HTMLInputElement>) {
     const newValue = e.target.value;

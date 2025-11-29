@@ -69,7 +69,7 @@ export function generatePath(modules: Modules, margin = 0): string {
 export function getImageSettings(
   cells: Modules,
   size: number,
-  margin: number,
+  _margin: number,
   imageSettings?: ImageSettings
 ): null | {
   x: number;

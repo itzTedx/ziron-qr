@@ -43,7 +43,7 @@ export function QRCodeCanvas(props: QRPropsCanvas) {
   // Don't actually read the value anywhere. A smarter use of useEffect would
   // depend on this value.
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isImgLoaded, setIsImageLoaded] = useState(false);
+  const [_isImgLoaded, setIsImageLoaded] = useState(false);
 
   useEffect(() => {
     // Always update the canvas. It's cheap enough and we want to be correct
@@ -118,7 +118,7 @@ export function QRCodeCanvas(props: QRPropsCanvas) {
   // canvas in our other effect.
   useEffect(() => {
     setIsImageLoaded(false);
-  }, [imgSrc]);
+  }, []);
 
   const canvasStyle = { height: size, width: size, ...style };
   let img: JSX.Element | null = null;

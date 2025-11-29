@@ -54,7 +54,7 @@ export const CompanyField = ({ data: data, companyId }: Props) => {
   const handleModalOpen = useCallback(() => {
     setOpenPopover(false);
     setCompanyModal({ modal: "company" });
-  }, []);
+  }, [setCompanyModal]);
 
   return (
     <FormField

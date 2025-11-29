@@ -317,7 +317,7 @@ export const DndLinks = () => {
           <Button
             onClick={useCallback(() => {
               setOpen(true);
-            }, [setOpen])}
+            }, [])}
             type="button"
             variant="link"
           >
