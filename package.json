@@ -8,7 +8,7 @@
     "clean": "git clean -xdf .cache .next .turbo node_modules",
     "prepare": "husky",
     "dev": "turbo dev",
-    "dev:web": "turbo -F portal dev",
+    "dev:portal": "pnpm -F portal dev",
     "dev:client": "turbo -F client dev",
     "lint": "turbo lint",
     "db:generate": "pnpm -F @ziron/db generate",

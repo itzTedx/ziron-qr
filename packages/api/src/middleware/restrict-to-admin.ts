@@ -1,9 +1,7 @@
-import type { User } from "@ziron/auth";
-
 import { base } from "./base";
 
-export const restrictToAdmin = base.$context<{ user: User }>().middleware(async ({ context, next, errors }) => {
-  const { role } = context.user;
+export const restrictToAdmin = base.middleware(async ({ context, next, errors }) => {
+  const role = context.session?.user?.role;
 
   const isAdmin = role === "admin" || role === "dev";
 
@@ -11,5 +9,5 @@ export const restrictToAdmin = base.$context<{ user: User }>().middleware(async 
     throw errors.FORBIDDEN();
   }
 
-  return next({ context: { isAdmin, user: context.user } });
+  return next({ context: { isAdmin, session: context.session } });
 });

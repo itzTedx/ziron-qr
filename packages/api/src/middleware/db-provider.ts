@@ -6,6 +6,7 @@ export const dbProvider = os.$context<{ db?: typeof database }>().middleware(asy
   /**
    * If db already exists, skip the connection.
    */
+
   const db = context.db ?? database;
 
   return next({ context: { db } });
