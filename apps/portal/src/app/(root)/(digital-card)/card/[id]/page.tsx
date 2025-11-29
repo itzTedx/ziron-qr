@@ -2,7 +2,7 @@ import { Metadata } from "next";
 
 import { client } from "@/lib/orpc/client";
 
-import { CardPageContent } from "./_components/card-page-content";
+import { CardPageContent, CardPageHeader } from "./_components/card-page-content";
 
 export async function generateMetadata({ params }: PageProps<"/card/[id]">): Promise<Metadata> {
   const { id } = await params;
@@ -40,5 +40,10 @@ export async function generateMetadata({ params }: PageProps<"/card/[id]">): Pro
 }
 
 export default function CardPage({ params }: PageProps<"/card/[id]">) {
-  return <CardPageContent params={params} />;
+  return (
+    <>
+      <CardPageHeader params={params} />
+      <CardPageContent params={params} />
+    </>
+  );
 }

@@ -1,7 +1,5 @@
 import { Suspense } from "react";
 
-import { notFound } from "next/navigation";
-
 import { ScrollArea, ScrollBar } from "@ziron/ui/components/scroll-area";
 
 import { truncate } from "@ziron/utils";
@@ -20,38 +18,46 @@ interface CardPageContentProps {
   params: PageProps<"/card/[id]">["params"];
 }
 
-async function CardPageContentInner({ params }: CardPageContentProps) {
+async function SuspenseCardPageHeader({ params }: CardPageContentProps) {
   const { id } = await params;
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery(orpc.analytics.getCardAnalytics.queryOptions({ input: { cardId: id } }));
 
-  // Fetching the card based on the ID
-  const card = id === "new" ? undefined : await client.card.get({ id });
-  if (!card && id !== "new") {
-    return notFound();
-  }
-
   const isEditMode = id !== "new";
+
+  // Fetching the card if in edit mode
+  const card = isEditMode ? await client.card.get({ id }) : undefined;
 
   const PAGE_TITLE = isEditMode
     ? (`${truncate(card?.organization.name!, 5)}/${card?.name}` as const)
     : ("Create New Card" as const);
 
   return (
-    <>
-      <Header backHref="/" currentPage={PAGE_TITLE} showBackButton title="Cards">
-        {isEditMode ? (
-          <>
-            <CopyLinkButton slug={card?.slug} />
-            <HydrateClient client={queryClient}>
-              <ClicksVisits cardId={id} className="max-md:hidden" />
-            </HydrateClient>
-            <CardActionsDropdown cardId={id} />
-          </>
-        ) : null}
-      </Header>
+    <Header backHref="/" currentPage={PAGE_TITLE} showBackButton title="Cards">
+      {isEditMode ? (
+        <>
+          <CopyLinkButton slug={card?.slug} />
+          <HydrateClient client={queryClient}>
+            <ClicksVisits cardId={id} className="max-md:hidden" />
+          </HydrateClient>
+          <CardActionsDropdown cardId={id} />
+        </>
+      ) : null}
+    </Header>
+  );
+}
 
+async function SuspenseCardPageContent({ params }: CardPageContentProps) {
+  const { id } = await params;
+
+  const isEditMode = id !== "new";
+
+  // Fetching the card if in edit mode
+  const card = isEditMode ? await client.card.get({ id }) : undefined;
+
+  return (
+    <>
       <section className="h-full flex-1">
         <ScrollArea className="h-full flex-1 overflow-y-auto">
           <CardForm initialData={card} isEditMode={isEditMode} />
@@ -62,10 +68,18 @@ async function CardPageContentInner({ params }: CardPageContentProps) {
   );
 }
 
+export function CardPageHeader({ params }: CardPageContentProps) {
+  return (
+    <Suspense fallback={<div>Loading card...</div>}>
+      <SuspenseCardPageHeader params={params} />
+    </Suspense>
+  );
+}
+
 export function CardPageContent({ params }: CardPageContentProps) {
   return (
     <Suspense fallback={<div>Loading card...</div>}>
-      <CardPageContentInner params={params} />
+      <SuspenseCardPageContent params={params} />
     </Suspense>
   );
 }
