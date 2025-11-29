@@ -64,15 +64,19 @@ const apiHandler = new OpenAPIHandler(router, {
 });
 
 async function handleRequest(req: NextRequest) {
+  // Create context once and reuse it for both handlers
+  // This prevents duplicate session retrieval calls and ensures consistency
+  const context = await createContext(req);
+
   const rpcResult = await rpcHandler.handle(req, {
     prefix: "/api/rpc",
-    context: await createContext(req),
+    context,
   });
   if (rpcResult.response) return rpcResult.response;
 
   const apiResult = await apiHandler.handle(req, {
     prefix: "/api/rpc/api-reference",
-    context: await createContext(req),
+    context,
   });
   if (apiResult.response) return apiResult.response;
 
