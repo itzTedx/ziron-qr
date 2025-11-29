@@ -29,18 +29,18 @@ interface Props {
 
 export const OrganizationField = ({ organizationId }: Props) => {
   const [openPopover, setOpenPopover] = useState(false);
-  const [, setCompanyModal] = useQueryStates({
+  const [, setOrganizationModal] = useQueryStates({
     modal: parseAsString,
   });
   const { data } = useQuery(orpc.organization.list.queryOptions());
   const form = useFormContext<zCardSchema>();
 
-  // Memoize company lookup
-  const selectedCompany = useMemo(() => {
+  // Memoize organization lookup
+  const selectedOrganization = useMemo(() => {
     return data?.find((org) => org.id === organizationId);
   }, [data, organizationId]);
 
-  // Memoize selection handler
+  // Memoize organization selection handler
   const handleSelect = useCallback(
     (organizationId?: string) => {
       if (organizationId) {
@@ -51,11 +51,11 @@ export const OrganizationField = ({ organizationId }: Props) => {
     [form]
   );
 
-  // Memoize modal handler
+  // Memoize organization modal handler
   const handleModalOpen = useCallback(() => {
     setOpenPopover(false);
-    setCompanyModal({ modal: "company" });
-  }, [setCompanyModal]);
+    setOrganizationModal({ modal: "organization" });
+  }, [setOrganizationModal]);
 
   return (
     <FormField
@@ -63,7 +63,7 @@ export const OrganizationField = ({ organizationId }: Props) => {
       name="organizationId"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>Company</FormLabel>
+          <FormLabel>Organization</FormLabel>
 
           <Popover onOpenChange={setOpenPopover} open={openPopover}>
             <PopoverTrigger asChild>
@@ -76,20 +76,20 @@ export const OrganizationField = ({ organizationId }: Props) => {
                   role="combobox"
                   variant="outline"
                 >
-                  {selectedCompany ? (
+                  {selectedOrganization ? (
                     <span className="inline-flex items-center gap-2.5">
                       <div className="relative aspect-square size-4">
                         <Image
-                          alt={`${selectedCompany.name} logo`}
+                          alt={`${selectedOrganization.name} logo`}
                           className="object-contain"
                           fill
-                          src={selectedCompany.logo || "/images/placeholder-cover.jpg"}
+                          src={selectedOrganization.logo || "/images/placeholder-cover.jpg"}
                         />
                       </div>
-                      <span>{selectedCompany.name}</span>
+                      <span>{selectedOrganization.name}</span>
                     </span>
                   ) : (
-                    "Select Category"
+                    "Select Organization"
                   )}
                   <IconCaretUpDownFilled className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -98,9 +98,9 @@ export const OrganizationField = ({ organizationId }: Props) => {
             <PopoverContent align="start" className="p-0 sm:w-78">
               <Command>
                 <CommandInput placeholder="Search Organization..." />
-                <CommandEmpty>Company not found</CommandEmpty>
+                <CommandEmpty>Organization not found</CommandEmpty>
                 <CommandList className="max-h-[300px] overflow-auto">
-                  <CommandGroup heading="Companies">
+                  <CommandGroup heading="Organizations">
                     {data?.map((org) => (
                       <CommandItem
                         className="cursor-pointer gap-2.5 px-4 py-2.5 font-medium"
@@ -119,9 +119,9 @@ export const OrganizationField = ({ organizationId }: Props) => {
                       </CommandItem>
                     ))}
                   </CommandGroup>
-                  <CommandGroup heading="New Company?">
+                  <CommandGroup heading="New Organization?">
                     <CommandItem className="cursor-pointer px-4 py-2.5 font-medium" onSelect={handleModalOpen}>
-                      Add new
+                      Add new organization
                     </CommandItem>
                   </CommandGroup>
                 </CommandList>
