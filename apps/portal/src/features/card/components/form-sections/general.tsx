@@ -2,19 +2,17 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage, useFormContex
 import { Input } from "@ziron/ui/components/input";
 import { Textarea } from "@ziron/ui/components/textarea";
 
-import { Company } from "@ziron/db/schema";
 import { EmailsType, PhonesType, zCardSchema } from "@ziron/validators";
 
-import { CompanyField } from "../fields/company-field";
 import { EmailsField } from "../fields/emails-field";
+import { OrganizationField } from "../fields/organization-field";
 import { PhonesField } from "../fields/phone-field";
 
 interface Props {
   data: {
-    companies?: Company[];
     emails?: EmailsType;
     phones?: PhonesType;
-    companyId?: string;
+    organizationId?: string;
   };
 }
 
@@ -78,7 +76,7 @@ export const CardGeneral = ({ data }: Props) => {
           />
         </div>
         <div className="space-y-4">
-          <CompanyField companyId={data.companyId} data={data.companies} />
+          <OrganizationField organizationId={data.organizationId} />
           <FormField
             control={form.control}
             name="designation"

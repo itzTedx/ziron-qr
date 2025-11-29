@@ -1,19 +1,16 @@
-import { Suspense } from "react";
-
 import { Route } from "next";
 import Link from "next/link";
 
-import { IconChartLine, IconChevronRight, IconPhoto, IconTemplate } from "@tabler/icons-react";
-
 import { IconBuilding } from "@ziron/ui/assets/icons/building";
 import { IconCard2 } from "@ziron/ui/assets/icons/card";
+import { IconChart } from "@ziron/ui/assets/icons/chart";
 import { IconMouse } from "@ziron/ui/assets/icons/mouse";
 import { Label } from "@ziron/ui/components/label";
 
 import { orpc } from "@/lib/orpc/client";
-import { getQueryClient, HydrateClient } from "@/lib/orpc/query/hydration";
+import { getQueryClient } from "@/lib/orpc/query/hydration";
 
-import { UsageMetrics } from "./_components/usage-metrics";
+import { SidebarLink } from "./_components/sidebar-link";
 
 interface Props {
   children: React.ReactNode;
@@ -30,7 +27,7 @@ export default async function DigitalCardLayout({ children }: Props) {
       <aside className="fixed top-0 left-0 z-50 hidden h-dvh w-screen max-md:pointer-events-none md:sticky md:z-auto md:block md:w-full">
         <div className="size-full overflow-hidden py-2 pr-2 transition-opacity duration-300">
           <div className="scrollbar-hide relative flex h-full flex-col overflow-y-auto overflow-x-hidden rounded-xl bg-sidebar/60 backdrop-blur-lg">
-            <div className="relative flex grow flex-col p-3 text-stone-500">
+            <div className="relative flex grow flex-col p-3 text-muted-foreground">
               <Link className="group mb-2 flex items-center gap-3 px-3 py-2" href="/">
                 <span className="font-semibold text-foreground text-lg transition-colors duration-150 group-hover:text-foreground">
                   Digital Cards
@@ -40,49 +37,18 @@ export default async function DigitalCardLayout({ children }: Props) {
               <div className="flex flex-col gap-8">
                 <ul className="space-y-0.5">
                   <li>
-                    <Link
-                      className="flex items-center gap-2 rounded-lg bg-brand-secondary/10 px-3 py-2 text-brand-secondary hover:bg-muted"
-                      href={"/"}
-                    >
-                      <IconCard2 className="size-4" />
-                      <span className="text-sm">Cards</span>
-                    </Link>
+                    <SidebarLink href={"/"} icon={IconCard2}>
+                      Cards
+                    </SidebarLink>
                   </li>
                   <li>
-                    <Link
-                      className="flex items-center gap-2 rounded-lg px-3 py-2 text-foreground/90 hover:bg-muted"
-                      href={"/organization" as Route}
-                    >
-                      <IconBuilding className="size-4" />
-                      <span className="text-sm">Organizations</span>
-                    </Link>
+                    <SidebarLink href={"/organization" as Route} icon={IconBuilding}>
+                      Organizations
+                    </SidebarLink>
                   </li>
                 </ul>
 
-                <div className="flex flex-col gap-0.5">
-                  <Label className="my-2 px-3 font-light text-muted-foreground">Insights</Label>
-                  <ul className="space-y-0.5">
-                    <li>
-                      <Link
-                        className="flex items-center gap-2 rounded-lg px-3 py-2 text-foreground/90 hover:bg-muted"
-                        href={"/account/settings" as Route}
-                      >
-                        <IconChartLine className="size-4" />
-                        <span className="text-sm">Analytics</span>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className="flex items-center gap-2 rounded-lg px-3 py-2 text-foreground/90 hover:bg-muted"
-                        href={"/account/settings" as Route}
-                      >
-                        <IconMouse className="size-4" />
-                        <span className="text-sm">Events</span>
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-                <div className="flex flex-col gap-0.5">
+                {/* <div className="flex flex-col gap-0.5">
                   <Label className="my-2 px-3 font-light text-muted-foreground">Library</Label>
                   <ul className="space-y-0.5">
                     <li>
@@ -104,20 +70,24 @@ export default async function DigitalCardLayout({ children }: Props) {
                       </Link>
                     </li>
                   </ul>
-                </div>
+                </div> */}
               </div>
             </div>
-            <div className="border-t">
-              <div className="flex flex-col gap-4 p-3 pt-4">
-                <Label>
-                  Usage <IconChevronRight className="size-3 text-muted-foreground" />
-                </Label>
-                <HydrateClient client={queryClient}>
-                  <Suspense>
-                    <UsageMetrics />
-                  </Suspense>
-                </HydrateClient>
-              </div>
+            {/* TODO: Add most important insights here */}
+            <div className="flex flex-col gap-0.5 p-3 text-muted-foreground">
+              <Label className="my-1.5 px-3 font-light text-muted-foreground/60">Resources</Label>
+              <ul className="space-y-0.5">
+                <li>
+                  <SidebarLink href={"/analytics" as Route} icon={IconChart}>
+                    Analytics
+                  </SidebarLink>
+                </li>
+                <li>
+                  <SidebarLink href={"/templates" as Route} icon={IconMouse}>
+                    Templates
+                  </SidebarLink>
+                </li>
+              </ul>
             </div>
           </div>
         </div>

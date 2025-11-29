@@ -3,6 +3,7 @@ import { useCallback, useMemo, useState } from "react";
 import Image from "next/image";
 
 import { IconCaretUpDownFilled } from "@tabler/icons-react";
+import { useQuery } from "@tanstack/react-query";
 import { parseAsString, useQueryStates } from "nuqs";
 
 import { Button } from "@ziron/ui/components/button";
@@ -17,33 +18,33 @@ import {
 import { FormControl, FormField, FormItem, FormLabel, FormMessage, useFormContext } from "@ziron/ui/components/form";
 import { Popover, PopoverContent, PopoverTrigger } from "@ziron/ui/components/popover";
 
-import { Company } from "@ziron/db/schema";
 import { cn } from "@ziron/utils";
 import { zCardSchema } from "@ziron/validators";
 
+import { orpc } from "@/lib/orpc/client";
+
 interface Props {
-  data?: Company[];
-  companyId?: string;
+  organizationId?: string;
 }
 
-export const CompanyField = ({ data: data, companyId }: Props) => {
+export const OrganizationField = ({ organizationId }: Props) => {
   const [openPopover, setOpenPopover] = useState(false);
   const [, setCompanyModal] = useQueryStates({
     modal: parseAsString,
   });
-
+  const { data } = useQuery(orpc.organization.list.queryOptions());
   const form = useFormContext<zCardSchema>();
 
   // Memoize company lookup
   const selectedCompany = useMemo(() => {
-    return data?.find((cat) => cat.id === companyId);
-  }, [data, companyId]);
+    return data?.find((org) => org.id === organizationId);
+  }, [data, organizationId]);
 
   // Memoize selection handler
   const handleSelect = useCallback(
-    (companyId?: string) => {
-      if (companyId) {
-        form.setValue("companyId", companyId);
+    (organizationId?: string) => {
+      if (organizationId) {
+        form.setValue("organizationId", organizationId);
         setOpenPopover(false);
       }
     },
@@ -59,7 +60,7 @@ export const CompanyField = ({ data: data, companyId }: Props) => {
   return (
     <FormField
       control={form.control}
-      name="companyId"
+      name="organizationId"
       render={({ field }) => (
         <FormItem>
           <FormLabel>Company</FormLabel>
@@ -96,25 +97,25 @@ export const CompanyField = ({ data: data, companyId }: Props) => {
             </PopoverTrigger>
             <PopoverContent align="start" className="p-0 sm:w-78">
               <Command>
-                <CommandInput placeholder="Search Category..." />
+                <CommandInput placeholder="Search Organization..." />
                 <CommandEmpty>Company not found</CommandEmpty>
                 <CommandList className="max-h-[300px] overflow-auto">
                   <CommandGroup heading="Companies">
-                    {data?.map((cat) => (
+                    {data?.map((org) => (
                       <CommandItem
                         className="cursor-pointer gap-2.5 px-4 py-2.5 font-medium"
-                        key={cat.id}
-                        onSelect={() => handleSelect(cat.id?.toString())}
-                        value={cat.name}
+                        key={org.id}
+                        onSelect={() => handleSelect(org.id?.toString())}
+                        value={org.name}
                       >
                         <Image
-                          alt={`${cat.name} logo`}
+                          alt={`${org.name} logo`}
                           height={16}
                           loading="lazy"
-                          src={cat.logo || "/images/placeholder-cover.jpg"}
+                          src={org.logo || "/images/placeholder-cover.jpg"}
                           width={16}
                         />
-                        <span>{cat.name}</span>
+                        <span>{org.name}</span>
                       </CommandItem>
                     ))}
                   </CommandGroup>
