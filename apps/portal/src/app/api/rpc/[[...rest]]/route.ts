@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server";
 
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
-import { ORPCError, ValidationError, onError } from "@orpc/server";
+import { ORPCError, onError, ValidationError } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 

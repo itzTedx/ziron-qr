@@ -10,6 +10,10 @@ catalog:
   '@orpc/server': ^1.11.3
   '@orpc/tanstack-query': ^1.10.0
   '@orpc/zod': ^1.11.3
+  '@tanstack/react-query': ^5.90.11
+  "@tanstack/query-core": ^5.90.11
+  "@tanstack/react-query-devtools": ^5.91.1
+  'better-auth': 1.4.3
   next: 16.0.5
   typescript: ^5
   zod: ^4.1.12

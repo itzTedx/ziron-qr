@@ -2,10 +2,14 @@
   "name": "ziron-qr",
   "version": "0.0.1",
   "private": true,
+  "workspaces": ["apps/*", "packages/*", "tooling/*"],
   "scripts": {
     "build": "turbo build",
     "clean": "git clean -xdf .cache .next .turbo node_modules",
+    "prepare": "husky",
     "dev": "turbo dev",
+    "dev:web": "turbo -F portal dev",
+    "dev:client": "turbo -F client dev",
     "lint": "turbo lint",
     "db:generate": "pnpm -F @ziron/db generate",
     "db:migrate": "turbo -F @ziron/db migrate",
@@ -16,8 +20,13 @@
   "devDependencies": {
     "@biomejs/biome": "catalog:",
     "@ziron/typescript-config": "workspace:*",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "turbo": "^2.6.1",
     "typescript": "5.7.3"
+  },
+  "lint-staged": {
+    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": ["biome check --write . --unsafe"]
   },
   "packageManager": "pnpm@10.23.0",
   "engines": {

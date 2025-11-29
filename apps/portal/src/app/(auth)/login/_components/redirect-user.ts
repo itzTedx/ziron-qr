@@ -1,11 +1,9 @@
-"use server";
-
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/lib/auth/server";
 
-export async function redirectUser() {
+export async function RedirectUser() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -19,4 +17,6 @@ export async function redirectUser() {
       redirect("/unauthorized");
     }
   }
+
+  return null;
 }

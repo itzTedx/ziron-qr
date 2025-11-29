@@ -17,7 +17,7 @@
     "@orpc/client": "catalog:",
     "@orpc/server": "catalog:",
     "@orpc/tanstack-query": "catalog:",
-    "@tanstack/react-query": "^5.90.10",
+    "@tanstack/react-query": "catalog:",
     "@ziron/api": "workspace:*",
     "@ziron/ui": "workspace:*",
     "@ziron/utils": "workspace:*",
@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
-    "@tanstack/react-query-devtools": "^5.91.0",
+    "@tanstack/react-query-devtools": "catalog:",
     "@types/node": "^20",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",

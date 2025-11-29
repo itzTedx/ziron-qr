@@ -20,7 +20,7 @@
     "@t3-oss/env-nextjs": "^0.13.6",
     "@ziron/db": "workspace:*",
     "@ziron/redis": "workspace:*",
-    "better-auth": "1.4.3",
+    "better-auth": "catalog:",
     "next": "catalog:",
     "react": "catalog:react19",
     "react-dom": "catalog:react19",

@@ -37,6 +37,13 @@ export function initAuth(options: {
       },
     },
 
+    session: {
+      cookieCache: {
+        enabled: true,
+        maxAge: 5 * 60, // 5 minutes cache duration
+      },
+    },
+
     plugins: [nextCookies(), ...(options.plugins || [])],
 
     rateLimit: {
@@ -64,12 +71,7 @@ export function initAuth(options: {
         generateId: false,
       },
     },
-    session: {
-      cookieCache: {
-        enabled: true,
-        maxAge: 5 * 60, // Cache duration in seconds
-      },
-    },
+
     trustedOrigins: [
       "https://ziron-qr-portal.vercel.app",
       "http://localhost:3000",

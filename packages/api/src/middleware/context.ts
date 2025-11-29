@@ -3,12 +3,14 @@ import type { NextRequest } from "next/server";
 import { initAuth } from "@ziron/auth";
 import { authEnv } from "@ziron/auth/env";
 
+const baseUrl = authEnv().NODE_ENV === "production" ? "https://ziron-qr-portal.vercel.app" : "http://localhost:3000";
+
 const auth = initAuth({
-  baseUrl: authEnv().BETTER_AUTH_URL,
+  baseUrl: baseUrl,
   secret: authEnv().BETTER_AUTH_SECRET,
 });
 
-export async function createContext(req: NextRequest | Request | Headers | undefined) {
+export async function createContext(req: NextRequest | Headers | undefined) {
   // Handle undefined or null request
   if (!req) {
     return {
