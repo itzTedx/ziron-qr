@@ -27,7 +27,7 @@ async function CardPageContentInner({ params }: CardPageContentProps) {
   await queryClient.prefetchQuery(orpc.analytics.getCardAnalytics.queryOptions({ input: { cardId: id } }));
 
   // Fetching the card based on the ID
-  const card = await client.card.get({ id });
+  const card = id === "new" ? undefined : await client.card.get({ id });
   if (!card && id !== "new") {
     return notFound();
   }

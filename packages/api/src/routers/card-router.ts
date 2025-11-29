@@ -6,7 +6,7 @@ import { appearance, CardType, cards, emails, links, OrganizationWithCards, phon
 import { slugify } from "@ziron/utils";
 import { cardSchema, transformSlug, ZodError, z } from "@ziron/validators";
 
-import { protectedProcedure } from "..";
+import { protectedProcedure, publicProcedure } from "..";
 import { dbProvider } from "../middleware/db-provider";
 import { getAvatar } from "../utils/get-avatar";
 
@@ -557,7 +557,7 @@ export const getCard = protectedProcedure
     }
   });
 
-export const getCardBySlug = os
+export const getCardBySlug = publicProcedure
   .use(dbProvider)
   .route({
     method: "GET",

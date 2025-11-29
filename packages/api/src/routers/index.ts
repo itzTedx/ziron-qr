@@ -31,7 +31,7 @@ export const router = {
     create: createCard,
     list: listCards,
     get: getCard,
-
+    getBySlug: getCardBySlug,
     update: updateCard,
     duplicate: duplicateCard,
     checkSlug: checkSlugAvailability,

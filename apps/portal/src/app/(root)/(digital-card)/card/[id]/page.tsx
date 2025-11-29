@@ -6,7 +6,7 @@ import { CardPageContent } from "./_components/card-page-content";
 
 export async function generateMetadata({ params }: PageProps<"/card/[id]">): Promise<Metadata> {
   const { id } = await params;
-  const card = await client.card.get({ id });
+  const card = await client.card.getBySlug({ slug: id });
 
   if (!card && id === "new")
     return {

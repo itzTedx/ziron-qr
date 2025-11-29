@@ -17,10 +17,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <NuqsAdapter>
           <ProgressProvider color="#962DFF" height="3px" memo options={{ showSpinner: false }} shallowRouting>
             {children}
-            <ReactQueryDevtools />
           </ProgressProvider>
           <Toaster position="bottom-center" richColors />
         </NuqsAdapter>
+        <ReactQueryDevtools />
       </QueryClientProvider>
     </ThemeProvider>
   );

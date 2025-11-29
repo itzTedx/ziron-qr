@@ -1,11 +1,11 @@
 import { NextRequest } from "next/server";
 
-import { initAuth, type Session } from "@ziron/auth";
+import { type Auth, initAuth, type Session } from "@ziron/auth";
 import { authEnv } from "@ziron/auth/env";
 
 const baseUrl = authEnv().NODE_ENV === "production" ? "https://ziron-qr-portal.vercel.app" : "http://localhost:3000";
 
-const auth = initAuth({
+export const auth: Auth = initAuth({
   baseUrl: baseUrl,
   secret: authEnv().BETTER_AUTH_SECRET,
 });
