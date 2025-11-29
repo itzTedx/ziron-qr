@@ -44,7 +44,7 @@ export function initAuth(options: {
       },
     },
 
-    plugins: [nextCookies(), ...(options.plugins || [])],
+    plugins: [...(options.plugins || []), nextCookies()],
 
     rateLimit: {
       enabled: true,
