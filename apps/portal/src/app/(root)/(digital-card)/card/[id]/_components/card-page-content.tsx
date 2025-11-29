@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 
 import { ScrollArea, ScrollBar } from "@ziron/ui/components/scroll-area";
+import { Skeleton } from "@ziron/ui/components/skeleton";
 
 import { truncate } from "@ziron/utils";
 
@@ -13,6 +14,7 @@ import { getQueryClient, HydrateClient } from "@/lib/orpc/query/hydration";
 import { CardActionsDropdown } from "../../_components/card-actions-dropdown";
 import { ClicksVisits } from "../../_components/clicks-visits";
 import { CopyLinkButton } from "../../_components/copy-link-button";
+import { CardPageContentSkeleton } from "./card-page-header-skeleton";
 
 interface CardPageContentProps {
   params: PageProps<"/card/[id]">["params"];
@@ -70,7 +72,7 @@ async function SuspenseCardPageContent({ params }: CardPageContentProps) {
 
 export function CardPageHeader({ params }: CardPageContentProps) {
   return (
-    <Suspense fallback={<div>Loading card...</div>}>
+    <Suspense fallback={<CardPageHeaderSkeleton />}>
       <SuspenseCardPageHeader params={params} />
     </Suspense>
   );
@@ -78,8 +80,28 @@ export function CardPageHeader({ params }: CardPageContentProps) {
 
 export function CardPageContent({ params }: CardPageContentProps) {
   return (
-    <Suspense fallback={<div>Loading card...</div>}>
+    <Suspense fallback={<CardPageContentSkeleton />}>
       <SuspenseCardPageContent params={params} />
     </Suspense>
+  );
+}
+
+export function CardPageHeaderSkeleton() {
+  return (
+    <header className="sticky top-0 z-50 flex w-full items-center justify-between gap-3 overflow-hidden border-b bg-stone-50 px-6 py-2 backdrop-blur-2xl sm:h-16 dark:bg-stone-950">
+      <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
+          <Skeleton className="size-4" />
+          <Skeleton className="h-4 w-16" />
+          <Skeleton className="h-4 w-1" />
+          <Skeleton className="h-4 w-24" />
+        </div>
+      </div>
+      <div className="flex flex-wrap gap-2 sm:gap-3">
+        <Skeleton className="h-9 w-9" />
+        <Skeleton className="h-9 w-20 max-md:hidden" />
+        <Skeleton className="h-9 w-9" />
+      </div>
+    </header>
   );
 }
