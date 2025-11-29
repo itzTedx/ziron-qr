@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 
 import { createRouterClient } from "@orpc/server";
 
+import { createContext } from "@ziron/api/middleware/context";
 import { clientRouter } from "@ziron/api/routers/index";
 
 globalThis.$client = createRouterClient(clientRouter, {
@@ -14,8 +15,5 @@ globalThis.$client = createRouterClient(clientRouter, {
    * only include context that's safe to reuse globally.
    * For per-request context, use middleware context or pass a function as the initial context.
    */
-  context: async ({ request }) => ({
-    headers: await headers(),
-    request,
-  }),
+  context: async ({ request }) => await createContext(request, await headers()),
 });

@@ -10,14 +10,21 @@ export const auth: Auth = initAuth({
   secret: authEnv().BETTER_AUTH_SECRET,
 });
 
-export async function createContext(_req: NextRequest, headers: Headers) {
-  const session = await auth.api.getSession({
-    headers,
-  });
+export async function createContext(request: NextRequest, headers?: Headers) {
+  if (headers) {
+    const session = await auth.api.getSession({
+      headers,
+    });
+
+    return {
+      session,
+      request,
+    };
+  }
 
   return {
-    session,
-    headers,
+    session: null,
+    request,
   };
 }
 
