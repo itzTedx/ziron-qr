@@ -54,7 +54,7 @@ export const Preview = ({ cardData }: Props) => {
     : undefined;
 
   return (
-    <Card className="@container sticky top-24 col-span-1 mt-6 hidden h-fit rounded-lg bg-background py-6 md:block">
+    <Card className="@container sticky top-24 col-span-1 mt-6 hidden h-fit rounded-lg bg-background py-6 lg:block">
       <CardHeader className="border-b">
         <CardTitle>Preview</CardTitle>
         <CardAction className="row-span-1">

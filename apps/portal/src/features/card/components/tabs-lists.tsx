@@ -31,7 +31,11 @@ export const TabsLists = ({ form, children }: Props) => {
   }
 
   return (
-    <Tabs className="relative col-span-2 mt-6 w-full px-6" defaultValue={tab} onValueChange={handleTabChange}>
+    <Tabs
+      className="relative col-span-1 mt-6 w-full px-3 lg:col-span-2 lg:px-6"
+      defaultValue={tab}
+      onValueChange={handleTabChange}
+    >
       <TabsList className="h-auto w-full justify-start rounded-none border-b bg-transparent p-0">
         <TabsTrigger
           className={cn(

@@ -73,7 +73,7 @@ export const ProfileDashboard = ({ isPending, organization, data }: Props) => {
         />
       </div>
       <section className="-mt-16 container mx-auto">
-        <div className="relative grid grid-cols-10 rounded-xl border-background bg-card px-6 py-4 shadow-muted/30 backdrop-blur-xl sm:border sm:shadow-lg md:grid-cols-12 md:divide-x">
+        <div className="relative grid grid-cols-10 rounded-xl border-background bg-card px-4 py-4 shadow-muted/30 backdrop-blur-xl sm:border sm:px-6 sm:shadow-lg md:grid-cols-12 md:divide-x">
           <div className="col-span-10 flex items-center md:col-span-4 md:px-3 lg:pr-6">
             <div className="group relative size-24 shrink-0">
               <Image

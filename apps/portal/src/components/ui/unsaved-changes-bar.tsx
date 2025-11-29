@@ -51,13 +51,25 @@ export function UnsavedChangesBar({
         className
       )}
     >
-      <div className="mx-auto flex max-w-4xl items-center justify-between rounded-lg border bg-background px-4 py-3 shadow-lg">
+      <div className="mx-auto flex max-w-4xl flex-col gap-3 rounded-lg border bg-background px-4 py-3 shadow-lg sm:flex-row sm:items-center sm:justify-between">
         <span className="font-medium text-foreground text-sm">Unsaved changes</span>
         <div className="flex items-center gap-3">
-          <Button disabled={isSaving} onClick={onDiscard} type="button" variant="outline">
+          <Button
+            className="flex-1 sm:flex-initial"
+            disabled={isSaving}
+            onClick={onDiscard}
+            type="button"
+            variant="outline"
+          >
             Discard
           </Button>
-          <Button disabled={isSaving} onClick={onSave} type="button" variant="secondary">
+          <Button
+            className="flex-1 sm:flex-initial"
+            disabled={isSaving}
+            onClick={onSave}
+            type="button"
+            variant="secondary"
+          >
             <LoadingSwap isLoading={isSaving}>Save changes</LoadingSwap>
           </Button>
         </div>

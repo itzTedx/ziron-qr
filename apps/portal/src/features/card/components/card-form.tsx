@@ -205,7 +205,7 @@ export function CardForm({ isEditMode, initialData }: Props) {
           isPending={isPending}
           organization={data.organizationId ? { id: data.organizationId, name: data.name ?? "" } : undefined}
         />
-        <div className={cn("mx-auto grid max-w-7xl grid-cols-3 gap-4 pb-6", shouldShowBar && "pb-20")}>
+        <div className={cn("mx-auto grid max-w-7xl grid-cols-1 gap-4 pb-6 lg:grid-cols-3", shouldShowBar && "pb-20")}>
           <TabsLists form={form}>
             <TabsContent value="general">
               <CardGeneral data={data} />
