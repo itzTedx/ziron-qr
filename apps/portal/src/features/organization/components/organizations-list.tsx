@@ -4,7 +4,6 @@ import { memo, useCallback } from "react";
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 import { IconPlus } from "@tabler/icons-react";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -12,7 +11,6 @@ import { useAtom } from "jotai";
 
 import { Button } from "@ziron/ui/components/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@ziron/ui/components/collapsible";
-import { useHotkey } from "@ziron/ui/hooks/use-hotkey";
 
 import { OrganizationWithCards } from "@ziron/db/schema";
 import { cn } from "@ziron/utils";
@@ -85,17 +83,6 @@ OrganizationItem.displayName = "OrganizationItem";
 export const OrganizationsList = () => {
   const [collapsibleState, setCollapsibleState] = useAtom(companyCollapsibleStateAtom);
   const { data: organizations } = useSuspenseQuery(orpc.organization.list.queryOptions());
-  const router = useRouter();
-
-  // Handle C keyboard shortcut
-  useHotkey({
-    combos: [{ key: "c" }],
-    enabled: true,
-    callback: () => {
-      router.push("/card/new");
-    },
-    throttleMs: 300,
-  });
 
   const handleOpenChange = useCallback(
     (organizationId: string, open: boolean) => {
@@ -125,6 +112,10 @@ export const OrganizationsList = () => {
     },
     [setCollapsibleState]
   );
+
+  if (!organizations?.length) {
+    return <div>No organizations found</div>;
+  }
 
   return (
     <div className="flex w-full flex-1 flex-col gap-8">

@@ -1,12 +1,10 @@
-import { ORPCError } from "@orpc/server";
-
 import { base } from "./base";
 
-export const requireAuth = base.middleware(async ({ context, next }) => {
-  console.log("context", context);
+export const requireAuth = base.middleware(async ({ context, next, errors }) => {
+  // console.log("context", context);
 
   if (!context.session) {
-    throw new ORPCError("UNAUTHORIZED");
+    throw errors.UNAUTHORIZED();
   }
   return next({
     context: {

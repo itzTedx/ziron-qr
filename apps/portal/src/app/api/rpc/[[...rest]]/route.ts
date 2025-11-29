@@ -75,7 +75,7 @@ async function handleRequest(req: NextRequest) {
   if (rpcResult.response) return rpcResult.response;
 
   const apiResult = await apiHandler.handle(req, {
-    prefix: "/api/rpc/api-reference",
+    prefix: "/api/rpc/docs",
     context,
   });
   if (apiResult.response) return apiResult.response;
