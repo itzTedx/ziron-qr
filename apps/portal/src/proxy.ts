@@ -25,8 +25,6 @@ export async function proxy(request: NextRequest) {
     cookiePrefix: "ziron",
   });
 
-  console.log("cookie cache session", session);
-
   if (!session) {
     return NextResponse.redirect(new URL("/login", request.url));
   }

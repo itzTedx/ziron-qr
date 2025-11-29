@@ -12,7 +12,6 @@ import { useAtom } from "jotai";
 
 import { Button } from "@ziron/ui/components/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@ziron/ui/components/collapsible";
-import { Skeleton } from "@ziron/ui/components/skeleton";
 import { useHotkey } from "@ziron/ui/hooks/use-hotkey";
 
 import { OrganizationWithCards } from "@ziron/db/schema";
@@ -85,7 +84,7 @@ OrganizationItem.displayName = "OrganizationItem";
 
 export const OrganizationsList = () => {
   const [collapsibleState, setCollapsibleState] = useAtom(companyCollapsibleStateAtom);
-  const { data: organizations, isLoading } = useSuspenseQuery(orpc.organization.list.queryOptions());
+  const { data: organizations } = useSuspenseQuery(orpc.organization.list.queryOptions());
   const router = useRouter();
 
   // Handle C keyboard shortcut
@@ -126,8 +125,6 @@ export const OrganizationsList = () => {
     },
     [setCollapsibleState]
   );
-
-  if (isLoading) return <Skeleton className="h-10 w-full" />;
 
   return (
     <div className="flex w-full flex-1 flex-col gap-8">

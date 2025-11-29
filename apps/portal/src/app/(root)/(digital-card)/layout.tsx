@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import { Route } from "next";
 import Link from "next/link";
 
@@ -18,6 +20,8 @@ interface Props {
 }
 
 export default async function DigitalCardLayout({ children }: Props) {
+  "use cache";
+
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery(orpc.metrics.get.queryOptions());
@@ -109,7 +113,9 @@ export default async function DigitalCardLayout({ children }: Props) {
                   Usage <IconChevronRight className="size-3 text-muted-foreground" />
                 </Label>
                 <HydrateClient client={queryClient}>
-                  <UsageMetrics />
+                  <Suspense>
+                    <UsageMetrics />
+                  </Suspense>
                 </HydrateClient>
               </div>
             </div>
