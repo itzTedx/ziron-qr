@@ -69,7 +69,7 @@ export const listOrganizations = publicProcedure
     return data;
   });
 
-export const getOrganization = protectedProcedure
+export const getOrganization = publicProcedure
   .use(dbProvider)
   .route({
     method: "GET",

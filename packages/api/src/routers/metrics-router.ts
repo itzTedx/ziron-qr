@@ -1,9 +1,9 @@
 import { z } from "@ziron/validators";
 
-import { protectedProcedure } from "..";
+import { publicProcedure } from "..";
 import { dbProvider } from "../middleware/db-provider";
 
-export const getMetrics = protectedProcedure
+export const getMetrics = publicProcedure
   .use(dbProvider)
   .route({
     method: "GET",

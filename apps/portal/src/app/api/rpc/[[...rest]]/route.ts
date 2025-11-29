@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import type { NextRequest } from "next/server";
 
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
@@ -66,7 +67,7 @@ const apiHandler = new OpenAPIHandler(router, {
 async function handleRequest(req: NextRequest) {
   // Create context once and reuse it for both handlers
   // This prevents duplicate session retrieval calls and ensures consistency
-  const context = await createContext(req);
+  const context = await createContext(req, await headers());
 
   const rpcResult = await rpcHandler.handle(req, {
     prefix: "/api/rpc",
