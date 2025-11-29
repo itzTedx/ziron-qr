@@ -4,6 +4,7 @@ import { IconLink } from "@tabler/icons-react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { IconMouse } from "@ziron/ui/assets/icons/mouse";
+import { Skeleton } from "@ziron/ui/components/skeleton";
 
 import { orpc } from "@/lib/orpc/client";
 
@@ -15,12 +16,21 @@ function formatNumber(num: number): string {
 }
 
 export const UsageMetrics = () => {
-  const { data: metrics } = useSuspenseQuery(orpc.metrics.get.queryOptions());
+  const { data: metrics, isLoading } = useSuspenseQuery(orpc.metrics.get.queryOptions());
 
   const eventsUsed = metrics?.totalEvents ?? 0;
   const eventsLimit = 1000;
   const linksUsed = metrics?.totalCards ?? 0;
   const linksLimit = 25;
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col gap-0">
+        <Skeleton className="h-6 w-16" />
+        <Skeleton className="h-6 w-16" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-0">
