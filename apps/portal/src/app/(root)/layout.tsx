@@ -1,4 +1,9 @@
+import { Suspense } from "react";
+
 import type { Metadata } from "next";
+
+import { ShareModal } from "@/features/modal/share-modal";
+import CompanyFormModal from "@/features/organization/components/modal";
 
 import { RootSidebar } from "./_components/root-sidebar";
 
@@ -16,5 +21,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <RootSidebar>{children}</RootSidebar>;
+  return (
+    <RootSidebar>
+      {children}
+
+      <Suspense>
+        <ShareModal />
+      </Suspense>
+
+      <Suspense>
+        <CompanyFormModal />
+      </Suspense>
+    </RootSidebar>
+  );
 }

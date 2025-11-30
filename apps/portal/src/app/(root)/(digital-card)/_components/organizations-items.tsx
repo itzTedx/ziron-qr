@@ -1,3 +1,3 @@
-export const OrganizationsItems = () => {
+export const CardsItems = () => {
   return <div>OrganizationsItems</div>;
 };

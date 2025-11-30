@@ -5,13 +5,25 @@ import Link from "next/link";
 import { IconCard } from "@ziron/ui/assets/icons/card";
 import { IconSettings } from "@ziron/ui/assets/icons/settings";
 import { IconLogo } from "@ziron/ui/assets/logo";
+import {
+  ContextMenu,
+  ContextMenuCheckboxItem,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuLabel,
+  ContextMenuRadioGroup,
+  ContextMenuRadioItem,
+  ContextMenuSeparator,
+  ContextMenuShortcut,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
+  ContextMenuTrigger,
+} from "@ziron/ui/components/context-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ziron/ui/components/tooltip";
 
 import { NavUser } from "@/components/layout/sidebar/nav-user";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-
-import { ShareModal } from "@/features/modal/share-modal";
-import CompanyFormModal from "@/features/organization/components/modal";
 
 export const RootSidebar = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -21,21 +33,68 @@ export const RootSidebar = ({ children }: { children: React.ReactNode }) => {
         <div className="scrollbar-hide relative flex h-full w-[calc(var(--sidebar-areas-width)-0.5rem)] flex-col">
           <div className="flex flex-1 grow flex-col items-center justify-between">
             <div className="flex flex-col items-center p-2">
-              <div className="pt-2 pb-2">
+              <ContextMenu>
+                <ContextMenuTrigger asChild>
+                  <div className="py-2">
+                    <Link
+                      className="flex w-11 items-center justify-center rounded-lg px-1 py-2 outline-none transition-colors hover:bg-card/20 focus-visible:ring-2 focus-visible:ring-black/50"
+                      href="/"
+                    >
+                      <IconLogo className="size-8" />
+                    </Link>
+                  </div>
+                </ContextMenuTrigger>
+                <ContextMenuContent className="w-52">
+                  <ContextMenuItem inset>
+                    Back
+                    <ContextMenuShortcut>⌘[</ContextMenuShortcut>
+                  </ContextMenuItem>
+                  <ContextMenuItem disabled inset>
+                    Forward
+                    <ContextMenuShortcut>⌘]</ContextMenuShortcut>
+                  </ContextMenuItem>
+                  <ContextMenuItem inset>
+                    Reload
+                    <ContextMenuShortcut>⌘R</ContextMenuShortcut>
+                  </ContextMenuItem>
+                  <ContextMenuSub>
+                    <ContextMenuSubTrigger inset>More Tools</ContextMenuSubTrigger>
+                    <ContextMenuSubContent className="w-44">
+                      <ContextMenuItem>Save Page...</ContextMenuItem>
+                      <ContextMenuItem>Create Shortcut...</ContextMenuItem>
+                      <ContextMenuItem>Name Window...</ContextMenuItem>
+                      <ContextMenuSeparator />
+                      <ContextMenuItem>Developer Tools</ContextMenuItem>
+                      <ContextMenuSeparator />
+                      <ContextMenuItem variant="destructive">Delete</ContextMenuItem>
+                    </ContextMenuSubContent>
+                  </ContextMenuSub>
+                  <ContextMenuSeparator />
+                  <ContextMenuCheckboxItem checked>Show Bookmarks</ContextMenuCheckboxItem>
+                  <ContextMenuCheckboxItem>Show Full URLs</ContextMenuCheckboxItem>
+                  <ContextMenuSeparator />
+                  <ContextMenuRadioGroup value="pedro">
+                    <ContextMenuLabel inset>People</ContextMenuLabel>
+                    <ContextMenuRadioItem value="pedro">Pedro Duarte</ContextMenuRadioItem>
+                    <ContextMenuRadioItem value="colm">Colm Tuite</ContextMenuRadioItem>
+                  </ContextMenuRadioGroup>
+                </ContextMenuContent>
+              </ContextMenu>
+              {/* <div className="py-2">
                 <Link
-                  className="flex w-11 items-center justify-center rounded-lg px-1 py-2 outline-none transition-colors hover:bg-card/80 focus-visible:ring-2 focus-visible:ring-black/50"
+                  className="flex w-11 items-center justify-center rounded-lg px-1 py-2 outline-none transition-colors hover:bg-card/20 focus-visible:ring-2 focus-visible:ring-black/50"
                   href="/"
                 >
                   <IconLogo className="size-8" />
                 </Link>
-              </div>
+              </div> */}
 
               <div className="flex flex-col items-center gap-4">
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Link
                       className="relative flex size-11 items-center justify-center rounded-lg bg-card outline-none transition-colors duration-150 hover:bg-card/80 focus-visible:ring-2 focus-visible:ring-black/50"
-                      href={"/"}
+                      href={"/cards"}
                     >
                       <IconCard className="size-5" />
                     </Link>
@@ -72,14 +131,6 @@ export const RootSidebar = ({ children }: { children: React.ReactNode }) => {
         </div>
       </div>
       {children}
-
-      <Suspense>
-        <ShareModal />
-      </Suspense>
-
-      <Suspense>
-        <CompanyFormModal />
-      </Suspense>
     </div>
   );
 };

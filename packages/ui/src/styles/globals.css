@@ -24,7 +24,7 @@
 
   --primary: oklch(0.5739 0.27695 299.6177);
   --primary-foreground: oklch(0.985 0 0);
-  --brand-secondary: oklch(0.5173 0.272 274.81);
+  --brand-secondary: oklch(48.745% 0.29012 271.344);
 
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -78,7 +78,7 @@
 
   --primary: oklch(0.741 0.1769 316.17);
   --primary-foreground: oklch(0.205 0 0);
-  --brand-secondary: oklch(0.5799 0.2292 259.4);
+  --brand-secondary: oklch(50.562% 0.27567 263.675);
 
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
@@ -186,7 +186,7 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring/50 tracking-tight;
   }
   body {
     @apply bg-background text-foreground;
@@ -214,13 +214,13 @@
 
 .gradient {
   background:
-    radial-gradient(ellipse 72% 150% at 50% 100%, var(--C-q6Ig), var(--r6MHXQ)),
-    linear-gradient(to bottom, var(--r6MHXQ) 0%, var(--r6MHXQ) 9.5%, var(--C-q6Ig) 94%),
+    radial-gradient(ellipse 72% 150% at 50% 100%, #18191b, rgba(24, 25, 27, 0)),
+    linear-gradient(to bottom, rgba(24, 25, 27, 0) 0%, rgba(24, 25, 27, 0) 9.5%, #18191b 94%),
     linear-gradient(hsla(0, 0%, 100%, 0.35), hsla(0, 0%, 100%, 0.35)),
     linear-gradient(hsla(0, 0%, 100%, 0.35), hsla(0, 0%, 100%, 0.35)),
     linear-gradient(hsla(0, 0%, 100%, 0.1), hsla(0, 0%, 100%, 0.1)),
-    linear-gradient(to bottom, var(--r6MHXQ) 0%, var(--C-q6Ig) 100%),
-    linear-gradient(to right, var(--Zpa-KA) 0%, #6f00ff 100%);
+    linear-gradient(to bottom, rgba(24, 25, 27, 0) 0%, #18191b 100%),
+    linear-gradient(to right, #00c4cc 0%, #6f00ff 100%);
 }
 
 ::selection {

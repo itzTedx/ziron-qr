@@ -4,7 +4,6 @@ import { IconChevronLeft } from "@tabler/icons-react";
 
 import { IconSettings } from "@ziron/ui/assets/icons/settings";
 import { IconShield } from "@ziron/ui/assets/icons/shield";
-import { Label } from "@ziron/ui/components/label";
 
 import { SidebarLink } from "@/components/layout/sidebar/sidebar-link";
 
@@ -18,13 +17,12 @@ export const SettingsSidebar = () => {
               <div className="group-hover:-translate-x-0.5 flex size-6 items-center justify-center rounded-md bg-muted text-muted-foreground transition-[transform_background-color_color] duration-150 group-hover:bg-muted-foreground/20 group-hover:text-foreground">
                 <IconChevronLeft className="size-3" />
               </div>
-              <span className="font-semibold text-foreground/80 text-lg transition-colors duration-150 group-hover:text-foreground">
+              <h2 className="font-semibold text-foreground/80 text-lg transition-colors duration-150 group-hover:text-foreground">
                 Settings
-              </span>
+              </h2>
             </Link>
 
-            <Label className="mb-2 px-3 font-light text-muted-foreground">Account</Label>
-
+            <h3 className="mb-2 px-3 font-light text-muted-foreground">Account</h3>
             <ul className="space-y-0.5">
               <li>
                 <SidebarLink href="/settings/account" icon={<IconSettings className="size-4" />}>
@@ -34,6 +32,16 @@ export const SettingsSidebar = () => {
               <li>
                 <SidebarLink href="/settings/security" icon={<IconShield className="size-4" />}>
                   Security
+                </SidebarLink>
+              </li>
+              <li>
+                <SidebarLink href="/settings/security" icon={<IconShield className="size-4" />}>
+                  Data and Storage
+                </SidebarLink>
+              </li>
+              <li>
+                <SidebarLink href="/settings/security" icon={<IconShield className="size-4" />}>
+                  Billing
                 </SidebarLink>
               </li>
             </ul>

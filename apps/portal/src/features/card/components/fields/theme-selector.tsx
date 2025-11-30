@@ -9,7 +9,7 @@ import { IconCheck } from "@tabler/icons-react";
 import { RadioGroup, RadioGroupItem } from "@ziron/ui/components/radio-group";
 
 interface Props {
-  value: string;
+  value?: string;
   onChange: (value: string) => void;
 }
 
@@ -20,12 +20,6 @@ const THEME_ITEMS = [
   { value: "card", label: "Card", image: "/images/card-template.png" },
 ] as const;
 
-// Extract static styles
-const imageContainerStyles = "relative aspect-[7/15] h-60 md:h-96 lg:h-[30rem]";
-const radioItemStyles = "peer sr-only after:absolute after:inset-0";
-const radioWrapperStyles =
-  "relative shrink-0 cursor-pointer overflow-hidden rounded-2xl border border-input p-1 shadow-sm shadow-black/5 outline-offset-2 transition-colors peer-[:focus-visible]:outline peer-[:focus-visible]:outline-2 peer-[:focus-visible]:outline-ring/70 peer-data-[disabled]:cursor-not-allowed peer-data-[state=checked]:border-ring peer-data-[state=checked]:bg-brand-secondary/60 peer-data-[disabled]:opacity-50 ";
-
 export const ThemeSelector = ({ onChange, value }: Props) => {
   const id = useId();
 
@@ -33,10 +27,14 @@ export const ThemeSelector = ({ onChange, value }: Props) => {
   const radioItems = useMemo(
     () =>
       THEME_ITEMS.map((item) => (
-        <label className="grid shrink-0 flex-col items-center justify-center" key={`${id}-${item.value}`}>
-          <RadioGroupItem className={radioItemStyles} id={`${id}-${item.value}`} value={item.value} />
-          <div className={radioWrapperStyles}>
-            <div className={imageContainerStyles}>
+        <label className="relative grid shrink-0 flex-col items-center justify-center" key={`${id}-${item.value}`}>
+          <RadioGroupItem
+            className="peer sr-only after:absolute after:inset-0"
+            id={`${id}-${item.value}`}
+            value={item.value}
+          />
+          <div className="relative shrink-0 cursor-pointer overflow-hidden rounded-2xl border p-1 shadow-black/5 shadow-sm outline-offset-2 transition-colors peer-focus-[visible]:outline peer-focus-[visible]:outline-2 peer-focus-[visible]:outline-ring/70 peer-data-disabled:cursor-not-allowed peer-data-[state=checked]:border-ring peer-data-[state=checked]:bg-muted/60 peer-data-disabled:opacity-50">
+            <div className="relative aspect-7/15 h-60 md:h-96 lg:h-120">
               <Image
                 alt={item.label}
                 className="rounded-xl object-cover"

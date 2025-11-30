@@ -24,7 +24,7 @@ export function DigitalCardSidebar() {
             <div className="flex flex-col gap-8">
               <ul className="space-y-0.5">
                 <li>
-                  <SidebarLink href={"/"} icon={<IconCard2 className="size-4" />}>
+                  <SidebarLink href={"/cards"} icon={<IconCard2 className="size-4" />}>
                     Cards
                   </SidebarLink>
                 </li>
