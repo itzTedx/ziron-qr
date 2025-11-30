@@ -27,18 +27,14 @@ export const SettingsSidebar = () => {
 
             <ul className="space-y-0.5">
               <li>
-                <SidebarLink href={"/account/settings"} icon={<IconSettings />}>
+                <SidebarLink href={"/account/settings"} icon={<IconSettings className="size-4" />}>
                   General
                 </SidebarLink>
               </li>
               <li>
-                <Link
-                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-foreground/90 hover:bg-muted hover:text-muted-foreground"
-                  href={"/account/settings"}
-                >
-                  <IconShield className="size-4" />
-                  <span className="text-sm">Security</span>
-                </Link>
+                <SidebarLink href={"/account/settings"} icon={<IconShield className="size-4" />}>
+                  Security
+                </SidebarLink>
               </li>
             </ul>
           </div>

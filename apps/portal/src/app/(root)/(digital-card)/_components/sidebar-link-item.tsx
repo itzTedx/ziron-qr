@@ -9,10 +9,10 @@ import { cn } from "@ziron/utils";
 interface Props {
   href: string;
   children: React.ReactNode;
-  Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  icon: React.ReactNode;
 }
 
-export function SidebarLinkItem({ href, children, Icon }: Props) {
+export function SidebarLinkItem({ href, children, icon }: Props) {
   const pathname = usePathname();
   const segment = useSelectedLayoutSegment();
 
@@ -26,7 +26,7 @@ export function SidebarLinkItem({ href, children, Icon }: Props) {
       data-active={isActive}
       href={href as Route}
     >
-      <Icon className="size-4" />
+      {icon}
       <span className="text-sm">{children}</span>
     </Link>
   );

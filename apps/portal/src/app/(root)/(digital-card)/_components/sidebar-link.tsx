@@ -1,11 +1,13 @@
 import { Suspense } from "react";
 
+import { Skeleton } from "@ziron/ui/components/skeleton";
+
 import { SidebarLinkItem } from "./sidebar-link-item";
 
-export function SidebarLink({ href, children, icon: Icon }: React.ComponentProps<typeof SidebarLinkItem>) {
+export function SidebarLink({ href, children, icon }: React.ComponentProps<typeof SidebarLinkItem>) {
   return (
     <Suspense fallback={<SidebarLinkSkeleton />}>
-      <SidebarLinkItem href={href} icon={Icon}>
+      <SidebarLinkItem href={href} icon={icon}>
         {children}
       </SidebarLinkItem>
     </Suspense>

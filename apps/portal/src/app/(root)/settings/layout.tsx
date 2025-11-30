@@ -1,6 +1,6 @@
 import { SettingsSidebar } from "./_components/settings-sidebar";
 
-export default function AccountLayout({ children }: { children: React.ReactNode }) {
+export default function SettingsLayout({ children }: LayoutProps<"/settings">) {
   return (
     <>
       <SettingsSidebar />

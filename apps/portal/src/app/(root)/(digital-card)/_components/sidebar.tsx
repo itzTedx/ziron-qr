@@ -7,6 +7,8 @@ import { IconChart } from "@ziron/ui/assets/icons/chart";
 import { IconMouse } from "@ziron/ui/assets/icons/mouse";
 import { Label } from "@ziron/ui/components/label";
 
+import { SidebarLink } from "./sidebar-link";
+
 export function DigitalCardSidebar() {
   return (
     <aside className="fixed top-0 left-0 z-50 hidden h-dvh w-screen max-md:pointer-events-none md:sticky md:z-auto md:block md:w-full">
@@ -22,12 +24,12 @@ export function DigitalCardSidebar() {
             <div className="flex flex-col gap-8">
               <ul className="space-y-0.5">
                 <li>
-                  <SidebarLink href={"/"} icon={IconCard2}>
+                  <SidebarLink href={"/"} icon={<IconCard2 className="size-4" />}>
                     Cards
                   </SidebarLink>
                 </li>
                 <li>
-                  <SidebarLink href={"/organization" as Route} icon={IconBuilding}>
+                  <SidebarLink href={"/organization" as Route} icon={<IconBuilding className="size-4" />}>
                     Organizations
                   </SidebarLink>
                 </li>
@@ -63,12 +65,12 @@ export function DigitalCardSidebar() {
             <Label className="my-1.5 px-3 font-light text-muted-foreground/60">Resources</Label>
             <ul className="space-y-0.5">
               <li>
-                <SidebarLink href={"/analytics"} icon={IconChart}>
+                <SidebarLink href={"/analytics"} icon={<IconChart className="size-4" />}>
                   Analytics
                 </SidebarLink>
               </li>
               <li>
-                <SidebarLink href={"/templates"} icon={IconMouse}>
+                <SidebarLink href={"/templates"} icon={<IconMouse className="size-4" />}>
                   Templates
                 </SidebarLink>
               </li>
