@@ -23,28 +23,34 @@ interface Props {
 
 export default function Header({ title, currentPage, children, showBackButton = false, backHref }: Props) {
   return (
-    <header className="sticky top-0 z-50 flex w-full items-center justify-between gap-3 overflow-hidden border-b bg-stone-50 px-6 py-2 backdrop-blur-2xl sm:h-16 dark:bg-stone-950">
+    <header className="sticky top-0 z-50 flex h-14 w-full items-center justify-between gap-3 overflow-hidden border-b bg-stone-50 px-6 py-2 backdrop-blur-2xl sm:h-16 dark:bg-stone-950">
       <div className="flex items-center gap-3">
         <Breadcrumb>
           <BreadcrumbList
             className={cn(
-              "fade-in animate-in",
-              showBackButton ? "slide-in-from-left-2 duration-300" : "slide-in-from-right-2 duration-200"
+              "animate-in",
+              showBackButton ? "slide-in-from-left-2 fade-in duration-300" : "slide-in-from-right-2 duration-200"
             )}
             key={showBackButton ? "with-back" : "without-back"}
           >
-            <BreadcrumbItem className={cn(backHref && "group")}>
-              {showBackButton && <BackButton href={backHref} />}
-              <BreadcrumbLink className="truncate" href="/">
-                {title}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-
-            {currentPage && (
+            {currentPage ? (
               <>
+                <BreadcrumbItem className={cn(backHref && "group")}>
+                  {showBackButton && <BackButton href={backHref} />}
+                  <BreadcrumbLink className="truncate" href="/">
+                    {title}
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
                 <BreadcrumbSeparator />
-                <BreadcrumbPage>{currentPage}</BreadcrumbPage>
+                <BreadcrumbItem>
+                  <BreadcrumbPage>{currentPage}</BreadcrumbPage>
+                </BreadcrumbItem>
               </>
+            ) : (
+              <BreadcrumbItem className={cn(backHref && "group")}>
+                {showBackButton && <BackButton href={backHref} />}
+                <BreadcrumbPage className="truncate">{title}</BreadcrumbPage>
+              </BreadcrumbItem>
             )}
           </BreadcrumbList>
         </Breadcrumb>

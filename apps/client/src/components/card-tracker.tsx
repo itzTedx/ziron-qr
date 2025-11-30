@@ -12,5 +12,6 @@ interface CardTrackerProps {
  */
 export function CardTracker({ cardId, children }: CardTrackerProps) {
   usePageVisitTracking(cardId);
+
   return <>{children}</>;
 }

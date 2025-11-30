@@ -1,6 +1,4 @@
-import React from "react";
-
-export const IconSettings = (props: React.SVGProps<SVGSVGElement>) => {
+export function IconSettings(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg {...props} aria-hidden="true" height="18" viewBox="0 0 18 18" width="18" xmlns="http://www.w3.org/2000/svg">
       <g fill="currentColor">
@@ -15,4 +13,4 @@ export const IconSettings = (props: React.SVGProps<SVGSVGElement>) => {
       </g>
     </svg>
   );
-};
+}

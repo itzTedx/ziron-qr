@@ -178,6 +178,8 @@
   --shadow-lg: var(--shadow-lg);
   --shadow-2xl: var(--shadow-2xl);
   --shadow-3xl: var(--shadow-3xl);
+
+  --ease-tact: cubic-bezier(0.25, 0, 0.25, 1);
 }
 
 @layer base {

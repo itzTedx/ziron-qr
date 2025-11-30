@@ -31,7 +31,7 @@ import { TabsLists } from "./tabs-lists";
 
 interface Props {
   // companies?: Company[];
-  isEditMode: boolean;
+  isEditMode?: boolean;
   initialData?: CardType;
 }
 

@@ -11,7 +11,7 @@ export const EmptyOrganization = () => {
     <Empty className="col-span-full border border-dashed">
       <EmptyHeader>
         <EmptyMedia>
-          <div className="mask-[linear-gradient(transparent,black_10%,black_90%,transparent)] h-36 w-full max-w-64 animate-fade-in overflow-hidden px-4">
+          <div className="mask-[linear-gradient(transparent,black_25%,black_75%,transparent)] h-36 w-full max-w-64 animate-fade-in overflow-hidden px-4">
             <div
               className="animation-duration-[10s] flex animate-infinite-scroll-y flex-col"
               style={{ "--scroll": "-50%" } as React.CSSProperties}

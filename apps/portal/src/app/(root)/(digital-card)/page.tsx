@@ -1,5 +1,3 @@
-import type { Route } from "next";
-
 import { ScrollArea, ScrollBar } from "@ziron/ui/components/scroll-area";
 
 import Header from "@/components/layout/header";
@@ -10,7 +8,7 @@ import { getQueryClient, HydrateClient } from "@/lib/orpc/query/hydration";
 
 import { OrganizationsItems } from "./_components/organizations-items";
 
-export default async function Page() {
+export default async function RootPage() {
   "use cache";
 
   const queryClient = getQueryClient();
@@ -19,7 +17,7 @@ export default async function Page() {
   return (
     <>
       <Header title="Cards">
-        <CreateButton href={"/card/new" as Route} label="Create Card" />
+        <CreateButton href={"/card/create"} label="Create Card" />
       </Header>
 
       <section className="h-full flex-1">

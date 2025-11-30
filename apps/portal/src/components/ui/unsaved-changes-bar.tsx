@@ -68,7 +68,7 @@ export function UnsavedChangesBar({
             disabled={isSaving}
             onClick={onSave}
             type="button"
-            variant="secondary"
+            variant="inverted"
           >
             <LoadingSwap isLoading={isSaving}>Save changes</LoadingSwap>
           </Button>
