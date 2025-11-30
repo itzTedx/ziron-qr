@@ -65,12 +65,12 @@ export function DigitalCardSidebar() {
             <Label className="my-1.5 px-3 font-light text-muted-foreground/60">Resources</Label>
             <ul className="space-y-0.5">
               <li>
-                <SidebarLink href={"/analytics"} icon={<IconChart className="size-4" />}>
+                <SidebarLink href={"/analytics"} icon={<IconChart className="size-4" />} shortcut="A">
                   Analytics
                 </SidebarLink>
               </li>
               <li>
-                <SidebarLink href={"/templates"} icon={<IconMouse className="size-4" />}>
+                <SidebarLink href={"/templates"} icon={<IconMouse className="size-4" />} shortcut="T">
                   Templates
                 </SidebarLink>
               </li>

@@ -43,17 +43,19 @@ export default function OrganizationFormModal() {
         <ResponsiveModalHeader className="border-b p-6">
           <ResponsiveModalTitle>{fields.name ? `Edit ${fields.name}` : "Add New Organization"}</ResponsiveModalTitle>
         </ResponsiveModalHeader>
-        <OrganizationForm
-          initialData={{
-            id: fields.id ?? undefined,
-            name: fields.name ?? "",
-            address: fields.address ?? "",
-            phone: fields.phone ?? "",
-            website: fields.website ?? "",
-            logo: fields.logo ?? "",
-          }}
-          isEditMode={!!fields.name}
-        />
+        <div className="p-6 pt-0">
+          <OrganizationForm
+            initialData={{
+              id: fields.id ?? undefined,
+              name: fields.name ?? "",
+              address: fields.address ?? "",
+              phone: fields.phone ?? "",
+              website: fields.website ?? "",
+              logo: fields.logo ?? "",
+            }}
+            isEditMode={!!fields.name}
+          />
+        </div>
       </ResponsiveModalContent>
     </ResponsiveModal>
   );

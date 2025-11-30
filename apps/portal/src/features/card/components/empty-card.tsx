@@ -1,13 +1,12 @@
 import Link from "next/link";
 
-import { IconPlus } from "@tabler/icons-react";
-
 import { IconEmptyCard } from "@ziron/ui/assets/icons/empty-card";
 import { Button } from "@ziron/ui/components/button";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@ziron/ui/components/empty";
+import { Kbd } from "@ziron/ui/components/kbd";
 
 interface Props {
-  id: string;
+  id?: string;
 }
 
 export const EmptyCard = ({ id }: Props) => {
@@ -25,8 +24,8 @@ export const EmptyCard = ({ id }: Props) => {
       <EmptyContent>
         <div className="flex gap-2">
           <Button asChild className="gap-2" size="sm">
-            <Link href={`/card/new?organizationId=${id}`}>
-              <IconPlus /> Create a Card
+            <Link href={`/cards/create?organizationId=${id}`}>
+              Create a Card <Kbd size="sm">C</Kbd>
             </Link>
           </Button>
           <Button size="sm" variant="outline">

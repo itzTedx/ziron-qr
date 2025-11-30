@@ -9,8 +9,9 @@ export default function OrganizationsPage() {
   return (
     <>
       <Header title="Organizations">
-        <CreateButton href={"/organization/new" as Route} label="Create Organization" />
+        <CreateButton hotkey="d" href={"/organization/?modal=organization" as Route} label="Create Organization" />
       </Header>
+
       <section className="px-6 pt-12">
         <EmptyOrganization />
       </section>

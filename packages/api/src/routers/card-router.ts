@@ -2,7 +2,7 @@ import { os } from "@orpc/server";
 
 import { eq } from "@ziron/db";
 import { db } from "@ziron/db/client";
-import { appearance, CardType, cards, emails, links, OrganizationWithCards, phones } from "@ziron/db/schema";
+import { appearance, CardType, cards, emails, links, phones } from "@ziron/db/schema";
 import { slugify } from "@ziron/utils";
 import { cardSchema, transformSlug, ZodError, z } from "@ziron/validators";
 
@@ -514,14 +514,16 @@ export const listCards = os
     description: "List all cards with their company",
     tags: ["card"],
   })
-  .output(z.array(z.custom<OrganizationWithCards>()))
+  .output(z.array(z.custom<CardType>()))
   .handler(async ({ context }) => {
-    const data = await context.db.query.organizationTable.findMany({
+    const data = await context.db.query.cards.findMany({
       where: (organization, { isNull }) => isNull(organization.deletedAt),
       with: {
-        cards: {
-          where: (cards, { isNull, and }) => and(isNull(cards.deletedAt), isNull(cards.archivedAt)),
-        },
+        organization: true,
+        emails: true,
+        phones: true,
+        links: true,
+        appearance: true,
       },
     });
 

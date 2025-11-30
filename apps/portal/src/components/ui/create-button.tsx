@@ -8,11 +8,12 @@ import { Button } from "@ziron/ui/components/button";
 import { Kbd } from "@ziron/ui/components/kbd";
 import { useHotkey } from "@ziron/ui/hooks/use-hotkey";
 
-export const CreateButton = ({ href, label }: { href: Route; label: string }) => {
+export const CreateButton = ({ href, label, hotkey }: { href: Route; label: string; hotkey: string }) => {
+  console.log(hotkey);
   const router = useRouter();
 
   useHotkey({
-    combos: [{ key: "c" }],
+    combos: [{ key: hotkey }],
     callback: () => {
       router.push(href);
     },
@@ -22,7 +23,7 @@ export const CreateButton = ({ href, label }: { href: Route; label: string }) =>
     <Button asChild className="sm:pr-2.5">
       <Link href={href}>
         {label}
-        <Kbd className="text-card">C</Kbd>
+        <Kbd className="text-card uppercase">{hotkey}</Kbd>
       </Link>
     </Button>
   );

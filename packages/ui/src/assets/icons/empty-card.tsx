@@ -17,8 +17,12 @@ export const IconEmptyCard = (props: React.SVGProps<SVGSVGElement>) => {
         rx="95.5"
         stroke="white"
         strokeDasharray="10 10"
+        strokeDashoffset="0"
         strokeLinecap="round"
         strokeOpacity="0.15"
+        style={{
+          animation: "stroke-dash-rotate .7s linear infinite",
+        }}
         width="191"
         x="0.5"
         y="0.5"
@@ -80,6 +84,18 @@ export const IconEmptyCard = (props: React.SVGProps<SVGSVGElement>) => {
         />
       </g>
       <defs>
+        <style>
+          {`
+            @keyframes stroke-dash-rotate {
+              0% {
+                stroke-dashoffset: 0;
+              }
+              100% {
+                stroke-dashoffset: 20;
+              }
+            }
+          `}
+        </style>
         <linearGradient
           gradientUnits="userSpaceOnUse"
           id="paint0_linear_2689_12764"

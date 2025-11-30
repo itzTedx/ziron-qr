@@ -18,6 +18,7 @@ const kbdVariants = cva(
       size: {
         default: "h-5 min-w-5 text-xs [&_svg:not([class*='size-'])]:size-3",
         lg: "h-7 min-w-7 text-sm [&_svg:not([class*='size-'])]:size-3.5",
+        sm: "h-4 min-w-4 rounded text-xs [&_svg:not([class*='size-'])]:size-2.5",
       },
     },
     defaultVariants: {

@@ -58,7 +58,7 @@ const OrganizationItem = memo(({ organization, isOpen, onOpenChange }: Organizat
         <div className="flex gap-2">
           <EditOrganizationButton initialData={organization} />
           <Button asChild size="icon" variant="outline">
-            <Link href={`/card/new?organizationId=${organization.id}`}>
+            <Link href={`/cards/create?organizationId=${organization.id}`}>
               <IconPlus className="size-4" />
             </Link>
           </Button>

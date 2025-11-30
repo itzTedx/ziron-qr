@@ -7,3 +7,4 @@ export * from "./remove-extension";
 export * from "./slugify";
 export * from "./text-color";
 export * from "./truncate";
+export { tv, type VariantProps } from "./tv";

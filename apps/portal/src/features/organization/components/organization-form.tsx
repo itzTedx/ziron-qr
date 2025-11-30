@@ -57,6 +57,16 @@ export default function OrganizationForm({ initialData, isEditMode }: Organizati
     defaultValues,
   });
 
+  const handleCancel = () => {
+    setOrganizationModal({ modal: null });
+    setFields({
+      id: null,
+      name: null,
+      logo: null,
+      address: null,
+    });
+  };
+
   const createOrganization = useMutation(
     orpc.organization.create.mutationOptions({
       onSuccess: (newOrganization) => {
@@ -66,15 +76,7 @@ export default function OrganizationForm({ initialData, isEditMode }: Organizati
           queryKey: orpc.organization.list.queryKey(),
         });
 
-        setOrganizationModal({ modal: null });
-        setFields({
-          id: null,
-          name: null,
-          logo: null,
-          address: null,
-          phone: null,
-          website: null,
-        });
+        handleCancel();
         form.reset(); // This will reset the form fields to their default values
       },
       onError: (error) => {
@@ -290,7 +292,9 @@ export default function OrganizationForm({ initialData, isEditMode }: Organizati
               </AlertDialogContent>
             </AlertDialog>
           ) : (
-            <Button variant="outline">Cancel</Button>
+            <Button onClick={handleCancel} type="button" variant="outline">
+              Cancel
+            </Button>
           )}
           <Button disabled={createOrganization.isPending} type="submit">
             <LoadingSwap

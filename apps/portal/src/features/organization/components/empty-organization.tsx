@@ -1,10 +1,12 @@
-import { IconPlus } from "@tabler/icons-react";
+import { Route } from "next";
+import Link from "next/link";
 
 import { IconDiamondArrowRight } from "@ziron/ui/assets/icons/arrows";
 import { IconFlag } from "@ziron/ui/assets/icons/flag";
 import { IconWorldPointer } from "@ziron/ui/assets/icons/world";
 import { Button } from "@ziron/ui/components/button";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@ziron/ui/components/empty";
+import { Kbd } from "@ziron/ui/components/kbd";
 
 export const EmptyOrganization = () => {
   return (
@@ -32,8 +34,10 @@ export const EmptyOrganization = () => {
       </EmptyHeader>
       <EmptyContent>
         <div className="flex gap-2">
-          <Button className="gap-1.5" size="sm">
-            <IconPlus className="size-3" /> Create Organization
+          <Button asChild className="gap-1.5" size="sm">
+            <Link href={"/organization/?modal=organization" as Route}>
+              Create Organization <Kbd size="sm">D</Kbd>
+            </Link>
           </Button>
           <Button size="sm" variant="outline">
             Import
