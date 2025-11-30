@@ -45,7 +45,7 @@ export const PersonCard = ({ card, organization }: PersonCardProps) => {
       </CardContent>
       <CardFooter className="mt-auto border-t">
         <Button asChild className="w-full flex-1 gap-1.5" size="sm" variant="ghost">
-          <Link href={`card/${card.id}` as Route}>
+          <Link href={`cards/${card.id}` as Route}>
             <IconEdit className="size-3.5 sm:size-4" />
             <span className="text-xs sm:text-sm">Edit</span>
           </Link>

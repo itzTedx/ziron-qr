@@ -26,7 +26,7 @@ export function SidebarLinkItem({ href, children, icon, shortcut, className }: P
 
   useHotkey({
     enabled: !!shortcut,
-    combos: [{ key: shortcut?.toLowerCase() }],
+    combos: [{ key: shortcut?.toLowerCase() ?? "" }],
     callback: () => {
       router.push(href);
     },

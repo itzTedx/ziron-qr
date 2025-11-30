@@ -530,7 +530,7 @@ export const listCards = os
     return data;
   });
 
-export const getCard = protectedProcedure
+export const getCard = publicProcedure
   .use(dbProvider)
   .route({
     method: "GET",

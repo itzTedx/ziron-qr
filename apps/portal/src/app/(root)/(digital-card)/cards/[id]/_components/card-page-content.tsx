@@ -14,10 +14,9 @@ import { getQueryClient, HydrateClient } from "@/lib/orpc/query/hydration";
 import { CardActionsDropdown } from "../../_components/card-actions-dropdown";
 import { ClicksVisits } from "../../_components/clicks-visits";
 import { CopyLinkButton } from "../../_components/copy-link-button";
-import { CardPageContentSkeleton } from "./card-page-header-skeleton";
 
 interface CardPageContentProps {
-  params: PageProps<"/card/[id]">["params"];
+  params: PageProps<"/cards/[id]">["params"];
 }
 
 async function SuspenseCardPageHeader({ params }: CardPageContentProps) {
@@ -26,7 +25,7 @@ async function SuspenseCardPageHeader({ params }: CardPageContentProps) {
 
   await queryClient.prefetchQuery(orpc.analytics.getCardAnalytics.queryOptions({ input: { cardId: id } }));
 
-  const isEditMode = id !== "new";
+  const isEditMode = id !== "create";
 
   // Fetching the card if in edit mode
   const card = isEditMode ? await client.card.get({ id }) : undefined;
@@ -51,6 +50,7 @@ async function SuspenseCardPageHeader({ params }: CardPageContentProps) {
 }
 
 async function SuspenseCardPageContent({ params }: CardPageContentProps) {
+  "use cache";
   const { id } = await params;
 
   const isEditMode = id !== "new";
@@ -79,11 +79,7 @@ export function CardPageHeader({ params }: CardPageContentProps) {
 }
 
 export function CardPageContent({ params }: CardPageContentProps) {
-  return (
-    <Suspense fallback={<CardPageContentSkeleton />}>
-      <SuspenseCardPageContent params={params} />
-    </Suspense>
-  );
+  return <SuspenseCardPageContent params={params} />;
 }
 
 export function CardPageHeaderSkeleton() {

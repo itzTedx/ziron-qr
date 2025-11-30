@@ -4,9 +4,9 @@ import { client } from "@/lib/orpc/client";
 
 import { CardPageContent, CardPageHeader } from "./_components/card-page-content";
 
-export async function generateMetadata({ params }: PageProps<"/card/[id]">): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<"/cards/[id]">): Promise<Metadata> {
   const { id } = await params;
-  const card = await client.card.getBySlug({ slug: id });
+  const card = await client.card.get({ id });
 
   if (!card && id === "new")
     return {
@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: PageProps<"/card/[id]">): Pro
   };
 }
 
-export default function CardPage({ params }: PageProps<"/card/[id]">) {
+export default function CardPage({ params }: PageProps<"/cards/[id]">) {
   return (
     <>
       <CardPageHeader params={params} />

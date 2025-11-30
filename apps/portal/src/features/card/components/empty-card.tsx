@@ -5,11 +5,7 @@ import { Button } from "@ziron/ui/components/button";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@ziron/ui/components/empty";
 import { Kbd } from "@ziron/ui/components/kbd";
 
-interface Props {
-  id?: string;
-}
-
-export const EmptyCard = ({ id }: Props) => {
+export const EmptyCard = () => {
   return (
     <Empty className="col-span-full border border-dashed">
       <EmptyHeader>
@@ -24,7 +20,7 @@ export const EmptyCard = ({ id }: Props) => {
       <EmptyContent>
         <div className="flex gap-2">
           <Button asChild className="gap-2" size="sm">
-            <Link href={`/cards/create?organizationId=${id}`}>
+            <Link href={"/cards/create"}>
               Create a Card <Kbd size="sm">C</Kbd>
             </Link>
           </Button>

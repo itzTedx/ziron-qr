@@ -11,7 +11,7 @@
 
 :root {
   --background: oklch(0.92 0 0);
-  --foreground: oklch(0.145 0 0);
+  --foreground: oklch(0.2046 0 0);
 
   --container: oklch(0.92 0 0);
   --container-foreground: oklch(0.145 0 0);
@@ -29,8 +29,11 @@
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
 
-  --muted: oklch(86.9% 0.005 56.366);
+  --muted: oklch(0.709 0.01 56.259 / 24%);
   --muted-foreground: oklch(0.556 0 0);
+
+  --faded: oklch(0.869 0.005 56.366 / 36%);
+  --faded-foreground: oklch(0.556 0 0);
 
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
@@ -86,6 +89,9 @@
   --muted: oklch(0.269 0 0);
   --muted-foreground: oklch(0.708 0 0);
 
+  --faded: oklch(0.869 0.005 56.366 / 16%);
+  --faded-foreground: oklch(0.556 0 0);
+
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
 
@@ -138,6 +144,9 @@
 
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
+
+  --color-faded: var(--faded);
+  --color-faded-foreground: var(--faded-foreground);
 
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
