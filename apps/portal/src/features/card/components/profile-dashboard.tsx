@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Suspense, useState } from "react";
 
 import Image from "next/image";
 
@@ -134,7 +134,9 @@ export const ProfileDashboard = ({ isPending, organization, data }: Props) => {
           </div>
 
           <div className="col-span-10 flex items-center justify-between gap-4 md:col-span-5 md:px-3 lg:px-6">
-            <SlugField data={data} organizationId={organization?.id} />
+            <Suspense fallback={<div>Loading...</div>}>
+              <SlugField data={data} organizationId={organization?.id} />
+            </Suspense>
           </div>
 
           <div className="col-span-3 hidden flex-col items-center gap-3 px-6 md:flex">

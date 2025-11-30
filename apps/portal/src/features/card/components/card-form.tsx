@@ -1,14 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 
-import { useRouter } from "next/navigation";
-
-import { isDefinedError } from "@orpc/client";
-import { useMutation } from "@tanstack/react-query";
-import { useQueryState } from "nuqs";
 import { useFormState } from "react-hook-form";
-import { toast } from "sonner";
 
 import { Form, useForm, zodResolver } from "@ziron/ui/components/form";
 import { TabsContent } from "@ziron/ui/components/tabs";
@@ -19,31 +13,37 @@ import { cardSchema, zCardSchema } from "@ziron/validators";
 
 import { UnsavedChangesBar } from "@/components/ui/unsaved-changes-bar";
 
-import { orpc, queryClient } from "@/lib/orpc/client";
-
 import { transformCardData } from "../utils/transform-card-data";
 import { CardCustomize } from "./form-sections/customize";
 import { CardGeneral } from "./form-sections/general";
 import { CardLinks } from "./form-sections/links";
+import { hasAnyTouchedField } from "./helpers/has-touched-field";
+import { useCreateCard } from "./helpers/use-create-card";
+import { useUpdateCard } from "./helpers/use-update-card";
 import { Preview } from "./preview";
 import { ProfileDashboard } from "./profile-dashboard";
 import { TabsLists } from "./tabs-lists";
 
 interface Props {
-  // companies?: Company[];
   isEditMode?: boolean;
   initialData?: CardType;
 }
 
 export function CardForm({ isEditMode, initialData }: Props) {
-  const router = useRouter();
+  // Conditionally get initial data based on mode
+  const transformedInitialData = useMemo(() => {
+    if (isEditMode && initialData) {
+      return transformCardData(initialData);
+    }
+    // Create mode: return static defaults (no server fetch)
+    return transformCardData();
+  }, [isEditMode, initialData]);
 
-  const [organization, _] = useQueryState("organization");
-  const transformedInitialData = useMemo(
-    () => transformCardData(initialData, organization),
-    [initialData, organization]
+  // In create mode, start with null (static, no initial data)
+  // In edit mode, initialize with transformed data
+  const [cardData, setCardData] = useState<Partial<zCardSchema> | null>(
+    isEditMode && transformedInitialData ? transformedInitialData : null
   );
-  const [cardData, setCardData] = useState<Partial<zCardSchema> | null>(transformedInitialData ?? null);
   const [hasBlurred, setHasBlurred] = useState(false);
 
   const form = useForm<zCardSchema>({
@@ -51,9 +51,6 @@ export function CardForm({ isEditMode, initialData }: Props) {
     defaultValues: transformedInitialData,
     mode: "onBlur",
   });
-
-  // const validation = validateForm(form.watch(), cardSchema);
-  // console.log(validation);
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -76,68 +73,33 @@ export function CardForm({ isEditMode, initialData }: Props) {
     };
   }, [form.watch]);
 
+  // Conditionally use mutations based on mode
+  const createCard = useCreateCard(form);
+  const updateCard = useUpdateCard(form);
+
   const data = {
     ...cardData,
-    // companies,
     emails: cardData?.emails ?? undefined,
-
     template: cardData?.appearance?.template ?? "default",
-    organizationId: cardData?.organizationId ?? organization ?? "",
+    organizationId: cardData?.organizationId ?? "",
   };
 
-  const createCard = useMutation(
-    orpc.card.create.mutationOptions({
-      onSuccess: (newCard) => {
-        toast.success(`Card: ${newCard.cardName} has been ${isEditMode ? "Edited" : "Created"}`);
-        form.reset(form.getValues(), { keepDefaultValues: true });
-        queryClient.invalidateQueries({
-          queryKey: orpc.card.list.queryKey(),
-        });
-        router.push("/");
-      },
-      onError: (error) => {
-        if (isDefinedError(error)) {
-          if (error.code === "NOT_FOUND") {
-            toast.error("Card not found", { description: error.message });
-            return;
-          }
-          toast.error("Failed to create card, try again later!", { description: error.message });
-          return;
-        }
-        toast.error(error.message);
-      },
-    })
-  );
+  // Separate submit handlers
+  function handleCreate(values: zCardSchema) {
+    createCard.mutate(values);
+  }
 
-  const updateCard = useMutation(
-    orpc.card.update.mutationOptions({
-      onSuccess: (updatedCard) => {
-        toast.success(`Card: ${updatedCard.cardName} has been updated`);
-        form.reset(form.getValues(), { keepDefaultValues: true });
-        queryClient.invalidateQueries({
-          queryKey: orpc.card.list.queryKey(),
-        });
-        router.push("/");
-      },
-      onError: (error) => {
-        if (isDefinedError(error)) {
-          if (error.code === "NOT_FOUND") {
-            toast.error("Card not found", { description: error.message });
-            return;
-          }
-          toast.error("Failed to update card, try again later!", { description: error.message });
-          return;
-        }
-        toast.error(error.message);
-      },
-    })
-  );
+  function handleUpdate(values: zCardSchema) {
+    if (initialData?.id) {
+      updateCard.mutate({ id: initialData.id, ...values });
+    }
+  }
 
   function onSubmit(values: zCardSchema) {
     if (isEditMode && initialData?.id) {
-      updateCard.mutate({ id: initialData?.id, ...values });
+      handleUpdate(values);
     } else {
-      createCard.mutate(values);
+      handleCreate(values);
     }
   }
 
@@ -149,21 +111,6 @@ export function CardForm({ isEditMode, initialData }: Props) {
     form.reset(transformedInitialData, { keepDefaultValues: true });
     setCardData(transformedInitialData ?? null);
     setHasBlurred(false);
-  }
-
-  // Helper function to check if any field is touched (including nested fields)
-  function hasAnyTouchedField(touchedFields: Record<string, unknown>): boolean {
-    for (const key in touchedFields) {
-      if (touchedFields[key] === true) {
-        return true;
-      }
-      if (typeof touchedFields[key] === "object" && touchedFields[key] !== null) {
-        if (hasAnyTouchedField(touchedFields[key] as Record<string, unknown>)) {
-          return true;
-        }
-      }
-    }
-    return false;
   }
 
   // Subscribe to form state changes using useFormState for proper reactivity
@@ -186,7 +133,7 @@ export function CardForm({ isEditMode, initialData }: Props) {
     }
   }, []);
 
-  const isPending = createCard.isPending || updateCard.isPending;
+  const isPending = isEditMode ? updateCard.isPending : createCard.isPending;
   // Show bar if form is dirty AND (at least one field has been touched OR any input has been blurred)
   const shouldShowBar = isDirty && (hasTouchedFields || hasBlurred);
 
@@ -230,7 +177,9 @@ export function CardForm({ isEditMode, initialData }: Props) {
             />
           </TabsLists>
 
-          <Preview cardData={data} />
+          <Suspense fallback={<div>Loading Preview...</div>}>
+            <Preview cardData={data} />
+          </Suspense>
         </div>
       </form>
     </Form>

@@ -1,6 +1,5 @@
-import { startTransition, useMemo } from "react";
+import { useMemo } from "react";
 
-import { parseAsString, useQueryState } from "nuqs";
 import { UseFormReturn } from "react-hook-form";
 
 import { Tabs, TabsList, TabsTrigger } from "@ziron/ui/components/tabs";
@@ -16,7 +15,7 @@ interface Props {
 }
 
 export const TabsLists = ({ form, children }: Props) => {
-  const [tab, setTab] = useQueryState("tab", parseAsString.withDefault("general"));
+  // const [tab, setTab] = useQueryState("tab", parseAsString.withDefault("general"));
 
   // Check for errors in each tab
   const errors = form.formState.errors;
@@ -24,18 +23,14 @@ export const TabsLists = ({ form, children }: Props) => {
   const hasLinksErrors = useMemo(() => hasFieldErrors(errors, linksFields), [errors]);
   const hasCustomizeErrors = useMemo(() => hasFieldErrors(errors, customizeFields), [errors]);
 
-  function handleTabChange(value: string) {
-    startTransition(() => {
-      void setTab(value);
-    });
-  }
+  // function handleTabChange(value: string) {
+  //   startTransition(() => {
+  //     void setTab(value);
+  //   });
+  // }
 
   return (
-    <Tabs
-      className="relative col-span-1 mt-6 w-full px-3 lg:col-span-2 lg:px-6"
-      defaultValue={tab}
-      onValueChange={handleTabChange}
-    >
+    <Tabs className="relative col-span-1 mt-6 w-full px-3 lg:col-span-2 lg:px-6" defaultValue="general">
       <TabsList className="h-auto w-full justify-start rounded-none border-b bg-transparent p-0">
         <TabsTrigger
           className={cn(

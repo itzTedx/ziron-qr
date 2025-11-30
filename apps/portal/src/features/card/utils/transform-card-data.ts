@@ -5,7 +5,7 @@ function nullToUndefined<T>(value: T | null | undefined): T | undefined {
   return value === null ? undefined : value;
 }
 
-export function transformCardData(initialData?: CardType, organizationId?: string | null): zCardSchema {
+export function transformCardData(initialData?: CardType): zCardSchema {
   return {
     id: initialData?.id ?? undefined,
     name: initialData?.name ?? "",
@@ -36,7 +36,7 @@ export function transformCardData(initialData?: CardType, organizationId?: strin
       : [],
     address: initialData?.address ?? "",
     mapUrl: initialData?.mapUrl ?? "",
-    organizationId: initialData?.organizationId ?? organizationId ?? "",
+    organizationId: initialData?.organizationId ?? "",
     designation: initialData?.designation ?? "",
     bio: initialData?.bio ?? "",
     appearance: {

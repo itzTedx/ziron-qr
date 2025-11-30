@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import { FormControl, FormField, FormItem, FormLabel, FormMessage, useFormContext } from "@ziron/ui/components/form";
 import { Input } from "@ziron/ui/components/input";
 import { Textarea } from "@ziron/ui/components/textarea";
@@ -36,8 +38,12 @@ export const CardGeneral = ({ data }: Props) => {
         )}
       />
       <div className="grid gap-4 sm:grid-cols-2">
-        <EmailsField data={data.emails} />
-        <PhonesField data={data.phones} />
+        <Suspense fallback={<div>Loading...</div>}>
+          <EmailsField data={data.emails} />
+        </Suspense>
+        <Suspense fallback={<div>Loading...</div>}>
+          <PhonesField data={data.phones} />
+        </Suspense>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-4">
@@ -76,7 +82,9 @@ export const CardGeneral = ({ data }: Props) => {
           />
         </div>
         <div className="space-y-4">
-          <OrganizationField organizationId={data.organizationId} />
+          <Suspense fallback={<div>Loading...</div>}>
+            <OrganizationField organizationId={data.organizationId} />
+          </Suspense>
           <FormField
             control={form.control}
             name="designation"
