@@ -6,7 +6,7 @@ import { IconSettings } from "@ziron/ui/assets/icons/settings";
 import { IconShield } from "@ziron/ui/assets/icons/shield";
 import { Label } from "@ziron/ui/components/label";
 
-import { SidebarLink } from "../../(digital-card)/_components/sidebar-link";
+import { SidebarLink } from "@/components/layout/sidebar/sidebar-link";
 
 export const SettingsSidebar = () => {
   return (
@@ -27,12 +27,12 @@ export const SettingsSidebar = () => {
 
             <ul className="space-y-0.5">
               <li>
-                <SidebarLink href={"/account/settings"} icon={<IconSettings className="size-4" />}>
+                <SidebarLink href="/settings/account" icon={<IconSettings className="size-4" />}>
                   General
                 </SidebarLink>
               </li>
               <li>
-                <SidebarLink href={"/account/settings"} icon={<IconShield className="size-4" />}>
+                <SidebarLink href="/settings/security" icon={<IconShield className="size-4" />}>
                   Security
                 </SidebarLink>
               </li>

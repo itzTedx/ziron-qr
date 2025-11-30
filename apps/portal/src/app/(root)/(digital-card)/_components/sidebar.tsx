@@ -7,7 +7,7 @@ import { IconChart } from "@ziron/ui/assets/icons/chart";
 import { IconMouse } from "@ziron/ui/assets/icons/mouse";
 import { Label } from "@ziron/ui/components/label";
 
-import { SidebarLink } from "./sidebar-link";
+import { SidebarLink } from "@/components/layout/sidebar/sidebar-link";
 
 export function DigitalCardSidebar() {
   return (

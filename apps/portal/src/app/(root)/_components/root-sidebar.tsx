@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 
-import type { Route } from "next";
 import Link from "next/link";
 
 import { IconCard } from "@ziron/ui/assets/icons/card";
@@ -54,9 +53,9 @@ export const RootSidebar = ({ children }: { children: React.ReactNode }) => {
                 <TooltipTrigger asChild>
                   <Link
                     className="group relative flex size-11 items-center justify-center rounded-lg outline-none transition-colors duration-150 hover:bg-muted focus-visible:ring-2 focus-visible:ring-black/50"
-                    href={"/account/settings" as Route}
+                    href="/settings/account"
                   >
-                    <IconSettings className="size-4 transition-transform duration-300 group-hover:rotate-45" />
+                    <IconSettings className="size-4 transition-transform duration-300 ease-tact group-hover:rotate-180" />
                     <span className="sr-only">Settings</span>
                   </Link>
                 </TooltipTrigger>

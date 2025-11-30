@@ -9,6 +9,7 @@
     "start": "pnpm with-env next start -p 3000",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
+    "typegen": "next typegen",
     "typecheck": "tsc --noEmit",
     "clean": "git clean -xdf .cache .next .turbo node_modules",
     "format": "biome check .",
