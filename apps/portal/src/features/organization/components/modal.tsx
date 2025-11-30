@@ -2,12 +2,17 @@
 
 import { parseAsString, useQueryStates } from "nuqs";
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@ziron/ui/components/dialog";
+import {
+  ResponsiveModal,
+  ResponsiveModalContent,
+  ResponsiveModalHeader,
+  ResponsiveModalTitle,
+} from "@/components/ui/responsive-modal";
 
-import CompanyForm from "./organization-form";
+import OrganizationForm from "./organization-form";
 
-export default function CompanyFormModal() {
-  const [modal, setCompanyModal] = useQueryStates({
+export default function OrganizationFormModal() {
+  const [modal, setOrganizationModal] = useQueryStates({
     modal: parseAsString,
   });
   const [fields, setFields] = useQueryStates({
@@ -20,9 +25,9 @@ export default function CompanyFormModal() {
   });
 
   return (
-    <Dialog
+    <ResponsiveModal
       onOpenChange={(v) => {
-        if (!v) setCompanyModal({ modal: null });
+        if (!v) setOrganizationModal({ modal: null });
         setFields({
           id: null,
           name: null,
@@ -34,11 +39,11 @@ export default function CompanyFormModal() {
       }}
       open={modal.modal === "organization"}
     >
-      <DialogContent className="min-w-xl p-0">
-        <DialogHeader className="border-b p-6">
-          <DialogTitle>{fields.name ? `Edit ${fields.name}` : "Add New Organization"}</DialogTitle>
-        </DialogHeader>
-        <CompanyForm
+      <ResponsiveModalContent className="p-0 sm:max-w-xl">
+        <ResponsiveModalHeader className="border-b p-6">
+          <ResponsiveModalTitle>{fields.name ? `Edit ${fields.name}` : "Add New Organization"}</ResponsiveModalTitle>
+        </ResponsiveModalHeader>
+        <OrganizationForm
           initialData={{
             id: fields.id ?? undefined,
             name: fields.name ?? "",
@@ -49,7 +54,7 @@ export default function CompanyFormModal() {
           }}
           isEditMode={!!fields.name}
         />
-      </DialogContent>
-    </Dialog>
+      </ResponsiveModalContent>
+    </ResponsiveModal>
   );
 }

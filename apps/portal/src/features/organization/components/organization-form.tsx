@@ -20,7 +20,6 @@ import {
   AlertDialogTrigger,
 } from "@ziron/ui/components/alert-dialog";
 import { Button } from "@ziron/ui/components/button";
-import { DialogFooter } from "@ziron/ui/components/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, zodResolver } from "@ziron/ui/components/form";
 import { Input } from "@ziron/ui/components/input";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
@@ -30,12 +29,12 @@ import { OrganizationType, organizationSchema } from "@ziron/validators";
 
 import { orpc } from "@/lib/orpc/client";
 
-interface CompanyFormProps {
+interface OrganizationFormProps {
   initialData: OrganizationType;
   isEditMode: boolean;
 }
 
-export default function CompanyForm({ initialData, isEditMode }: CompanyFormProps) {
+export default function OrganizationForm({ initialData, isEditMode }: OrganizationFormProps) {
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   const queryClient = useQueryClient();
 
@@ -257,8 +256,9 @@ export default function CompanyForm({ initialData, isEditMode }: CompanyFormProp
             />
           </div>
         </div>
-        <DialogFooter className="gap-3 sm:justify-start">
-          {isEditMode && (
+
+        <div className="flex items-center justify-end gap-2">
+          {isEditMode ? (
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button variant="destructive">
@@ -289,8 +289,10 @@ export default function CompanyForm({ initialData, isEditMode }: CompanyFormProp
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
+          ) : (
+            <Button variant="outline">Cancel</Button>
           )}
-          <Button className="w-full shrink" disabled={createOrganization.isPending} type="submit">
+          <Button disabled={createOrganization.isPending} type="submit">
             <LoadingSwap
               className="flex items-center justify-center gap-1.5 font-medium"
               isLoading={createOrganization.isPending}
@@ -299,7 +301,7 @@ export default function CompanyForm({ initialData, isEditMode }: CompanyFormProp
               {isEditMode ? "Save Changes" : "Add Organization"}
             </LoadingSwap>
           </Button>
-        </DialogFooter>
+        </div>
       </form>
     </Form>
   );

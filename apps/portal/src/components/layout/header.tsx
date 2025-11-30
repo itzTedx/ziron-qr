@@ -28,10 +28,10 @@ export default function Header({ title, currentPage, children, showBackButton = 
         <Breadcrumb>
           <BreadcrumbList
             className={cn(
-              "animate-in",
-              showBackButton ? "slide-in-from-left-2 fade-in duration-300" : "slide-in-from-right-2 duration-200"
+              showBackButton
+                ? "slide-in-from-left-2 fade-in animate-in duration-300"
+                : "slide-in-from-right-2 animate-in duration-200"
             )}
-            key={showBackButton ? "with-back" : "without-back"}
           >
             {currentPage ? (
               <>
