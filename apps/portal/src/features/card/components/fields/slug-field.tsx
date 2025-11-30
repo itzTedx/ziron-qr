@@ -139,7 +139,7 @@ export const SlugField = ({ data, organizationId }: Props) => {
 
   // Handle s keyboard shortcut
   useHotkey({
-    combos: [{ key: "s" }],
+    combos: [{ key: "s", ctrl: false }],
     enabled: true,
     callback: () => {
       handleShare();
@@ -231,7 +231,7 @@ export const SlugField = ({ data, organizationId }: Props) => {
                 >
                   <Icons.share className="size-4 stroke-[1.5]" />
                   <span className="hidden lg:block">Share</span>
-                  <Kbd variant="outline">S</Kbd>
+                  <Kbd variant="default">S</Kbd>
                 </Button>
               </ButtonGroup>
             </ButtonGroup>

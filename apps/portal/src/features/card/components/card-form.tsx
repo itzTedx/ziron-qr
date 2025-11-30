@@ -13,6 +13,8 @@ import { cardSchema, zCardSchema } from "@ziron/validators";
 
 import { UnsavedChangesBar } from "@/components/ui/unsaved-changes-bar";
 
+import { validateForm } from "@/lib/utils";
+
 import { transformCardData } from "../utils/transform-card-data";
 import { CardCustomize } from "./form-sections/customize";
 import { CardGeneral } from "./form-sections/general";
@@ -83,6 +85,9 @@ export function CardForm({ isEditMode, initialData }: Props) {
     template: cardData?.appearance?.template ?? "default",
     organizationId: cardData?.organizationId ?? "",
   };
+
+  const validationResult = validateForm(form.watch(), cardSchema);
+  console.log(validationResult);
 
   // Separate submit handlers
   function handleCreate(values: zCardSchema) {

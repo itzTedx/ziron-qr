@@ -19,6 +19,7 @@ import {
   CropperProps,
 } from "@ziron/ui/components/cropper";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ziron/ui/components/form";
+import { Hitbox } from "@ziron/ui/components/hitbox";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@ziron/ui/components/hover-card";
 import { Label } from "@ziron/ui/components/label";
 import { Slider } from "@ziron/ui/components/slider";
@@ -120,13 +121,15 @@ export const PhotoUploadModal = ({ currentImage }: { currentImage?: string }) =>
   return (
     <ResponsiveModal onOpenChange={handleModalOpenChange} open={isOpen}>
       <ResponsiveModalTrigger asChild>
-        <Button
-          className="absolute right-1 bottom-1 z-10 flex items-center justify-center rounded-full"
-          size="icon-sm"
-          variant="secondary"
-        >
-          <IconCamera className="size-4" />
-        </Button>
+        <Hitbox size="10px">
+          <Button
+            className="absolute right-1 bottom-1 z-10 flex items-center justify-center rounded-full backdrop-blur-lg"
+            size="icon-sm"
+            variant="secondary"
+          >
+            <IconCamera className="size-4" />
+          </Button>
+        </Hitbox>
       </ResponsiveModalTrigger>
       <ResponsiveModalContent className="sm:max-w-xl">
         <ResponsiveModalHeader>

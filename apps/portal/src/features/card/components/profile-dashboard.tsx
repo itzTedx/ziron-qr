@@ -49,27 +49,36 @@ export const ProfileDashboard = ({ isPending, organization, data }: Props) => {
 
   return (
     <div>
-      <div
-        className="group relative h-48 cursor-pointer overflow-hidden border-b bg-secondary"
-        onClick={() => setIsCoverUploadOpen(true)}
-        role="button"
-      >
-        <Image
-          alt="cover image"
-          className="object-cover transition-[filter] duration-500 group-hover:brightness-75"
-          fill
-          priority
-          quality={80}
-          sizes="100vw"
-          src={data.cover ?? "/images/placeholder-cover.jpg"}
-          title="Cover Image"
-        />
+      <div className="group relative h-48 cursor-pointer overflow-hidden border-b bg-secondary">
+        <div
+          onClick={() => {
+            setIsCoverUploadOpen(true);
+          }}
+          role="button"
+        >
+          <Image
+            alt="cover image"
+            className="object-cover transition-[filter] duration-500 group-hover:brightness-75"
+            fill
+            priority
+            quality={80}
+            sizes="100vw"
+            src={data.cover ?? "/images/placeholder-cover.jpg"}
+            title="Cover Image"
+          />
+        </div>
 
         <CoverUpload
           className="absolute top-3 right-4 z-10 flex items-center gap-2"
           data={data.cover}
           isOpen={isCoverUploadOpen}
-          onOpenChange={setIsCoverUploadOpen}
+          onOpenChange={(open) => {
+            if (!open) {
+              setIsCoverUploadOpen(false);
+            } else {
+              setIsCoverUploadOpen(true);
+            }
+          }}
         />
       </div>
       <section className="-mt-16 container mx-auto">
@@ -122,7 +131,7 @@ export const ProfileDashboard = ({ isPending, organization, data }: Props) => {
                     </h2>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p className="text-muted-foreground text-sm">{data && data.name ? data.name : "Untitled Card"}</p>
+                    <p>{data && data.name ? data.name : "Untitled Card"}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>

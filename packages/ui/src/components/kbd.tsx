@@ -10,7 +10,7 @@ const kbdVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-muted/60 text-foreground/80",
+        default: "bg-faded/60 text-foreground/80",
         secondary: "bg-foreground text-background shadow-xs hover:bg-foreground/80",
         outline: "border border-input bg-muted/10 shadow-xs hover:bg-muted/50 hover:text-accent-foreground",
         destructive: "bg-destructive text-destructive-foreground",

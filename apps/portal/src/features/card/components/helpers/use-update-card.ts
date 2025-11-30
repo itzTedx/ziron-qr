@@ -21,7 +21,7 @@ export function useUpdateCard(form: ReturnType<typeof useForm<zCardSchema>>) {
         queryClient.invalidateQueries({
           queryKey: orpc.card.list.queryKey(),
         });
-        router.push("/");
+        router.push("/cards");
       },
       onError: (error) => {
         if (isDefinedError(error)) {

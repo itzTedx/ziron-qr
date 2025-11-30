@@ -23,7 +23,7 @@ export const CreateButton = ({ href, label, hotkey }: { href: Route; label: stri
     <Button asChild className="sm:pr-2.5">
       <Link href={href}>
         {label}
-        <Kbd className="text-card uppercase">{hotkey}</Kbd>
+        <Kbd className="uppercase">{hotkey}</Kbd>
       </Link>
     </Button>
   );

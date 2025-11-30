@@ -12,7 +12,7 @@ import { Button } from "@ziron/ui/components/button";
 import { Kbd } from "@ziron/ui/components/kbd";
 import { Label } from "@ziron/ui/components/label";
 import { ProgressiveBlur } from "@ziron/ui/components/progressive-blur";
-import { useHotkey } from "@ziron/ui/hooks/use-hotkey";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@ziron/ui/components/tooltip";
 
 import { CardType } from "@ziron/db/schema";
 import { cn } from "@ziron/utils";
@@ -20,7 +20,6 @@ import { cn } from "@ziron/utils";
 import { CopyButton } from "@/components/ui/copy-button";
 import {
   ResponsiveModal,
-  ResponsiveModalClose,
   ResponsiveModalContent,
   ResponsiveModalDescription,
   ResponsiveModalHeader,
@@ -51,15 +50,6 @@ export const ShareModal = () => {
     enabled: !!id?.cardId,
   });
 
-  useHotkey({
-    enabled: modalState.open,
-    combos: [{ key: "s" }],
-    callback: () => {
-      closeModal();
-    },
-    throttleMs: 300,
-  });
-
   if (!id?.cardId || !data) {
     return null;
   }
@@ -87,14 +77,19 @@ export const ShareModal = () => {
         <ResponsiveModalHeader className="flex-row items-center justify-between">
           <ResponsiveModalTitle>Share digital card</ResponsiveModalTitle>
           <ResponsiveModalDescription>Share the digital card with your friends and family.</ResponsiveModalDescription>
-          <ResponsiveModalClose asChild>
-            <Kbd className="group" size="lg" variant="outline">
-              <span className="fade-out zoom-in-50 animate-in duration-200 group-hover:hidden">S</span>
-              <span className="fade-in zoom-in-50 hidden animate-in duration-200 group-hover:block">
-                <IconX />
-              </span>
-            </Kbd>
-          </ResponsiveModalClose>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Kbd className="group" size="lg" variant="outline">
+                <span className="fade-out zoom-in-50 animate-in duration-200 group-hover:hidden">S</span>
+                <span className="fade-in zoom-in-50 hidden animate-in duration-200 group-hover:block">
+                  <IconX />
+                </span>
+              </Kbd>
+            </TooltipTrigger>
+            <TooltipContent side="right">
+              Press <span className="font-semibold">S</span> to open this quickly
+            </TooltipContent>
+          </Tooltip>
         </ResponsiveModalHeader>
         {isLoading ? (
           <IconLoader className="size-4 animate-spin" />
