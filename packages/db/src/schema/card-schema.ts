@@ -12,7 +12,7 @@ export const cards = pgTable(
 
     // Core card information
     name: varchar("name", { length: 255 }).notNull(),
-    slug: varchar("slug", { length: 100 }).unique(),
+    slug: varchar("slug", { length: 100 }).notNull().unique(),
     bio: text("bio"),
     designation: varchar("designation", { length: 255 }),
 

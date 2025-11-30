@@ -28,13 +28,13 @@ function Switch({ className, pressedWidth = 19, startIcon, endIcon, thumbIcon, .
     >
       <SwitchThumbPrimitive
         className={cn(
-          "pointer-events-none relative z-10 block size-4 rounded-full bg-background ring-0 dark:data-[state=checked]:bg-primary-foreground dark:data-[state=unchecked]:bg-foreground"
+          "pointer-events-none relative z-10 block size-4 rounded-full bg-card ring-0 dark:data-[state=checked]:bg-primary-foreground dark:data-[state=unchecked]:bg-foreground"
         )}
         pressedAnimation={{ width: pressedWidth }}
       >
         {thumbIcon && (
           <SwitchIconPrimitive
-            className="-translate-1/2 absolute top-1/2 left-1/2 text-neutral-400 dark:text-neutral-500 [&_svg]:size-[9px]"
+            className="-translate-1/2 absolute top-1/2 left-1/2 text-stone-400 dark:text-stone-500 [&_svg]:size-[9px]"
             position="thumb"
           >
             {thumbIcon}
@@ -44,7 +44,7 @@ function Switch({ className, pressedWidth = 19, startIcon, endIcon, thumbIcon, .
 
       {startIcon && (
         <SwitchIconPrimitive
-          className="-translate-y-1/2 absolute top-1/2 left-0.5 text-neutral-400 dark:text-neutral-500 [&_svg]:size-[9px]"
+          className="-translate-y-1/2 absolute top-1/2 left-0.5 text-stone-400 dark:text-stone-500 [&_svg]:size-[9px]"
           position="left"
         >
           {startIcon}
@@ -52,7 +52,7 @@ function Switch({ className, pressedWidth = 19, startIcon, endIcon, thumbIcon, .
       )}
       {endIcon && (
         <SwitchIconPrimitive
-          className="-translate-y-1/2 absolute top-1/2 right-0.5 text-neutral-500 dark:text-neutral-400 [&_svg]:size-[9px]"
+          className="-translate-y-1/2 absolute top-1/2 right-0.5 text-stone-500 dark:text-stone-400 [&_svg]:size-[9px]"
           position="right"
         >
           {endIcon}

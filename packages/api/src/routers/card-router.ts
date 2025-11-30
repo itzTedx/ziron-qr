@@ -457,7 +457,7 @@ export const archiveCard = protectedProcedure
     try {
       const [data] = await context.db
         .update(cards)
-        .set({ archivedAt: new Date(), slug: null })
+        .set({ archivedAt: new Date() })
         .where(eq(cards.id, input.id))
         .returning({
           name: cards.name,
@@ -487,7 +487,7 @@ export const deleteCard = protectedProcedure
   .handler(async ({ input, errors, context }) => {
     try {
       const [data] = await Promise.all([
-        context.db.update(cards).set({ deletedAt: new Date(), slug: null }).where(eq(cards.id, input.id)).returning({
+        context.db.update(cards).set({ deletedAt: new Date() }).where(eq(cards.id, input.id)).returning({
           name: cards.name,
         }),
         context.db.update(links).set({ deletedAt: new Date() }).where(eq(links.cardId, input.id)),
@@ -539,24 +539,34 @@ export const getCard = publicProcedure
     description: "Get a card by ID",
     tags: ["card"],
   })
-  .input(z.object({ id: z.string() }))
+  .input(
+    z.object({
+      id: z.string().optional(),
+    })
+  )
   .output(z.custom<CardType>().optional())
-  .handler(async ({ input, context }) => {
-    if (input.id !== "new") {
-      const data = await context.db.query.cards.findFirst({
-        where: (cards, { eq, isNull, and }) =>
-          and(eq(cards.id, input.id), isNull(cards.deletedAt), isNull(cards.archivedAt)),
-        with: {
-          emails: true,
-          phones: true,
-          links: true,
-          organization: true,
-          appearance: true,
-        },
-      });
+  .handler(async ({ input, context, errors }) => {
+    const cardId = input.id;
 
-      return data;
+    if (!cardId) {
+      throw errors.BAD_REQUEST({ message: "Card ID is required" });
     }
+
+    const data = await context.db.query.cards.findFirst({
+      where: (cards, { eq, isNull, and }) =>
+        and(eq(cards.id, cardId), isNull(cards.deletedAt), isNull(cards.archivedAt)),
+      with: {
+        emails: true,
+        phones: true,
+        links: true,
+        organization: true,
+        appearance: true,
+      },
+    });
+
+    if (!data) throw errors.NOT_FOUND();
+
+    return data;
   });
 
 export const getCardBySlug = publicProcedure

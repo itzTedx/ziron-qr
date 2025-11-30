@@ -1,5 +1,6 @@
 import { createORPCClient } from "@orpc/client";
 import { RPCLink } from "@orpc/client/fetch";
+import { DedupeRequestsPlugin } from "@orpc/client/plugins";
 import type { RouterClient } from "@orpc/server";
 import { createTanstackQueryUtils } from "@orpc/tanstack-query";
 import { QueryCache, QueryClient } from "@tanstack/react-query";
@@ -30,6 +31,17 @@ const link = new RPCLink({
       credentials: "include",
     });
   },
+  plugins: [
+    new DedupeRequestsPlugin({
+      filter: ({ request }) => request.method === "POST", // Filters requests to dedupe
+      groups: [
+        {
+          condition: () => true,
+          context: {}, // Context used for the rest of the request lifecycle
+        },
+      ],
+    }),
+  ],
 });
 
 /**

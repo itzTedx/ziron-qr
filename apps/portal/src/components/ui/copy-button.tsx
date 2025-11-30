@@ -15,7 +15,9 @@ export const CopyButton = ({ link }: { link: string }) => {
       </InputGroupAddon>
       <InputGroupInput readOnly value={link} />
       <InputGroupAddon align="inline-end">
-        <InputGroupButton onClick={() => copyToClipboard(link)}>{isCopied ? <Check /> : <Copy />}</InputGroupButton>
+        <InputGroupButton className="cursor-copy" onClick={() => copyToClipboard(link)}>
+          {isCopied ? <Check /> : <Copy />}
+        </InputGroupButton>
       </InputGroupAddon>
     </InputGroup>
   );

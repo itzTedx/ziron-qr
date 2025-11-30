@@ -1,3 +1,7 @@
+"use client";
+
+import { useEffect } from "react";
+
 import { IconDotsVertical } from "@tabler/icons-react";
 
 import { Button } from "@ziron/ui/components/button";
@@ -20,6 +24,12 @@ interface Props {
 }
 
 export const CardActionsDropdown = ({ cardId }: Props) => {
+  console.log("cardId", cardId);
+
+  useEffect(() => {
+    console.log("cardId Rendered", cardId);
+  }, [cardId]);
+
   return (
     <DropdownMenu>
       <Tooltip>

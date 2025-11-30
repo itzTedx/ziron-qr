@@ -99,7 +99,7 @@ export const ArchiveCard = ({ cardId }: Props) => {
                   </Avatar>
                   <div>
                     <h2 className="font-medium">
-                      {card?.company.name} / {card?.name}
+                      {card?.organization.name} / {card?.name}
                     </h2>
                     <span className="flex items-center gap-1">
                       <IconArrowMoveDownRight className="size-3 text-muted-foreground/60" />

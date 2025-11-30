@@ -4,13 +4,13 @@ import { cn } from "@ziron/utils";
 
 const kbdVariants = cva(
   [
-    "hidden w-fit select-none items-center justify-center gap-1 rounded-sm px-1 font-medium font-sans transition-colors duration-200 sm:inline-flex",
+    "inline-flex w-fit select-none items-center justify-center gap-1 rounded-sm px-1 font-medium font-sans transition-colors duration-200",
     "in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10",
   ],
   {
     variants: {
       variant: {
-        default: "bg-muted/40 text-card/90 dark:text-foreground/80",
+        default: "bg-muted/60 text-foreground/80",
         secondary: "bg-foreground text-background shadow-xs hover:bg-foreground/80",
         outline: "border border-input bg-muted/10 shadow-xs hover:bg-muted/50 hover:text-accent-foreground",
         destructive: "bg-destructive text-destructive-foreground",

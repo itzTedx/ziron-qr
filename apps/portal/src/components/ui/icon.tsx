@@ -210,7 +210,6 @@ function AnimateIcon({
     setCurrentAnimation(typeof animate === "string" ? animate : animation);
     if (animate) startAnimation(animate as TriggerProp);
     else stopAnimation();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [animate, animation, startAnimation, stopAnimation]);
 
   React.useEffect(() => {
@@ -368,68 +367,95 @@ function AnimateIcon({
 
   const childProps = (React.isValidElement(children) ? (children as React.ReactElement).props : {}) as AnyProps;
 
-  const handleMouseEnter = composeEventHandlers<React.MouseEvent<HTMLElement>>(childProps.onMouseEnter, () => {
-    if (animateOnHover) startAnimation(animateOnHover);
-  });
-
-  const handleMouseLeave = composeEventHandlers<React.MouseEvent<HTMLElement>>(childProps.onMouseLeave, () => {
-    if (animateOnHover || animateOnTap) stopAnimation();
-  });
-
-  const handlePointerDown = composeEventHandlers<React.PointerEvent<HTMLElement>>(childProps.onPointerDown, () => {
-    if (animateOnTap) startAnimation(animateOnTap);
-  });
-
-  const handlePointerUp = composeEventHandlers<React.PointerEvent<HTMLElement>>(childProps.onPointerUp, () => {
-    if (animateOnTap) stopAnimation();
-  });
-
-  const content = asChild ? (
-    <Slot
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onPointerDown={handlePointerDown}
-      onPointerUp={handlePointerUp}
-      ref={inViewRef}
-      {...props}
-    >
-      {children}
-    </Slot>
-  ) : (
-    <motion.span
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onPointerDown={handlePointerDown}
-      onPointerUp={handlePointerUp}
-      ref={inViewRef}
-      {...props}
-    >
-      {children}
-    </motion.span>
+  const handleMouseEnter = React.useCallback(
+    composeEventHandlers<React.MouseEvent<HTMLElement>>(childProps.onMouseEnter, () => {
+      if (animateOnHover) startAnimation(animateOnHover);
+    }),
+    []
   );
 
-  return (
-    <AnimateIconContext.Provider
-      value={{
-        controls,
-        animation: currentAnimation,
-        loop,
-        loopDelay,
-        active: localAnimate,
-        animate,
-        initialOnAnimateEnd,
-        completeOnStop,
-        delay,
-      }}
-    >
-      {content}
-    </AnimateIconContext.Provider>
+  const handleMouseLeave = React.useCallback(
+    composeEventHandlers<React.MouseEvent<HTMLElement>>(childProps.onMouseLeave, () => {
+      if (animateOnHover || animateOnTap) stopAnimation();
+    }),
+    []
   );
+
+  const handlePointerDown = React.useCallback(
+    composeEventHandlers<React.PointerEvent<HTMLElement>>(childProps.onPointerDown, () => {
+      if (animateOnTap) startAnimation(animateOnTap);
+    }),
+    []
+  );
+
+  const handlePointerUp = React.useCallback(
+    composeEventHandlers<React.PointerEvent<HTMLElement>>(childProps.onPointerUp, () => {
+      if (animateOnTap) stopAnimation();
+    }),
+    []
+  );
+
+  const contextValue = React.useMemo<AnimateIconContextValue>(
+    () => ({
+      controls,
+      animation: currentAnimation,
+      loop,
+      loopDelay,
+      active: localAnimate,
+      animate,
+      initialOnAnimateEnd,
+      completeOnStop,
+      persistOnAnimateEnd,
+      delay,
+    }),
+    [
+      controls,
+      currentAnimation,
+      loop,
+      loopDelay,
+      localAnimate,
+      animate,
+      initialOnAnimateEnd,
+      completeOnStop,
+      persistOnAnimateEnd,
+      delay,
+    ]
+  );
+
+  const content = React.useMemo(
+    () =>
+      asChild ? (
+        <Slot
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onPointerDown={handlePointerDown}
+          onPointerUp={handlePointerUp}
+          ref={inViewRef}
+          {...props}
+        >
+          {children}
+        </Slot>
+      ) : (
+        <motion.span
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onPointerDown={handlePointerDown}
+          onPointerUp={handlePointerUp}
+          ref={inViewRef}
+          {...props}
+        >
+          {children}
+        </motion.span>
+      ),
+    [asChild, handleMouseEnter, handleMouseLeave, handlePointerDown, handlePointerUp, inViewRef, props, children]
+  );
+
+  return <AnimateIconContext.Provider value={contextValue}>{content}</AnimateIconContext.Provider>;
 }
 
 const pathClassName = "[&_[stroke-dasharray='1px_1px']]:![stroke-dasharray:1px_0px]";
 
-function IconWrapper<T extends string>({
+const IconWrapper = React.memo(function IconWrapper<T extends string>({
   size = 28,
   animation: animationProp,
   animate,
@@ -450,22 +476,21 @@ function IconWrapper<T extends string>({
 }: IconWrapperProps<T>) {
   const context = React.useContext(AnimateIconContext);
 
-  if (context) {
-    const {
-      controls,
-      animation: parentAnimation,
-      loop: parentLoop,
-      loopDelay: parentLoopDelay,
-      active: parentActive,
-      animate: parentAnimate,
-      persistOnAnimateEnd: parentPersistOnAnimateEnd,
-      initialOnAnimateEnd: parentInitialOnAnimateEnd,
-      delay: parentDelay,
-      completeOnStop: parentCompleteOnStop,
-    } = context;
+  // Compute all values at the top to avoid conditional hooks
+  const parentAnimation = context?.animation;
+  const parentLoop = context?.loop;
+  const parentLoopDelay = context?.loopDelay;
+  const parentActive = context?.active;
+  const parentAnimate = context?.animate;
+  const parentPersistOnAnimateEnd = context?.persistOnAnimateEnd;
+  const parentInitialOnAnimateEnd = context?.initialOnAnimateEnd;
+  const parentDelay = context?.delay;
+  const parentCompleteOnStop = context?.completeOnStop;
+  const controls = context?.controls;
 
-    const hasOverrides =
-      animate !== undefined ||
+  const hasOverrides =
+    context &&
+    (animate !== undefined ||
       animateOnHover !== undefined ||
       animateOnTap !== undefined ||
       animateOnView !== undefined ||
@@ -474,77 +499,102 @@ function IconWrapper<T extends string>({
       initialOnAnimateEnd !== undefined ||
       persistOnAnimateEnd !== undefined ||
       delay !== undefined ||
-      completeOnStop !== undefined;
+      completeOnStop !== undefined);
 
-    if (hasOverrides) {
-      const inheritedAnimate: Trigger = parentActive ? (animationProp ?? parentAnimation ?? "default") : false;
-
-      const finalAnimate: Trigger = (animate ?? parentAnimate ?? inheritedAnimate) as Trigger;
-
-      return (
-        <AnimateIcon
-          animate={finalAnimate}
-          animateOnHover={animateOnHover}
-          animateOnTap={animateOnTap}
-          animateOnView={animateOnView}
-          animateOnViewMargin={animateOnViewMargin}
-          animateOnViewOnce={animateOnViewOnce}
-          animation={animationProp ?? parentAnimation}
-          asChild
-          completeOnStop={completeOnStop ?? parentCompleteOnStop}
-          delay={delay ?? parentDelay}
-          initialOnAnimateEnd={initialOnAnimateEnd ?? parentInitialOnAnimateEnd}
-          loop={loop ?? parentLoop}
-          loopDelay={loopDelay ?? parentLoopDelay}
-          persistOnAnimateEnd={persistOnAnimateEnd ?? parentPersistOnAnimateEnd}
-        >
-          <IconComponent
-            className={cn(
-              className,
-              ((animationProp ?? parentAnimation) === "path" || (animationProp ?? parentAnimation) === "path-loop") &&
-                pathClassName
-            )}
-            size={size}
-            {...props}
-          />
-        </AnimateIcon>
-      );
-    }
-
-    const animationToUse = animationProp ?? parentAnimation;
-    const loopToUse = parentLoop;
-    const loopDelayToUse = parentLoopDelay;
-
-    return (
-      <AnimateIconContext.Provider
-        value={{
-          controls,
-          animation: animationToUse,
-          loop: loopToUse,
-          loopDelay: loopDelayToUse,
-          active: parentActive,
-          animate: parentAnimate,
-          initialOnAnimateEnd: parentInitialOnAnimateEnd,
-          delay: parentDelay,
-          completeOnStop: parentCompleteOnStop,
-        }}
-      >
-        <IconComponent
-          className={cn(className, (animationToUse === "path" || animationToUse === "path-loop") && pathClassName)}
-          size={size}
-          {...props}
-        />
-      </AnimateIconContext.Provider>
-    );
-  }
-
-  if (
+  const hasAnimationProps =
     animate !== undefined ||
     animateOnHover !== undefined ||
     animateOnTap !== undefined ||
     animateOnView !== undefined ||
-    animationProp !== undefined
-  ) {
+    animationProp !== undefined;
+
+  // Compute animation values
+  const finalAnimation = context ? (animationProp ?? parentAnimation) : animationProp;
+  const inheritedAnimate: Trigger = context && parentActive ? (animationProp ?? parentAnimation ?? "default") : false;
+  const finalAnimate: Trigger = (animate ?? (context ? parentAnimate : undefined) ?? inheritedAnimate) as Trigger;
+  const animationToUse = context ? (animationProp ?? parentAnimation) : animationProp;
+
+  // Memoize className computation
+  const iconClassName = React.useMemo(
+    () => cn(className, (finalAnimation === "path" || finalAnimation === "path-loop") && pathClassName),
+    [className, finalAnimation]
+  );
+
+  const iconClassNameWithAnimation = React.useMemo(
+    () => cn(className, (animationProp === "path" || animationProp === "path-loop") && pathClassName),
+    [className, animationProp]
+  );
+
+  const iconClassNameWithAnimationToUse = React.useMemo(
+    () => cn(className, (animationToUse === "path" || animationToUse === "path-loop") && pathClassName),
+    [className, animationToUse]
+  );
+
+  // Memoize context value
+  const contextValue = React.useMemo<AnimateIconContextValue | null>(
+    () =>
+      context && controls && animationToUse
+        ? {
+            controls,
+            animation: animationToUse,
+            loop: parentLoop ?? false,
+            loopDelay: parentLoopDelay ?? 0,
+            active: parentActive ?? false,
+            animate: parentAnimate,
+            initialOnAnimateEnd: parentInitialOnAnimateEnd ?? false,
+            delay: parentDelay ?? 0,
+            completeOnStop: parentCompleteOnStop ?? false,
+            persistOnAnimateEnd: parentPersistOnAnimateEnd ?? false,
+          }
+        : null,
+    [
+      context,
+      controls,
+      animationToUse,
+      parentLoop,
+      parentLoopDelay,
+      parentActive,
+      parentAnimate,
+      parentInitialOnAnimateEnd,
+      parentDelay,
+      parentCompleteOnStop,
+      parentPersistOnAnimateEnd,
+    ]
+  );
+
+  // Render logic
+  if (context && hasOverrides) {
+    return (
+      <AnimateIcon
+        animate={finalAnimate}
+        animateOnHover={animateOnHover}
+        animateOnTap={animateOnTap}
+        animateOnView={animateOnView}
+        animateOnViewMargin={animateOnViewMargin}
+        animateOnViewOnce={animateOnViewOnce}
+        animation={finalAnimation}
+        asChild
+        completeOnStop={completeOnStop ?? parentCompleteOnStop}
+        delay={delay ?? parentDelay}
+        initialOnAnimateEnd={initialOnAnimateEnd ?? parentInitialOnAnimateEnd}
+        loop={loop ?? parentLoop}
+        loopDelay={loopDelay ?? parentLoopDelay}
+        persistOnAnimateEnd={persistOnAnimateEnd ?? parentPersistOnAnimateEnd}
+      >
+        <IconComponent className={iconClassName} size={size} {...props} />
+      </AnimateIcon>
+    );
+  }
+
+  if (context && contextValue) {
+    return (
+      <AnimateIconContext.Provider value={contextValue}>
+        <IconComponent className={iconClassNameWithAnimationToUse} size={size} {...props} />
+      </AnimateIconContext.Provider>
+    );
+  }
+
+  if (hasAnimationProps) {
     return (
       <AnimateIcon
         animate={animate}
@@ -560,23 +610,13 @@ function IconWrapper<T extends string>({
         loop={loop}
         loopDelay={loopDelay}
       >
-        <IconComponent
-          className={cn(className, (animationProp === "path" || animationProp === "path-loop") && pathClassName)}
-          size={size}
-          {...props}
-        />
+        <IconComponent className={iconClassNameWithAnimation} size={size} {...props} />
       </AnimateIcon>
     );
   }
 
-  return (
-    <IconComponent
-      className={cn(className, (animationProp === "path" || animationProp === "path-loop") && pathClassName)}
-      size={size}
-      {...props}
-    />
-  );
-}
+  return <IconComponent className={iconClassNameWithAnimation} size={size} {...props} />;
+}) as <T extends string>(props: IconWrapperProps<T>) => React.ReactElement;
 
 function getVariants<V extends { default: T; [key: string]: T }, T extends Record<string, Variants>>(animations: V): T {
   // eslint-disable-next-line react-hooks/rules-of-hooks

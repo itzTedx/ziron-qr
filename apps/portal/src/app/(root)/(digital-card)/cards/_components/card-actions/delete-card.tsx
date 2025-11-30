@@ -26,7 +26,7 @@ import { Kbd } from "@ziron/ui/components/kbd";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 import { useHotkey } from "@ziron/ui/hooks/use-hotkey";
 
-import { env } from "@/lib/env/client";
+import { constructUrl } from "@/lib/link/construct-url";
 import { orpc, queryClient } from "@/lib/orpc/client";
 
 interface Props {
@@ -73,6 +73,10 @@ export const DeleteCard = ({ cardId }: Props) => {
     callback: () => setIsOpen(true),
   });
 
+  if (!card?.slug) {
+    return null;
+  }
+
   return (
     <>
       <Dialog onOpenChange={setIsOpen} open={isOpen}>
@@ -100,13 +104,11 @@ export const DeleteCard = ({ cardId }: Props) => {
                   </Avatar>
                   <div>
                     <h2 className="font-medium">
-                      {card?.company.name} / {card?.name}
+                      {card?.organization.name} / {card?.name}
                     </h2>
                     <span className="flex items-center gap-1">
                       <IconArrowMoveDownRight className="size-3 text-muted-foreground/60" />
-                      <p className="truncate text-muted-foreground text-xs">
-                        {env.NEXT_PUBLIC_CLIENT_URL.split("//").pop()}/{card?.slug}
-                      </p>
+                      <p className="truncate text-muted-foreground text-xs">{constructUrl(card?.slug)}</p>
                     </span>
                   </div>
                 </div>

@@ -25,8 +25,6 @@ export const CopyLinkButton = ({ slug }: { slug?: string | null }) => {
     callback: handleCopyLink,
   });
 
-  if (!slug) return null;
-
   return (
     <Button
       className="group font-medium max-md:size-8 md:pl-2"
@@ -36,15 +34,18 @@ export const CopyLinkButton = ({ slug }: { slug?: string | null }) => {
       variant="outline"
     >
       {isCopied ? (
-        <div className="inline-flex h-5 w-fit min-w-5 items-center justify-center rounded-sm bg-success-foreground transition-colors group-hover:hidden">
-          <IconCheck className="fade-in-0 slide-in-from-bottom slide-out-to-top size-4 animate-in text-success" />
+        <div className="inline-flex h-5 w-fit min-w-5 items-center justify-center rounded-sm bg-success-foreground transition-colors">
+          <IconCheck
+            className="data-[copied=true]:fade-in-0 data-[copied=true]:slide-in-from-bottom data-[copied=false]:slide-out-to-top data-[copied=false]:fade-out-0 size-4 text-success data-[copied=false]:animate-out data-[copied=true]:animate-in"
+            data-copied={isCopied}
+          />
         </div>
       ) : (
         <>
           <div className="inline-flex h-5 w-fit min-w-5 items-center justify-center group-hover:hidden">
             <IconCopy className={cn("size-4", isCopied && "fade-in-0 slide-in-from-bottom animate-in")} />
           </div>
-          <Kbd className="hidden group-hover:inline-flex">C</Kbd>
+          <Kbd className="fade-in hidden animate-in group-hover:inline-flex">C</Kbd>
         </>
       )}
       <span className="hidden sm:block">Copy Link</span>

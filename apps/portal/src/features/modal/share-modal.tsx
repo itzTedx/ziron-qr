@@ -4,7 +4,8 @@ import { Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-import { IconExternalLink, IconX } from "@tabler/icons-react";
+import { IconExternalLink, IconLoader, IconX } from "@tabler/icons-react";
+import { useQuery } from "@tanstack/react-query";
 import { useAtomValue, useSetAtom } from "jotai";
 
 import { Button } from "@ziron/ui/components/button";
@@ -13,6 +14,7 @@ import { Label } from "@ziron/ui/components/label";
 import { ProgressiveBlur } from "@ziron/ui/components/progressive-blur";
 import { useHotkey } from "@ziron/ui/hooks/use-hotkey";
 
+import { CardType } from "@ziron/db/schema";
 import { cn } from "@ziron/utils";
 
 import { CopyButton } from "@/components/ui/copy-button";
@@ -26,7 +28,10 @@ import {
 } from "@/components/ui/responsive-modal";
 import { Tilt, TiltContent } from "@/components/ui/tilt";
 
-import { closeShareModalAtom, ShareModalData, shareModalAtom } from "../organization/atom";
+import { constructUrl } from "@/lib/link/construct-url";
+import { orpc } from "@/lib/orpc/client";
+
+import { closeShareModalAtom, shareModalAtom } from "../organization/atom";
 import QRCodeDownload from "./components/qr-download";
 
 export const ShareModal = () => {
@@ -39,6 +44,13 @@ export const ShareModal = () => {
     }
   };
 
+  const id = modalState.data;
+
+  const { data, isLoading } = useQuery({
+    ...orpc.card.get.queryOptions({ input: { id: id?.cardId } }),
+    enabled: !!id?.cardId,
+  });
+
   useHotkey({
     enabled: modalState.open,
     combos: [{ key: "s" }],
@@ -48,14 +60,12 @@ export const ShareModal = () => {
     throttleMs: 300,
   });
 
-  if (!modalState.data) {
+  if (!id?.cardId || !data) {
     return null;
   }
 
-  const { data } = modalState.data;
-
   const shareToSocial = (platform: string) => {
-    const encodedUrl = encodeURIComponent(data.url);
+    const encodedUrl = encodeURIComponent(constructUrl(data.slug));
     const encodedText = encodeURIComponent(`Check out ${data.name}'s digital card`);
 
     const shareUrls: Record<string, string> = {
@@ -86,111 +96,112 @@ export const ShareModal = () => {
             </Kbd>
           </ResponsiveModalClose>
         </ResponsiveModalHeader>
-        <div className="grid grid-cols-7">
-          <ProfileCard className="col-span-3 m-6" data={data} />
+        {isLoading ? (
+          <IconLoader className="size-4 animate-spin" />
+        ) : (
+          <div className="grid grid-cols-7 overflow-hidden rounded-b-[inherit]">
+            <ProfileCard className="col-span-3 m-6" data={data} />
 
-          <div className="col-span-4 flex flex-col gap-6 border-l p-6">
-            <QRCodeDownload
-              data={{
-                name: data.name,
-                url: data.url,
-                logo: data.company.logo ?? undefined,
-              }}
-            />
+            <div className="col-span-4 flex flex-col gap-6 border-l bg-card p-6">
+              <QRCodeDownload
+                data={{
+                  name: data.name,
+                  url: constructUrl(data.slug),
+                  logo: data.organization.logo ?? undefined,
+                }}
+              />
 
-            {/* Copy Link */}
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center justify-between">
-                <Label>Link</Label>
+              {/* Copy Link */}
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <Label>Link</Label>
 
-                <Link
-                  className="flex items-center gap-1.5 text-muted-foreground text-xs hover:underline"
-                  href={data.url as Route}
-                  target="_blank"
-                >
-                  Open in new tab
-                  <IconExternalLink className="size-3" />
-                </Link>
+                  <Link
+                    className="flex items-center gap-1.5 text-muted-foreground text-xs hover:underline"
+                    href={data.slug as Route}
+                    target="_blank"
+                  >
+                    Open in new tab
+                    <IconExternalLink className="size-3" />
+                  </Link>
+                </div>
+                <CopyButton link={constructUrl(data.slug)} />
               </div>
-              <CopyButton link={data.url} />
-            </div>
 
-            {/* Social Share Buttons */}
-            <div className="flex flex-col gap-2">
-              <Label>Share on</Label>
+              {/* Social Share Buttons */}
+              <div className="flex flex-col gap-2">
+                <Label>Share on</Label>
 
-              <div className="grid grid-cols-4 gap-2">
-                <Button
-                  className="flex h-auto flex-col gap-2 py-3"
-                  onClick={() => shareToSocial("twitter")}
-                  size="sm"
-                  variant="outline"
-                >
-                  <Image alt="Twitter" height={20} src="/icons/x.svg" width={20} />
-                  <span className="text-xs">Twitter</span>
-                </Button>
-                <Button
-                  className="flex h-auto flex-col gap-2 py-3"
-                  onClick={() => shareToSocial("facebook")}
-                  size="sm"
-                  variant="outline"
-                >
-                  <Image alt="Facebook" height={20} src="/icons/fb.svg" width={20} />
-                  <span className="text-xs">Facebook</span>
-                </Button>
-                <Button
-                  className="flex h-auto flex-col gap-2 py-3"
-                  onClick={() => shareToSocial("linkedin")}
-                  size="sm"
-                  variant="outline"
-                >
-                  <Image alt="LinkedIn" height={20} src="/icons/linkedin.svg" width={20} />
-                  <span className="text-xs">LinkedIn</span>
-                </Button>
-                <Button
-                  className="flex h-auto flex-col gap-2 py-3"
-                  onClick={() => shareToSocial("whatsapp")}
-                  size="sm"
-                  variant="outline"
-                >
-                  <Image alt="WhatsApp" height={20} src="/icons/whatsapp.svg" width={20} />
-                  <span className="text-xs">WhatsApp</span>
-                </Button>
+                <div className="grid grid-cols-4 gap-2">
+                  <Button
+                    className="flex h-auto flex-col gap-2 py-3"
+                    onClick={() => shareToSocial("twitter")}
+                    size="sm"
+                    variant="outline"
+                  >
+                    <Image alt="Twitter" height={20} src="/icons/x.svg" width={20} />
+                    <span className="text-xs">Twitter</span>
+                  </Button>
+                  <Button
+                    className="flex h-auto flex-col gap-2 py-3"
+                    onClick={() => shareToSocial("facebook")}
+                    size="sm"
+                    variant="outline"
+                  >
+                    <Image alt="Facebook" height={20} src="/icons/fb.svg" width={20} />
+                    <span className="text-xs">Facebook</span>
+                  </Button>
+                  <Button
+                    className="flex h-auto flex-col gap-2 py-3"
+                    onClick={() => shareToSocial("linkedin")}
+                    size="sm"
+                    variant="outline"
+                  >
+                    <Image alt="LinkedIn" height={20} src="/icons/linkedin.svg" width={20} />
+                    <span className="text-xs">LinkedIn</span>
+                  </Button>
+                  <Button
+                    className="flex h-auto flex-col gap-2 py-3"
+                    onClick={() => shareToSocial("whatsapp")}
+                    size="sm"
+                    variant="outline"
+                  >
+                    <Image alt="WhatsApp" height={20} src="/icons/whatsapp.svg" width={20} />
+                    <span className="text-xs">WhatsApp</span>
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </ResponsiveModalContent>
     </ResponsiveModal>
   );
 };
 
 interface ProfileCardProps {
-  data: ShareModalData["data"];
+  data: Pick<CardType, "name" | "designation" | "image" | "cover" | "organization">;
   className?: string;
 }
 
 function ProfileCard({ data, className }: ProfileCardProps) {
   return (
     <Tilt className={cn(className)} maxTilt={6} perspective={1200}>
-      <TiltContent
-        asChild
-        className="fade-in-75 zoom-in-80 animate-in duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
-      >
+      <TiltContent asChild className="fade-in-80 zoom-in-90 animate-in duration-300 ease-tact">
         <div className="relative aspect-3/4 overflow-hidden rounded-lg border bg-linear-45 from-primary to-brand-secondary">
           <div className="relative z-10 flex h-full flex-col justify-between gap-2 p-6">
-            {data.company.logo ? (
+            {data.organization.logo ? (
               <div className="flex size-12 shrink-0 items-center justify-center rounded-sm border bg-white p-2">
                 <Image
                   alt={`${data.name}'s Logo`}
                   className="size-8 object-contain"
                   height={48}
-                  src={data.company.logo}
+                  src={data.organization.logo}
                   width={48}
                 />
               </div>
             ) : (
-              <p>{data.company.name}</p>
+              <p>{data.organization.name}</p>
             )}
             <div className="flex items-center justify-center">
               <Image alt={`${data.name}'s Photo`} className="rounded-full" height={152} src={data.image} width={152} />

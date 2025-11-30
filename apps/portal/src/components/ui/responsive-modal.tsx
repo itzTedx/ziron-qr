@@ -28,20 +28,20 @@ function ResponsiveModal({ ...props }: React.ComponentProps<typeof Dialog>) {
   const isMobile = useIsMobile();
 
   if (isMobile) {
-    return <Drawer data-slot="responsive-modal" {...props} />;
+    return <Drawer {...props} />;
   }
 
-  return <Dialog data-slot="responsive-modal" {...props} />;
+  return <Dialog {...props} />;
 }
 
 function ResponsiveModalTrigger({ ...props }: React.ComponentProps<typeof DialogTrigger>) {
   const isMobile = useIsMobile();
 
   if (isMobile) {
-    return <DrawerTrigger data-slot="responsive-modal-trigger" {...props} />;
+    return <DrawerTrigger {...props} />;
   }
 
-  return <DialogTrigger data-slot="responsive-modal-trigger" {...props} />;
+  return <DialogTrigger {...props} />;
 }
 
 interface ResponsiveModalContentProps extends React.ComponentProps<typeof DialogContent> {
@@ -58,19 +58,14 @@ function ResponsiveModalContent({
 
   if (isMobile) {
     return (
-      <DrawerContent className={className} data-slot="responsive-modal-content" {...props}>
+      <DrawerContent className={className} {...props}>
         {children}
       </DrawerContent>
     );
   }
 
   return (
-    <DialogContent
-      className={cn("p-0", "sm:max-w-3xl", className)}
-      data-slot="responsive-modal-content"
-      showCloseButton={showCloseButton}
-      {...props}
-    >
+    <DialogContent className={cn("p-0", "sm:max-w-3xl", className)} showCloseButton={showCloseButton} {...props}>
       {children}
     </DialogContent>
   );
@@ -80,42 +75,40 @@ function ResponsiveModalHeader({ className, ...props }: React.ComponentProps<"di
   const isMobile = useIsMobile();
 
   if (isMobile) {
-    return <DrawerHeader className={cn(className)} data-slot="responsive-modal-header" {...props} />;
+    return <DrawerHeader className={cn(className)} {...props} />;
   }
 
-  return <DialogHeader className={cn("border-b p-6", className)} data-slot="responsive-modal-header" {...props} />;
+  return <DialogHeader className={cn("border-b p-6", className)} {...props} />;
 }
 
 function ResponsiveModalTitle({ className, ...props }: React.ComponentProps<typeof DialogTitle>) {
   const isMobile = useIsMobile();
 
   if (isMobile) {
-    return <DrawerTitle className={cn(className)} data-slot="responsive-modal-title" {...props} />;
+    return <DrawerTitle className={cn(className)} {...props} />;
   }
 
-  return <DialogTitle className={cn(className)} data-slot="responsive-modal-title" {...props} />;
+  return <DialogTitle className={cn(className)} {...props} />;
 }
 
 function ResponsiveModalDescription({ className, ...props }: React.ComponentProps<typeof DialogDescription>) {
   const isMobile = useIsMobile();
 
   if (isMobile) {
-    return (
-      <DrawerDescription className={cn("sr-only", className)} data-slot="responsive-modal-description" {...props} />
-    );
+    return <DrawerDescription className={cn("sr-only", className)} {...props} />;
   }
 
-  return <DialogDescription className={cn("sr-only", className)} data-slot="responsive-modal-description" {...props} />;
+  return <DialogDescription className={cn("sr-only", className)} {...props} />;
 }
 
 function ResponsiveModalClose({ ...props }: React.ComponentProps<typeof DialogClose>) {
   const isMobile = useIsMobile();
 
   if (isMobile) {
-    return <DrawerClose data-slot="responsive-modal-close" {...props} />;
+    return <DrawerClose {...props} />;
   }
 
-  return <DialogClose data-slot="responsive-modal-close" {...props} />;
+  return <DialogClose {...props} />;
 }
 // Backward-compatible wrapper component (maintains old API)
 interface ResponsiveModalWrapperProps {

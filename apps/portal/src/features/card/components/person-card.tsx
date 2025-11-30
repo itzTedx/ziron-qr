@@ -7,7 +7,7 @@ import { IconEdit } from "@tabler/icons-react";
 import { Button } from "@ziron/ui/components/button";
 import { Card, CardContent, CardFooter } from "@ziron/ui/components/card";
 
-import type { CardType, Organization } from "@ziron/db/schema";
+import type { CardType } from "@ziron/db/schema";
 
 import ShareButton from "./share-button";
 
@@ -15,10 +15,9 @@ type PersonCardFields = Pick<CardType, "id" | "name" | "designation" | "slug" | 
 
 interface PersonCardProps {
   card: PersonCardFields;
-  organization: Organization;
 }
 
-export const PersonCard = ({ card, organization }: PersonCardProps) => {
+export const PersonCard = ({ card }: PersonCardProps) => {
   return (
     <Card className="relative overflow-hidden pt-10 md:pt-12">
       <CardContent className="flex flex-col items-center justify-between p-0">
@@ -51,7 +50,7 @@ export const PersonCard = ({ card, organization }: PersonCardProps) => {
           </Link>
         </Button>
 
-        <ShareButton data={card} organization={organization} />
+        <ShareButton cardId={card.id} />
       </CardFooter>
     </Card>
   );

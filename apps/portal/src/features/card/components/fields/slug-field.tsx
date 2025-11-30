@@ -130,22 +130,8 @@ export const SlugField = ({ data, organizationId }: Props) => {
       return;
     }
 
-    const shareLink = `${env.NEXT_PUBLIC_CLIENT_URL}/${data.slug}`;
-
     const shareData: ShareModalData = {
-      data: {
-        id: data.id,
-        name: data.name ?? "",
-        designation: data.designation ?? null,
-        slug: data.slug,
-        image: data.image ?? "",
-        cover: data.cover ?? "",
-        organization: {
-          logo: organization?.logo ?? null,
-          name: organization.name,
-        },
-        url: shareLink,
-      },
+      cardId: data.id,
     };
 
     openModal(shareData);
