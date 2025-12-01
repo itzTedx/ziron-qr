@@ -5,6 +5,7 @@ import { getAvatar, getAvatarV1 } from "./avatar-router";
 import {
   archiveCard,
   checkSlugAvailability,
+  countCards,
   createCard,
   deleteCard,
   duplicateCard,
@@ -31,6 +32,7 @@ export const router = {
     create: createCard,
     list: listCards,
     get: getCard,
+    count: countCards,
     getBySlug: getCardBySlug,
     update: updateCard,
     duplicate: duplicateCard,

@@ -1,6 +1,6 @@
 import { os } from "@orpc/server";
 
-import { eq } from "@ziron/db";
+import { and, count, eq, isNotNull, isNull } from "@ziron/db";
 import { db } from "@ziron/db/client";
 import { appearance, CardType, cards, emails, links, phones } from "@ziron/db/schema";
 import { slugify } from "@ziron/utils";
@@ -596,4 +596,35 @@ export const getCardBySlug = publicProcedure
 
       return data;
     }
+  });
+
+export const countCards = publicProcedure
+  .use(dbProvider)
+  .route({
+    method: "GET",
+    path: "/card/count",
+    summary: "Count all cards",
+    description: "Count all cards",
+    tags: ["card"],
+  })
+  .input(z.object({ showArchived: z.boolean().optional() }))
+  .output(z.number())
+  .handler(async ({ context, input }) => {
+    const filters = input ?? {};
+
+    // Build where conditions
+    const conditions = [isNull(cards.deletedAt)];
+
+    if (filters.showArchived === false) {
+      conditions.push(isNull(cards.archivedAt));
+    } else if (filters.showArchived === true) {
+      conditions.push(isNotNull(cards.archivedAt));
+    }
+
+    const [data] = await context.db
+      .select({ count: count() })
+      .from(cards)
+      .where(and(...conditions));
+
+    return data?.count ?? 0;
   });
