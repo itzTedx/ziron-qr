@@ -1,7 +1,6 @@
 import { headers } from "next/headers";
 import type { NextRequest } from "next/server";
 
-import { LoggingHandlerPlugin } from "@orpc/experimental-pino";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
 import { ORPCError, onError, ValidationError } from "@orpc/server";
@@ -12,8 +11,6 @@ import { createContext } from "@ziron/api/middleware/context";
 import { router } from "@ziron/api/routers/index";
 import { z } from "@ziron/validators";
 
-import { logger } from "@/lib/pino";
-
 // const rpcHandler = new RPCHandler(router, {
 //   interceptors: [
 //     onError((error) => {
@@ -22,15 +19,15 @@ import { logger } from "@/lib/pino";
 //   ],
 
 const rpcHandler = new RPCHandler(router, {
-  plugins: [
-    new LoggingHandlerPlugin({
-      logger,
-      // biome-ignore lint/correctness/noUnusedFunctionParameters: <we need the request to generate a unique id>
-      generateId: ({ request }) => crypto.randomUUID(),
-      logRequestResponse: true,
-      logRequestAbort: true,
-    }),
-  ],
+  // plugins: [
+  //   new LoggingHandlerPlugin({
+  //     logger,
+  //     // biome-ignore lint/correctness/noUnusedFunctionParameters: <we need the request to generate a unique id>
+  //     generateId: ({ request }) => crypto.randomUUID(),
+  //     logRequestResponse: true,
+  //     logRequestAbort: true,
+  //   }),
+  // ],
   interceptors: [
     onError((error) => {
       console.error(error);
