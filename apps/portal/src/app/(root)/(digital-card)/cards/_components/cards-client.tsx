@@ -40,7 +40,7 @@ export const CardsClient = () => {
         cards={[]}
         cardsCount={4}
         isLoading={false}
-        isSelectMode={false}
+        isSelectMode={true}
         selectedCardsId={[]}
         setIsSelectMode={() => {}}
         setSelectedCardsId={() => {}}

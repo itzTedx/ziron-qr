@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useState } from "react";
+import { memo, Suspense, useState } from "react";
 
 import { CircleCheck, X } from "lucide-react";
 
@@ -64,7 +64,9 @@ export const CardsToolbar = memo(
                       <Spinner className="size-3.5" />
                     ) : (
                       <div className="hidden sm:block">
-                        <ArchivedLinksHint />
+                        <Suspense>
+                          <ArchivedLinksHint />
+                        </Suspense>
                       </div>
                     )}
                   </PaginationControls>
