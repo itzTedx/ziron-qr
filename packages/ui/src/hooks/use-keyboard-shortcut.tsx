@@ -27,27 +27,18 @@ export function KeyboardShortcutProvider({ children }: { children: React.ReactNo
   );
 }
 
-//  useKeyboardShortcut(
-//     ["e", "q", "d"],
-//     (e) => {
-//       setOpenPopover(false);
-//       switch (e.key) {
-//         case "e":
-//           setShowPartnerLinkModal(true);
-//           break;
-//         case "q":
-//           setShowLinkQRModal(true);
-//           break;
-//         case "d":
-//           setShowDuplicateLinkModal(true);
-//           break;
-//       }
-//     },
-//     {
-//       enabled: shortcutsEnabled,
-//       priority: 1,
-//     },
-//   );
+const OVERLAY_QUERY = `
+  [data-slot="dialog-overlay"],
+  [data-slot="dialog-content"][data-state="open"],
+  [data-slot="dialog"][data-state="open"],
+  [data-slot="drawer-overlay"],
+  [data-slot="drawer-content"][data-state="open"],
+  [data-slot="drawer"][data-state="open"],
+  [data-slot="sheet-overlay"],
+  [data-slot="sheet-content"][data-state="open"],
+  [role="dialog"]:not([aria-hidden="true"]),
+  [role="alertdialog"]:not([aria-hidden="true"])
+`;
 
 export function useKeyboardShortcut(
   key: KeyboardShortcutListener["key"],
@@ -63,19 +54,11 @@ export function useKeyboardShortcut(
       if (options.enabled === false) return;
 
       const target = e.target as HTMLElement;
-      const existingModalBackdrop = document.getElementById("modal-backdrop");
-      const existingSheetBackdrop = document.querySelector("[data-sheet-overlay]");
 
-      // Ignore shortcuts if the user is typing in an input or textarea, or in a modal
-      if (
-        target.tagName === "INPUT" ||
-        target.tagName === "TEXTAREA" ||
-        target.isContentEditable ||
-        !!existingModalBackdrop !== !!options.modal ||
-        !!existingSheetBackdrop !== !!options.sheet
-      )
-        return;
+      // Early return: ignore if typing in input/textarea
+      if (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable) return;
 
+      // Build pressed key first (cheap operation)
       const pressedKey = [
         ...(e.metaKey ? ["meta"] : []),
         ...(e.ctrlKey ? ["ctrl"] : []),
@@ -83,17 +66,28 @@ export function useKeyboardShortcut(
         e.key,
       ].join("+");
 
-      // Ignore shortcut if it doesn't match this listener
+      // Early return: ignore if key doesn't match this listener (before expensive DOM queries)
       if (Array.isArray(key) ? !key.includes(pressedKey) : pressedKey !== key) return;
 
+      // Check for overlays once (lazy evaluation - only when key matches)
+      // Use a single combined query for better performance instead of multiple queries
+      const hasAnyOverlay = !!document.querySelector(OVERLAY_QUERY);
+
+      // If overlay exists and this listener doesn't explicitly allow it, return early
+      if (hasAnyOverlay && !options.modal && !options.sheet) return;
+
       // Find enabled listeners that match the key
-      const matchingListeners = listeners.filter(
-        (l) =>
+      const matchingListeners = listeners.filter((l) => {
+        // If overlay exists, only match listeners that explicitly allow it (modal or sheet flag)
+        // If no overlay exists, match all listeners (modal/sheet flags don't matter)
+        const shouldWork = hasAnyOverlay ? l.modal || l.sheet : true;
+
+        return (
           l.enabled !== false &&
-          !!existingModalBackdrop === !!l.modal &&
-          !!existingSheetBackdrop === !!l.sheet &&
+          shouldWork &&
           (Array.isArray(l.key) ? l.key.includes(pressedKey) : l.key === pressedKey)
-      );
+        );
+      });
 
       if (!matchingListeners.length) return;
 

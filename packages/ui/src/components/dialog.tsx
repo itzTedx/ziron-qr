@@ -31,6 +31,7 @@ function DialogOverlay({ className, ...props }: React.ComponentProps<typeof Dial
         className
       )}
       data-slot="dialog-overlay"
+      id="modal-backdrop"
       {...props}
     />
   );

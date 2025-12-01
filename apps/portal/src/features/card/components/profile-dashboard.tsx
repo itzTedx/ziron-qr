@@ -3,14 +3,12 @@ import { Suspense, useState } from "react";
 import Image from "next/image";
 
 import { IconArrowsMaximize, IconShare } from "@tabler/icons-react";
-import { useFormContext } from "react-hook-form";
 
 import { Badge } from "@ziron/ui/components/badge";
 import { Button } from "@ziron/ui/components/button";
 import { Kbd, KbdGroup } from "@ziron/ui/components/kbd";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ziron/ui/components/tooltip";
-import { useKeyboardShortcut } from "@ziron/ui/hooks";
 
 import { zCardSchema } from "@ziron/validators";
 
@@ -29,17 +27,7 @@ interface Props {
 }
 
 export const ProfileDashboard = ({ isPending, organization, data }: Props) => {
-  const form = useFormContext<zCardSchema>();
   const [isCoverUploadOpen, setIsCoverUploadOpen] = useState(false);
-
-  // Handle Ctrl+S keyboard shortcut
-  useKeyboardShortcut(
-    ["ctrl+s", "meta+s"],
-    () => {
-      form.trigger();
-    },
-    { priority: 6 }
-  );
 
   return (
     <div>

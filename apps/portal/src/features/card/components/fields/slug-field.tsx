@@ -138,7 +138,7 @@ export const SlugField = ({ data, organizationId }: Props) => {
   }
 
   // Handle s keyboard shortcut
-  useKeyboardShortcut("ctrl+s", handleShare, { priority: 5 });
+  useKeyboardShortcut("s", handleShare, { priority: 1 });
 
   return (
     <FormField

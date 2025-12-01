@@ -2,18 +2,19 @@
 
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 
+import { useRouter } from "next/navigation";
+
 import { useFormState } from "react-hook-form";
 
 import { Form, useForm, zodResolver } from "@ziron/ui/components/form";
 import { TabsContent } from "@ziron/ui/components/tabs";
+import { useKeyboardShortcut } from "@ziron/ui/hooks";
 
 import { CardType } from "@ziron/db/schema";
 import { cn } from "@ziron/utils";
 import { cardSchema, zCardSchema } from "@ziron/validators";
 
 import { UnsavedChangesBar } from "@/components/ui/unsaved-changes-bar";
-
-import { validateForm } from "@/lib/utils";
 
 import { transformCardData } from "../utils/transform-card-data";
 import { CardCustomize } from "./form-sections/customize";
@@ -32,6 +33,8 @@ interface Props {
 }
 
 export function CardForm({ isEditMode, initialData }: Props) {
+  const router = useRouter();
+
   // Conditionally get initial data based on mode
   const transformedInitialData = useMemo(() => {
     if (isEditMode && initialData) {
@@ -86,8 +89,8 @@ export function CardForm({ isEditMode, initialData }: Props) {
     organizationId: cardData?.organizationId ?? "",
   };
 
-  const validationResult = validateForm(form.watch(), cardSchema);
-  console.log(validationResult);
+  // const validationResult = validateForm(form.watch(), cardSchema);
+  // console.log(validationResult);
 
   // Separate submit handlers
   function handleCreate(values: zCardSchema) {
@@ -106,6 +109,8 @@ export function CardForm({ isEditMode, initialData }: Props) {
     } else {
       handleCreate(values);
     }
+
+    form.reset();
   }
 
   function handleSave() {
@@ -141,6 +146,18 @@ export function CardForm({ isEditMode, initialData }: Props) {
   const isPending = isEditMode ? updateCard.isPending : createCard.isPending;
   // Show bar if form is dirty AND (at least one field has been touched OR any input has been blurred)
   const shouldShowBar = isDirty && (hasTouchedFields || hasBlurred);
+
+  // Go back to `/cards` when ESC is pressed
+  useKeyboardShortcut("Escape", () => router.push("/cards"), {
+    enabled: !isDirty,
+  });
+
+  // Save when CMD+S or CTRL+S is pressed
+  useKeyboardShortcut(["meta+s", "ctrl+s"], handleSave, {
+    enabled: isDirty,
+    priority: 10,
+    modal: true,
+  });
 
   return (
     <Form {...form}>

@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { ScrollArea, ScrollBar } from "@ziron/ui/components/scroll-area";
 import { Skeleton } from "@ziron/ui/components/skeleton";
 
-import { truncate } from "@ziron/utils";
+import { smartTruncate } from "@ziron/utils";
 
 import Header from "@/components/layout/header";
 
@@ -31,12 +31,12 @@ async function SuspenseCardPageHeader({ params }: CardPageContentProps) {
   // Fetching the card if in edit mode
   const card = isEditMode ? await client.card.get({ id }) : undefined;
 
-  const PAGE_TITLE = isEditMode
-    ? (`${truncate(card?.organization.name!, 5)}/${card?.name}` as const)
+  const name = isEditMode
+    ? (`${smartTruncate(card?.organization.name!, 9)}/${smartTruncate(card?.name!, 9)}` as const)
     : ("Create New Card" as const);
 
   return (
-    <Header backHref="/" currentPage={PAGE_TITLE} showBackButton title="Cards">
+    <Header backHref="/" currentPage={name} showBackButton title="Cards">
       {isEditMode ? (
         <>
           <CopyLinkButton slug={card?.slug} />

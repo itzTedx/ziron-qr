@@ -24,8 +24,8 @@ interface Props {
 export default function Header({ title, currentPage, children, showBackButton = false, backHref }: Props) {
   return (
     <header className="sticky top-0 z-50 flex h-14 w-full items-center justify-between gap-3 overflow-hidden border-b bg-stone-50 px-6 py-2 backdrop-blur-2xl sm:h-16 dark:bg-stone-950">
-      <div className="flex items-center gap-3">
-        <Breadcrumb>
+      <div className="flex grow">
+        <Breadcrumb className="w-full">
           <BreadcrumbList
             className={cn(
               showBackButton
@@ -37,9 +37,7 @@ export default function Header({ title, currentPage, children, showBackButton = 
               <>
                 <BreadcrumbItem className={cn(backHref && "group")}>
                   {showBackButton && <BackButton href={backHref} />}
-                  <BreadcrumbLink className="truncate" href="/">
-                    {title}
-                  </BreadcrumbLink>
+                  <BreadcrumbLink href="/">{title}</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
@@ -49,13 +47,13 @@ export default function Header({ title, currentPage, children, showBackButton = 
             ) : (
               <BreadcrumbItem className={cn(backHref && "group")}>
                 {showBackButton && <BackButton href={backHref} />}
-                <BreadcrumbPage className="truncate">{title}</BreadcrumbPage>
+                <BreadcrumbPage>{title}</BreadcrumbPage>
               </BreadcrumbItem>
             )}
           </BreadcrumbList>
         </Breadcrumb>
       </div>
-      <div className="flex flex-wrap gap-2 sm:gap-3">{children}</div>
+      <div className="flex shrink-0 flex-wrap gap-2 sm:gap-3">{children}</div>
     </header>
   );
 }

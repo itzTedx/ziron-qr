@@ -1,8 +1,17 @@
+import { memo } from "react";
+
 import { AnimatedSizeContainer } from "@ziron/ui/components/animated-size-container";
 
+import { CardType } from "@ziron/db/schema";
 import { cn } from "@ziron/utils";
 
-export const CardsToolbar = () => {
+interface Props {
+  isLoading: boolean;
+  cards: CardType[];
+  cardsCount: number;
+}
+
+export const CardsToolbar = memo(({ isLoading, cards, cardsCount }: Props) => {
   return (
     <>
       <div className="h-[90px]" />
@@ -21,4 +30,4 @@ export const CardsToolbar = () => {
       </div>
     </>
   );
-};
+});
