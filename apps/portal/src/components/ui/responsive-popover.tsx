@@ -4,7 +4,7 @@ import { PropsWithChildren, ReactNode, WheelEventHandler } from "react";
 
 import { Drawer, DrawerContent, DrawerTrigger } from "@ziron/ui/components/drawer";
 import { Popover, PopoverContent, PopoverTrigger } from "@ziron/ui/components/popover";
-import { useIsMobile } from "@ziron/ui/hooks/use-mobile";
+import { useIsMobile } from "@ziron/ui/hooks";
 
 import { cn } from "@ziron/utils";
 

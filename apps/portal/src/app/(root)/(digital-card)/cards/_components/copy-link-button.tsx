@@ -4,8 +4,7 @@ import { IconCheck, IconCopy } from "@tabler/icons-react";
 
 import { Button } from "@ziron/ui/components/button";
 import { Kbd } from "@ziron/ui/components/kbd";
-import { useCopyToClipboard } from "@ziron/ui/hooks/use-copy-to-clipboard";
-import { useHotkey } from "@ziron/ui/hooks/use-hotkey";
+import { useCopyToClipboard, useKeyboardShortcut } from "@ziron/ui/hooks";
 
 import { cn } from "@ziron/utils";
 
@@ -19,11 +18,7 @@ export const CopyLinkButton = ({ slug }: { slug?: string | null }) => {
     copyToClipboard(`${env.NEXT_PUBLIC_CLIENT_URL}/${slug}`);
   }
 
-  useHotkey({
-    combos: [{ key: "c" }],
-    enabled: true,
-    callback: handleCopyLink,
-  });
+  useKeyboardShortcut("c", handleCopyLink, { priority: 5 });
 
   return (
     <Button

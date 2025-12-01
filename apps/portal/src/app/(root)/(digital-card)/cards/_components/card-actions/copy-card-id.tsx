@@ -5,8 +5,7 @@ import { IconCheck, IconCopy } from "@tabler/icons-react";
 import { DropdownMenuItem, DropdownMenuShortcut } from "@ziron/ui/components/dropdown-menu";
 import { Kbd } from "@ziron/ui/components/kbd";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
-import { useCopyToClipboard } from "@ziron/ui/hooks/use-copy-to-clipboard";
-import { useHotkey } from "@ziron/ui/hooks/use-hotkey";
+import { useCopyToClipboard, useKeyboardShortcut } from "@ziron/ui/hooks";
 
 interface Props {
   cardId: string;
@@ -23,10 +22,7 @@ export const CopyCardId = ({ cardId }: Props) => {
     copyToClipboard(cardId);
   }
 
-  useHotkey({
-    combos: [{ key: "i" }],
-    callback: handleCopyCardId,
-  });
+  useKeyboardShortcut("i", handleCopyCardId, { priority: 4 });
 
   return (
     <DropdownMenuItem

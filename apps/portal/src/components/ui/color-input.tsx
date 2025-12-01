@@ -16,7 +16,7 @@ import {
 import { Input } from "@ziron/ui/components/input";
 import { RadioGroup, RadioGroupItem } from "@ziron/ui/components/radio-group";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ziron/ui/components/tooltip";
-import { useIsMobile } from "@ziron/ui/hooks/use-mobile";
+import { useIsMobile } from "@ziron/ui/hooks";
 
 import { useDebouncedCallback } from "@/hooks/debounce-callback";
 

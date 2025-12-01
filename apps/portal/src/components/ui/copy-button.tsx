@@ -3,7 +3,7 @@
 import { Check, Copy, Link } from "lucide-react";
 
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@ziron/ui/components/input-group";
-import { useCopyToClipboard } from "@ziron/ui/hooks/use-copy-to-clipboard";
+import { useCopyToClipboard } from "@ziron/ui/hooks";
 
 export const CopyButton = ({ link }: { link: string }) => {
   const { isCopied, copyToClipboard } = useCopyToClipboard();

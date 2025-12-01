@@ -7,21 +7,24 @@ import { ThemeProvider } from "next-themes";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import { Toaster } from "@ziron/ui/components/sonner";
+import { KeyboardShortcutProvider } from "@ziron/ui/hooks";
 
 import { queryClient } from "@/lib/orpc/client";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange enableColorScheme enableSystem>
-      <QueryClientProvider client={queryClient}>
-        <NuqsAdapter>
-          <ProgressProvider color="#962DFF" height="3px" memo options={{ showSpinner: false }} shallowRouting>
-            {children}
-          </ProgressProvider>
-          <Toaster position="bottom-center" richColors />
-        </NuqsAdapter>
-        <ReactQueryDevtools />
-      </QueryClientProvider>
+      <KeyboardShortcutProvider>
+        <QueryClientProvider client={queryClient}>
+          <NuqsAdapter>
+            <ProgressProvider color="#962DFF" height="3px" memo options={{ showSpinner: false }} shallowRouting>
+              {children}
+            </ProgressProvider>
+            <Toaster position="bottom-center" richColors />
+          </NuqsAdapter>
+          <ReactQueryDevtools />
+        </QueryClientProvider>
+      </KeyboardShortcutProvider>
     </ThemeProvider>
   );
 }

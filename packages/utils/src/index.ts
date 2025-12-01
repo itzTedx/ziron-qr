@@ -5,6 +5,8 @@ export * from "./get-strict-context";
 export * from "./pluralize";
 export * from "./remove-extension";
 export * from "./slugify";
+export * from "./smart-truncate";
+export * from "./stable-sort";
 export * from "./text-color";
 export * from "./truncate";
 export { tv, type VariantProps } from "./tv";

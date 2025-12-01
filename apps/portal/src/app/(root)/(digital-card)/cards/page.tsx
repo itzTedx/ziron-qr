@@ -17,6 +17,7 @@ import { orpc } from "@/lib/orpc/client";
 import { getQueryClient, HydrateClient } from "@/lib/orpc/query/hydration";
 
 import { CardsItems } from "../_components/organizations-items";
+import { CardsToolbar } from "./_components/cards-toolbar";
 
 export default async function CardsPage() {
   "use cache";
@@ -52,6 +53,7 @@ export default async function CardsPage() {
                 <CardsItems />
               </Suspense>
             </HydrateClient>
+            <CardsToolbar />
           </PageWidthWrapper>
 
           <ScrollBar />

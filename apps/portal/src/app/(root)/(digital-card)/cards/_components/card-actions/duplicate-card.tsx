@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { DropdownMenuItem, DropdownMenuShortcut } from "@ziron/ui/components/dropdown-menu";
 import { Kbd } from "@ziron/ui/components/kbd";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
-import { useHotkey } from "@ziron/ui/hooks/use-hotkey";
+import { useKeyboardShortcut } from "@ziron/ui/hooks";
 
 import { orpc, queryClient } from "@/lib/orpc/client";
 
@@ -30,7 +30,7 @@ export const DuplicateCard = ({ cardId }: Props) => {
         queryClient.invalidateQueries({
           queryKey: orpc.card.list.queryKey(),
         });
-        router.push(`/card/${data.cardId}`);
+        router.push(`/cards/${data.cardId}`);
       },
 
       onError: (error) => {
@@ -50,11 +50,7 @@ export const DuplicateCard = ({ cardId }: Props) => {
     duplicateCard.mutate({ id: cardId });
   };
 
-  useHotkey({
-    combos: [{ key: "d" }],
-    callback: handleDuplicate,
-  });
-
+  useKeyboardShortcut("d", handleDuplicate, { priority: 3 });
   return (
     <DropdownMenuItem
       disabled={duplicateCard.isPending}

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter, useSelectedLayoutSegment } from "next/navigation";
 
 import { Kbd } from "@ziron/ui/components/kbd";
-import { useHotkey } from "@ziron/ui/hooks/use-hotkey";
+import { useKeyboardShortcut } from "@ziron/ui/hooks";
 
 import { cn } from "@ziron/utils";
 
@@ -24,13 +24,13 @@ export function SidebarLinkItem({ href, children, icon, shortcut, className }: P
 
   const isActive = segment ? href.toString().includes(segment) : pathname === href;
 
-  useHotkey({
-    enabled: !!shortcut,
-    combos: [{ key: shortcut?.toLowerCase() ?? "" }],
-    callback: () => {
+  useKeyboardShortcut(
+    shortcut?.toLowerCase() ?? "",
+    () => {
       router.push(href);
     },
-  });
+    { priority: 10, enabled: !!shortcut }
+  );
 
   return (
     <Link className={cn(className)} data-active={isActive} href={href}>

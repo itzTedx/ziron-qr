@@ -19,7 +19,7 @@ import {
 } from "@ziron/ui/components/input-group";
 import { Kbd } from "@ziron/ui/components/kbd";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ziron/ui/components/tooltip";
-import { useHotkey } from "@ziron/ui/hooks/use-hotkey";
+import { useKeyboardShortcut } from "@ziron/ui/hooks";
 
 import { transformSlug, zCardSchema } from "@ziron/validators";
 
@@ -138,14 +138,7 @@ export const SlugField = ({ data, organizationId }: Props) => {
   }
 
   // Handle s keyboard shortcut
-  useHotkey({
-    combos: [{ key: "s", ctrl: false }],
-    enabled: true,
-    callback: () => {
-      handleShare();
-    },
-    throttleMs: 300,
-  });
+  useKeyboardShortcut("ctrl+s", handleShare, { priority: 5 });
 
   return (
     <FormField

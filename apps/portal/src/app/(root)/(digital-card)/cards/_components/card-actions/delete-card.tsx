@@ -24,7 +24,7 @@ import {
 import { DropdownMenuItem, DropdownMenuShortcut } from "@ziron/ui/components/dropdown-menu";
 import { Kbd } from "@ziron/ui/components/kbd";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
-import { useHotkey } from "@ziron/ui/hooks/use-hotkey";
+import { useKeyboardShortcut } from "@ziron/ui/hooks";
 
 import { constructUrl } from "@/lib/link/construct-url";
 import { orpc, queryClient } from "@/lib/orpc/client";
@@ -68,10 +68,7 @@ export const DeleteCard = ({ cardId }: Props) => {
     deleteCard.mutate({ id: cardId });
   };
 
-  useHotkey({
-    combos: [{ key: "x" }],
-    callback: () => setIsOpen(true),
-  });
+  useKeyboardShortcut("x", () => setIsOpen(true), { priority: 1 });
 
   if (!card?.slug) {
     return null;

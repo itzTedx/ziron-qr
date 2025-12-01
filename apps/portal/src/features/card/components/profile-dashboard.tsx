@@ -10,7 +10,7 @@ import { Button } from "@ziron/ui/components/button";
 import { Kbd, KbdGroup } from "@ziron/ui/components/kbd";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ziron/ui/components/tooltip";
-import { useHotkey } from "@ziron/ui/hooks/use-hotkey";
+import { useKeyboardShortcut } from "@ziron/ui/hooks";
 
 import { zCardSchema } from "@ziron/validators";
 
@@ -33,19 +33,13 @@ export const ProfileDashboard = ({ isPending, organization, data }: Props) => {
   const [isCoverUploadOpen, setIsCoverUploadOpen] = useState(false);
 
   // Handle Ctrl+S keyboard shortcut
-  useHotkey({
-    combos: [
-      { key: "s", ctrl: true },
-      { key: "s", meta: true },
-    ],
-
-    enabled: true,
-    condition: () => !form.formState.isSubmitting,
-    callback: () => {
+  useKeyboardShortcut(
+    ["ctrl+s", "meta+s"],
+    () => {
       form.trigger();
     },
-    throttleMs: 300,
-  });
+    { priority: 6 }
+  );
 
   return (
     <div>

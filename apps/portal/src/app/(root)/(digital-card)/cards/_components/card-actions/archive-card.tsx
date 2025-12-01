@@ -24,7 +24,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@ziron/ui/components/avatar
 import { DropdownMenuItem, DropdownMenuShortcut } from "@ziron/ui/components/dropdown-menu";
 import { Kbd } from "@ziron/ui/components/kbd";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
-import { useHotkey } from "@ziron/ui/hooks/use-hotkey";
+import { useKeyboardShortcut } from "@ziron/ui/hooks";
 
 import { env } from "@/lib/env/client";
 import { orpc, queryClient } from "@/lib/orpc/client";
@@ -67,11 +67,7 @@ export const ArchiveCard = ({ cardId }: Props) => {
     archiveCard.mutate({ id: cardId });
   };
 
-  useHotkey({
-    combos: [{ key: "a" }],
-    callback: () => setIsOpen(true),
-  });
-
+  useKeyboardShortcut("a", () => setIsOpen(true), { priority: 3 });
   return (
     <>
       <AlertDialog onOpenChange={setIsOpen} open={isOpen}>

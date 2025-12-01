@@ -20,7 +20,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@ziron/ui/components/drawer";
-import { useIsMobile } from "@ziron/ui/hooks/use-mobile";
+import { useIsMobile } from "@ziron/ui/hooks";
 
 import { cn } from "@ziron/utils";
 
