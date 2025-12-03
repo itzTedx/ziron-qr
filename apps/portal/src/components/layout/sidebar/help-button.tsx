@@ -1,4 +1,4 @@
-import { CircleQuestion } from "@/assets/icons/question";
+import { IconCircleQuestion } from "@/assets/icons/question";
 
 export async function HelpButton() {
   return (
@@ -7,7 +7,7 @@ export async function HelpButton() {
       href="https://dub.co/contact/support"
       target="_blank"
     >
-      <CircleQuestion className="size-5" strokeWidth={2} />
+      <IconCircleQuestion className="size-5" strokeWidth={2} />
     </a>
   );
 }

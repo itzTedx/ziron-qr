@@ -7,6 +7,7 @@ import {
   DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -16,10 +17,12 @@ import {
   DrawerClose,
   DrawerContent,
   DrawerDescription,
+  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
 } from "@ziron/ui/components/drawer";
+import { ScrollArea } from "@ziron/ui/components/scroll-area";
 import { useIsMobile } from "@ziron/ui/hooks";
 
 import { cn } from "@ziron/utils";
@@ -46,27 +49,40 @@ function ResponsiveModalTrigger({ ...props }: React.ComponentProps<typeof Dialog
 
 interface ResponsiveModalContentProps extends React.ComponentProps<typeof DialogContent> {
   showCloseButton?: boolean;
+  title?: string;
+  description?: string;
 }
 
 function ResponsiveModalContent({
   className,
   children,
   showCloseButton = false,
+  title,
+  description,
+
   ...props
 }: ResponsiveModalContentProps) {
   const isMobile = useIsMobile();
 
   if (isMobile) {
     return (
-      <DrawerContent className={className} {...props}>
-        {children}
+      <DrawerContent className={cn("flex flex-col", className)} {...props}>
+        <DrawerHeader className="border-b bg-card p-4 text-start!">
+          <DrawerTitle>{title}</DrawerTitle>
+          <DrawerDescription className="sr-only">{description ?? "This is a modal"}</DrawerDescription>
+        </DrawerHeader>
+        <ScrollArea className="flex-1 overflow-y-auto">{children}</ScrollArea>
       </DrawerContent>
     );
   }
 
   return (
-    <DialogContent className={cn("p-0", "sm:max-w-3xl", className)} showCloseButton={showCloseButton} {...props}>
-      {children}
+    <DialogContent className={cn("gap-0 p-0", "sm:max-w-3xl", className)} showCloseButton={showCloseButton} {...props}>
+      <DialogHeader className="border-b p-6">
+        <DialogTitle>{title}</DialogTitle>
+        <DialogDescription className="sr-only">{description ?? "This is a modal"}</DialogDescription>
+      </DialogHeader>
+      <ScrollArea className="overflow-y-auto">{children}</ScrollArea>
     </DialogContent>
   );
 }
@@ -75,7 +91,7 @@ function ResponsiveModalHeader({ className, ...props }: React.ComponentProps<"di
   const isMobile = useIsMobile();
 
   if (isMobile) {
-    return <DrawerHeader className={cn(className)} {...props} />;
+    return <DrawerHeader className={cn("border-b bg-card p-4 text-start!", className)} {...props} />;
   }
 
   return <DialogHeader className={cn("border-b p-6", className)} {...props} />;
@@ -109,6 +125,16 @@ function ResponsiveModalClose({ ...props }: React.ComponentProps<typeof DialogCl
   }
 
   return <DialogClose {...props} />;
+}
+
+function ResponsiveModalFooter({ className, ...props }: React.ComponentProps<"div">) {
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return <DrawerFooter className={cn("sticky bottom-0 mt-auto border-t", className)} {...props} />;
+  }
+
+  return <DialogFooter className={cn("rounded-b-[inherit] border-t px-6 py-4", className)} {...props} />;
 }
 // Backward-compatible wrapper component (maintains old API)
 interface ResponsiveModalWrapperProps {
@@ -162,4 +188,5 @@ export {
   ResponsiveModalTitle,
   ResponsiveModalDescription,
   ResponsiveModalClose,
+  ResponsiveModalFooter,
 };

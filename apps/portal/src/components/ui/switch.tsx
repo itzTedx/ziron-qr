@@ -16,7 +16,15 @@ type SwitchProps = SwitchPrimitiveProps & {
   thumbIcon?: React.ReactElement;
 };
 
-function Switch({ className, pressedWidth = 19, startIcon, endIcon, thumbIcon, ...props }: SwitchProps) {
+function Switch({
+  className,
+
+  pressedWidth = 19,
+  startIcon,
+  endIcon,
+  thumbIcon,
+  ...props
+}: SwitchProps) {
   return (
     <SwitchPrimitive
       className={cn(

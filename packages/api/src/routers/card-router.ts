@@ -1,14 +1,15 @@
 import { os } from "@orpc/server";
 
-import { and, count, eq, isNotNull, isNull } from "@ziron/db";
+import { and, count, eq, gte, isNotNull, isNull, lte } from "@ziron/db";
 import { db } from "@ziron/db/client";
 import { appearance, CardType, cards, emails, links, phones } from "@ziron/db/schema";
 import { slugify } from "@ziron/utils";
-import { cardSchema, transformSlug, ZodError, z } from "@ziron/validators";
+import { cardSchema, exportCardSchema, columns as exportColumns, transformSlug, ZodError, z } from "@ziron/validators";
 
 import { protectedProcedure, publicProcedure } from "..";
 import { dbProvider } from "../middleware/db-provider";
 import { getAvatar } from "../utils/get-avatar";
+import { convertToCSV } from "../utils/json-to-csv";
 
 export const createCard = protectedProcedure
   .use(dbProvider)
@@ -460,9 +461,9 @@ export const archiveCard = protectedProcedure
       const currentCard = await context.db.query.cards.findFirst({
         where: eq(cards.id, input.id),
         columns: {
-          id: cards.id,
-          name: cards.name,
-          archivedAt: cards.archivedAt,
+          id: true,
+          name: true,
+          archivedAt: true,
         },
       });
 
@@ -643,4 +644,111 @@ export const countCards = publicProcedure
       .where(and(...conditions));
 
     return data?.count ?? 0;
+  });
+
+export const exportAllCards = protectedProcedure
+  .use(dbProvider)
+  .route({
+    method: "POST",
+    path: "/card/export",
+    summary: "Export all cards as CSV",
+    description: "Export all cards as CSV with optional date filtering and column selection",
+    tags: ["card"],
+  })
+  .input(exportCardSchema)
+  .output(z.string())
+  .handler(async ({ input, context }) => {
+    // Build where conditions
+    const conditions = [isNull(cards.deletedAt)];
+
+    // Apply date filtering
+    if (input.dateRange.from) {
+      conditions.push(gte(cards.createdAt, input.dateRange.from));
+    }
+    if (input.dateRange.to) {
+      conditions.push(lte(cards.createdAt, input.dateRange.to));
+    }
+
+    // Fetch cards with related data
+    const data = await context.db.query.cards.findMany({
+      where: and(...conditions),
+      with: {
+        emails: true,
+        phones: true,
+        links: true,
+        appearance: true,
+      },
+      orderBy: (cards, { desc }) => [desc(cards.createdAt)],
+    });
+
+    // Transform data according to selected columns
+    const transformedData = data.map((card) => {
+      const row: Record<string, string> = {};
+
+      for (const columnId of input.columns) {
+        const column = exportColumns.find((col) => col.id === columnId);
+        if (!column) continue;
+
+        let value: unknown;
+
+        switch (columnId) {
+          case "name":
+            value = card.name;
+            break;
+          case "email":
+            // Get primary email or first email
+            value = card.emails?.find((e) => e.label === "primary")?.email ?? card.emails?.[0]?.email ?? "";
+            break;
+          case "phone":
+            // Get primary phone or first phone
+            value = card.phones?.find((p) => p.label === "primary")?.phone ?? card.phones?.[0]?.phone ?? "";
+            break;
+          case "address":
+            value = card.address ?? "";
+            break;
+          case "mapUrl":
+            value = card.mapUrl ?? "";
+            break;
+          case "designation":
+            value = card.designation ?? "";
+            break;
+          case "bio":
+            value = card.bio ?? "";
+            break;
+          case "links":
+            // Join all links as comma-separated
+            value = card.links?.map((link) => `${link.label}: ${link.url}`).join(", ") ?? "";
+            break;
+          case "image":
+            value = card.image ?? "";
+            break;
+          case "cover":
+            value = card.cover ?? "";
+            break;
+          case "attachmentUrl":
+            value = card.attachmentUrl ?? "";
+            break;
+          case "slug":
+            value = card.slug ?? "";
+            break;
+          case "appearance":
+            // Format appearance data
+            value = card.appearance
+              ? `Template: ${card.appearance.template}, Theme: ${card.appearance.theme}, Dark Mode: ${card.appearance.isDarkMode}`
+              : "";
+            break;
+          default:
+            value = "";
+        }
+
+        row[column.label] = column.transform(value);
+      }
+
+      return row;
+    });
+
+    // Convert to CSV
+    const csv = convertToCSV(transformedData);
+
+    return csv;
   });

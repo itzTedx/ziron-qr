@@ -1,6 +1,6 @@
 import { SVGProps } from "react";
 
-export function CircleQuestion(props: SVGProps<SVGSVGElement>) {
+export function IconCircleQuestion(props: SVGProps<SVGSVGElement>) {
   return (
     <svg height="18" viewBox="0 0 18 18" width="18" xmlns="http://www.w3.org/2000/svg" {...props}>
       <g fill="currentColor">

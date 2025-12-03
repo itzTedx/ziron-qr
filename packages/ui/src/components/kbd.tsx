@@ -4,7 +4,7 @@ import { cn } from "@ziron/utils";
 
 const kbdVariants = cva(
   [
-    "inline-flex w-fit select-none items-center justify-center gap-1 rounded-sm px-1 font-medium font-sans transition-colors duration-200",
+    "hidden w-fit select-none items-center justify-center gap-1 rounded-sm px-1 font-medium font-sans transition-colors duration-200 sm:inline-flex",
     "in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10",
   ],
   {

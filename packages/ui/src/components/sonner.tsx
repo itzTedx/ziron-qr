@@ -10,7 +10,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
 
   return (
     <Sonner
-      className="toaster group"
+      className="toaster group z-9999"
       style={
         {
           "--normal-bg": "var(--popover)",

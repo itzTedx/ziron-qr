@@ -3,12 +3,13 @@ import { boolean, index, pgTable, real, text, timestamp, uniqueIndex, uuid, varc
 
 import { InferResultType } from "../client";
 import { events, pageVisits } from "./analytics-schema";
+import { archivedAt, createdAt, deletedAt, id, updatedAt } from "./helper";
 import { organizationTable } from "./organization-schema";
 
 export const cards = pgTable(
   "cards",
   {
-    id: uuid("id").primaryKey().defaultRandom().notNull(),
+    id,
 
     // Core card information
     name: varchar("name", { length: 255 }).notNull(),
@@ -33,12 +34,10 @@ export const cards = pgTable(
       .references(() => organizationTable.id, { onDelete: "cascade" }),
 
     // Timestamps
-    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true })
-      .defaultNow()
-      .$onUpdate(() => new Date()),
-    deletedAt: timestamp("deleted_at", { withTimezone: true }),
-    archivedAt: timestamp("archived_at", { withTimezone: true }),
+    createdAt,
+    updatedAt,
+    deletedAt,
+    archivedAt,
   },
   (table) => [
     index("cards_name_idx").on(table.name),
