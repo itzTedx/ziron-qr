@@ -33,12 +33,7 @@ import { CardsItems } from "../../_components/organizations-items";
 import { CardsToolbar } from "./cards-toolbar";
 
 export const CardsClient = () => {
-  const [isSelectMode, setIsSelectMode] = useState(false);
-  const [selectedCardsId, setSelectedCardsId] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<"cards" | "rows">("cards");
-
-  const { data: cards, isLoading } = useSuspenseQuery(orpc.card.list.queryOptions());
-  const { data: cardsCount } = useSuspenseQuery(orpc.card.count.queryOptions({ input: {} }));
 
   return (
     <PageWidthWrapper className="flex flex-col gap-y-3 sm:gap-y-4">
@@ -93,21 +88,33 @@ export const CardsClient = () => {
           </ButtonGroup>
         </ButtonGroup>
       </div>
-      <Suspense fallback={<div>Loading cards...</div>}>
-        <CardsItems isSelectMode={isSelectMode} setIsSelectMode={setIsSelectMode} variant={viewMode} />
-      </Suspense>
-
-      <Suspense fallback={<div>Loading cards toolbar...</div>}>
-        <CardsToolbar
-          cards={cards}
-          cardsCount={cardsCount}
-          isLoading={isLoading}
-          isSelectMode={isSelectMode}
-          selectedCardsId={selectedCardsId}
-          setIsSelectMode={setIsSelectMode}
-          setSelectedCardsId={setSelectedCardsId}
-        />
+      <Suspense>
+        <CardsClientContent viewMode={viewMode} />
       </Suspense>
     </PageWidthWrapper>
+  );
+};
+
+const CardsClientContent = ({ viewMode }: { viewMode: "cards" | "rows" }) => {
+  const [isSelectMode, setIsSelectMode] = useState(false);
+  const [selectedCardsId, setSelectedCardsId] = useState<string[]>([]);
+
+  const { data: cards, isLoading } = useSuspenseQuery(orpc.card.list.queryOptions());
+  const { data: cardsCount } = useSuspenseQuery(orpc.card.count.queryOptions({ input: {} }));
+
+  return (
+    <>
+      <CardsItems cards={cards} isSelectMode={isSelectMode} setIsSelectMode={setIsSelectMode} variant={viewMode} />
+
+      <CardsToolbar
+        cards={cards}
+        cardsCount={cardsCount}
+        isLoading={isLoading}
+        isSelectMode={isSelectMode}
+        selectedCardsId={selectedCardsId}
+        setIsSelectMode={setIsSelectMode}
+        setSelectedCardsId={setSelectedCardsId}
+      />
+    </>
   );
 };

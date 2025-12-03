@@ -1,7 +1,6 @@
 "use client";
 
-import { useSuspenseQuery } from "@tanstack/react-query";
-
+import { CardType } from "@ziron/db/schema";
 import { cn } from "@ziron/utils";
 
 import { AnimatedEmptyState } from "@/components/shared/animated-empty";
@@ -10,23 +9,18 @@ import { CreateButton } from "@/components/ui/create-button";
 import { CursorRays, Hyperlink } from "@/assets/icons";
 
 import { PersonCard } from "@/features/card/components/person-card";
-import { orpc } from "@/lib/orpc/client";
 
 export const CardsItems = ({
+  cards,
   isSelectMode,
   setIsSelectMode,
   variant = "cards",
 }: {
+  cards: CardType[];
   isSelectMode: boolean;
   setIsSelectMode: (isSelectMode: boolean) => void;
   variant?: "cards" | "rows";
 }) => {
-  const { data: cards, isError } = useSuspenseQuery(orpc.card.list.queryOptions());
-
-  if (isError) {
-    return <div>Error loading cards</div>;
-  }
-
   const isFiltered = false;
 
   if (cards.length === 0) {
