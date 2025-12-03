@@ -21,6 +21,7 @@ export function useResizeObserver(elementRef: RefObject<Element | null>): Resize
     observer.observe(node);
 
     return () => observer.disconnect();
+    // biome-ignore lint/correctness/useExhaustiveDependencies: we want to memoize by all values
   }, [elementRef, updateEntry]);
 
   return entry;

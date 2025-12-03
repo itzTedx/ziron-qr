@@ -18,7 +18,6 @@ interface PasswordInputProps {
 
 export function PasswordInput({
   id = "password",
-  label = "Password",
   placeholder = "Password",
   value,
   onChange,

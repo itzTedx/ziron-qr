@@ -164,7 +164,7 @@ export function QRCodeSVG(props: QRPropsSVG) {
       );
 
       image = (
-        // eslint-disable-next-line @next/next/no-img-element
+        // biome-ignore lint/performance/noImgElement: we need to use img element for the QR code
         <img
           alt="Logo"
           src={imageSettings.src}

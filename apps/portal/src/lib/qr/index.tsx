@@ -124,6 +124,7 @@ export function QRCodeCanvas(props: QRPropsCanvas) {
   let img: JSX.Element | null = null;
   if (imgSrc != null) {
     img = (
+      // biome-ignore lint/performance/noImgElement: we need to use img element for the QR code
       <img
         alt="QR code"
         key={imgSrc}
