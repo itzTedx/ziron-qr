@@ -1,6 +1,5 @@
 "use client";
 
-import { Route } from "next";
 import Link from "next/link";
 
 import { IconLogout } from "@tabler/icons-react";
@@ -59,7 +58,7 @@ export function NavUser() {
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem asChild>
-              <Link href={"/account/settings" as Route}>
+              <Link href="/settings/account">
                 <IconUser className="size-4 text-muted-foreground" />
                 Account Settings
               </Link>

@@ -2,10 +2,13 @@ import { Suspense } from "react";
 
 import type { Metadata } from "next";
 
+import { AppSidebarNav } from "@/components/layout/sidebar/app-sidebar-nav";
+import { HelpButton } from "@/components/layout/sidebar/help-button";
+import { MainNav } from "@/components/layout/sidebar/main-nav";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
+
 import { ShareModal } from "@/features/modal/share-modal";
 import CompanyFormModal from "@/features/organization/components/modal";
-
-import { RootSidebar } from "./_components/root-sidebar";
 
 export const metadata: Metadata = {
   title: "QR Code Generator",
@@ -22,9 +25,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <RootSidebar>
-      {children}
-
+    <>
+      <MainNav
+        sidebar={AppSidebarNav}
+        toolContent={
+          <>
+            <ThemeToggle />
+            <HelpButton />
+          </>
+        }
+      >
+        {children}
+      </MainNav>
       <Suspense>
         <ShareModal />
       </Suspense>
@@ -32,6 +44,6 @@ export default function RootLayout({
       <Suspense>
         <CompanyFormModal />
       </Suspense>
-    </RootSidebar>
+    </>
   );
 }

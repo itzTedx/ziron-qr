@@ -55,9 +55,9 @@ export function CTA({
       </div>
 
       <div className="relative mx-auto my-8 flex w-fit gap-8">
-        {RATINGS.map(({ href, name, logo, stars }, idx) => (
+        {RATINGS.map(({ href, name, stars }, idx) => (
           <a className="group flex flex-col items-center" href={href} key={`${name}-rating-${idx + 1}`} target="_blank">
-            <img alt={name} className="size-6 transition-transform duration-150 group-hover:scale-105" src={logo} />
+            {/* <img alt={name} className="size-6 transition-transform duration-150 group-hover:scale-105" src={logo} /> */}
             <div className="mt-4 flex items-center gap-1.5 text-black">
               {[...Array(Math.floor(stars))].map((_, idx) => (
                 <Star

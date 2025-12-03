@@ -447,7 +447,7 @@ function AnimateIcon({
           {children}
         </motion.span>
       ),
-    [asChild, handleMouseEnter, handleMouseLeave, handlePointerDown, handlePointerUp, inViewRef, props, children]
+    [asChild, handleMouseEnter, handleMouseLeave, handlePointerDown, handlePointerUp, inViewRef, children, props]
   );
 
   return <AnimateIconContext.Provider value={contextValue}>{content}</AnimateIconContext.Provider>;
