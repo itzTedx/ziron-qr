@@ -1,4 +1,4 @@
-import { CSSProperties, PropsWithChildren, ReactNode, useMemo, useState } from "react";
+import { CSSProperties, PropsWithChildren, ReactNode, Suspense, useMemo, useState } from "react";
 
 import { Route } from "next";
 import Link from "next/link";
@@ -68,8 +68,8 @@ export function SidebarNav<T extends Record<string, unknown>>({
               {(!currentArea || !areas[currentArea]?.(data)?.hideSwitcherIcons) && (
                 <div className="flex flex-col gap-3">
                   {switcher}
-                  {groups(data).map((group) => (
-                    <NavGroupItem group={group} key={group.name} />
+                  {groups(data).map((group, idx) => (
+                    <NavGroupItem group={group} key={`${group.name}_${idx + 1}`} />
                   ))}
                 </div>
               )}
@@ -123,7 +123,9 @@ export function SidebarNav<T extends Record<string, unknown>>({
                             <div className="flex flex-col gap-0.5" key={`${name}_${idx + 1}`}>
                               {name && <div className="mb-2 pl-3 text-muted-foreground/80 text-sm">{name}</div>}
                               {items.map((item) => (
-                                <NavItem item={item} key={item.name} />
+                                <Suspense key={item.name}>
+                                  <NavItem item={item} />
+                                </Suspense>
                               ))}
                             </div>
                           ))}
@@ -176,7 +178,7 @@ export function NavGroupTooltip({
 }>) {
   return (
     <Tooltip
-      className="rounded-lg bg-black px-3 py-1.5 font-medium text-sm text-white"
+      className="e rounded-lg px-3 py-1.5 font-medium text-sm"
       content={
         <div>
           <span>{name}</span>
@@ -191,7 +193,7 @@ export function NavGroupTooltip({
                 <p className="text-content-muted">{description}</p>
                 {learnMoreHref && (
                   <div className="mt-2.5">
-                    <Link className="font-semibold text-white underline" href={learnMoreHref as Route} target="_blank">
+                    <Link className="font-semibold underline" href={learnMoreHref as Route} target="_blank">
                       Learn more
                     </Link>
                   </div>

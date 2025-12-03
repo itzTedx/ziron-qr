@@ -12,8 +12,6 @@ import { IconSettings } from "@ziron/ui/assets/icons/settings";
 
 import { IconLinesY } from "@/assets/icons/lines-y";
 
-import { useSession } from "@/lib/auth/client";
-
 import { SidebarNav } from "./sidebar-nav";
 import { SidebarNavAreas, SidebarNavData, SidebarNavGroups } from "./types";
 
@@ -165,7 +163,6 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
 export function AppSidebarNav({ toolContent }: { toolContent?: ReactNode }) {
   const { slug } = useParams() as { slug?: string };
   const pathname = usePathname();
-  const { data: session } = useSession();
 
   const currentArea = useMemo(() => {
     if (pathname.startsWith("/settings/account")) return "userSettings";
@@ -180,7 +177,6 @@ export function AppSidebarNav({ toolContent }: { toolContent?: ReactNode }) {
       data={{
         slug: slug || "",
         pathname,
-        session: session || undefined,
       }}
       groups={NAV_GROUPS}
       // switcher={<WorkspaceDropdown />}

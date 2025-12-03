@@ -61,7 +61,7 @@ export function MainNav({
       <div
         className={cn(
           "fixed top-0 left-0 z-50 h-dvh w-screen transition-[background-color,backdrop-filter] md:sticky md:z-auto md:w-full md:bg-transparent",
-          isOpen ? "bg-black/20 backdrop-blur-sm" : "bg-transparent max-md:pointer-events-none"
+          isOpen ? "bg-card/20 backdrop-blur-sm" : "bg-transparent max-md:pointer-events-none"
         )}
         onClick={(e) => {
           if (e.target === e.currentTarget) {
