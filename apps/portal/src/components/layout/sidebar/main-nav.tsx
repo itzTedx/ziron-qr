@@ -11,8 +11,6 @@ import {
   useState,
 } from "react";
 
-import { usePathname } from "next/navigation";
-
 import { useMediaQuery } from "@ziron/ui/hooks";
 
 import { cn } from "@ziron/utils";
@@ -40,8 +38,6 @@ export function MainNav({
   toolContent?: ReactNode;
   newsContent?: ReactNode;
 }>) {
-  const _pathname = usePathname();
-
   const { isMobile } = useMediaQuery();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -60,7 +56,7 @@ export function MainNav({
       {/* Side nav backdrop */}
       <div
         className={cn(
-          "fixed top-0 left-0 z-50 h-dvh w-screen transition-[background-color,backdrop-filter] md:sticky md:z-auto md:w-full md:bg-transparent",
+          "fixed top-0 left-0 z-99 h-dvh w-screen transition-[background-color,backdrop-filter] md:sticky md:z-auto md:w-full md:bg-transparent",
           isOpen ? "bg-card/20 backdrop-blur-sm" : "bg-transparent max-md:pointer-events-none"
         )}
         onClick={(e) => {
@@ -73,7 +69,7 @@ export function MainNav({
         {/* Side nav */}
         <div
           className={cn(
-            "relative h-full w-min max-w-full transition-transform md:translate-x-0",
+            "relative h-full w-min max-w-full bg-background transition-transform md:translate-x-0",
             !isOpen && "-translate-x-full"
           )}
         >
