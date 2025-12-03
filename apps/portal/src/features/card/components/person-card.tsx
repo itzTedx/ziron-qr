@@ -1,23 +1,57 @@
+import { Activity } from "react";
+
 import type { Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-import { IconEdit } from "@tabler/icons-react";
+import { IconArrowRight, IconCopy, IconEdit } from "@tabler/icons-react";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@ziron/ui/components/avatar";
 import { Button } from "@ziron/ui/components/button";
 import { Card, CardContent, CardFooter } from "@ziron/ui/components/card";
+import { Tooltip, TooltipTrigger } from "@ziron/ui/components/tooltip";
 
 import type { CardType } from "@ziron/db/schema";
+import { formatDate } from "@ziron/utils";
+
+import { constructUrl } from "@/lib/link/construct-url";
 
 import ShareButton from "./share-button";
 
-type PersonCardFields = Pick<CardType, "id" | "name" | "designation" | "slug" | "image" | "cover">;
+type PersonCardFields = Pick<CardType, "id" | "name" | "designation" | "slug" | "image" | "cover" | "createdAt">;
 
 interface PersonCardProps {
   card: PersonCardFields;
+  isSelectMode?: boolean;
+  setIsSelectMode?: (isSelectMode: boolean) => void;
+  variant?: "cards" | "rows";
 }
 
-export const PersonCard = ({ card }: PersonCardProps) => {
+export const PersonCard = ({ card, isSelectMode, setIsSelectMode, variant = "cards" }: PersonCardProps) => {
+  if (variant === "rows") {
+    return (
+      <div className="relative border p-3 first:rounded-t-lg last:rounded-b-lg">
+        <div className="flex items-center gap-3">
+          <div onMouseDown={() => setIsSelectMode?.(true)} onMouseUp={() => setIsSelectMode?.(false)}>
+            <Activity mode={isSelectMode ? "hidden" : "visible"}>
+              <Avatar>
+                <AvatarImage src={card.image} />
+                <AvatarFallback> {card.name.charAt(0).toUpperCase()}</AvatarFallback>
+              </Avatar>
+            </Activity>
+            <div />
+          </div>
+          <h3> {card.name}</h3>
+          <IconCopy />
+          <IconArrowRight />
+          <p> {constructUrl(card.slug)}</p>
+          <Tooltip>
+            <TooltipTrigger>{formatDate(card.createdAt, { showYear: false })}</TooltipTrigger>
+          </Tooltip>
+        </div>
+      </div>
+    );
+  }
   return (
     <Card className="relative overflow-hidden pt-10 md:pt-12">
       <CardContent className="flex flex-col items-center justify-between p-0">

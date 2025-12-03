@@ -447,17 +447,33 @@ export const archiveCard = protectedProcedure
   .route({
     method: "POST",
     path: "/card/:id/archive",
-    summary: "Archive a card",
-    description: "Archive a card by ID",
+    summary: "Archive or unarchive a card",
+    description:
+      "Archive or unarchive a card by ID. If the card is archived, it will be unarchived. If not archived, it will be archived.",
     tags: ["card"],
   })
   .input(z.object({ id: z.string() }))
   .output(z.object({ success: z.boolean(), cardName: z.string() }))
   .handler(async ({ input, errors, context }) => {
     try {
+      // First, get the current card to check if it's archived
+      const currentCard = await context.db.query.cards.findFirst({
+        where: eq(cards.id, input.id),
+        columns: {
+          id: cards.id,
+          name: cards.name,
+          archivedAt: cards.archivedAt,
+        },
+      });
+
+      if (!currentCard) {
+        throw errors.NOT_FOUND();
+      }
+
+      // Toggle archive status: if archived, unarchive (set to null), otherwise archive (set to date)
       const [data] = await context.db
         .update(cards)
-        .set({ archivedAt: new Date() })
+        .set({ archivedAt: currentCard.archivedAt ? null : new Date() })
         .where(eq(cards.id, input.id))
         .returning({
           name: cards.name,

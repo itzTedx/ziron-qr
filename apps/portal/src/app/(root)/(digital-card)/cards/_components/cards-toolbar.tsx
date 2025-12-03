@@ -1,8 +1,8 @@
 "use client";
 
-import { memo, Suspense, useState } from "react";
+import { ComponentType, memo, ReactNode, Suspense, SVGProps, useMemo, useState } from "react";
 
-import { CircleCheck, X } from "lucide-react";
+import { CircleCheck, Trash, X } from "lucide-react";
 
 import { AnimatedSizeContainer } from "@ziron/ui/components/animated-size-container";
 import { Button } from "@ziron/ui/components/button";
@@ -14,7 +14,11 @@ import { cn } from "@ziron/utils";
 
 import { CreateButton } from "@/components/ui/create-button";
 
+import { BoxArchive } from "@/assets/icons";
+
+import { ArchiveCardModal } from "./archive-card-modal";
 import ArchivedLinksHint from "./archived-links-hint";
+import { DeleteCardModal } from "./delete-card-modal";
 import { PaginationControls } from "./pagination";
 
 interface Props {
@@ -27,16 +31,68 @@ interface Props {
   setSelectedCardsId: (selectedCardsId: string[]) => void;
 }
 
+type BulkAction = {
+  label: string;
+  icon: ComponentType<SVGProps<SVGSVGElement>>;
+  action: () => void;
+  disabledTooltip?: string | ReactNode;
+  keyboardShortcut?: string;
+};
+
 export const CardsToolbar = memo(
   ({ isLoading, cards, cardsCount, isSelectMode, setIsSelectMode, selectedCardsId, setSelectedCardsId }: Props) => {
     const [pagination, setPagination] = useState<PaginationState>({
       pageIndex: 1,
       pageSize: 10,
     });
+
+    const [showArchiveCardModal, setShowArchiveCardModal] = useState(false);
+    const [showDeleteCardModal, setShowDeleteCardModal] = useState(false);
+
+    const selectedCards = useMemo(
+      () => cards.filter(({ id }) => selectedCardsId.includes(id)),
+      [cards, selectedCardsId]
+    );
+
+    const bulkActions: BulkAction[] = useMemo(
+      () => [
+        {
+          label: selectedCards.length && selectedCards.every(({ archivedAt }) => archivedAt) ? "Unarchive" : "Archive",
+          icon: BoxArchive,
+          action: () => setShowArchiveCardModal(true),
+          keyboardShortcut: "a",
+        },
+        {
+          label: "Delete",
+          icon: Trash,
+          action: () => setShowDeleteCardModal(true),
+          disabledTooltip: selectedCards.some(({ organizationId }) => organizationId)
+            ? "You can't delete a card that's part of a program."
+            : undefined,
+          keyboardShortcut: "x",
+        },
+      ],
+      [selectedCards]
+    );
+
     const isSelecting = isSelectMode || selectedCardsId.length > 0;
 
     return (
       <>
+        {selectedCards.length > 0 && (
+          <>
+            <ArchiveCardModal
+              cards={selectedCards}
+              setShowArchiveCardModal={setShowArchiveCardModal}
+              showArchiveCardModal={showArchiveCardModal}
+            />
+            <DeleteCardModal
+              cards={selectedCards}
+              setShowDeleteCardModal={setShowDeleteCardModal}
+              showDeleteCardModal={showDeleteCardModal}
+            />
+          </>
+        )}
         <div className="h-[120px]" />
 
         <div className="fixed bottom-3 left-0 z-10 w-full [--left:62px] sm:max-[1372px]:w-[calc(100%-150px)] md:left-(--left) md:w-[calc(100%-var(--left))] md:max-[1372px]:w-[calc(100%-var(--left)-150px)]">
@@ -86,16 +142,17 @@ export const CardsToolbar = memo(
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
-                      <button
-                        className="rounded-md p-1.5 transition-colors duration-75 hover:bg-neutral-50 active:bg-neutral-100"
+                      <Button
                         onClick={() => {
                           setSelectedCardsId([]);
                           setIsSelectMode(false);
                         }}
+                        size="icon-sm"
                         type="button"
+                        variant="ghost"
                       >
                         <X className="size-4 text-neutral-900" />
-                      </button>
+                      </Button>
                       <span className="whitespace-nowrap font-medium text-neutral-600 text-sm">
                         <strong className="font-semibold">{selectedCardsId.length}</strong> selected
                       </span>
@@ -111,24 +168,18 @@ export const CardsToolbar = memo(
                       )}
                     >
                       Bulk Actions
-                      {/* {bulkActions.map(({ label, icon: Icon, action, disabledTooltip, keyboardShortcut }, idx) => (
+                      {bulkActions.map(({ label, icon: Icon, action }) => (
                         <Button
                           className="h-7 gap-1.5 px-2 xs:px-2.5 text-xs min-[1120px]:pr-1.5"
-                          disabledTooltip={
-                            disabledTooltip ||
-                            (!hasAllFolderPermissions ? "You don't have permission to perform this action." : undefined)
-                          }
-                          icon={<Icon className="size-3.5" />}
-                          key={idx}
+                          key={label}
                           onClick={action}
-                          shortcut={keyboardShortcut?.toUpperCase()}
-                          shortcutClassName="py-px px-1 text-[0.625rem] leading-snug md:hidden min-[1120px]:inline-block"
-                          text={label}
-                          textWrapperClassName="max-[1120px]:hidden"
                           type="button"
                           variant="secondary"
-                        />
-                      ))} */}
+                        >
+                          <Icon className="size-3.5" />
+                          {label}
+                        </Button>
+                      ))}
                     </div>
                   </div>
                 </div>
