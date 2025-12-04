@@ -54,8 +54,8 @@ export const cardSchema = z
     // Core card information
     id: z.string().optional(),
     name: z.string().min(2, { message: "Please enter full name" }).max(256, { message: "Name is too long" }),
-    bio: z.string().nullable(),
-    designation: z.string().nullable(),
+    bio: z.string().optional(),
+    designation: z.string().optional(),
     organizationId: z.string(),
 
     // Contact information

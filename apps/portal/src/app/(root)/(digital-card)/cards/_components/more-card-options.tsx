@@ -1,7 +1,8 @@
 import { useState } from "react";
 
 import { IconDotsVertical } from "@tabler/icons-react";
-import { Download, Table2 } from "lucide-react";
+import { Download } from "lucide-react";
+import { parseAsString, useQueryState } from "nuqs";
 
 import { Button } from "@ziron/ui/components/button";
 import { ButtonGroup } from "@ziron/ui/components/button-group";
@@ -14,12 +15,14 @@ import {
   DropdownMenuTrigger,
 } from "@ziron/ui/components/dropdown-menu";
 
+import { IconTable } from "@/assets/icons/table";
+
 import { ExportCardModal } from "./export-cards-modal";
 import { ImportCardsModal } from "./import-cards-modal";
 
 export const MoreCardOptions = () => {
   const [openExport, setOpenExport] = useState(false);
-  const [openImport, setOpenImport] = useState(false);
+  const [_, setIsOpenImport] = useQueryState("import", parseAsString);
   return (
     <>
       <ButtonGroup>
@@ -33,8 +36,8 @@ export const MoreCardOptions = () => {
             <DropdownMenuGroup>
               <DropdownMenuLabel>Import Cards</DropdownMenuLabel>
               <DropdownMenuItem asChild>
-                <button onClick={() => setOpenImport(true)}>
-                  <Table2 className="size-4" /> Import from CSV
+                <button onClick={() => setIsOpenImport("csv")}>
+                  <IconTable className="size-4" /> Import from CSV
                 </button>
               </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -50,7 +53,7 @@ export const MoreCardOptions = () => {
         </DropdownMenu>
       </ButtonGroup>
       <ExportCardModal open={openExport} setOpen={setOpenExport} />
-      <ImportCardsModal open={openImport} setOpen={setOpenImport} />
+      <ImportCardsModal />
     </>
   );
 };

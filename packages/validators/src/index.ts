@@ -3,5 +3,5 @@ export * from "zod";
 
 export * from "./auth";
 export * from "./card";
-export * from "./card/export";
+export * from "./card/import-export";
 export * from "./organization";

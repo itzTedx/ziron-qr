@@ -1,4 +1,6 @@
-import z from "zod";
+import { z } from "zod";
+
+import { cardSchema } from "./index";
 
 export const columns = [
   {
@@ -102,3 +104,50 @@ export const exportCardSchema = z.object({
 });
 
 export type ExportCardType = z.infer<typeof exportCardSchema>;
+
+// Valid field names that can be mapped from CSV columns
+const mappableFieldNames = [
+  "name",
+  "email",
+  "phone",
+  "address",
+  "mapUrl",
+  "designation",
+  "bio",
+  "links",
+  "image",
+  "cover",
+  "attachmentUrl",
+  "slug",
+  "appearance",
+] as const;
+
+export const importCardSchema = z.object({
+  file: z.instanceof(File).refine((file) => file.type === "text/csv", {
+    message: "Please select a CSV file",
+  }),
+  // Field mappings - each field maps to a CSV column name (or null if not mapped)
+  // Only allow valid card schema field names
+  fields: z.record(z.string(), z.string().nullable()).refine(
+    (fields) => {
+      const fieldKeys = Object.keys(fields);
+      return fieldKeys.every((key) => mappableFieldNames.includes(key as (typeof mappableFieldNames)[number]));
+    },
+    {
+      message: "Invalid field name in mappings",
+    }
+  ),
+});
+
+export type ImportCardType = z.infer<typeof importCardSchema>;
+
+/**
+ * Schema for validating a single CSV row after transformation to card data
+ * Uses the cardSchema to ensure all data conforms to the expected structure
+ */
+export const importCardRowSchema = cardSchema;
+
+/**
+ * Schema for validating an array of CSV rows
+ */
+export const importCardRowsSchema = z.array(importCardRowSchema).min(1, "At least one valid card is required");

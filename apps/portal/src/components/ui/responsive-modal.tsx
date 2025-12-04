@@ -66,23 +66,27 @@ function ResponsiveModalContent({
 
   if (isMobile) {
     return (
-      <DrawerContent className={cn("flex flex-col", className)} {...props}>
-        <DrawerHeader className="border-b bg-card p-4 text-start!">
-          <DrawerTitle>{title}</DrawerTitle>
-          <DrawerDescription className="sr-only">{description ?? "This is a modal"}</DrawerDescription>
-        </DrawerHeader>
-        <ScrollArea className="flex-1 overflow-y-auto">{children}</ScrollArea>
+      <DrawerContent className={cn("flex flex-col overflow-hidden", className)} {...props}>
+        {title && (
+          <DrawerHeader className="border-b bg-card p-4 text-start!">
+            <DrawerTitle>{title}</DrawerTitle>
+            <DrawerDescription className="sr-only">{description ?? "This is a modal"}</DrawerDescription>
+          </DrawerHeader>
+        )}
+        <ScrollArea className="flex-1 overflow-y-auto rounded-[inherit]">{children}</ScrollArea>
       </DrawerContent>
     );
   }
 
   return (
     <DialogContent className={cn("gap-0 p-0", "sm:max-w-3xl", className)} showCloseButton={showCloseButton} {...props}>
-      <DialogHeader className="border-b p-6">
-        <DialogTitle>{title}</DialogTitle>
-        <DialogDescription className="sr-only">{description ?? "This is a modal"}</DialogDescription>
-      </DialogHeader>
-      <ScrollArea className="overflow-y-auto">{children}</ScrollArea>
+      {title && (
+        <DialogHeader className="border-b p-6">
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription className="sr-only">{description ?? "This is a modal"}</DialogDescription>
+        </DialogHeader>
+      )}
+      <ScrollArea className="overflow-y-auto rounded-[inherit]">{children}</ScrollArea>
     </DialogContent>
   );
 }
@@ -91,10 +95,12 @@ function ResponsiveModalHeader({ className, ...props }: React.ComponentProps<"di
   const isMobile = useIsMobile();
 
   if (isMobile) {
-    return <DrawerHeader className={cn("border-b bg-card p-4 text-start!", className)} {...props} />;
+    return (
+      <DrawerHeader className={cn("rounded-t-[inherit] border-b bg-card p-4 text-start!", className)} {...props} />
+    );
   }
 
-  return <DialogHeader className={cn("border-b p-6", className)} {...props} />;
+  return <DialogHeader className={cn("rounded-t-[inherit] border-b p-6", className)} {...props} />;
 }
 
 function ResponsiveModalTitle({ className, ...props }: React.ComponentProps<typeof DialogTitle>) {
@@ -111,10 +117,10 @@ function ResponsiveModalDescription({ className, ...props }: React.ComponentProp
   const isMobile = useIsMobile();
 
   if (isMobile) {
-    return <DrawerDescription className={cn("sr-only", className)} {...props} />;
+    return <DrawerDescription className={cn("text-muted-foreground text-sm", className)} {...props} />;
   }
 
-  return <DialogDescription className={cn("sr-only", className)} {...props} />;
+  return <DialogDescription className={cn("text-muted-foreground text-sm", className)} {...props} />;
 }
 
 function ResponsiveModalClose({ ...props }: React.ComponentProps<typeof DialogClose>) {
