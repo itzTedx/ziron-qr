@@ -21,6 +21,7 @@ import { Switch } from "@/components/ui/switch";
 import { BoxArchive, IconArrowsUpDown, IconLayoutGrid } from "@/assets/icons";
 
 import { orpc } from "@/lib/orpc/client";
+import { getQueryClient } from "@/lib/orpc/query/hydration";
 
 import { CardSort } from "./card-sort";
 import { selectedSortAtom, showArchivedAtom, viewModeAtom } from "./cards-atoms";
@@ -35,6 +36,8 @@ export const CardsDisplay = () => {
   const [showArchived, setShowArchived] = useAtom(showArchivedAtom);
   const [selectedSort, setSelectedSort] = useAtom(selectedSortAtom);
   const { data: preferences } = useQuery(orpc.workspace.getPreferences.queryOptions());
+
+  const queryClient = getQueryClient();
 
   // Store original preferences for reset functionality
   const originalPreferences = useMemo<WorkspacePreferences>(
@@ -51,6 +54,7 @@ export const CardsDisplay = () => {
     orpc.workspace.updatePreferences.mutationOptions({
       onSuccess: () => {
         toast.success("Display preferences saved");
+        queryClient.invalidateQueries(orpc.workspace.getPreferences.queryOptions());
       },
       onError: (error) => {
         toast.error("Failed to save preferences", { description: error.message });
