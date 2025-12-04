@@ -21,7 +21,8 @@ import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 import { CardType } from "@ziron/db/schema";
 import { pluralize } from "@ziron/utils";
 
-import { orpc, queryClient } from "@/lib/orpc/client";
+import { orpc } from "@/lib/orpc/client";
+import { getQueryClient } from "@/lib/orpc/query/hydration";
 
 import { SimpleCardCard } from "./simple-card-card";
 
@@ -48,7 +49,7 @@ export function ArchiveCardModal(props: ArchiveCardModalProps) {
 function ArchiveCardModalInner({ setShowArchiveCardModal, cards }: ArchiveCardModalProps) {
   const archived = cards.every((card) => card.archivedAt);
   const actionText = archived ? "unarchive" : "archive";
-
+  const queryClient = getQueryClient();
   const [archiving, setArchiving] = useState(false);
 
   const archiveCard = useMutation(orpc.card.archive.mutationOptions());
@@ -70,7 +71,7 @@ function ArchiveCardModalInner({ setShowArchiveCardModal, cards }: ArchiveCardMo
       toast.success(`Successfully ${actionText}d ${pluralize("card", cards.length)}!`, {
         duration: 5000,
       });
-    } catch (error: unknown) {
+    } catch (error) {
       if (isDefinedError(error)) {
         toast.error(error.message);
       } else {

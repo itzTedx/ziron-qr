@@ -19,7 +19,8 @@ import { cardSchema, zCardSchema } from "@ziron/validators";
 
 import { UnsavedChangesBar } from "@/components/ui/unsaved-changes-bar";
 
-import { orpc, queryClient } from "@/lib/orpc/client";
+import { orpc } from "@/lib/orpc/client";
+import { getQueryClient } from "@/lib/orpc/query/hydration";
 
 import { transformCardData } from "../utils/transform-card-data";
 import { SlugField } from "./fields/slug-field";
@@ -37,6 +38,7 @@ interface Props {
 
 export function CardForm({ isEditMode, initialData }: Props) {
   const router = useRouter();
+  const queryClient = getQueryClient();
 
   // Conditionally get initial data based on mode
   const transformedInitialData = useMemo(() => {

@@ -7,7 +7,8 @@ import { toast } from "sonner";
 
 import { ActionButton } from "@/components/ui/action-button";
 
-import { orpc, queryClient } from "@/lib/orpc/client";
+import { orpc } from "@/lib/orpc/client";
+import { getQueryClient } from "@/lib/orpc/query/hydration";
 
 interface Props {
   id: string;
@@ -15,6 +16,7 @@ interface Props {
 
 export const DeleteCard = ({ id }: Props) => {
   const router = useRouter();
+  const queryClient = getQueryClient();
   const deleteCard = useMutation(
     orpc.card.delete.mutationOptions({
       onSuccess: (data) => {

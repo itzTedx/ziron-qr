@@ -27,7 +27,8 @@ import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 import { useKeyboardShortcut } from "@ziron/ui/hooks";
 
 import { env } from "@/lib/env/client";
-import { orpc, queryClient } from "@/lib/orpc/client";
+import { orpc } from "@/lib/orpc/client";
+import { getQueryClient } from "@/lib/orpc/query/hydration";
 
 interface Props {
   cardId: string;
@@ -37,6 +38,8 @@ export const ArchiveCard = ({ cardId }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const { data: card } = useSuspenseQuery(orpc.card.get.queryOptions({ input: { id: cardId } }));
+
+  const queryClient = getQueryClient();
 
   const archiveCard = useMutation(
     orpc.card.archive.mutationOptions({

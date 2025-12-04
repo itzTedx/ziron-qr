@@ -21,7 +21,8 @@ import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 import { CardType } from "@ziron/db/schema";
 import { pluralize } from "@ziron/utils";
 
-import { orpc, queryClient } from "@/lib/orpc/client";
+import { orpc } from "@/lib/orpc/client";
+import { getQueryClient } from "@/lib/orpc/query/hydration";
 
 import { SimpleCardCard } from "./simple-card-card";
 
@@ -43,6 +44,7 @@ export function DeleteCardModal(props: DeleteCardModalProps) {
 
 function DeleteCardModalInner({ setShowDeleteCardModal, cards }: DeleteCardModalProps) {
   const [deleting, setDeleting] = useState(false);
+  const queryClient = getQueryClient();
 
   const deleteCard = useMutation(orpc.card.delete.mutationOptions());
 

@@ -25,7 +25,8 @@ import {
 
 import { IconTable } from "@/assets/icons/table";
 
-import { orpc, queryClient } from "@/lib/orpc/client";
+import { orpc } from "@/lib/orpc/client";
+import { getQueryClient } from "@/lib/orpc/query/hydration";
 
 import { FieldMapping } from "./field-mapping";
 import { SelectFile } from "./select-file";
@@ -53,6 +54,8 @@ export const ImportCardsModal = () => {
   // Get organizations for default organizationId
   const { data: organizations } = useQuery(orpc.organization.list.queryOptions());
   const defaultOrganizationId = organizations?.[0]?.id;
+
+  const queryClient = getQueryClient();
 
   // Create card mutation
   const createCardMutation = useMutation(

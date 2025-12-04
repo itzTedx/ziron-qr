@@ -12,7 +12,8 @@ import { Kbd } from "@ziron/ui/components/kbd";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 import { useKeyboardShortcut } from "@ziron/ui/hooks";
 
-import { orpc, queryClient } from "@/lib/orpc/client";
+import { orpc } from "@/lib/orpc/client";
+import { getQueryClient } from "@/lib/orpc/query/hydration";
 
 interface Props {
   cardId: string;
@@ -20,6 +21,7 @@ interface Props {
 
 export const DuplicateCard = ({ cardId }: Props) => {
   const router = useRouter();
+  const queryClient = getQueryClient();
 
   const duplicateCard = useMutation(
     orpc.card.duplicate.mutationOptions({

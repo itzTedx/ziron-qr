@@ -10,13 +10,12 @@ import { CardForm } from "@/features/card/components/card-form";
 export default async function CreateCardPage() {
   return (
     <>
-      <Header backHref="/" currentPage="Create New Card" showBackButton title="Cards" />
-      <section className="h-full flex-1">
-        <ScrollArea className="h-full flex-1 overflow-y-auto">
-          <CardForm />
-          <ScrollBar />
-        </ScrollArea>
-      </section>
+      <Header backHref="/" currentPage={"Create New Card"} showBackButton title="Cards" />
+
+      <ScrollArea className="flex-1 overflow-y-auto">
+        <CardForm />
+        <ScrollBar />
+      </ScrollArea>
     </>
   );
 }
