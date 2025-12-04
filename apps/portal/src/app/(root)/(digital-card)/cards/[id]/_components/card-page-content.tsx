@@ -51,7 +51,7 @@ async function SuspenseCardPageContent({ params, isDuplicateMode }: CardPageCont
 
   return (
     <>
-      <ScrollArea className="flex-1 overflow-y-auto">
+      <ScrollArea className="h-full flex-1 overflow-y-auto">
         <CardForm initialData={card} isDuplicateMode={isDuplicateMode} isEditMode={isEditMode} />
         <ScrollBar />
       </ScrollArea>

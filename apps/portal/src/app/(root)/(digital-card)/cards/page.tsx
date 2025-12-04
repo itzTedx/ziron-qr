@@ -20,15 +20,13 @@ export default async function CardsPage() {
         <CreateButton hotkey="c" href={"/cards/create"} label="Create Card" />
       </Header>
 
-      <section className="h-full flex-1">
-        <ScrollArea className="h-full flex-1 overflow-y-auto pt-3 sm:py-4">
-          <Suspense>
-            <CardsClient />
-          </Suspense>
+      <ScrollArea className="h-full flex-1 overflow-y-auto pt-3 sm:py-4">
+        <Suspense>
+          <CardsClient />
+        </Suspense>
 
-          <ScrollBar />
-        </ScrollArea>
-      </section>
+        <ScrollBar />
+      </ScrollArea>
     </>
   );
 }
