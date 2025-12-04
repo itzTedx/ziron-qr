@@ -2,7 +2,7 @@ import { eq } from "@ziron/db";
 import { workspaceTable } from "@ziron/db/schema";
 import { updateWorkspacePreferencesSchema, workspacePreferencesSchema } from "@ziron/validators";
 
-import { protectedProcedure } from "..";
+import { protectedProcedure, publicProcedure } from "..";
 import { dbProvider } from "../middleware/db-provider";
 
 const defaultPreferences = {
@@ -11,7 +11,7 @@ const defaultPreferences = {
   showArchived: false,
 };
 
-export const getWorkspacePreferences = protectedProcedure
+export const getWorkspacePreferences = publicProcedure
   .use(dbProvider)
   .route({
     method: "GET",
@@ -21,8 +21,12 @@ export const getWorkspacePreferences = protectedProcedure
     tags: ["workspace"],
   })
   .output(workspacePreferencesSchema)
-  .handler(async ({ context }) => {
-    const userId = context.session.user.id;
+  .handler(async ({ context, errors }) => {
+    const userId = context.session?.user.id;
+
+    if (!userId) {
+      throw errors.FORBIDDEN();
+    }
 
     const workspace = await context.db.query.workspaceTable.findFirst({
       where: (workspace, { eq }) => eq(workspace.id, userId),
