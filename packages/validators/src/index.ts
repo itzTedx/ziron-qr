@@ -5,3 +5,4 @@ export * from "./auth";
 export * from "./card";
 export * from "./card/import-export";
 export * from "./organization";
+export * from "./workspace";

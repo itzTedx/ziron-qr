@@ -28,6 +28,7 @@
     "dotenv": "^17.0.1",
     "drizzle-orm": "^0.44.2",
     "pg": "^8.16.3",
+    "@ziron/validators": "workspace:*",
     "zod": "catalog:"
   },
   "devDependencies": {

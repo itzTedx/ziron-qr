@@ -1,30 +1,8 @@
 import { index, json, pgTable } from "drizzle-orm/pg-core";
 
+import { type CardsSortSlug, type CardsViewMode } from "@ziron/validators";
+
 import { createdAt, id, updatedAt } from "./helper";
-
-export const cardsViewModes = ["cards", "rows"] as const;
-export type CardsViewMode = (typeof cardsViewModes)[number];
-
-export const cardsSortOptions = [
-  {
-    display: "Date created",
-    slug: "createdAt",
-  },
-  {
-    display: "Total clicks",
-    slug: "clicks",
-  },
-  {
-    display: "Last clicked",
-    slug: "lastClicked",
-  },
-  {
-    display: "Total sales",
-    slug: "saleAmount",
-  },
-] as const;
-
-export type CardsSortSlug = (typeof cardsSortOptions)[number]["slug"];
 
 export const workspaceTable = pgTable(
   "workspace",

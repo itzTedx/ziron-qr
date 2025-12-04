@@ -1,15 +1,16 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 import { IconChevronDown, IconSearch } from "@tabler/icons-react";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 import { Button } from "@ziron/ui/components/button";
 import { ButtonGroup } from "@ziron/ui/components/button-group";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@ziron/ui/components/input-group";
 
-import { CardsSortSlug } from "@ziron/db/schema";
+import { type CardsSortSlug } from "@ziron/validators";
 
 import { PageWidthWrapper } from "@/components/layout/page-width-wrapper";
 import { AnimateIcon } from "@/components/ui/icon";
@@ -24,20 +25,44 @@ import { CardsToolbar } from "./cards-toolbar";
 import { MoreCardOptions } from "./more-card-options";
 
 export const CardsClient = () => {
-  const [viewMode, setViewMode] = useState<"cards" | "rows">("cards");
-  const [showArchived, setShowArchived] = useState(false);
-  const [selectedSort, setSelectedSort] = useState<CardsSortSlug>("createdAt");
+  // Fetch preferences from database
+  const { data: preferences } = useSuspenseQuery(orpc.workspace.getPreferences.queryOptions());
+
+  const [viewMode, setViewMode] = useState<"cards" | "rows">(preferences.viewMode);
+  const [showArchived, setShowArchived] = useState(preferences.showArchived);
+  const [selectedSort, setSelectedSort] = useState<CardsSortSlug>(preferences.sortBy);
+
+  // Update state when preferences are loaded
+  useEffect(() => {
+    setViewMode(preferences.viewMode);
+    setShowArchived(preferences.showArchived);
+    setSelectedSort(preferences.sortBy);
+  }, [preferences]);
+
+  // Mutation to persist preferences
+  const updatePreferencesMutation = useMutation(
+    orpc.workspace.updatePreferences.mutationOptions({
+      onSuccess: () => {
+        toast.success("Display preferences saved");
+      },
+      onError: (error) => {
+        toast.error("Failed to save preferences", { description: error.message });
+      },
+    })
+  );
 
   const reset = () => {
-    setViewMode("cards");
-    setShowArchived(false);
-    setSelectedSort("createdAt");
+    setViewMode(preferences.viewMode);
+    setShowArchived(preferences.showArchived);
+    setSelectedSort(preferences.sortBy);
   };
 
   const persist = () => {
-    setViewMode("cards");
-    setShowArchived(false);
-    setSelectedSort("createdAt");
+    updatePreferencesMutation.mutate({
+      viewMode,
+      showArchived,
+      sortBy: selectedSort,
+    });
   };
 
   return (
@@ -50,6 +75,7 @@ export const CardsClient = () => {
             </Button>
           </AnimateIcon>
           <CardsDisplay
+            initialData={preferences}
             persist={persist}
             reset={reset}
             selectedSort={selectedSort}

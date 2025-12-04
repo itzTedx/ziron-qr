@@ -5,8 +5,8 @@ import { ChevronDown, SortDesc } from "lucide-react";
 
 import { Popover, PopoverContent, PopoverTrigger } from "@ziron/ui/components/popover";
 
-import { CardsSortSlug, cardsSortOptions } from "@ziron/db/schema";
-import { cn } from "@ziron/utils/dist/cn";
+import { cn } from "@ziron/utils";
+import { type CardsSortSlug, cardsSortOptions } from "@ziron/validators";
 
 export const CardSort = ({
   selectedSort,
@@ -28,8 +28,7 @@ export const CardSort = ({
         >
           <SortDesc className="size-4" />
           <span className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-left text-muted-foreground">
-            {/* TODO: Add selected sort display */}
-            Sort by
+            {cardsSortOptions.find((option) => option.slug === selectedSort)?.display ?? "Sort by"}
           </span>
           <ChevronDown className="size-4 shrink-0 text-muted-foreground transition-transform duration-75 group-data-[state=open]:rotate-180" />
         </button>

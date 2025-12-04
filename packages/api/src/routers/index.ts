@@ -18,6 +18,7 @@ import {
 import { getMetrics } from "./metrics-router";
 import { createOrganization, deleteOrganization, getOrganization, listOrganizations } from "./organization-router";
 import { generateQR } from "./qr-router";
+import { getWorkspacePreferences, updateWorkspacePreferences } from "./workspace-router";
 
 export const router = {
   metrics: {
@@ -53,6 +54,10 @@ export const router = {
   },
   analytics: {
     getCardAnalytics: getCardAnalytics,
+  },
+  workspace: {
+    getPreferences: getWorkspacePreferences,
+    updatePreferences: updateWorkspacePreferences,
   },
 };
 

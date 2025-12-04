@@ -415,6 +415,9 @@ importers:
 
   packages/db:
     dependencies:
+      '@ziron/validators':
+        specifier: workspace:*
+        version: link:../validators
       dotenv:
         specifier: ^17.0.1
         version: 17.2.3
