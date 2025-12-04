@@ -1,7 +1,6 @@
 import { os } from "@orpc/server";
-import { RequestHeadersPluginContext } from "@orpc/server/plugins";
 
-export interface ORPCContext extends RequestHeadersPluginContext {
+export interface ORPCContext {
   request: Request;
 }
 

@@ -23,6 +23,17 @@ const SIDEBAR_WIDTH = 280;
 const SIDEBAR_GROUPS_WIDTH = 64;
 const SIDEBAR_AREAS_WIDTH = SIDEBAR_WIDTH - SIDEBAR_GROUPS_WIDTH;
 
+interface SidebarNavProps<T extends Record<string, unknown>> {
+  groups: SidebarNavGroups<T>;
+  areas: SidebarNavAreas<T>;
+  currentArea: string | null;
+  data: T;
+  toolContent?: ReactNode;
+  newsContent?: ReactNode;
+  switcher?: ReactNode;
+  bottom?: ReactNode;
+}
+
 export function SidebarNav<T extends Record<string, unknown>>({
   groups,
   areas,
@@ -32,16 +43,7 @@ export function SidebarNav<T extends Record<string, unknown>>({
   newsContent,
   switcher,
   bottom,
-}: {
-  groups: SidebarNavGroups<T>;
-  areas: SidebarNavAreas<T>;
-  currentArea: string | null;
-  data: T;
-  toolContent?: ReactNode;
-  newsContent?: ReactNode;
-  switcher?: ReactNode;
-  bottom?: ReactNode;
-}) {
+}: SidebarNavProps<T>) {
   return (
     <div
       className={cn("h-full w-(--sidebar-width) transition-[width] duration-300")}

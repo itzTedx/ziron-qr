@@ -1,15 +1,13 @@
+import { headers } from "next/headers";
+
 import { base } from "./base";
 import { auth } from "./context";
 
 // const DEBUG = process.env.NODE_ENV === "development" || process.env.DEBUG_AUTH === "true";
 
-export const requireAuth = base.middleware(async ({ context, next, errors }) => {
-  if (!context.reqHeaders) {
-    throw errors.UNAUTHORIZED({ message: "You are not authorized to access this endpoint." });
-  }
-
+export const requireAuth = base.middleware(async ({ next, errors }) => {
   const session = await auth.api.getSession({
-    headers: context.reqHeaders,
+    headers: await headers(),
   });
 
   if (!session?.session || !session.user) {

@@ -26,19 +26,18 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <Suspense>
-        <MainNav
-          sidebar={AppSidebarNav}
-          toolContent={
-            <>
-              <ThemeToggle />
-              <HelpButton />
-            </>
-          }
-        >
-          {children}
-        </MainNav>
-      </Suspense>
+      <MainNav
+        sidebar={AppSidebarNav}
+        toolContent={
+          <>
+            <ThemeToggle />
+            <HelpButton />
+          </>
+        }
+      >
+        {children}
+      </MainNav>
+
       <Suspense>
         <ShareModal />
       </Suspense>

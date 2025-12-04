@@ -1,7 +1,10 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 import { IconChevronDown, IconLayoutList, IconTable } from "@tabler/icons-react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useAtom } from "jotai";
 import { AnimatePresence, motion } from "motion/react";
+import { toast } from "sonner";
 
 import { Button } from "@ziron/ui/components/button";
 import { Kbd } from "@ziron/ui/components/kbd";
@@ -10,58 +13,75 @@ import { Separator } from "@ziron/ui/components/separator";
 import { useKeyboardShortcut } from "@ziron/ui/hooks";
 
 import { cn } from "@ziron/utils/dist/cn";
-import { CardsSortSlug } from "@ziron/validators";
+import { WorkspacePreferences } from "@ziron/validators";
 
 import { AnimateIcon } from "@/components/ui/icon";
 import { Switch } from "@/components/ui/switch";
 
 import { BoxArchive, IconArrowsUpDown, IconLayoutGrid } from "@/assets/icons";
 
+import { orpc } from "@/lib/orpc/client";
+
 import { CardSort } from "./card-sort";
+import { selectedSortAtom, showArchivedAtom, viewModeAtom } from "./cards-atoms";
 
 const CARDS_DISPLAY_OPTIONS = [
   { id: "cards", label: "Cards", icon: IconLayoutList },
   { id: "rows", label: "Rows", icon: IconTable },
 ] as const;
 
-interface CardsDisplayInitialData {
-  viewMode: "cards" | "rows";
-  showArchived: boolean;
-  sortBy: CardsSortSlug;
-}
+export const CardsDisplay = () => {
+  const [viewMode, setViewMode] = useAtom(viewModeAtom);
+  const [showArchived, setShowArchived] = useAtom(showArchivedAtom);
+  const [selectedSort, setSelectedSort] = useAtom(selectedSortAtom);
+  const { data: preferences } = useQuery(orpc.workspace.getPreferences.queryOptions());
 
-interface CardsDisplayProps {
-  viewMode: "cards" | "rows";
-  reset: () => void;
-  persist: () => void;
-  setViewMode: (viewMode: "cards" | "rows") => void;
-  showArchived: boolean;
-  setShowArchived: (showArchived: boolean) => void;
-  selectedSort: CardsSortSlug;
-  setSelectedSort: (selectedSort: CardsSortSlug) => void;
-  initialData: CardsDisplayInitialData;
-}
+  // Store original preferences for reset functionality
+  const originalPreferences = useMemo<WorkspacePreferences>(
+    () => ({
+      viewMode: preferences?.viewMode ?? "cards",
+      showArchived: preferences?.showArchived ?? false,
+      sortBy: preferences?.sortBy ?? "createdAt",
+    }),
+    [preferences?.viewMode, preferences?.showArchived, preferences?.sortBy]
+  );
 
-export const CardsDisplay = ({
-  viewMode,
-  reset,
-  persist,
-  setViewMode,
-  showArchived,
-  setShowArchived,
-  selectedSort,
-  setSelectedSort,
-  initialData,
-}: CardsDisplayProps) => {
-  useKeyboardShortcut("a", () => setShowArchived(!showArchived));
+  // Mutation to persist preferences
+  const updatePreferences = useMutation(
+    orpc.workspace.updatePreferences.mutationOptions({
+      onSuccess: () => {
+        toast.success("Display preferences saved");
+      },
+      onError: (error) => {
+        toast.error("Failed to save preferences", { description: error.message });
+      },
+    })
+  );
+
+  const reset = useCallback(() => {
+    setViewMode(originalPreferences.viewMode);
+    setShowArchived(originalPreferences.showArchived);
+    setSelectedSort(originalPreferences.sortBy);
+  }, [originalPreferences, setSelectedSort, setShowArchived, setViewMode]);
+
+  const persist = useCallback(() => {
+    updatePreferences.mutate({
+      viewMode,
+      showArchived,
+      sortBy: selectedSort,
+    });
+  }, [viewMode, showArchived, selectedSort, updatePreferences]);
 
   const isDirty = useMemo(() => {
-    if (viewMode !== initialData?.viewMode) return true;
-    if (selectedSort !== initialData?.sortBy) return true;
-    if (showArchived !== initialData?.showArchived) return true;
+    if (viewMode !== preferences?.viewMode) return true;
+    if (selectedSort !== preferences?.sortBy) return true;
+    if (showArchived !== preferences?.showArchived) return true;
 
     return false;
-  }, [viewMode, selectedSort, showArchived, initialData]);
+  }, [viewMode, selectedSort, showArchived, preferences]);
+
+  useKeyboardShortcut("a", () => setShowArchived(!showArchived));
+
   return (
     <Popover>
       <PopoverTrigger asChild>

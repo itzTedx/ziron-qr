@@ -8,6 +8,7 @@ import { orpc } from "@/lib/orpc/client";
 import { getQueryClient } from "@/lib/orpc/query/hydration";
 
 export default async function OrganizationsPage() {
+  "use cache";
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery(orpc.organization.list.queryOptions());
