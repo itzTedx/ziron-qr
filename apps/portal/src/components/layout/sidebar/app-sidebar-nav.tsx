@@ -2,7 +2,7 @@
 
 import { ReactNode, useMemo } from "react";
 
-import { useParams, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 import { Bell, ShieldCheck } from "lucide-react";
 
@@ -17,7 +17,7 @@ import { SidebarNavAreas, SidebarNavData, SidebarNavGroups } from "./types";
 
 const FIVE_YEARS_SECONDS = 60 * 60 * 24 * 365 * 5;
 
-const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = ({ slug }) => [
+const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = () => [
   {
     name: "Digital Card",
     description: "Create, organize, and measure the performance of your digital cards.",
@@ -27,7 +27,7 @@ const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = ({ slug }) => [
     // active: pathname.startsWith("/cards"),
 
     onClick: () => {
-      document.cookie = `ziron:${slug}=card;path=/;max-age=${FIVE_YEARS_SECONDS}`;
+      document.cookie = `ziron=card;path=/;max-age=${FIVE_YEARS_SECONDS}`;
     },
   },
 ];
@@ -161,7 +161,6 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
 };
 
 export function AppSidebarNav({ toolContent }: { toolContent?: ReactNode }) {
-  const { slug } = useParams() as { slug?: string };
   const pathname = usePathname();
 
   const currentArea = useMemo(() => {
@@ -175,7 +174,6 @@ export function AppSidebarNav({ toolContent }: { toolContent?: ReactNode }) {
       areas={NAV_AREAS}
       currentArea={currentArea}
       data={{
-        slug: slug || "",
         pathname,
       }}
       groups={NAV_GROUPS}

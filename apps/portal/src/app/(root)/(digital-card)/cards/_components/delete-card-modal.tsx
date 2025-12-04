@@ -2,8 +2,10 @@
 
 import { Dispatch, MouseEvent, SetStateAction, useCallback, useMemo, useState } from "react";
 
+import { useRouter } from "next/navigation";
+
 import { isDefinedError } from "@orpc/client";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { Button } from "@ziron/ui/components/button";
@@ -44,9 +46,30 @@ export function DeleteCardModal(props: DeleteCardModalProps) {
 
 function DeleteCardModalInner({ setShowDeleteCardModal, cards }: DeleteCardModalProps) {
   const [deleting, setDeleting] = useState(false);
+  const router = useRouter();
   const queryClient = getQueryClient();
 
-  const deleteCard = useMutation(orpc.card.delete.mutationOptions());
+  const deleteCard = useMutation(
+    orpc.card.delete.mutationOptions({
+      onError: (error) => {
+        if (isDefinedError(error)) {
+          toast.error(error.message);
+        } else {
+          const errorMessage = error instanceof Error ? error.message : "Unknown error";
+          toast.error(`Failed to delete cards. ${errorMessage}`);
+        }
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: orpc.card.list.queryKey(),
+        });
+        setShowDeleteCardModal(false);
+        toast.success(`Successfully deleted ${pluralize("card", cards.length)}!`, {
+          duration: 5000,
+        });
+      },
+    })
+  );
 
   const handleDeleteRequest = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -64,13 +87,14 @@ function DeleteCardModalInner({ setShowDeleteCardModal, cards }: DeleteCardModal
       toast.success(`Successfully deleted ${pluralize("card", cards.length)}!`, {
         duration: 5000,
       });
-    } catch (error) {
-      if (isDefinedError(error)) {
-        toast.error(error.message);
-      } else {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error";
-        toast.error(`Failed to delete cards. ${errorMessage}`);
+
+      // Navigate to home page after deleting a single card (from card detail page)
+      if (cards.length === 1) {
+        router.push("/");
       }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      toast.error(`Failed to delete cards. ${errorMessage}`);
     } finally {
       setDeleting(false);
     }
@@ -129,18 +153,54 @@ function DeleteCardModalInner({ setShowDeleteCardModal, cards }: DeleteCardModal
   );
 }
 
-export function useDeleteCardModal({ props }: { props: CardType | CardType[] }) {
+export function useDeleteCardModal({
+  cardId,
+  cardIds,
+  cards: providedCards,
+}: {
+  cardId?: string;
+  cardIds?: string[];
+  cards?: CardType[];
+}) {
   const [showDeleteCardModal, setShowDeleteCardModal] = useState(false);
 
+  // Fetch single card if cardId is provided (and cards/cardIds are not)
+  const singleCardQuery = useQuery({
+    ...orpc.card.get.queryOptions({ input: { id: cardId ?? "" } }),
+    enabled: !!cardId && !cardIds && !providedCards,
+  });
+
+  // Fetch multiple cards if cardIds is provided (and cards is not)
+  const multipleCardsQueries = useQueries({
+    queries: (cardIds ?? []).map((id) => orpc.card.get.queryOptions({ input: { id } })),
+  });
+
+  // Get cards data - prioritize provided cards, then fetched cards
+  const cards = useMemo(() => {
+    // If cards are provided directly, use them (for bulk actions)
+    if (providedCards && providedCards.length > 0) {
+      return providedCards;
+    }
+    // If cardIds are provided, fetch and return those
+    if (cardIds && cardIds.length > 0) {
+      return multipleCardsQueries.map((query) => query.data).filter((card): card is CardType => card !== undefined);
+    }
+    // If cardId is provided, fetch and return that single card
+    if (cardId && singleCardQuery.data) {
+      return [singleCardQuery.data];
+    }
+    return [];
+  }, [providedCards, cardIds, cardId, singleCardQuery.data, multipleCardsQueries]);
+
   const DeleteCardModalCallback = useCallback(() => {
-    return props ? (
+    return cards.length > 0 ? (
       <DeleteCardModal
-        cards={Array.isArray(props) ? props : [props]}
+        cards={cards}
         setShowDeleteCardModal={setShowDeleteCardModal}
         showDeleteCardModal={showDeleteCardModal}
       />
     ) : null;
-  }, [showDeleteCardModal, props]);
+  }, [showDeleteCardModal, cards]);
 
   return useMemo(
     () => ({

@@ -8,7 +8,6 @@ import type { LucideIcon } from "lucide-react";
 export type Icon = TablerIcon | LucideIcon | ComponentType<SVGProps<SVGSVGElement>>;
 
 export type SidebarNavData = {
-  slug: string;
   pathname: string;
 };
 

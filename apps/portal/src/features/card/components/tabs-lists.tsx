@@ -1,5 +1,6 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
+import { motion } from "motion/react";
 import { UseFormReturn } from "react-hook-form";
 
 import { Tabs, TabsList, TabsTrigger } from "@ziron/ui/components/tabs";
@@ -14,64 +15,61 @@ interface Props {
   children: React.ReactNode;
 }
 
-export const TabsLists = ({ form, children }: Props) => {
-  // const [tab, setTab] = useQueryState("tab", parseAsString.withDefault("general"));
+interface TabConfig {
+  value: string;
+  label: string;
+  hasError: boolean;
+}
 
+export const TabsLists = ({ form, children }: Props) => {
+  const [tab, setTab] = useState("general");
   // Check for errors in each tab
   const errors = form.formState.errors;
   const hasGeneralErrors = useMemo(() => hasFieldErrors(errors, generalFields), [errors]);
   const hasLinksErrors = useMemo(() => hasFieldErrors(errors, linksFields), [errors]);
   const hasCustomizeErrors = useMemo(() => hasFieldErrors(errors, customizeFields), [errors]);
 
-  // function handleTabChange(value: string) {
-  //   startTransition(() => {
-  //     void setTab(value);
-  //   });
-  // }
+  const tabs: TabConfig[] = [
+    { value: "general", label: "General", hasError: hasGeneralErrors },
+    { value: "links", label: "Links", hasError: hasLinksErrors },
+    { value: "customize", label: "Customize", hasError: hasCustomizeErrors },
+  ];
 
   return (
-    <Tabs className="relative mt-6 h-fit w-full px-3 lg:px-6" defaultValue="general">
-      <TabsList className="h-auto w-full justify-start rounded-none border-b bg-transparent p-0">
-        <TabsTrigger
-          className={cn(
-            "relative rounded-none py-2 after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary",
-            hasGeneralErrors && "text-destructive data-[state=active]:text-destructive"
-          )}
-          value="general"
-        >
-          <span className="inline-flex items-center gap-1.5">
-            General
-            {hasGeneralErrors && (
-              <span aria-label="Errors in General tab" className="size-2 rounded-full bg-destructive" />
+    <Tabs className="relative mt-4 h-fit w-full px-3 lg:px-6" defaultValue="general" onValueChange={setTab} value={tab}>
+      <TabsList>
+        {tabs.map(({ value, label, hasError }) => (
+          <TabsTrigger
+            className={cn(
+              "relative py-2 data-[state=active]:bg-transparent",
+              hasError && "text-destructive data-[state=active]:text-destructive"
             )}
-          </span>
-        </TabsTrigger>
-        <TabsTrigger
-          className={cn(
-            "relative rounded-none py-2 after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary",
-            hasLinksErrors && "text-destructive"
-          )}
-          value="links"
-        >
-          <span className="inline-flex items-center gap-1.5">
-            Links
-            {hasLinksErrors && <span aria-label="Errors in Links tab" className="size-2 rounded-full bg-destructive" />}
-          </span>
-        </TabsTrigger>
-        <TabsTrigger
-          className={cn(
-            "relative rounded-none py-2 after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary",
-            hasCustomizeErrors && "text-destructive"
-          )}
-          value="customize"
-        >
-          <span className="inline-flex items-center gap-1.5">
-            Customize
-            {hasCustomizeErrors && (
-              <span aria-label="Errors in Customize tab" className="size-2 rounded-full bg-destructive" />
+            key={value}
+            value={value}
+          >
+            <span className="relative z-10 inline-flex items-center gap-1.5">
+              {label}
+              {hasError && (
+                <span aria-label={`Errors in ${label} tab`} className="size-2 rounded-full bg-destructive" />
+              )}
+            </span>
+            {tab === value && (
+              <motion.span
+                animate={{
+                  opacity: 1,
+                  transition: { duration: 0.01, type: "spring", stiffness: 300, damping: 20 },
+                }}
+                className={cn("absolute inset-0 z-0 block h-full w-full rounded-[inherit] bg-card")}
+                exit={{
+                  opacity: 0,
+                  transition: { duration: 0.01 },
+                }}
+                initial={{ opacity: 0 }}
+                layoutId="cardHoverEffect"
+              />
             )}
-          </span>
-        </TabsTrigger>
+          </TabsTrigger>
+        ))}
       </TabsList>
       {children}
     </Tabs>

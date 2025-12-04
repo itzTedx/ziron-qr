@@ -2,7 +2,7 @@ import { IconArrowsMaximize } from "@tabler/icons-react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { parseAsBoolean, useQueryState } from "nuqs";
 
-import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@ziron/ui/components/card";
+import { Card, CardAction, CardContent, CardHeader } from "@ziron/ui/components/card";
 import { ScrollArea } from "@ziron/ui/components/scroll-area";
 import CardTemplate from "@ziron/ui/templates/card-template";
 import DefaultTemplate from "@ziron/ui/templates/default-template";
@@ -54,9 +54,8 @@ export const Preview = ({ cardData }: Props) => {
     : undefined;
 
   return (
-    <Card className="@container mt-6 hidden h-fit rounded-lg bg-background py-6 lg:block">
-      <CardHeader className="border-b">
-        <CardTitle>Preview</CardTitle>
+    <Card className="@container hidden aspect-5/4 h-fit overflow-hidden rounded-lg bg-background lg:block lg:aspect-4/3 xl:aspect-3/4">
+      <CardHeader>
         <CardAction className="row-span-1">
           <ResponsiveModal onOpenChange={(open) => setPreview(open ?? false)} open={preview}>
             <ResponsiveModalTrigger asChild>
@@ -66,7 +65,7 @@ export const Preview = ({ cardData }: Props) => {
               <ResponsiveModalHeader>
                 <ResponsiveModalTitle>Preview</ResponsiveModalTitle>
               </ResponsiveModalHeader>
-              <CardContent className={cn("relative p-0", cardData.appearance?.isDarkMode ? "dark" : "light")}>
+              <CardContent className={cn("relative p-0 px-0", cardData.appearance?.isDarkMode ? "dark" : "light")}>
                 <ScrollArea className="h-[640px]">
                   {(() => {
                     switch (cardData.appearance?.template) {
@@ -86,7 +85,7 @@ export const Preview = ({ cardData }: Props) => {
           </ResponsiveModal>
         </CardAction>
       </CardHeader>
-      <CardContent className="relative py-5">
+      <CardContent className="relative px-0">
         <PhoneMockup>
           <ScrollArea className="h-full">
             {(() => {

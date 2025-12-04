@@ -275,10 +275,10 @@ function NavItem({ item }: { item: NavItemType | NavSubItemType }) {
           "group flex h-8 items-center justify-between rounded-lg p-2 text-content-default text-sm leading-none transition-[background-color,color,font-weight] duration-75",
           "outline-none focus-visible:ring-2 focus-visible:ring-black/50",
           isActive && !items
-            ? "bg-brand-secondary/10 font-medium text-brand-secondary hover:bg-brand-secondary/20 active:bg-brand-secondary/30"
+            ? "bg-background font-medium text-brand-secondary active:bg-brand-secondary/30"
             : locked
               ? "cursor-not-allowed opacity-75"
-              : "hover:bg-bg-inverted/5 active:bg-bg-inverted/10"
+              : "hover:bg-faded active:bg-faded"
         )}
         data-active={isActive}
         href={locked ? "#" : href}

@@ -135,14 +135,11 @@ export const PhotoUploadModal = ({ currentImage }: { currentImage?: string }) =>
         <ResponsiveModalHeader>
           <ResponsiveModalTitle>Update Profile Picture</ResponsiveModalTitle>
         </ResponsiveModalHeader>
-        <div className="p-6 pt-0">
+        <div className="p-6">
           <FormField
             control={form.control}
             name="image"
             render={({ field }) => {
-              // Use previewUrl if a new file is selected, otherwise use the existing image from form
-              const activeImage = previewUrl ?? currentImage ?? null;
-
               const handleUploadOverride = (files: File[] | FileList, _options?: unknown) => {
                 const incomingFiles = Array.isArray(files) ? files : Array.from(files);
                 const [file] = incomingFiles;
@@ -153,12 +150,12 @@ export const PhotoUploadModal = ({ currentImage }: { currentImage?: string }) =>
               };
 
               const handleCropApply = async () => {
-                if (!croppedArea || !activeImage) return;
+                if (!croppedArea || !previewUrl || !selectedFile) return;
                 try {
                   const croppedFile = await createCroppedImage(
-                    activeImage,
+                    previewUrl,
                     croppedArea,
-                    selectedFile?.name ?? "profile-image.png"
+                    selectedFile.name ?? "profile-image.png"
                   );
                   upload([croppedFile]);
                 } catch (error) {
@@ -173,6 +170,21 @@ export const PhotoUploadModal = ({ currentImage }: { currentImage?: string }) =>
                     <ButtonGroup>
                       <Tooltip>
                         <TooltipTrigger asChild>
+                          <Button
+                            onClick={() => {
+                              form.setValue("image", undefined);
+                              resetAll();
+                            }}
+                            size="sm"
+                            variant="ghost"
+                          >
+                            Remove
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Remove image</TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
                           <Button size="icon-sm" variant="ghost">
                             <IconLink className="size-4" />
                           </Button>
@@ -182,41 +194,42 @@ export const PhotoUploadModal = ({ currentImage }: { currentImage?: string }) =>
                     </ButtonGroup>
                   </FormLabel>
                   <FormControl>
-                    {activeImage ? (
+                    {selectedFile ? (
+                      // Show cropper only when a new image is uploaded
                       <div className="relative flex flex-col gap-2">
-                        {selectedFile && (
-                          <HoverCard>
-                            <HoverCardTrigger asChild>
-                              <Button className="absolute top-2 left-2 z-10" size="icon-sm" variant="ghost">
-                                <IconInfoCircle />
-                              </Button>
-                            </HoverCardTrigger>
-                            <HoverCardContent>
-                              <p>{selectedFile.name}</p>
-                              <p>{formatBytes(selectedFile.size)}</p>
-                              <p>{selectedFile.type}</p>
-                            </HoverCardContent>
-                          </HoverCard>
-                        )}
+                        <HoverCard>
+                          <HoverCardTrigger asChild>
+                            <Button className="absolute top-2 left-2 z-10" size="icon-sm" variant="ghost">
+                              <IconInfoCircle />
+                            </Button>
+                          </HoverCardTrigger>
+                          <HoverCardContent>
+                            <p>{selectedFile.name}</p>
+                            <p>{formatBytes(selectedFile.size)}</p>
+                            <p>{selectedFile.type}</p>
+                          </HoverCardContent>
+                        </HoverCard>
                         <Tooltip>
-                          <Button
-                            className="absolute top-2 right-2 z-10"
-                            onClick={() => {
-                              form.setValue("image", undefined);
-                              setSelectedFile(null);
-                              resetAll();
-                            }}
-                            size="icon-sm"
-                            variant="destructive"
-                          >
-                            <IconX />
-                          </Button>
+                          <TooltipTrigger asChild>
+                            <Button
+                              className="absolute top-2 right-2 z-10"
+                              onClick={() => {
+                                setSelectedFile(null);
+                                resetAll();
+                              }}
+                              size="icon-sm"
+                              variant="destructive"
+                            >
+                              <IconX />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Cancel</TooltipContent>
                         </Tooltip>
                         <Cropper
                           aspectRatio={1}
                           className="h-80"
                           crop={crop}
-                          key={activeImage}
+                          key={previewUrl}
                           onCropAreaChange={onCropAreaChange}
                           onCropChange={setCrop}
                           onCropComplete={onCropComplete}
@@ -224,7 +237,7 @@ export const PhotoUploadModal = ({ currentImage }: { currentImage?: string }) =>
                           shape="circle"
                           zoom={zoom}
                         >
-                          <CropperImage alt="cropped image" crossOrigin="anonymous" src={activeImage} />
+                          <CropperImage alt="cropped image" crossOrigin="anonymous" src={previewUrl ?? ""} />
                           <CropperArea />
                         </Cropper>
                         <div className="flex items-center gap-2">
@@ -249,7 +262,31 @@ export const PhotoUploadModal = ({ currentImage }: { currentImage?: string }) =>
                           </div>
                         </div>
                       </div>
+                    ) : currentImage ? (
+                      // Show current image with remove option when no new file is selected
+                      <div className="relative flex flex-col gap-2">
+                        <div
+                          aria-label="Current profile picture"
+                          className="relative h-80 w-full overflow-hidden rounded-md bg-muted"
+                          style={{
+                            backgroundImage: `url(${currentImage})`,
+                            backgroundPosition: "center",
+                            backgroundSize: "cover",
+                            backgroundRepeat: "no-repeat",
+                          }}
+                        />
+                        <div className="flex justify-center">
+                          <UploadDropzoneProgress
+                            accept="image/*"
+                            control={control}
+                            description="Upload a new image to replace the current one"
+                            uploadOverride={handleUploadOverride}
+                            {...field}
+                          />
+                        </div>
+                      </div>
                     ) : (
+                      // Show upload dropzone when no image exists
                       <UploadDropzoneProgress
                         accept="image/*"
                         control={control}

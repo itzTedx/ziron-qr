@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 
 import { useRouter } from "next/navigation";
 
@@ -20,8 +20,11 @@ import { CardType } from "@ziron/db/schema";
 import { cn } from "@ziron/utils";
 import { cardSchema, zCardSchema } from "@ziron/validators";
 
+import { QRCode } from "@/components/ui/qr-code";
+import { ShimmerDots } from "@/components/ui/shimmer-dots";
 import { UnsavedChangesBar } from "@/components/ui/unsaved-changes-bar";
 
+import { constructUrl } from "@/lib/link/construct-url";
 import { orpc } from "@/lib/orpc/client";
 import { getQueryClient } from "@/lib/orpc/query/hydration";
 
@@ -31,6 +34,7 @@ import { CardCustomize } from "./form-sections/customize";
 import { CardGeneral } from "./form-sections/general";
 import { CardLinks } from "./form-sections/links";
 import { hasAnyTouchedField } from "./helpers/has-touched-field";
+import { Preview } from "./preview";
 import { ProfileDashboard } from "./profile-dashboard";
 import { TabsLists } from "./tabs-lists";
 
@@ -202,6 +206,7 @@ export function CardForm({ isEditMode, initialData }: Props) {
   // Go back to `/cards` when ESC is pressed
   useKeyboardShortcut("Escape", () => router.push("/cards"), {
     enabled: !isDirty,
+    priority: 1,
   });
 
   // Save when CMD+S or CTRL+S is pressed
@@ -221,14 +226,9 @@ export function CardForm({ isEditMode, initialData }: Props) {
           <ProfileDashboard
             data={{
               id: data.id,
-              name: data.name,
-              designation: data.designation,
-              slug: data.slug,
               image: data.image,
               cover: data.cover,
             }}
-            isPending={isPending}
-            organization={data.organizationId ? { id: data.organizationId, name: data.name ?? "" } : undefined}
           />
 
           <div className={cn("mx-auto grid max-w-3xl grid-cols-1 gap-4 pb-6", shouldShowBar && "pb-20")}>
@@ -257,15 +257,28 @@ export function CardForm({ isEditMode, initialData }: Props) {
             </TabsLists>
           </div>
         </div>
-        <div className="sticky top-0 flex flex-col px-4 md:h-[calc(100vh-calc(var(--spacing)*16)-18px)] md:px-6 lg:bg-sidebar lg:px-0">
+        <div className="sticky top-0 flex flex-col px-4 md:h-[calc(100vh-calc(var(--spacing)*14)-18px)] md:px-6 lg:bg-sidebar lg:px-0">
           <div className="lg:divide-y">
-            <div className="py-4 lg:px-4 lg:py-6">
+            <div className="py-4 lg:px-4">
               <SlugField data={data} />
             </div>
+            <div className="py-4 lg:px-4">
+              <p className="mb-1 font-medium text-sm leading-none">QR Code</p>
+              <div className="relative flex items-center justify-center gap-6 rounded-lg border p-4">
+                <ShimmerDots className="mask-[radial-gradient(40%_80%,transparent_20%,black)] opacity-50 dark:opacity-30" />
+
+                <QRCode className="rounded-md dark:invert" scale={1} url={constructUrl(data.slug ?? "")} />
+              </div>
+            </div>
+            <div className="py-4 lg:px-4">
+              <Suspense fallback={<div>Loading Preview...</div>}>
+                <Preview cardData={data} />
+              </Suspense>
+            </div>
           </div>
-          <div className="mt-auto justify-between gap-3 border-t py-4 md:flex lg:px-4 lg:py-6">
+          <div className="mt-auto justify-between gap-3 border-t py-4 md:flex lg:px-4">
             <p className="flex items-center gap-2 text-muted-foreground text-sm">
-              <div className="inline-block size-1.5 rounded-full bg-success" /> {isDirty ? null : "Saved as draft"}
+              <span className="inline-block size-1.5 rounded-full bg-success" /> {isDirty ? null : "Saved as draft"}
             </p>
             <Button type="submit">
               <LoadingSwap className="flex items-center gap-1.5" isLoading={isPending}>
@@ -278,9 +291,6 @@ export function CardForm({ isEditMode, initialData }: Props) {
             </Button>
           </div>
         </div>
-        {/* <Suspense fallback={<div>Loading Preview...</div>}>
-          <Preview cardData={data} />
-        </Suspense> */}
       </form>
     </Form>
   );

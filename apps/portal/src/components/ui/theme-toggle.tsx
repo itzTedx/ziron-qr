@@ -32,11 +32,7 @@ export function ThemeToggle() {
           <p>Theme</p>
         </TooltipContent>
 
-        <DropdownMenuContent
-          align="end"
-          className="ml-2 w-[--radix-dropdown-menu-trigger-width] min-w-48 rounded-lg"
-          sideOffset={4}
-        >
+        <DropdownMenuContent align="end" className="ml-2 rounded-lg" side="top" sideOffset={4}>
           <DropdownMenuItem onClick={() => setTheme("light")}>Light</DropdownMenuItem>
           <DropdownMenuItem onClick={() => setTheme("dark")}>Dark</DropdownMenuItem>
           <DropdownMenuItem onClick={() => setTheme("system")}>System</DropdownMenuItem>

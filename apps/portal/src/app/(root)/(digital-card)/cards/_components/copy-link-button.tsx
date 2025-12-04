@@ -36,12 +36,12 @@ export const CopyLinkButton = ({ slug }: { slug?: string | null }) => {
           />
         </div>
       ) : (
-        <>
-          <div className="inline-flex h-5 w-fit min-w-5 items-center justify-center group-hover:hidden">
+        <div className="relative inline-flex h-5 w-fit min-w-5">
+          <div className="absolute inline-flex h-5 w-fit min-w-5 items-center justify-center group-hover:hidden">
             <IconCopy className={cn("size-4", isCopied && "fade-in-0 slide-in-from-bottom animate-in")} />
           </div>
-          <Kbd className="fade-in hidden animate-in group-hover:inline-flex">C</Kbd>
-        </>
+          <Kbd className="fade-in absolute animate-in group-hover:inline-flex sm:hidden">C</Kbd>
+        </div>
       )}
       <span className="hidden sm:block">Copy Link</span>
     </Button>

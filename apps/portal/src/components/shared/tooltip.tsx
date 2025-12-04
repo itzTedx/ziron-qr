@@ -15,10 +15,17 @@ export interface TooltipProps extends Omit<typeof TooltipContent, "content"> {
   delayDuration?: ComponentProps<typeof TooltipRoot>["delayDuration"];
 }
 
-export const Tooltip = ({ content, disabled, children, side, ...props }: PropsWithChildren<TooltipProps>) => {
+export const Tooltip = ({
+  content,
+  disabled,
+  children,
+  side,
+  delayDuration,
+  ...props
+}: PropsWithChildren<TooltipProps>) => {
   const [open, setOpen] = useState(false);
   return (
-    <TooltipRoot onOpenChange={setOpen} open={disabled ? false : open}>
+    <TooltipRoot delayDuration={delayDuration} onOpenChange={setOpen} open={disabled ? false : open}>
       <TooltipTrigger
         asChild
         onBlur={() => {

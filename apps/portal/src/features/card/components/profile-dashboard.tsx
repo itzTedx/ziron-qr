@@ -5,31 +5,22 @@ import Image from "next/image";
 import { zCardSchema } from "@ziron/validators";
 
 import { CoverUpload } from "./fields/cover-upload";
+import { PhotoUploadModal } from "./fields/photo-upload-modal";
 
 interface Props {
-  isPending: boolean;
-  data: Partial<Pick<zCardSchema, "id" | "name" | "designation" | "slug" | "image" | "cover">>;
-  organization?: {
-    id: string;
-    name: string;
-  };
+  data: Partial<Pick<zCardSchema, "id" | "image" | "cover">>;
 }
 
-export const ProfileDashboard = ({ organization, data }: Props) => {
+export const ProfileDashboard = ({ data }: Props) => {
   const [isCoverUploadOpen, setIsCoverUploadOpen] = useState(false);
 
   return (
     <div>
-      <div className="group relative h-40 cursor-pointer overflow-hidden border-b bg-secondary">
-        <div
-          onClick={() => {
-            setIsCoverUploadOpen(true);
-          }}
-          role="button"
-        >
+      <div className="relative h-40 overflow-hidden border-b bg-secondary">
+        <div>
           <Image
             alt="cover image"
-            className="object-cover transition-[filter] duration-500 group-hover:brightness-75"
+            className="object-cover transition-[filter] duration-500 hover:brightness-75"
             fill
             priority
             quality={80}
@@ -37,6 +28,18 @@ export const ProfileDashboard = ({ organization, data }: Props) => {
             src={data.cover ?? "/images/placeholder-cover.jpg"}
             title="Cover Image"
           />
+        </div>
+        <div className="absolute top-4 left-4 z-10 aspect-square h-32 overflow-hidden rounded-xl border-4 bg-card shadow-lg">
+          <Image
+            alt="profile image"
+            className="object-cover transition-[filter] duration-500 hover:brightness-75"
+            fill
+            priority
+            quality={80}
+            sizes="100vw"
+            src={data.image ?? "/images/placeholder-profile.jpg"}
+          />
+          <PhotoUploadModal currentImage={data.image} />
         </div>
 
         <CoverUpload
