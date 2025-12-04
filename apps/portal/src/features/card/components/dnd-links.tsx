@@ -18,7 +18,7 @@ import { Label } from "@ziron/ui/components/label";
 import { cn } from "@ziron/utils";
 import { zCardSchema } from "@ziron/validators";
 
-import { ResponsiveModal } from "@/components/ui/responsive-modal";
+import { ResponsiveModal, ResponsiveModalContent, ResponsiveModalTrigger } from "@/components/ui/responsive-modal";
 
 import { LINKS } from "../data/constants";
 import { Link } from "../types";
@@ -266,49 +266,45 @@ export const DndLinks = () => {
           ))}
         </Reorder.Group>
       </div>
-      <ResponsiveModal
-        asChild
-        className="min-w-2xl"
-        closeModal={setOpen}
-        isOpen={open} // Use isOpen instead of open
-        title={"Add Link"} // Use closeModal instead of setOpen
-        trigger={
+      <ResponsiveModal onOpenChange={setOpen} open={open}>
+        <ResponsiveModalTrigger asChild>
           <Button className="w-full" size="lg" type="button" variant="outline">
-            <IconPlus className="mr-2" size={16} /> Add
+            <IconPlus className="size-4" /> Add Links
           </Button>
-        }
-      >
-        <div className="p-6 pt-0 pb-6">
-          {LINKS.map((item, i) => (
-            <div className="py-3" key={`${item.label}-${i}`}>
-              <h4 className="pb-2 text-muted-foreground text-sm">{item.label}</h4>
+        </ResponsiveModalTrigger>
+        <ResponsiveModalContent>
+          <div className="p-6 pt-0 pb-6">
+            {LINKS.map((item, i) => (
+              <div className="py-3" key={`${item.label}-${i}`}>
+                <h4 className="pb-2 text-muted-foreground text-sm">{item.label}</h4>
 
-              <div className={cn("grid gap-x-6", item.links.length > 1 ? "grid-cols-2" : "grid-cols-1")}>
-                {item.links.map((link, i) => (
-                  <div className="flex items-center justify-between border-b py-3" key={`addLink-${i}-${link.label}`}>
-                    <div className="flex items-center gap-4 font-medium">
-                      <div className="relative size-8">
-                        <Image alt="" fill sizes="10vw" src={link.icon} />
+                <div className={cn("grid gap-x-6", item.links.length > 1 ? "grid-cols-2" : "grid-cols-1")}>
+                  {item.links.map((link, i) => (
+                    <div className="flex items-center justify-between border-b py-3" key={`addLink-${i}-${link.label}`}>
+                      <div className="flex items-center gap-4 font-medium">
+                        <div className="relative size-8">
+                          <Image alt="" fill sizes="10vw" src={link.icon} />
+                        </div>
+
+                        <p>{link.label}</p>
                       </div>
-
-                      <p>{link.label}</p>
+                      <DialogClose asChild>
+                        <Button
+                          className="h-8 gap-2 px-2 font-semibold text-primary"
+                          onClick={() => handleLinkAdd(link, item.label)}
+                          variant="ghost"
+                        >
+                          <IconPlus className="size-3 stroke-[2.5]" />
+                          Add
+                        </Button>
+                      </DialogClose>
                     </div>
-                    <DialogClose asChild>
-                      <Button
-                        className="h-8 gap-2 px-2 font-semibold text-primary"
-                        onClick={() => handleLinkAdd(link, item.label)}
-                        variant="ghost"
-                      >
-                        <IconPlus className="size-3 stroke-[2.5]" />
-                        Add
-                      </Button>
-                    </DialogClose>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </ResponsiveModalContent>
       </ResponsiveModal>
 
       <section>

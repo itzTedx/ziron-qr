@@ -164,6 +164,7 @@ export const updateCard = protectedProcedure
   )
   .output(
     z.object({
+      id: z.string(),
       cardName: z.string(),
     })
   )
@@ -269,6 +270,7 @@ export const updateCard = protectedProcedure
       }
 
       return {
+        id: card.id,
         cardName: card.name,
       };
     } catch (error) {

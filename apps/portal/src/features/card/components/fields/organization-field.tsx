@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 
 import Image from "next/image";
 
-import { IconCaretUpDownFilled } from "@tabler/icons-react";
+import { IconCaretUpDownFilled, IconPlus } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { parseAsString, useQueryStates } from "nuqs";
 
@@ -29,8 +29,10 @@ interface Props {
 
 export const OrganizationField = ({ organizationId }: Props) => {
   const [openPopover, setOpenPopover] = useState(false);
+  const [search, setSearch] = useState("");
   const [, setOrganizationModal] = useQueryStates({
     modal: parseAsString,
+    name: parseAsString,
   });
   const { data } = useQuery(orpc.organization.list.queryOptions());
   const form = useFormContext<zCardSchema>();
@@ -54,8 +56,8 @@ export const OrganizationField = ({ organizationId }: Props) => {
   // Memoize organization modal handler
   const handleModalOpen = useCallback(() => {
     setOpenPopover(false);
-    setOrganizationModal({ modal: "organization" });
-  }, [setOrganizationModal]);
+    setOrganizationModal({ modal: "organization", name: search });
+  }, [search, setOrganizationModal]);
 
   return (
     <FormField
@@ -95,10 +97,16 @@ export const OrganizationField = ({ organizationId }: Props) => {
                 </Button>
               </FormControl>
             </PopoverTrigger>
-            <PopoverContent align="start" className="p-0 sm:w-78">
+            <PopoverContent align="start" className="p-0 sm:w-86">
               <Command>
-                <CommandInput placeholder="Search Organization..." />
-                <CommandEmpty>Organization not found</CommandEmpty>
+                <CommandInput onValueChange={setSearch} placeholder="Search or Add Organization..." value={search} />
+
+                <CommandEmpty className="px-2 py-2">
+                  <Button className="w-full justify-start" onClick={handleModalOpen} size="sm" variant="ghost">
+                    <IconPlus /> Create {search}
+                  </Button>
+                </CommandEmpty>
+
                 <CommandList className="max-h-[300px] overflow-auto">
                   <CommandGroup heading="Organizations">
                     {data?.map((org) => (

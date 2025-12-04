@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { useRouter } from "next/navigation";
 
@@ -116,7 +116,7 @@ export function CardForm({ isEditMode, initialData }: Props) {
         toast.success(`Card: ${updatedCard.cardName} has been updated`);
         form.reset(form.getValues(), { keepDefaultValues: true });
         queryClient.invalidateQueries({
-          queryKey: orpc.card.list.queryKey(),
+          queryKey: orpc.card.get.queryKey({ input: { id: updatedCard.id } }),
         });
         router.push("/cards");
       },
@@ -214,7 +214,7 @@ export function CardForm({ isEditMode, initialData }: Props) {
   return (
     <Form {...form}>
       <form
-        className="grid grid-cols-1 md:divide-x lg:grid-cols-[minmax(0,1fr)_300px]"
+        className="grid grid-cols-1 md:divide-x lg:grid-cols-[minmax(0,1fr)_320px]"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <div>
@@ -257,24 +257,25 @@ export function CardForm({ isEditMode, initialData }: Props) {
             </TabsLists>
           </div>
         </div>
-        <div className="sticky top-0 px-4 md:h-[calc(100vh-calc(var(--spacing)*16)-16px)] md:px-6 lg:bg-sidebar lg:px-0">
-          <div className="mx-auto max-w-xl lg:divide-y">
+        <div className="sticky top-0 flex flex-col px-4 md:h-[calc(100vh-calc(var(--spacing)*16)-18px)] md:px-6 lg:bg-sidebar lg:px-0">
+          <div className="lg:divide-y">
             <div className="py-4 lg:px-4 lg:py-6">
-              <Suspense fallback={<div>Loading...</div>}>
-                <SlugField data={data} organizationId={data.organizationId} />
-              </Suspense>
+              <SlugField data={data} />
             </div>
-            <div className="flex-col items-center gap-3 py-4 md:flex lg:px-4 lg:py-6">
-              <Button className="w-full" size="lg" type="submit">
-                <LoadingSwap className="flex items-center gap-1.5" isLoading={isPending}>
-                  Save {isEditMode ? "Changes" : "Card"}
-                  <KbdGroup>
-                    <Kbd>Ctrl</Kbd>
-                    <Kbd>S</Kbd>
-                  </KbdGroup>
-                </LoadingSwap>
-              </Button>
-            </div>
+          </div>
+          <div className="mt-auto justify-between gap-3 border-t py-4 md:flex lg:px-4 lg:py-6">
+            <p className="flex items-center gap-2 text-muted-foreground text-sm">
+              <div className="inline-block size-1.5 rounded-full bg-success" /> {isDirty ? null : "Saved as draft"}
+            </p>
+            <Button type="submit">
+              <LoadingSwap className="flex items-center gap-1.5" isLoading={isPending}>
+                Save
+                <KbdGroup>
+                  <Kbd className="text-white">Ctrl</Kbd>
+                  <Kbd className="text-white">S</Kbd>
+                </KbdGroup>
+              </LoadingSwap>
+            </Button>
           </div>
         </div>
         {/* <Suspense fallback={<div>Loading Preview...</div>}>

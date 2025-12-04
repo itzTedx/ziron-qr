@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
 import { CheckCircle, Edit, Loader, X, XCircle } from "lucide-react";
 import { useFormContext } from "react-hook-form";
@@ -28,21 +28,16 @@ import { orpc } from "@/lib/orpc/client";
 
 interface Props {
   data: Partial<Pick<zCardSchema, "id" | "name" | "designation" | "slug" | "image" | "cover">>;
-  organizationId?: string;
 }
 
 type SlugValidationState = "idle" | "validating" | "valid" | "invalid";
 
-export const SlugField = ({ data, organizationId }: Props) => {
+export const SlugField = ({ data }: Props) => {
   const form = useFormContext<zCardSchema>();
   const [slug, setSlug] = useState(data.slug ?? "");
   const [isEditingSlug, setIsEditingSlug] = useState(false);
   const [validationState, setValidationState] = useState<SlugValidationState>("idle");
   const openModal = useSetAtom(openShareModalAtom);
-
-  const { data: organization } = useSuspenseQuery(
-    orpc.organization.get.queryOptions({ input: { id: organizationId } })
-  );
 
   // Transform slug as user types
   const transformedSlug = transformSlug(slug);
@@ -123,7 +118,7 @@ export const SlugField = ({ data, organizationId }: Props) => {
   }
 
   function handleShare() {
-    if (!data.id || !data.slug || !organization) {
+    if (!data.id || !data.slug) {
       toast.error("Unable to share", { description: "Please ensure the card has been saved with a valid slug" });
       return;
     }

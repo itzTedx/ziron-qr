@@ -44,20 +44,21 @@ export function UnsavedChangesBar({
   return (
     <div
       className={cn(
-        "lg:filter-[drop-shadow(0_5px_8px_#222A351d)] sticky bottom-0 w-full overflow-hidden lg:bottom-4",
+        "sticky bottom-0 w-full lg:bottom-4",
         show
           ? ["duration-300", "animate-in", "fade-in", "slide-in-from-bottom-4"]
           : ["duration-200", "animate-out", "fade-out", "slide-out-to-bottom-4"],
         className
       )}
     >
-      <div className="mx-auto flex max-w-4xl flex-col gap-3 rounded-lg border bg-background px-4 py-3 shadow-lg sm:flex-row sm:items-center sm:justify-between">
+      <div className="mx-auto flex max-w-4xl flex-col gap-3 rounded-lg border bg-card px-4 py-3 shadow-lg sm:flex-row sm:items-center sm:justify-between lg:shadow-lg">
         <span className="font-medium text-foreground text-sm">Unsaved changes</span>
         <div className="flex items-center gap-3">
           <Button
             className="flex-1 sm:flex-initial"
             disabled={isSaving}
             onClick={onDiscard}
+            size="sm"
             type="button"
             variant="outline"
           >
@@ -67,6 +68,7 @@ export function UnsavedChangesBar({
             className="flex-1 sm:flex-initial"
             disabled={isSaving}
             onClick={onSave}
+            size="sm"
             type="button"
             variant="inverted"
           >

@@ -12,7 +12,10 @@ function Breadcrumb({ ...props }: React.ComponentProps<"nav">) {
 function BreadcrumbList({ className, ...props }: React.ComponentProps<"ol">) {
   return (
     <ol
-      className={cn("wrap-break-words flex items-center gap-1.5 font-medium text-sm sm:gap-2.5 sm:text-lg", className)}
+      className={cn(
+        "wrap-break-words flex items-center gap-1.5 font-medium text-sm sm:gap-2.5 sm:text-base",
+        className
+      )}
       data-slot="breadcrumb-list"
       {...props}
     />

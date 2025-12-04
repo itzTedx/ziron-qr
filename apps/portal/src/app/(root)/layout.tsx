@@ -8,7 +8,7 @@ import { MainNav } from "@/components/layout/sidebar/main-nav";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 import { ShareModal } from "@/features/modal/share-modal";
-import CompanyFormModal from "@/features/organization/components/modal";
+import { OrganizationFormModal } from "@/features/organization/components/modal";
 
 export const metadata: Metadata = {
   title: "QR Code Generator",
@@ -44,7 +44,7 @@ export default function RootLayout({
       </Suspense>
 
       <Suspense>
-        <CompanyFormModal />
+        <OrganizationFormModal />
       </Suspense>
     </>
   );

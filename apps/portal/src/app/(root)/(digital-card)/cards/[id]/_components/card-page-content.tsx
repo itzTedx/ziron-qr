@@ -3,8 +3,6 @@ import { Suspense } from "react";
 import { ScrollArea, ScrollBar } from "@ziron/ui/components/scroll-area";
 import { Skeleton } from "@ziron/ui/components/skeleton";
 
-import { smartTruncate } from "@ziron/utils";
-
 import Header from "@/components/layout/header";
 
 import { CardForm } from "@/features/card/components/card-form";
@@ -26,26 +24,18 @@ async function SuspenseCardPageHeader({ params }: CardPageContentProps) {
 
   await queryClient.prefetchQuery(orpc.analytics.getCardAnalytics.queryOptions({ input: { cardId: id } }));
 
-  const isEditMode = id !== "create";
-
   // Fetching the card if in edit mode
-  const card = isEditMode ? await client.card.get({ id }) : undefined;
+  const card = await client.card.get({ id });
 
-  const name = isEditMode
-    ? (`${smartTruncate(card?.organization.name!, 9)}/${smartTruncate(card?.name!, 9)}` as const)
-    : ("Create New Card" as const);
+  const name = `${card?.organization.name}/${card?.name}` as const;
 
   return (
     <Header backHref="/" currentPage={name} showBackButton title="Cards">
-      {isEditMode ? (
-        <>
-          <CopyLinkButton slug={card?.slug} />
-          <HydrateClient client={queryClient}>
-            <ClicksVisits cardId={id} className="max-md:hidden" />
-          </HydrateClient>
-          <CardActionsDropdown cardId={id} />
-        </>
-      ) : null}
+      <CopyLinkButton slug={card?.slug} />
+      <HydrateClient client={queryClient}>
+        <ClicksVisits cardId={id} className="max-md:hidden" />
+      </HydrateClient>
+      <CardActionsDropdown cardId={id} />
     </Header>
   );
 }

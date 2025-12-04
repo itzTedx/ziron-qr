@@ -2,16 +2,9 @@ import { useState } from "react";
 
 import Image from "next/image";
 
-import { IconArrowsMaximize, IconShare } from "@tabler/icons-react";
-
-import { Badge } from "@ziron/ui/components/badge";
-import { Button } from "@ziron/ui/components/button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ziron/ui/components/tooltip";
-
 import { zCardSchema } from "@ziron/validators";
 
 import { CoverUpload } from "./fields/cover-upload";
-import { PhotoUploadModal } from "./fields/photo-upload-modal";
 
 interface Props {
   isPending: boolean;
@@ -59,7 +52,7 @@ export const ProfileDashboard = ({ organization, data }: Props) => {
           }}
         />
       </div>
-      <section className="-mt-16 container mx-auto">
+      {/* <section className="-mt-16 container mx-auto">
         <div className="relative rounded-xl border-background bg-card/80 px-4 py-4 backdrop-blur-xl sm:border sm:px-6 sm:shadow-lg">
           <div className="flex items-center md:px-3 lg:pr-6">
             <div className="group relative size-24 shrink-0">
@@ -113,7 +106,7 @@ export const ProfileDashboard = ({ organization, data }: Props) => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 };

@@ -11,7 +11,7 @@ import {
 
 import OrganizationForm from "./organization-form";
 
-export default function OrganizationFormModal() {
+export function OrganizationFormModal() {
   const [modal, setOrganizationModal] = useQueryStates({
     modal: parseAsString,
   });
