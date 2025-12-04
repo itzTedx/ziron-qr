@@ -10,7 +10,7 @@ const baseUrl = env.NODE_ENV === "production" ? "https://ziron-qr-portal.vercel.
 
 export const auth = initAuth({
   baseUrl: baseUrl,
-  trustedOrigins: [baseUrl],
+  trustedOrigins: [baseUrl, "http://192.168.1.60:3000"],
   plugins: [openAPI()],
   secret: env.BETTER_AUTH_SECRET,
 });

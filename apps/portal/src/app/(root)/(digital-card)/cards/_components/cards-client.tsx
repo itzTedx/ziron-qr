@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useCallback, useMemo, useState } from "react";
 
 import { IconChevronDown, IconSearch } from "@tabler/icons-react";
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
@@ -24,20 +24,29 @@ import { CardsDisplay } from "./cards-display";
 import { CardsToolbar } from "./cards-toolbar";
 import { MoreCardOptions } from "./more-card-options";
 
+interface WorkspacePreferences {
+  viewMode: "cards" | "rows";
+  showArchived: boolean;
+  sortBy: CardsSortSlug;
+}
+
 export const CardsClient = () => {
   // Fetch preferences from database
   const { data: preferences } = useSuspenseQuery(orpc.workspace.getPreferences.queryOptions());
 
+  // Store original preferences for reset functionality
+  const originalPreferences = useMemo<WorkspacePreferences>(
+    () => ({
+      viewMode: preferences.viewMode,
+      showArchived: preferences.showArchived,
+      sortBy: preferences.sortBy,
+    }),
+    [preferences.viewMode, preferences.showArchived, preferences.sortBy]
+  );
+
   const [viewMode, setViewMode] = useState<"cards" | "rows">(preferences.viewMode);
   const [showArchived, setShowArchived] = useState(preferences.showArchived);
   const [selectedSort, setSelectedSort] = useState<CardsSortSlug>(preferences.sortBy);
-
-  // Update state when preferences are loaded
-  useEffect(() => {
-    setViewMode(preferences.viewMode);
-    setShowArchived(preferences.showArchived);
-    setSelectedSort(preferences.sortBy);
-  }, [preferences]);
 
   // Mutation to persist preferences
   const updatePreferences = useMutation(
@@ -51,19 +60,19 @@ export const CardsClient = () => {
     })
   );
 
-  const reset = () => {
-    setViewMode(preferences.viewMode);
-    setShowArchived(preferences.showArchived);
-    setSelectedSort(preferences.sortBy);
-  };
+  const reset = useCallback(() => {
+    setViewMode(originalPreferences.viewMode);
+    setShowArchived(originalPreferences.showArchived);
+    setSelectedSort(originalPreferences.sortBy);
+  }, [originalPreferences]);
 
-  const persist = () => {
+  const persist = useCallback(() => {
     updatePreferences.mutate({
       viewMode,
       showArchived,
       sortBy: selectedSort,
     });
-  };
+  }, [viewMode, showArchived, selectedSort, updatePreferences]);
 
   return (
     <PageWidthWrapper className="flex flex-col gap-y-3 sm:gap-y-4">
@@ -107,11 +116,15 @@ export const CardsClient = () => {
   );
 };
 
-const CardsClientContent = ({ viewMode }: { viewMode: "cards" | "rows" }) => {
+interface CardsClientContentProps {
+  viewMode: "cards" | "rows";
+}
+
+const CardsClientContent = ({ viewMode }: CardsClientContentProps) => {
   const [isSelectMode, setIsSelectMode] = useState(false);
   const [selectedCardsId, setSelectedCardsId] = useState<string[]>([]);
 
-  const { data: cards, isLoading } = useSuspenseQuery(orpc.card.list.queryOptions());
+  const { data: cards } = useSuspenseQuery(orpc.card.list.queryOptions());
   const { data: cardsCount } = useSuspenseQuery(orpc.card.count.queryOptions({ input: {} }));
 
   return (
@@ -121,7 +134,6 @@ const CardsClientContent = ({ viewMode }: { viewMode: "cards" | "rows" }) => {
       <CardsToolbar
         cards={cards}
         cardsCount={cardsCount}
-        isLoading={isLoading}
         isSelectMode={isSelectMode}
         selectedCardsId={selectedCardsId}
         setIsSelectMode={setIsSelectMode}

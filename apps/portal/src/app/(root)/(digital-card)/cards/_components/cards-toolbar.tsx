@@ -6,7 +6,6 @@ import { CircleCheck, Trash, X } from "lucide-react";
 
 import { AnimatedSizeContainer } from "@ziron/ui/components/animated-size-container";
 import { Button } from "@ziron/ui/components/button";
-import { Spinner } from "@ziron/ui/components/spinner";
 import { PaginationState } from "@ziron/ui/components/table";
 
 import { CardType } from "@ziron/db/schema";
@@ -22,7 +21,6 @@ import { DeleteCardModal } from "./delete-card-modal";
 import { PaginationControls } from "./pagination";
 
 interface Props {
-  isLoading: boolean;
   cards: CardType[];
   cardsCount: number;
   isSelectMode: boolean;
@@ -40,7 +38,7 @@ type BulkAction = {
 };
 
 export const CardsToolbar = memo(
-  ({ isLoading, cards, cardsCount, isSelectMode, setIsSelectMode, selectedCardsId, setSelectedCardsId }: Props) => {
+  ({ cards, cardsCount, isSelectMode, setIsSelectMode, selectedCardsId, setSelectedCardsId }: Props) => {
     const [pagination, setPagination] = useState<PaginationState>({
       pageIndex: 1,
       pageSize: 10,
@@ -116,15 +114,9 @@ export const CardsToolbar = memo(
                     totalCount={cardsCount}
                     unit={(plural) => `${plural ? "links" : "link"}`}
                   >
-                    {isLoading ? (
-                      <Spinner className="size-3.5" />
-                    ) : (
-                      <div className="hidden sm:block">
-                        <Suspense>
-                          <ArchivedLinksHint />
-                        </Suspense>
-                      </div>
-                    )}
+                    <Suspense>
+                      <ArchivedLinksHint />
+                    </Suspense>
                   </PaginationControls>
                   <div className="flex items-center gap-2 pt-3 sm:hidden">
                     <CreateButton hotkey="c" href="/cards/create" label="Create Card" />

@@ -1,6 +1,6 @@
-import { Activity, useMemo } from "react";
+import { useMemo } from "react";
 
-import { IconChevronDown, IconLayoutGrid, IconLayoutList, IconTable } from "@tabler/icons-react";
+import { IconChevronDown, IconLayoutList, IconTable } from "@tabler/icons-react";
 import { AnimatePresence, motion } from "motion/react";
 
 import { Button } from "@ziron/ui/components/button";
@@ -15,7 +15,7 @@ import { CardsSortSlug } from "@ziron/validators";
 import { AnimateIcon } from "@/components/ui/icon";
 import { Switch } from "@/components/ui/switch";
 
-import { BoxArchive, IconArrowsUpDown } from "@/assets/icons";
+import { BoxArchive, IconArrowsUpDown, IconLayoutGrid } from "@/assets/icons";
 
 import { CardSort } from "./card-sort";
 
@@ -23,6 +23,24 @@ const CARDS_DISPLAY_OPTIONS = [
   { id: "cards", label: "Cards", icon: IconLayoutList },
   { id: "rows", label: "Rows", icon: IconTable },
 ] as const;
+
+interface CardsDisplayInitialData {
+  viewMode: "cards" | "rows";
+  showArchived: boolean;
+  sortBy: CardsSortSlug;
+}
+
+interface CardsDisplayProps {
+  viewMode: "cards" | "rows";
+  reset: () => void;
+  persist: () => void;
+  setViewMode: (viewMode: "cards" | "rows") => void;
+  showArchived: boolean;
+  setShowArchived: (showArchived: boolean) => void;
+  selectedSort: CardsSortSlug;
+  setSelectedSort: (selectedSort: CardsSortSlug) => void;
+  initialData: CardsDisplayInitialData;
+}
 
 export const CardsDisplay = ({
   viewMode,
@@ -34,21 +52,7 @@ export const CardsDisplay = ({
   selectedSort,
   setSelectedSort,
   initialData,
-}: {
-  viewMode: "cards" | "rows";
-  reset: () => void;
-  persist: () => void;
-  setViewMode: (viewMode: "cards" | "rows") => void;
-  showArchived: boolean;
-  setShowArchived: (showArchived: boolean) => void;
-  selectedSort: CardsSortSlug;
-  setSelectedSort: (selectedSort: CardsSortSlug) => void;
-  initialData: {
-    viewMode: "cards" | "rows";
-    showArchived: boolean;
-    sortBy: CardsSortSlug;
-  };
-}) => {
+}: CardsDisplayProps) => {
   useKeyboardShortcut("a", () => setShowArchived(!showArchived));
 
   const isDirty = useMemo(() => {
@@ -60,13 +64,14 @@ export const CardsDisplay = ({
   }, [viewMode, selectedSort, showArchived, initialData]);
   return (
     <Popover>
-      <AnimateIcon animateOnHover asChild>
-        <PopoverTrigger asChild>
+      <PopoverTrigger asChild>
+        <AnimateIcon animateOnHover asChild>
           <Button className="w-full flex-1 bg-inherit" size="lg" variant="outline">
             <IconLayoutGrid /> Display <IconChevronDown className="size-4 text-muted-foreground" />
           </Button>
-        </PopoverTrigger>
-      </AnimateIcon>
+        </AnimateIcon>
+      </PopoverTrigger>
+
       <PopoverContent className="bg-popover md:w-80">
         <div className="grid grid-cols-2 gap-2 rounded-md bg-popover p-2">
           {CARDS_DISPLAY_OPTIONS.map(({ id, label, icon: Icon }) => {
@@ -109,30 +114,31 @@ export const CardsDisplay = ({
             </div>
             Show archived links
           </div>
-          <div>
-            <Switch checked={showArchived} onCheckedChange={setShowArchived} />
-          </div>
+
+          <Switch checked={showArchived} onCheckedChange={setShowArchived} />
         </div>
         <AnimatePresence initial={false}>
-          <Activity mode={isDirty ? "visible" : "hidden"}>
-            <Separator />
-            <motion.div
-              animate={{ height: "auto" }}
-              className="overflow-hidden"
-              exit={{ height: 0 }}
-              initial={{ height: 0 }}
-              transition={{ duration: 0.15 }}
-            >
-              <div className="flex items-center justify-end gap-2 p-2">
-                <Button className="h-8 w-auto px-2" onClick={reset} variant="outline">
-                  Reset to default
-                </Button>
-                <Button className="h-8 w-auto px-2" onClick={persist} variant="inverted">
-                  Set as default
-                </Button>
-              </div>
-            </motion.div>
-          </Activity>
+          {isDirty && (
+            <>
+              <Separator />
+              <motion.div
+                animate={{ height: "auto" }}
+                className="overflow-hidden"
+                exit={{ height: 0 }}
+                initial={{ height: 0 }}
+                transition={{ duration: 0.15 }}
+              >
+                <div className="flex items-center justify-end gap-2 p-2">
+                  <Button className="h-8 w-auto px-2" onClick={reset} variant="outline">
+                    Reset to default
+                  </Button>
+                  <Button className="h-8 w-auto px-2" onClick={persist} variant="inverted">
+                    Set as default
+                  </Button>
+                </div>
+              </motion.div>
+            </>
+          )}
         </AnimatePresence>
       </PopoverContent>
     </Popover>

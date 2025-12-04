@@ -13,7 +13,7 @@ import { Button } from "@ziron/ui/components/button";
 import { zodResolver } from "@ziron/ui/components/form";
 import { ScrollArea, ScrollBar } from "@ziron/ui/components/scroll-area";
 
-import { ImportCardType, importCardRowSchema, importCardSchema, zCardSchema } from "@ziron/validators";
+import { ImportCardType, importCardSchema, zCardSchema } from "@ziron/validators";
 
 import {
   ResponsiveModal,
@@ -183,22 +183,6 @@ export const ImportCardsModal = () => {
             // If not JSON, skip links
           }
         }
-
-        // Validate using cardSchema
-        const validationResult = importCardRowSchema.safeParse(cardData);
-        console.log(validationResult);
-        if (!validationResult.success) {
-          // Collect all validation errors for this row
-          const rowErrors = validationResult.error.issues.map((error) => {
-            const path = error.path.join(".");
-            return `Row ${i + 2}: ${path ? `${path}: ` : ""}${error.message}`;
-          });
-          errors.push(...rowErrors);
-          continue;
-        }
-
-        // Add validated card to array
-        cardsToCreate.push(validationResult.data);
       }
 
       if (cardsToCreate.length === 0) {
@@ -252,9 +236,6 @@ export const ImportCardsModal = () => {
       setIsImporting(false);
     }
   };
-
-  const validationResult = importCardRowSchema.safeParse(form.watch());
-  console.log(validationResult);
 
   return (
     <ResponsiveModal onOpenChange={(open) => setIsOpen(open ? "csv" : null)} open={isOpen === "csv"}>
