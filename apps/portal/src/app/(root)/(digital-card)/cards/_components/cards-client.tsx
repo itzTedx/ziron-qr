@@ -40,7 +40,7 @@ export const CardsClient = () => {
   }, [preferences]);
 
   // Mutation to persist preferences
-  const updatePreferencesMutation = useMutation(
+  const updatePreferences = useMutation(
     orpc.workspace.updatePreferences.mutationOptions({
       onSuccess: () => {
         toast.success("Display preferences saved");
@@ -58,7 +58,7 @@ export const CardsClient = () => {
   };
 
   const persist = () => {
-    updatePreferencesMutation.mutate({
+    updatePreferences.mutate({
       viewMode,
       showArchived,
       sortBy: selectedSort,

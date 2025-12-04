@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { useRouter } from "next/navigation";
 
@@ -17,13 +17,13 @@ import { cardSchema, zCardSchema } from "@ziron/validators";
 import { UnsavedChangesBar } from "@/components/ui/unsaved-changes-bar";
 
 import { transformCardData } from "../utils/transform-card-data";
+import { SlugField } from "./fields/slug-field";
 import { CardCustomize } from "./form-sections/customize";
 import { CardGeneral } from "./form-sections/general";
 import { CardLinks } from "./form-sections/links";
 import { hasAnyTouchedField } from "./helpers/has-touched-field";
 import { useCreateCard } from "./helpers/use-create-card";
 import { useUpdateCard } from "./helpers/use-update-card";
-import { Preview } from "./preview";
 import { ProfileDashboard } from "./profile-dashboard";
 import { TabsLists } from "./tabs-lists";
 
@@ -161,49 +161,57 @@ export function CardForm({ isEditMode, initialData }: Props) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <ProfileDashboard
-          data={{
-            id: data.id,
-            name: data.name,
-            designation: data.designation,
-            slug: data.slug,
-            image: data.image,
-            cover: data.cover,
-          }}
-          isPending={isPending}
-          organization={data.organizationId ? { id: data.organizationId, name: data.name ?? "" } : undefined}
-        />
+      <form className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_300px]" onSubmit={form.handleSubmit(onSubmit)}>
+        <div>
+          <ProfileDashboard
+            data={{
+              id: data.id,
+              name: data.name,
+              designation: data.designation,
+              slug: data.slug,
+              image: data.image,
+              cover: data.cover,
+            }}
+            isPending={isPending}
+            organization={data.organizationId ? { id: data.organizationId, name: data.name ?? "" } : undefined}
+          />
 
-        <div className={cn("mx-auto grid max-w-7xl grid-cols-1 gap-4 pb-6 lg:grid-cols-3", shouldShowBar && "pb-20")}>
-          <TabsLists form={form}>
-            <TabsContent value="general">
-              <CardGeneral data={data} />
-            </TabsContent>
-            <TabsContent value="links">
-              <CardLinks
-                attachment={
-                  data.attachmentUrl
-                    ? { url: data.attachmentUrl, filename: data.attachmentFileName ?? undefined }
-                    : null
-                }
+          <div className={cn("mx-auto grid max-w-3xl grid-cols-1 gap-4 pb-6", shouldShowBar && "pb-20")}>
+            <TabsLists form={form}>
+              <TabsContent value="general">
+                <CardGeneral data={data} />
+              </TabsContent>
+              <TabsContent value="links">
+                <CardLinks
+                  attachment={
+                    data.attachmentUrl
+                      ? { url: data.attachmentUrl, filename: data.attachmentFileName ?? undefined }
+                      : null
+                  }
+                />
+              </TabsContent>
+              <TabsContent value="customize">
+                <CardCustomize template={data.template} />
+              </TabsContent>
+              <UnsavedChangesBar
+                isSaving={isPending}
+                onDiscard={handleDiscard}
+                onSave={handleSave}
+                show={shouldShowBar}
               />
-            </TabsContent>
-            <TabsContent value="customize">
-              <CardCustomize template={data.template} />
-            </TabsContent>
-            <UnsavedChangesBar
-              isSaving={isPending}
-              onDiscard={handleDiscard}
-              onSave={handleSave}
-              show={shouldShowBar}
-            />
-          </TabsLists>
-
-          <Suspense fallback={<div>Loading Preview...</div>}>
-            <Preview cardData={data} />
-          </Suspense>
+            </TabsLists>
+          </div>
         </div>
+        <div className="sticky top-0 px-4 md:h-[calc(100vh-calc(var(--spacing)*16)-16px)] md:px-6 lg:bg-sidebar lg:px-0">
+          <div className="mx-auto max-w-xl lg:divide-y">
+            <div className="py-4 lg:px-4 lg:py-6">
+              <SlugField data={data} organizationId={data.organizationId} />
+            </div>
+          </div>
+        </div>
+        {/* <Suspense fallback={<div>Loading Preview...</div>}>
+          <Preview cardData={data} />
+        </Suspense> */}
       </form>
     </Form>
   );

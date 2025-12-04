@@ -30,7 +30,7 @@ export const TabsLists = ({ form, children }: Props) => {
   // }
 
   return (
-    <Tabs className="relative col-span-1 mt-6 h-fit w-full px-3 lg:col-span-2 lg:px-6" defaultValue="general">
+    <Tabs className="relative mt-6 h-fit w-full px-3 lg:px-6" defaultValue="general">
       <TabsList className="h-auto w-full justify-start rounded-none border-b bg-transparent p-0">
         <TabsTrigger
           className={cn(

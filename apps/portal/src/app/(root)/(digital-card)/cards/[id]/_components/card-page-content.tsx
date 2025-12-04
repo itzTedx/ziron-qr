@@ -60,12 +60,10 @@ async function SuspenseCardPageContent({ params }: CardPageContentProps) {
 
   return (
     <>
-      <section className="h-full flex-1">
-        <ScrollArea className="h-full flex-1 overflow-y-auto">
-          <CardForm initialData={card} isEditMode={isEditMode} />
-          <ScrollBar />
-        </ScrollArea>
-      </section>
+      <ScrollArea className="flex-1 overflow-y-auto">
+        <CardForm initialData={card} isEditMode={isEditMode} />
+        <ScrollBar />
+      </ScrollArea>
     </>
   );
 }

@@ -3,5 +3,5 @@ interface Props {
 }
 
 export default function DigitalCardLayout({ children }: Props) {
-  return <main className="h-full overflow-hidden bg-card">{children}</main>;
+  return <main className="flex h-full flex-col overflow-hidden bg-card">{children}</main>;
 }
