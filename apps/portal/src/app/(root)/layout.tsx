@@ -3,7 +3,6 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 
 import { AppSidebarNav } from "@/components/layout/sidebar/app-sidebar-nav";
-import { HelpButton } from "@/components/layout/sidebar/help-button";
 import { MainNav } from "@/components/layout/sidebar/main-nav";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 
@@ -31,7 +30,7 @@ export default function RootLayout({
         toolContent={
           <>
             <ThemeToggle />
-            <HelpButton />
+            {/* <HelpButton /> */}
           </>
         }
       >

@@ -22,7 +22,7 @@ const nextConfig: NextConfig = {
   },
   typedRoutes: true,
   reactCompiler: true,
-  cacheComponents: true,
+  cacheComponents: false,
 
   typescript: { ignoreBuildErrors: true },
 };

@@ -1,8 +1,6 @@
 "use client";
 
-import { ReactNode, useMemo } from "react";
-
-import { usePathname } from "next/navigation";
+import { ReactNode } from "react";
 
 import { Bell, ShieldCheck } from "lucide-react";
 
@@ -15,9 +13,9 @@ import { IconLinesY } from "@/assets/icons/lines-y";
 import { SidebarNav } from "./sidebar-nav";
 import { SidebarNavAreas, SidebarNavData, SidebarNavGroups } from "./types";
 
-const FIVE_YEARS_SECONDS = 60 * 60 * 24 * 365 * 5;
+// const FIVE_YEARS_SECONDS = 60 * 60 * 24 * 365 * 5;
 
-const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = () => [
+const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = [
   {
     name: "Digital Card",
     description: "Create, organize, and measure the performance of your digital cards.",
@@ -26,15 +24,15 @@ const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = () => [
     active: true,
     // active: pathname.startsWith("/cards"),
 
-    onClick: () => {
-      document.cookie = `ziron=card;path=/;max-age=${FIVE_YEARS_SECONDS}`;
-    },
+    // onClick: () => {
+    //   document.cookie = `ziron=card;path=/;max-age=${FIVE_YEARS_SECONDS}`;
+    // },
   },
 ];
 
-const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
+const NAV_AREAS: SidebarNavAreas = {
   // Top-level
-  default: ({ pathname }) => ({
+  default: {
     title: "Digital Cards",
     direction: "left",
     content: [
@@ -44,13 +42,11 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
             name: "Cards",
             icon: IconCard2,
             href: "/cards",
-            isActive: () => pathname.startsWith("/cards"),
           },
           {
             name: "Organizations",
             icon: IconBuilding,
             href: "/organization",
-            isActive: () => pathname.startsWith("/organization"),
           },
         ],
       },
@@ -90,10 +86,10 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
       //   ],
       // },
     ],
-  }),
+  },
 
   // Workspace settings
-  workspaceSettings: () => ({
+  workspaceSettings: {
     title: "Settings",
     backHref: "/cards",
     direction: "right",
@@ -131,10 +127,10 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
         ],
       },
     ],
-  }),
+  },
 
   // User settings
-  userSettings: () => ({
+  userSettings: {
     title: "Settings",
     backHref: "/cards",
     direction: "right",
@@ -157,28 +153,9 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
         ],
       },
     ],
-  }),
+  },
 };
 
 export function AppSidebarNav({ toolContent }: { toolContent?: ReactNode }) {
-  const pathname = usePathname();
-
-  const currentArea = useMemo(() => {
-    if (pathname.startsWith("/settings/account")) return "userSettings";
-    if (pathname.startsWith("/workspace/settings")) return "workspaceSettings";
-    return "default";
-  }, [pathname]);
-
-  return (
-    <SidebarNav
-      areas={NAV_AREAS}
-      currentArea={currentArea}
-      data={{
-        pathname,
-      }}
-      groups={NAV_GROUPS}
-      // switcher={<WorkspaceDropdown />}
-      toolContent={toolContent}
-    />
-  );
+  return <SidebarNav areas={NAV_AREAS} groups={NAV_GROUPS} toolContent={toolContent} />;
 }

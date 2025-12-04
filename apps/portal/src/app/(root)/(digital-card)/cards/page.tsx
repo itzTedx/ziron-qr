@@ -9,7 +9,6 @@ import { getQueryClient } from "@/lib/orpc/query/hydration";
 import { CardsClient } from "./_components/cards-client";
 
 export default async function CardsPage() {
-  "use cache";
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery(orpc.card.list.queryOptions());

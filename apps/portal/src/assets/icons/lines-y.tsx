@@ -1,3 +1,5 @@
+"use client";
+
 import { SVGProps, useEffect, useRef } from "react";
 
 import { cn } from "@ziron/utils";

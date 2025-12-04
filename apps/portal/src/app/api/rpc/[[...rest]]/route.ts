@@ -1,11 +1,9 @@
-import { headers } from "next/headers";
 import type { NextRequest } from "next/server";
 
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
 import { ORPCError, onError, ValidationError } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
-import { RequestHeadersPlugin } from "@orpc/server/plugins";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 
 import { router } from "@ziron/api/routers/index";
@@ -19,7 +17,6 @@ import { z } from "@ziron/validators";
 //   ],
 
 const rpcHandler = new RPCHandler(router, {
-  plugins: [new RequestHeadersPlugin()],
   interceptors: [
     onError((error) => {
       console.error(error);
@@ -71,7 +68,6 @@ async function handleRequest(req: NextRequest) {
   // const context = await createContext(req, await headers());
   const context = {
     request: req,
-    reqHeaders: await headers(),
   };
 
   const rpcResult = await rpcHandler.handle(req, {

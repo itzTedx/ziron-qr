@@ -1,5 +1,3 @@
-"use cache";
-
 import { ScrollArea, ScrollBar } from "@ziron/ui/components/scroll-area";
 
 import Header from "@/components/layout/header";

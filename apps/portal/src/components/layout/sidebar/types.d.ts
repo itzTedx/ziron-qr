@@ -15,7 +15,7 @@ export type NavItemCommon = {
   name: string;
   href: Route;
   exact?: boolean;
-  isActive?: (pathname: string, href: string) => boolean;
+
   badge?: ReactNode;
   arrow?: boolean;
   locked?: boolean;
@@ -43,19 +43,18 @@ export type NavGroupType = {
   learnMoreHref?: string;
 };
 
-export type SidebarNavGroups<T extends Record<string, unknown>> = (args: T) => NavGroupType[];
+export type SidebarNavGroups<_T extends Record<string, unknown>> = NavGroupType[];
 
-export type SidebarNavAreas<T extends Record<string, unknown>> = Record<
-  string,
-  (args: T) => {
-    title?: string | ReactNode;
-    backHref?: Route;
-    showNews?: boolean; // show news segment – TODO: enable this for Partner Program too
-    hideSwitcherIcons?: boolean; // hide workspace switcher + product icons for this area
-    direction?: "left" | "right";
-    content: {
-      name?: string;
-      items: NavItemType[];
-    }[];
-  }
->;
+export type SidebarNavArea = {
+  title?: string | ReactNode;
+  backHref?: Route;
+  showNews?: boolean; // show news segment – TODO: enable this for Partner Program too
+  hideSwitcherIcons?: boolean; // hide workspace switcher + product icons for this area
+  direction?: "left" | "right";
+  content: {
+    name?: string;
+    items: NavItemType[];
+  }[];
+};
+
+export type SidebarNavAreas = Record<string, SidebarNavArea>;
