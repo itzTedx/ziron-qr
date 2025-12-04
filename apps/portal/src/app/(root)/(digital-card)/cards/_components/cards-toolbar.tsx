@@ -81,7 +81,7 @@ export const CardsToolbar = memo(
           <>
             <ArchiveCardModal
               cards={selectedCards}
-              setShowArchiveCardModal={setShowArchiveCardModal}
+              setShowArchiveCardModalAction={setShowArchiveCardModal}
               showArchiveCardModal={showArchiveCardModal}
             />
             <DeleteCardModal

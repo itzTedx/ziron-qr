@@ -28,7 +28,7 @@ import { SimpleCardCard } from "./simple-card-card";
 
 type ArchiveCardModalProps = {
   showArchiveCardModal: boolean;
-  setShowArchiveCardModal: Dispatch<SetStateAction<boolean>>;
+  setShowArchiveCardModalAction: Dispatch<SetStateAction<boolean>>;
   cards: CardType[];
 };
 
@@ -38,7 +38,7 @@ function capitalize(str: string) {
 
 export function ArchiveCardModal(props: ArchiveCardModalProps) {
   return (
-    <Dialog onOpenChange={props.setShowArchiveCardModal} open={props.showArchiveCardModal}>
+    <Dialog onOpenChange={props.setShowArchiveCardModalAction} open={props.showArchiveCardModal}>
       <DialogContent className="p-0 sm:max-w-xl">
         <ArchiveCardModalInner {...props} />
       </DialogContent>
@@ -46,7 +46,10 @@ export function ArchiveCardModal(props: ArchiveCardModalProps) {
   );
 }
 
-function ArchiveCardModalInner({ setShowArchiveCardModal, cards }: ArchiveCardModalProps) {
+function ArchiveCardModalInner({
+  setShowArchiveCardModalAction: setShowArchiveCardModal,
+  cards,
+}: ArchiveCardModalProps) {
   const archived = cards.every((card) => card.archivedAt);
   const actionText = archived ? "unarchive" : "archive";
   const queryClient = getQueryClient();
@@ -193,7 +196,7 @@ export function useArchiveCardModal({
     return cards.length > 0 ? (
       <ArchiveCardModal
         cards={cards}
-        setShowArchiveCardModal={setShowArchiveCardModal}
+        setShowArchiveCardModalAction={setShowArchiveCardModal}
         showArchiveCardModal={showArchiveCardModal}
       />
     ) : null;

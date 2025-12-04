@@ -1321,7 +1321,6 @@ interface CropperImageProps extends React.ComponentProps<"img">, VariantProps<ty
 
 function CropperImage(props: CropperImageProps) {
   const { className, style, asChild, ref, onLoad, objectFit, snapPixels = false, ...imageProps } = props;
-  console.log("imageProps: ", imageProps);
 
   const context = useCropperContext(IMAGE_NAME);
   const store = useStoreContext(IMAGE_NAME);

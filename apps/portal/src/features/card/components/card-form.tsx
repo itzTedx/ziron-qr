@@ -41,9 +41,10 @@ import { TabsLists } from "./tabs-lists";
 interface Props {
   isEditMode?: boolean;
   initialData?: CardType;
+  isDuplicateMode?: boolean;
 }
 
-export function CardForm({ isEditMode, initialData }: Props) {
+export function CardForm({ isEditMode, initialData, isDuplicateMode = false }: Props) {
   const router = useRouter();
   const queryClient = getQueryClient();
 
@@ -111,6 +112,7 @@ export function CardForm({ isEditMode, initialData }: Props) {
           return;
         }
         toast.error(error.message);
+        console.log("error", error);
       },
     })
   );
@@ -159,11 +161,17 @@ export function CardForm({ isEditMode, initialData }: Props) {
     }
   }
 
+  console.log("isDuplicateMode", isDuplicateMode);
+
   async function onSubmit(values: zCardSchema) {
-    if (isEditMode && initialData?.id) {
+    if (isEditMode && !isDuplicateMode && initialData?.id) {
       handleUpdate(values);
     } else {
-      handleCreate(values);
+      const sanitizedValues = {
+        ...values,
+        id: undefined,
+      };
+      handleCreate(sanitizedValues);
     }
 
     form.reset();

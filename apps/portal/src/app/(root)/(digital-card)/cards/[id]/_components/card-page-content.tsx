@@ -16,6 +16,7 @@ import { CardPageContentSkeleton } from "./card-page-header-skeleton";
 
 interface CardPageContentProps {
   params: PageProps<"/cards/[id]">["params"];
+  isDuplicateMode?: boolean;
 }
 
 async function SuspenseCardPageHeader({ params }: CardPageContentProps) {
@@ -40,7 +41,7 @@ async function SuspenseCardPageHeader({ params }: CardPageContentProps) {
   );
 }
 
-async function SuspenseCardPageContent({ params }: CardPageContentProps) {
+async function SuspenseCardPageContent({ params, isDuplicateMode }: CardPageContentProps) {
   const { id } = await params;
 
   const isEditMode = id !== "new";
@@ -51,7 +52,7 @@ async function SuspenseCardPageContent({ params }: CardPageContentProps) {
   return (
     <>
       <ScrollArea className="flex-1 overflow-y-auto">
-        <CardForm initialData={card} isEditMode={isEditMode} />
+        <CardForm initialData={card} isDuplicateMode={isDuplicateMode} isEditMode={isEditMode} />
         <ScrollBar />
       </ScrollArea>
     </>
@@ -66,10 +67,10 @@ export function CardPageHeader({ params }: CardPageContentProps) {
   );
 }
 
-export function CardPageContent({ params }: CardPageContentProps) {
+export function CardPageContent({ params, isDuplicateMode }: CardPageContentProps) {
   return (
     <Suspense fallback={<CardPageContentSkeleton />}>
-      <SuspenseCardPageContent params={params} />
+      <SuspenseCardPageContent isDuplicateMode={isDuplicateMode} params={params} />
     </Suspense>
   );
 }

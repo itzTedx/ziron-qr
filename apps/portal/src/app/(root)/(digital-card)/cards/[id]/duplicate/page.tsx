@@ -4,7 +4,7 @@ export default function DuplicateCardPage({ params }: PageProps<"/cards/[id]/dup
   return (
     <>
       <CardPageHeader params={params} />
-      <CardPageContent params={params} />
+      <CardPageContent isDuplicateMode={true} params={params} />
     </>
   );
 }

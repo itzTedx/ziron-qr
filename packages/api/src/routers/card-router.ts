@@ -4,7 +4,7 @@ import { and, count, eq, gte, isNotNull, isNull, lte } from "@ziron/db";
 import { db } from "@ziron/db/client";
 import { appearance, CardType, cards, emails, links, phones } from "@ziron/db/schema";
 import { slugify } from "@ziron/utils";
-import { cardSchema, exportCardSchema, columns as exportColumns, transformSlug, ZodError, z } from "@ziron/validators";
+import { cardSchema, exportCardSchema, columns as exportColumns, transformSlug, z } from "@ziron/validators";
 
 import { protectedProcedure, publicProcedure } from "..";
 import { dbProvider } from "../middleware/db-provider";
@@ -47,7 +47,9 @@ export const createCard = protectedProcedure
           });
 
         if (!newCard) {
-          throw errors.INTERNAL_SERVER_ERROR();
+          throw errors.INTERNAL_SERVER_ERROR({
+            message: `Failed to create card: Database insert returned no card for name "${input.name}"`,
+          });
         }
 
         await Promise.all(
@@ -105,14 +107,22 @@ export const createCard = protectedProcedure
       });
 
       if (!card) {
-        throw errors.INTERNAL_SERVER_ERROR();
+        throw errors.INTERNAL_SERVER_ERROR({
+          message: `Failed to create card: Transaction completed but no card was returned for name "${input.name}"`,
+        });
       }
 
       return {
         cardName: card.name,
       };
-    } catch {
-      throw errors.INTERNAL_SERVER_ERROR();
+    } catch (error) {
+      console.error("Error in createCard:", error);
+      throw errors.INTERNAL_SERVER_ERROR({
+        message:
+          error instanceof Error
+            ? `Failed to create card: ${error.message}`
+            : "Failed to create card: Unknown error occurred",
+      });
     }
   });
 
@@ -143,8 +153,13 @@ export const checkSlugAvailability = protectedProcedure
         slug: transformSlug(input.slug),
       };
     } catch (error) {
-      console.log("Error in checkSlugAvailability", error);
-      throw errors.INTERNAL_SERVER_ERROR({ message: error instanceof ZodError ? error.message : "Unknown error" });
+      console.error("Error in checkSlugAvailability:", error);
+      throw errors.INTERNAL_SERVER_ERROR({
+        message:
+          error instanceof Error
+            ? `Failed to check slug availability for "${input.slug}": ${error.message}`
+            : "Failed to check slug availability: Unknown error occurred",
+      });
     }
   });
 
@@ -200,7 +215,9 @@ export const updateCard = protectedProcedure
         });
 
         if (!updatedCard) {
-          throw errors.INTERNAL_SERVER_ERROR();
+          throw errors.INTERNAL_SERVER_ERROR({
+            message: `Failed to update card: Database update returned no card for ID "${id}"`,
+          });
         }
 
         // Batch delete operations
@@ -266,7 +283,9 @@ export const updateCard = protectedProcedure
       });
 
       if (!card) {
-        throw errors.INTERNAL_SERVER_ERROR();
+        throw errors.INTERNAL_SERVER_ERROR({
+          message: `Failed to update card: Transaction completed but no card was returned for ID "${id}"`,
+        });
       }
 
       return {
@@ -274,8 +293,13 @@ export const updateCard = protectedProcedure
         cardName: card.name,
       };
     } catch (error) {
-      console.log("Error in updateCard", error);
-      throw errors.INTERNAL_SERVER_ERROR({ message: error instanceof Error ? error.message : "Unknown error" });
+      console.error("Error in updateCard:", error);
+      throw errors.INTERNAL_SERVER_ERROR({
+        message:
+          error instanceof Error
+            ? `Failed to update card with ID "${input.id}": ${error.message}`
+            : "Failed to update card: Unknown error occurred",
+      });
     }
   });
 
@@ -371,7 +395,9 @@ export const duplicateCard = protectedProcedure
           });
 
         if (!newCard) {
-          throw errors.INTERNAL_SERVER_ERROR();
+          throw errors.INTERNAL_SERVER_ERROR({
+            message: `Failed to duplicate card: Database insert returned no card when duplicating card ID "${input.id}"`,
+          });
         }
 
         // Copy all related data
@@ -429,7 +455,9 @@ export const duplicateCard = protectedProcedure
       });
 
       if (!duplicatedCard) {
-        throw errors.INTERNAL_SERVER_ERROR();
+        throw errors.INTERNAL_SERVER_ERROR({
+          message: `Failed to duplicate card: Transaction completed but no duplicated card was returned for ID "${input.id}"`,
+        });
       }
 
       return {
@@ -437,11 +465,16 @@ export const duplicateCard = protectedProcedure
         cardName: duplicatedCard.name,
       };
     } catch (error) {
-      console.log("Error in duplicateCard", error);
+      console.error("Error in duplicateCard:", error);
       if (error instanceof Error && error.message.includes("NOT_FOUND")) {
         throw error;
       }
-      throw errors.INTERNAL_SERVER_ERROR({ message: error instanceof Error ? error.message : "Unknown error" });
+      throw errors.INTERNAL_SERVER_ERROR({
+        message:
+          error instanceof Error
+            ? `Failed to duplicate card with ID "${input.id}": ${error.message}`
+            : "Failed to duplicate card: Unknown error occurred",
+      });
     }
   });
 
@@ -487,8 +520,16 @@ export const archiveCard = protectedProcedure
       }
       return { success: true, cardName: data.name };
     } catch (error) {
-      console.log("Error in archiveCard", error);
-      throw errors.INTERNAL_SERVER_ERROR();
+      console.error("Error in archiveCard:", error);
+      if (error instanceof Error && error.message.includes("NOT_FOUND")) {
+        throw error;
+      }
+      throw errors.INTERNAL_SERVER_ERROR({
+        message:
+          error instanceof Error
+            ? `Failed to archive/unarchive card with ID "${input.id}": ${error.message}`
+            : "Failed to archive/unarchive card: Unknown error occurred",
+      });
     }
   });
 
@@ -519,8 +560,16 @@ export const deleteCard = protectedProcedure
       }
       return { success: true, cardName: data[0].name };
     } catch (error) {
-      console.log("Error in deleteCard", error);
-      throw errors.INTERNAL_SERVER_ERROR();
+      console.error("Error in deleteCard:", error);
+      if (error instanceof Error && error.message.includes("NOT_FOUND")) {
+        throw error;
+      }
+      throw errors.INTERNAL_SERVER_ERROR({
+        message:
+          error instanceof Error
+            ? `Failed to delete card with ID "${input.id}": ${error.message}`
+            : "Failed to delete card: Unknown error occurred",
+      });
     }
   });
 
