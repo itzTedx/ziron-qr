@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { parseAsBoolean, useQueryState } from "nuqs";
 
 import { Button } from "@ziron/ui/components/button";
@@ -19,11 +19,10 @@ export default function ArchivedLinksHint() {
 }
 
 function ArchivedLinksHintHelper({ setShowArchived }: { setShowArchived: (showArchived: boolean) => void }) {
-  const { data: count } = useQuery(orpc.card.count.queryOptions({ input: { showArchived: false } }));
-  const { data: totalCount } = useQuery(orpc.card.count.queryOptions({ input: { showArchived: true } }));
+  const { data: nonArchivedCount } = useSuspenseQuery(orpc.card.count.queryOptions({ input: { showArchived: false } }));
+  const { data: totalCount } = useSuspenseQuery(orpc.card.count.queryOptions({ input: {} }));
 
-  //   const archivedCount = 12;
-  const archivedCount = (totalCount ?? 0) - (count ?? 0);
+  const archivedCount = (totalCount ?? 0) - (nonArchivedCount ?? 0);
 
   return (
     archivedCount > 0 && (

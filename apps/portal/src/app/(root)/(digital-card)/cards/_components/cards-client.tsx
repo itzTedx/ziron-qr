@@ -110,22 +110,25 @@ export const CardsClient = () => {
         </ButtonGroup>
       </div>
       <Suspense>
-        <CardsClientContent viewMode={viewMode} />
+        <CardsClientContent showArchived={showArchived} viewMode={viewMode} />
       </Suspense>
     </PageWidthWrapper>
   );
 };
 
 interface CardsClientContentProps {
+  showArchived: boolean;
   viewMode: "cards" | "rows";
 }
 
-const CardsClientContent = ({ viewMode }: CardsClientContentProps) => {
+const CardsClientContent = ({ showArchived, viewMode }: CardsClientContentProps) => {
   const [isSelectMode, setIsSelectMode] = useState(false);
   const [selectedCardsId, setSelectedCardsId] = useState<string[]>([]);
 
   const { data: cards } = useSuspenseQuery(orpc.card.list.queryOptions());
-  const { data: cardsCount } = useSuspenseQuery(orpc.card.count.queryOptions({ input: {} }));
+  const { data: cardsCount } = useSuspenseQuery(
+    orpc.card.count.queryOptions({ input: { showArchived: showArchived ? true : false } })
+  );
 
   return (
     <>
