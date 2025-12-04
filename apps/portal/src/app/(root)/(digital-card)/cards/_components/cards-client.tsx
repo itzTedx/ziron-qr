@@ -1,11 +1,10 @@
 "use client";
 
-import { Suspense, useMemo, useState } from "react";
+import { Suspense, useState } from "react";
 
 import { IconChevronDown, IconSearch } from "@tabler/icons-react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
-import { useHydrateAtoms } from "jotai/utils";
 
 import { Button } from "@ziron/ui/components/button";
 import { ButtonGroup } from "@ziron/ui/components/button-group";
@@ -19,29 +18,12 @@ import { IconSlidersHorizontal } from "@/assets/icons";
 import { orpc } from "@/lib/orpc/client";
 
 import { CardsItems } from "../../_components/organizations-items";
-import { selectedSortAtom, showArchivedAtom, viewModeAtom } from "./cards-atoms";
+import { showArchivedAtom, viewModeAtom } from "./cards-atoms";
 import { CardsDisplay } from "./cards-display";
 import { CardsToolbar } from "./cards-toolbar";
 import { MoreCardOptions } from "./more-card-options";
 
 export const CardsClient = () => {
-  // Fetch preferences from database
-  const { data: preferences } = useSuspenseQuery(orpc.workspace.getPreferences.queryOptions());
-
-  // Initialize atoms with preferences when they load
-  // useHydrateAtoms only hydrates once per store, so this is safe to call on every render
-  const hydrateValues = useMemo(() => {
-    if (!preferences) return new Map();
-    // Build Map entry by entry to avoid TypeScript inference issues with mixed atom types
-    const map = new Map();
-    map.set(viewModeAtom, preferences.viewMode ?? "cards");
-    map.set(showArchivedAtom, preferences.showArchived ?? false);
-    map.set(selectedSortAtom, preferences.sortBy ?? "createdAt");
-    return map;
-  }, [preferences]);
-
-  useHydrateAtoms(hydrateValues);
-
   return (
     <PageWidthWrapper className="flex flex-col gap-y-3 sm:gap-y-4">
       <div className="flex flex-wrap items-center gap-2 sm:justify-between">
