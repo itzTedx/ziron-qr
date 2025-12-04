@@ -18,12 +18,14 @@ export async function createContext(request: NextRequest, headers?: Headers) {
 
     return {
       session,
+      headers,
       request,
     };
   }
 
   return {
     session: null,
+    headers,
     request,
   };
 }

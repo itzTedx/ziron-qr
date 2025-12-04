@@ -4,7 +4,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { useRouter } from "next/navigation";
 
+import { isDefinedError } from "@orpc/client";
+import { useMutation } from "@tanstack/react-query";
 import { useFormState } from "react-hook-form";
+import { toast } from "sonner";
 
 import { Form, useForm, zodResolver } from "@ziron/ui/components/form";
 import { TabsContent } from "@ziron/ui/components/tabs";
@@ -16,14 +19,14 @@ import { cardSchema, zCardSchema } from "@ziron/validators";
 
 import { UnsavedChangesBar } from "@/components/ui/unsaved-changes-bar";
 
+import { orpc, queryClient } from "@/lib/orpc/client";
+
 import { transformCardData } from "../utils/transform-card-data";
 import { SlugField } from "./fields/slug-field";
 import { CardCustomize } from "./form-sections/customize";
 import { CardGeneral } from "./form-sections/general";
 import { CardLinks } from "./form-sections/links";
 import { hasAnyTouchedField } from "./helpers/has-touched-field";
-import { useCreateCard } from "./helpers/use-create-card";
-import { useUpdateCard } from "./helpers/use-update-card";
 import { ProfileDashboard } from "./profile-dashboard";
 import { TabsLists } from "./tabs-lists";
 
@@ -79,8 +82,52 @@ export function CardForm({ isEditMode, initialData }: Props) {
   }, [form.watch]);
 
   // Conditionally use mutations based on mode
-  const createCard = useCreateCard(form);
-  const updateCard = useUpdateCard(form);
+  const createCard = useMutation(
+    orpc.card.create.mutationOptions({
+      onSuccess: (newCard) => {
+        toast.success(`Card: ${newCard.cardName} has been Created`);
+        form.reset(form.getValues(), { keepDefaultValues: true });
+        queryClient.invalidateQueries({
+          queryKey: orpc.card.list.queryKey(),
+        });
+        router.push("/cards");
+      },
+      onError: (error) => {
+        if (isDefinedError(error)) {
+          if (error.code === "NOT_FOUND") {
+            toast.error("Card not found", { description: error.message });
+            return;
+          }
+          toast.error("Failed to create card, try again later!", { description: error.message });
+          return;
+        }
+        toast.error(error.message);
+      },
+    })
+  );
+  const updateCard = useMutation(
+    orpc.card.update.mutationOptions({
+      onSuccess: (updatedCard) => {
+        toast.success(`Card: ${updatedCard.cardName} has been updated`);
+        form.reset(form.getValues(), { keepDefaultValues: true });
+        queryClient.invalidateQueries({
+          queryKey: orpc.card.list.queryKey(),
+        });
+        router.push("/cards");
+      },
+      onError: (error) => {
+        if (isDefinedError(error)) {
+          if (error.code === "NOT_FOUND") {
+            toast.error("Card not found", { description: error.message });
+            return;
+          }
+          toast.error("Failed to update card, try again later!", { description: error.message });
+          return;
+        }
+        toast.error(error.message);
+      },
+    })
+  );
 
   const data = {
     ...cardData,
@@ -93,17 +140,17 @@ export function CardForm({ isEditMode, initialData }: Props) {
   // console.log(validationResult);
 
   // Separate submit handlers
-  function handleCreate(values: zCardSchema) {
+  async function handleCreate(values: zCardSchema) {
     createCard.mutate(values);
   }
 
-  function handleUpdate(values: zCardSchema) {
+  async function handleUpdate(values: zCardSchema) {
     if (initialData?.id) {
       updateCard.mutate({ id: initialData.id, ...values });
     }
   }
 
-  function onSubmit(values: zCardSchema) {
+  async function onSubmit(values: zCardSchema) {
     if (isEditMode && initialData?.id) {
       handleUpdate(values);
     } else {

@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import { ScrollArea, ScrollBar } from "@ziron/ui/components/scroll-area";
 
 import Header from "@/components/layout/header";
@@ -9,8 +11,6 @@ import { getQueryClient } from "@/lib/orpc/query/hydration";
 import { CardsClient } from "./_components/cards-client";
 
 export default async function CardsPage() {
-  "use cache";
-
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery(orpc.card.list.queryOptions());
@@ -22,7 +22,9 @@ export default async function CardsPage() {
 
       <section className="h-full flex-1">
         <ScrollArea className="h-full flex-1 overflow-y-auto pt-3 sm:py-4">
-          <CardsClient />
+          <Suspense>
+            <CardsClient />
+          </Suspense>
 
           <ScrollBar />
         </ScrollArea>

@@ -1,8 +1,11 @@
 import { os } from "@orpc/server";
+import { RequestHeadersPluginContext } from "@orpc/server/plugins";
 
-import { Context } from "./context";
+export interface ORPCContext extends RequestHeadersPluginContext {
+  request: Request;
+}
 
-export const base = os.$context<Context>().errors({
+export const base = os.$context<ORPCContext>().errors({
   UNAUTHORIZED: {
     message: "You are not authorized to access this endpoint.",
     status: 401,

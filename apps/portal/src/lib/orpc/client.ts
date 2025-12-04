@@ -31,6 +31,14 @@ const link = new RPCLink({
       credentials: "include",
     });
   },
+  // headers: async () => {
+  //   if (typeof window !== "undefined") {
+  //     return {};
+  //   }
+
+  //   const { headers } = await import("next/headers");
+  //   return await headers();
+  // },
   plugins: [
     new DedupeRequestsPlugin({
       filter: ({ request }) => request.method === "POST", // Filters requests to dedupe

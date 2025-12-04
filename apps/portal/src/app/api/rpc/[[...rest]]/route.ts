@@ -5,9 +5,9 @@ import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
 import { ORPCError, onError, ValidationError } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
+import { RequestHeadersPlugin } from "@orpc/server/plugins";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 
-import { createContext } from "@ziron/api/middleware/context";
 import { router } from "@ziron/api/routers/index";
 import { z } from "@ziron/validators";
 
@@ -19,15 +19,7 @@ import { z } from "@ziron/validators";
 //   ],
 
 const rpcHandler = new RPCHandler(router, {
-  // plugins: [
-  //   new LoggingHandlerPlugin({
-  //     logger,
-  //     // biome-ignore lint/correctness/noUnusedFunctionParameters: <we need the request to generate a unique id>
-  //     generateId: ({ request }) => crypto.randomUUID(),
-  //     logRequestResponse: true,
-  //     logRequestAbort: true,
-  //   }),
-  // ],
+  plugins: [new RequestHeadersPlugin()],
   interceptors: [
     onError((error) => {
       console.error(error);
@@ -76,7 +68,11 @@ const apiHandler = new OpenAPIHandler(router, {
 async function handleRequest(req: NextRequest) {
   // Create context once and reuse it for both handlers
   // This prevents duplicate session retrieval calls and ensures consistency
-  const context = await createContext(req, await headers());
+  // const context = await createContext(req, await headers());
+  const context = {
+    request: req,
+    reqHeaders: await headers(),
+  };
 
   const rpcResult = await rpcHandler.handle(req, {
     prefix: "/api/rpc",

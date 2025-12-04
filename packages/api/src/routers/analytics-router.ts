@@ -73,14 +73,14 @@ export const trackPageVisit = publicProcedure
   .output(z.object({ success: z.boolean() }))
   .handler(async ({ input, context }) => {
     try {
-      const request = context.request;
+      const request = context.reqHeaders;
       if (!request) {
         // If no request available, return success but skip tracking
         console.warn("No request available for page visit tracking");
         return { success: false };
       }
-      const userAgent = request.headers.get("user-agent");
-      const ipAddress = getIpAddress(request);
+      const userAgent = request.get("user-agent");
+      const ipAddress = getIpAddress(context.request);
       const deviceInfo = parseUserAgent(userAgent);
 
       await context.db.insert(pageVisits).values({

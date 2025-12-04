@@ -2,7 +2,7 @@ import { eq } from "@ziron/db";
 import { workspaceTable } from "@ziron/db/schema";
 import { updateWorkspacePreferencesSchema, workspacePreferencesSchema } from "@ziron/validators";
 
-import { protectedProcedure, publicProcedure } from "..";
+import { protectedProcedure } from "..";
 import { dbProvider } from "../middleware/db-provider";
 
 const defaultPreferences = {
@@ -11,7 +11,7 @@ const defaultPreferences = {
   showArchived: false,
 };
 
-export const getWorkspacePreferences = publicProcedure
+export const getWorkspacePreferences = protectedProcedure
   .use(dbProvider)
   .route({
     method: "GET",

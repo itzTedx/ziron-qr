@@ -3,11 +3,12 @@ import { NextRequest } from "next/server";
 
 import { onError } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
+import { RequestHeadersPlugin } from "@orpc/server/plugins";
 
-import { createContext } from "@ziron/api/middleware/context";
 import { clientRouter } from "@ziron/api/routers/index";
 
 const handler = new RPCHandler(clientRouter, {
+  plugins: [new RequestHeadersPlugin()],
   interceptors: [
     onError((error) => {
       console.error(error);
@@ -16,9 +17,14 @@ const handler = new RPCHandler(clientRouter, {
 });
 
 async function handleRequest(request: NextRequest) {
+  const context = {
+    request: request,
+    reqHeaders: await headers(),
+  };
+
   const { response } = await handler.handle(request, {
     prefix: "/api/rpc",
-    context: await createContext(request, await headers()),
+    context,
   });
 
   return response ?? new Response("Not found", { status: 404 });
