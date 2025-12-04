@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Suspense, useState } from "react";
 
 import { IconDotsVertical } from "@tabler/icons-react";
 import { Download } from "lucide-react";
@@ -53,7 +53,9 @@ export const MoreCardOptions = () => {
         </DropdownMenu>
       </ButtonGroup>
       <ExportCardModal open={openExport} setOpen={setOpenExport} />
-      <ImportCardsModal />
+      <Suspense>
+        <ImportCardsModal />
+      </Suspense>
     </>
   );
 };

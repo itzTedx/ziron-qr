@@ -61,11 +61,19 @@ export const AttachmentUpload = ({
   function handleDelete() {
     startTransition(async () => {
       if (uploadedData && uploadedData.objectKey) {
-        await deleteFile(uploadedData.objectKey);
-        form.setValue("attachmentUrl", null);
-        form.setValue("attachmentFileName", undefined);
-        form.setValue("attachmentObjectKey", undefined);
-        setUploadedData(null);
+        try {
+          await deleteFile(uploadedData.objectKey);
+          // Only update UI state on successful deletion
+          form.setValue("attachmentUrl", null);
+          form.setValue("attachmentFileName", undefined);
+          form.setValue("attachmentObjectKey", undefined);
+          setUploadedData(null);
+          toast.success("File deleted successfully");
+        } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : "Failed to delete file";
+          toast.error("Delete Failed", { description: errorMessage });
+          // UI state remains unchanged - file still appears in form
+        }
       }
     });
   }
