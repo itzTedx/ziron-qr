@@ -1,5 +1,5 @@
-import { eq } from "@ziron/db";
-import { Organization, OrganizationWithCards, organizationTable } from "@ziron/db/schema";
+import { and, count, desc, eq, isNull } from "@ziron/db";
+import { cards, Organization, organizationTable } from "@ziron/db/schema";
 import { slugify } from "@ziron/utils";
 import { organizationSchema, z } from "@ziron/validators";
 
@@ -51,22 +51,39 @@ export const listOrganizations = publicProcedure
     method: "GET",
     path: "/organization",
     summary: "List all organizations",
-    description: "List all organizations with their cards",
+    description: "List all organizations with their cards count",
     tags: ["organization"],
   })
-  .output(z.array(z.custom<OrganizationWithCards>()))
+  .output(z.array(z.custom<Organization>().and(z.object({ cardsCount: z.number() }))))
   .handler(async ({ context }) => {
-    const data = await context.db.query.organizationTable.findMany({
-      where: (organization, { isNull }) => isNull(organization.deletedAt),
-      with: {
-        cards: {
-          where: (cards, { isNull, and }) => and(isNull(cards.deletedAt), isNull(cards.archivedAt)),
-        },
-      },
-      // orderBy: getOrder(input.orderBy),
-    });
+    const data = await context.db
+      .select({
+        id: organizationTable.id,
+        name: organizationTable.name,
+        slug: organizationTable.slug,
+        phone: organizationTable.phone,
+        website: organizationTable.website,
+        email: organizationTable.email,
+        address: organizationTable.address,
+        logo: organizationTable.logo,
+        createdAt: organizationTable.createdAt,
+        updatedAt: organizationTable.updatedAt,
+        deletedAt: organizationTable.deletedAt,
+        cardsCount: count(cards.id),
+      })
+      .from(organizationTable)
+      .leftJoin(
+        cards,
+        and(eq(cards.organizationId, organizationTable.id), isNull(cards.deletedAt), isNull(cards.archivedAt))
+      )
+      .where(isNull(organizationTable.deletedAt))
+      .groupBy(organizationTable.id)
+      .orderBy(desc(organizationTable.createdAt));
 
-    return data;
+    return data.map(({ cardsCount, ...org }) => ({
+      ...org,
+      cardsCount: cardsCount ?? 0,
+    }));
   });
 
 export const getOrganization = publicProcedure

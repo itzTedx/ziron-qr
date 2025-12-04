@@ -23,11 +23,11 @@ export const OrganizationClient = () => {
   }
 
   return (
-    <PageWidthWrapper>
-      <ScrollArea className="h-full flex-1 overflow-y-auto pt-3 sm:py-4">
+    <ScrollArea className="h-full flex-1 overflow-y-auto pt-3 sm:py-4">
+      <PageWidthWrapper>
         <OrganizationsList organizations={organizations} />
-        <ScrollBar />
-      </ScrollArea>
-    </PageWidthWrapper>
+      </PageWidthWrapper>
+      <ScrollBar />
+    </ScrollArea>
   );
 };

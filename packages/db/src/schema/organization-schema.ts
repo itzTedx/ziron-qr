@@ -52,3 +52,5 @@ export type OrganizationWithCards = InferResultType<
 >;
 
 export type Organization = InferResultType<"organizationTable">;
+
+export type OrganizationWithCardsCount = Organization & { cardsCount: number };

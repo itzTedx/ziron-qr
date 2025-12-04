@@ -1,10 +1,12 @@
-import { OrganizationWithCards } from "@ziron/db/schema";
+import { OrganizationWithCardsCount } from "@ziron/db/schema";
 
-export const OrganizationsList = ({ organizations }: { organizations: OrganizationWithCards[] }) => {
+import { OrganizationCard } from "./organization-card";
+
+export const OrganizationsList = ({ organizations }: { organizations: OrganizationWithCardsCount[] }) => {
   return (
-    <div>
+    <div className="grid gap-4">
       {organizations.map((organization) => (
-        <div key={organization.id}>{organization.name}</div>
+        <OrganizationCard key={organization.id} organization={organization} />
       ))}
     </div>
   );
