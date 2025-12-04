@@ -1,12 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useRef } from "react";
 
+import Image from "next/image";
+
+import { useUploadFile } from "@better-upload/client";
+import { formatBytes } from "@better-upload/client/helpers";
 import { isDefinedError } from "@orpc/client";
-import { IconEdit, IconPlus, IconTrash } from "@tabler/icons-react";
+import { IconCloudUpload, IconTrash } from "@tabler/icons-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { parseAsString, useQueryStates } from "nuqs";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import {
@@ -20,13 +24,27 @@ import {
   AlertDialogTrigger,
 } from "@ziron/ui/components/alert-dialog";
 import { Button } from "@ziron/ui/components/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, zodResolver } from "@ziron/ui/components/form";
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSet,
+} from "@ziron/ui/components/field";
+import { zodResolver } from "@ziron/ui/components/form";
 import { Input } from "@ziron/ui/components/input";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 import { Textarea } from "@ziron/ui/components/textarea";
 
+import { cn } from "@ziron/utils";
 import { OrganizationType, organizationSchema } from "@ziron/validators";
 
+import { UploadButton } from "@/components/ui/upload-button";
+
+import { UPLOAD_ROUTES } from "@/lib/constants/upload";
 import { orpc } from "@/lib/orpc/client";
 
 interface OrganizationFormProps {
@@ -35,7 +53,7 @@ interface OrganizationFormProps {
 }
 
 export default function OrganizationForm({ initialData, isEditMode }: OrganizationFormProps) {
-  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
+  const uploadButtonRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
 
   const [, setOrganizationModal] = useQueryStates({
@@ -66,6 +84,19 @@ export default function OrganizationForm({ initialData, isEditMode }: Organizati
       address: null,
     });
   };
+
+  const { control, upload } = useUploadFile({
+    route: UPLOAD_ROUTES.logo,
+    onError: (error) => {
+      toast.error("Upload Error", { description: error.message });
+    },
+    onUploadComplete: ({ file, metadata }) => {
+      form.setValue("logo", (metadata?.url as string) ?? null);
+      toast.success("Upload Successful", {
+        description: `File: ${file.raw.name ?? null}, Size: ${formatBytes(file.raw.size ?? 0)}`,
+      });
+    },
+  });
 
   const createOrganization = useMutation(
     orpc.organization.create.mutationOptions({
@@ -110,7 +141,6 @@ export default function OrganizationForm({ initialData, isEditMode }: Organizati
           website: null,
         });
         form.reset(); // This will reset the form fields to their default values
-        setIsDeleteLoading(false);
       },
       onError: (error) => {
         if (isDefinedError(error)) {
@@ -118,7 +148,6 @@ export default function OrganizationForm({ initialData, isEditMode }: Organizati
           return;
         }
         toast.error(error.message);
-        setIsDeleteLoading(false);
       },
     })
   );
@@ -131,140 +160,126 @@ export default function OrganizationForm({ initialData, isEditMode }: Organizati
     deleteOrganization.mutate({ id });
   }
 
-  const _logo = form.getValues("logo");
+  const logo = form.watch("logo");
 
   return (
-    <Form {...form}>
-      <form className="p-6 pt-3" onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-col gap-6 pb-6 md:flex-row">
-          <FormField
-            control={form.control}
-            name="logo"
-            render={() => (
-              <FormItem>
-                <FormControl>
-                  <div className="mt-2 flex flex-col items-center gap-2">
-                    <div className="grid size-28 place-items-center rounded-md border bg-gray-50">
-                      {/* {uploading && <IconLoader className="absolute animate-spin text-muted-foreground/50" />}
-                      {!uploading && logo ? (
-                        <Image alt="Company Logo" height={70} src={logo} width={70} />
-                      ) : (
-                        <IconBuilding className="size-20 text-muted" />
-                      )} */}
+    <form onSubmit={form.handleSubmit(onSubmit)}>
+      <FieldGroup className="gap-6">
+        <Controller
+          control={form.control}
+          name="logo"
+          render={({ field, fieldState }) => (
+            <FieldSet>
+              <FieldLegend variant="label">Organization Logo</FieldLegend>
+              <Field data-invalid={fieldState.invalid} orientation="responsive">
+                <FieldContent className="flex-row items-center gap-3">
+                  <div
+                    className={cn(
+                      "group flex size-20 items-center justify-center rounded-full border bg-card",
+                      fieldState.invalid && "border-destructive"
+                    )}
+                  >
+                    {logo && (
+                      <div className="relative size-12 group-hover:hidden">
+                        <Image alt="Organization Logo" className="object-contain" fill src={logo ?? ""} />
+                      </div>
+                    )}
+                    <div
+                      className={cn(
+                        "relative size-12 cursor-pointer items-center justify-center",
+                        logo ? "hidden group-hover:flex" : "flex"
+                      )}
+                      onClick={() => uploadButtonRef.current?.click()}
+                    >
+                      <IconCloudUpload className="size-6 text-muted-foreground" />
                     </div>
-                    {/* <UploadButton
-                      endpoint="logoUploader"
-                      className="hover:bg-primary/5 ut-button:h-9 ut-button:w-fit ut-button:bg-primary ut-button:px-4 ut-allowed-content:text-xs ut-allowed-content:text-secondary-foreground/70 ut-label:text-primary ut-button:ut-uploading:after:bg-secondary cursor-pointer transition-all duration-500 ease-in-out"
-                      onUploadBegin={() => {
-                        setLoading(true);
-                        setUploading(true);
-                        toast.loading("Uploading Image");
-                      }}
-                      onClientUploadComplete={(res) => {
-                        setLoading(false);
-                        setUploading(false);
-                        form.setValue("logo", res[0].url);
-                        toast.dismiss();
-                        toast.success("Logo Uploaded");
-                      }}
-                      content={{
-                        button({ ready, isUploading }) {
-                          if (ready)
-                            if (isUploading)
-                              return (
-                                <div className="text-sm">Uploading...</div>
-                              );
-
-                          return (
-                            <div className="text-sm text-nowrap">
-                              {form.getValues("logo")
-                                ? "Change Logo"
-                                : "Upload Logo"}
-                            </div>
-                          );
-                        },
-                        allowedContent({ ready, isUploading }) {
-                          if (!ready) return "";
-                          if (isUploading) return "";
-                          return `Formats: png, svg`;
-                        },
-                      }}
-                    /> */}
                   </div>
-                </FormControl>
-
-                <FormMessage />
-              </FormItem>
+                  <div className="flex flex-col gap-1">
+                    <div className="flex items-center gap-2">
+                      <UploadButton
+                        buttonProps={{ variant: "outline", size: "sm" }}
+                        control={control}
+                        inputRef={uploadButtonRef}
+                      />
+                      {logo && (
+                        <Button
+                          className="hover:bg-destructive-foreground hover:text-destructive"
+                          onClick={() => form.setValue("logo", undefined)}
+                          size="sm"
+                          variant="ghost"
+                        >
+                          <IconTrash className="size-4" /> Remove
+                        </Button>
+                      )}
+                    </div>
+                    <FieldDescription className="text-xs">Recommended size: 160x160px</FieldDescription>
+                  </div>
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </FieldContent>
+              </Field>
+            </FieldSet>
+          )}
+        />
+        <Controller
+          control={form.control}
+          name="name"
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid} orientation="responsive">
+              <FieldContent>
+                <FieldLabel htmlFor={field.name}>Organization Name</FieldLabel>
+                <Input autoFocus placeholder="Acme, Inc." {...field} />
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </FieldContent>
+            </Field>
+          )}
+        />
+        <FieldGroup className="flex-row">
+          <Controller
+            control={form.control}
+            name="phone"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid} orientation="responsive">
+                <FieldContent>
+                  <FieldLabel htmlFor={field.name}>Phone Number</FieldLabel>
+                  <Input placeholder="+971 98 765 4321" {...field} />
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </FieldContent>
+              </Field>
             )}
           />
-          <div className="w-full space-y-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Company Name</FormLabel>
-                  <FormControl>
-                    <Input autoFocus placeholder="Name" {...field} className="w-full" />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="flex w-full gap-4">
-              <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Phone</FormLabel>
-                    <FormControl>
-                      <Input placeholder="+971 98 765 4321" {...field} />
-                    </FormControl>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="website"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Website</FormLabel>
-                    <FormControl>
-                      <Input placeholder="www.website.com" {...field} />
-                    </FormControl>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <FormField
-              control={form.control}
-              name="address"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Address</FormLabel>
-                  <FormControl>
-                    <Textarea placeholder="Enter full address" {...field} className="w-full" />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-
-        <div className="flex items-center justify-end gap-2">
-          {isEditMode ? (
+          <Controller
+            control={form.control}
+            name="website"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid} orientation="responsive">
+                <FieldContent>
+                  <FieldLabel htmlFor={field.name}>Website URL</FieldLabel>
+                  <Input placeholder="www.website.com" {...field} />
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </FieldContent>
+              </Field>
+            )}
+          />
+        </FieldGroup>
+        <Controller
+          control={form.control}
+          name="address"
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid} orientation="responsive">
+              <FieldContent>
+                <FieldLabel htmlFor={field.name}>Address</FieldLabel>
+                <Textarea placeholder="Enter full address" {...field} />
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </FieldContent>
+            </Field>
+          )}
+        />
+        <div className="flex items-center justify-between gap-2">
+          {isEditMode && (
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button variant="destructive">
-                  <LoadingSwap isLoading={isDeleteLoading}>
+                  <LoadingSwap isLoading={deleteOrganization.isPending}>
                     <IconTrash className="size-4" />
                     Delete
                   </LoadingSwap>
@@ -291,22 +306,17 @@ export default function OrganizationForm({ initialData, isEditMode }: Organizati
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-          ) : (
-            <Button onClick={handleCancel} type="button" variant="outline">
-              Cancel
-            </Button>
           )}
-          <Button disabled={createOrganization.isPending} type="submit">
+          <Button className="w-full" disabled={createOrganization.isPending} size="lg" type="submit">
             <LoadingSwap
               className="flex items-center justify-center gap-1.5 font-medium"
               isLoading={createOrganization.isPending}
             >
-              {isEditMode ? <IconEdit className="size-4" /> : <IconPlus className="size-4" />}
-              {isEditMode ? "Save Changes" : "Add Organization"}
+              {isEditMode ? "Save Changes" : "Create Organization"}
             </LoadingSwap>
           </Button>
         </div>
-      </form>
-    </Form>
+      </FieldGroup>
+    </form>
   );
 }

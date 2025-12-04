@@ -39,11 +39,11 @@ export default function OrganizationFormModal() {
       }}
       open={modal.modal === "organization"}
     >
-      <ResponsiveModalContent className="p-0 sm:max-w-xl">
-        <ResponsiveModalHeader className="border-b p-6">
-          <ResponsiveModalTitle>{fields.name ? `Edit ${fields.name}` : "Add New Organization"}</ResponsiveModalTitle>
+      <ResponsiveModalContent className="sm:max-w-lg">
+        <ResponsiveModalHeader>
+          <ResponsiveModalTitle>{fields.name ? `Edit ${fields.name}` : "Create a Organization"}</ResponsiveModalTitle>
         </ResponsiveModalHeader>
-        <div className="p-6 pt-0">
+        <div className="mx-auto max-w-md p-6">
           <OrganizationForm
             initialData={{
               id: fields.id ?? undefined,

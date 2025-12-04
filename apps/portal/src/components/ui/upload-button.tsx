@@ -14,6 +14,8 @@ type UploadButtonProps = {
   uploadOverride?: (...args: Parameters<UploadHookControl<false>["upload"]>) => void;
   className?: string;
   // Add any additional props you need.
+  buttonProps?: React.ComponentProps<typeof Button>;
+  inputRef?: React.Ref<HTMLInputElement>;
 };
 
 export function UploadButton({
@@ -22,11 +24,13 @@ export function UploadButton({
   metadata,
   uploadOverride,
   className,
+  buttonProps,
+  inputRef,
 }: UploadButtonProps) {
   const id = useId();
 
   return (
-    <Button className={cn("relative", className)} disabled={isPending} type="button">
+    <Button className={cn("relative", className)} disabled={isPending} type="button" {...buttonProps}>
       <label className="absolute inset-0 cursor-pointer" htmlFor={id}>
         <input
           accept={accept}
@@ -42,6 +46,7 @@ export function UploadButton({
             }
             e.target.value = "";
           }}
+          ref={inputRef}
           type="file"
         />
       </label>

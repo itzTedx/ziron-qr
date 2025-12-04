@@ -6,8 +6,6 @@ import { CheckCircle, Edit, Loader, X, XCircle } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { toast } from "sonner";
 
-import { Icons } from "@ziron/ui/assets/icons";
-import { Button } from "@ziron/ui/components/button";
 import { ButtonGroup } from "@ziron/ui/components/button-group";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ziron/ui/components/form";
 import {
@@ -17,7 +15,6 @@ import {
   InputGroupInput,
   InputGroupText,
 } from "@ziron/ui/components/input-group";
-import { Kbd } from "@ziron/ui/components/kbd";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ziron/ui/components/tooltip";
 import { useKeyboardShortcut } from "@ziron/ui/hooks";
 
@@ -26,6 +23,7 @@ import { transformSlug, zCardSchema } from "@ziron/validators";
 import { openShareModalAtom, ShareModalData } from "@/features/organization/atom";
 import { useDebounce } from "@/hooks/debounce";
 import { env } from "@/lib/env/client";
+import { getPrettyUrl } from "@/lib/link/construct-url";
 import { orpc } from "@/lib/orpc/client";
 
 interface Props {
@@ -149,84 +147,66 @@ export const SlugField = ({ data, organizationId }: Props) => {
           <FormLabel>Link</FormLabel>
           <FormControl>
             <ButtonGroup className="w-full">
-              <ButtonGroup className="w-full">
-                <InputGroup className="h-10">
-                  <InputGroupAddon>
-                    <InputGroupText>{env.NEXT_PUBLIC_CLIENT_URL}/</InputGroupText>
-                  </InputGroupAddon>
-                  <InputGroupInput
-                    className="pl-0.5!"
-                    disabled={!isEditingSlug}
-                    onChange={handleSlugChange}
-                    placeholder="untitled-card"
-                    value={slug}
-                  />
-                  <InputGroupAddon align="inline-end">
-                    {isEditingSlug ? (
-                      <div className="flex items-center gap-1">
-                        {validationState === "idle" && (
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <InputGroupButton
-                                className="mr-[-0.45rem]"
-                                onClick={() => setIsEditingSlug(false)}
-                                size="icon-sm"
-                              >
-                                <X className="size-4" />
-                              </InputGroupButton>
-                            </TooltipTrigger>
-                            <TooltipContent>Cancel</TooltipContent>
-                          </Tooltip>
-                        )}
-                        {validationState === "validating" && <Loader className="size-4 animate-spin" />}
-                        {validationState === "valid" && (
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <InputGroupButton className="mr-[-0.45rem]" onClick={saveSlug} size="icon-sm">
-                                <CheckCircle className="size-4 text-green-500" />
-                              </InputGroupButton>
-                            </TooltipTrigger>
-                            <TooltipContent>Slug is available</TooltipContent>
-                          </Tooltip>
-                        )}
-                        {validationState === "invalid" && (
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <XCircle className="size-4 text-red-500" />
-                            </TooltipTrigger>
-                            <TooltipContent>Slug is not available</TooltipContent>
-                          </Tooltip>
-                        )}
-                      </div>
-                    ) : (
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <InputGroupButton onClick={handleEditClick} size="icon-sm">
-                            <Edit className="size-4 stroke-[1.5]" />
-                          </InputGroupButton>
-                        </TooltipTrigger>
-                        <TooltipContent>Edit slug</TooltipContent>
-                      </Tooltip>
-                    )}
-                  </InputGroupAddon>
-                </InputGroup>
-              </ButtonGroup>
-
-              <ButtonGroup>
-                <Button
-                  className="hidden items-center gap-1.5 has-[>svg]:px-2 md:flex"
-                  onClick={() => {
-                    handleShare();
-                  }}
-                  size="lg"
-                  type="button"
-                  variant="outline"
-                >
-                  <Icons.share className="size-4 stroke-[1.5]" />
-                  <span className="hidden lg:block">Share</span>
-                  <Kbd variant="default">S</Kbd>
-                </Button>
-              </ButtonGroup>
+              <InputGroup className="h-10">
+                <InputGroupAddon>
+                  <InputGroupText>{getPrettyUrl(env.NEXT_PUBLIC_CLIENT_URL)}/</InputGroupText>
+                </InputGroupAddon>
+                <InputGroupInput
+                  className="pl-0.5!"
+                  disabled={!isEditingSlug}
+                  onChange={handleSlugChange}
+                  placeholder="untitled-card"
+                  value={slug}
+                />
+                <InputGroupAddon align="inline-end">
+                  {isEditingSlug ? (
+                    <div className="flex items-center gap-1">
+                      {validationState === "idle" && (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <InputGroupButton
+                              className="mr-[-0.45rem]"
+                              onClick={() => setIsEditingSlug(false)}
+                              size="icon-sm"
+                            >
+                              <X className="size-4" />
+                            </InputGroupButton>
+                          </TooltipTrigger>
+                          <TooltipContent>Cancel</TooltipContent>
+                        </Tooltip>
+                      )}
+                      {validationState === "validating" && <Loader className="size-4 animate-spin" />}
+                      {validationState === "valid" && (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <InputGroupButton className="mr-[-0.45rem]" onClick={saveSlug} size="icon-sm">
+                              <CheckCircle className="size-4 text-green-500" />
+                            </InputGroupButton>
+                          </TooltipTrigger>
+                          <TooltipContent>Slug is available</TooltipContent>
+                        </Tooltip>
+                      )}
+                      {validationState === "invalid" && (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <XCircle className="size-4 text-red-500" />
+                          </TooltipTrigger>
+                          <TooltipContent>Slug is not available</TooltipContent>
+                        </Tooltip>
+                      )}
+                    </div>
+                  ) : (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <InputGroupButton onClick={handleEditClick} size="icon-sm">
+                          <Edit className="size-4 stroke-[1.5]" />
+                        </InputGroupButton>
+                      </TooltipTrigger>
+                      <TooltipContent>Edit slug</TooltipContent>
+                    </Tooltip>
+                  )}
+                </InputGroupAddon>
+              </InputGroup>
             </ButtonGroup>
           </FormControl>
 

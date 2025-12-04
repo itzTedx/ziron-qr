@@ -1,4 +1,4 @@
-import { Suspense, useState } from "react";
+import { useState } from "react";
 
 import Image from "next/image";
 
@@ -6,16 +6,12 @@ import { IconArrowsMaximize, IconShare } from "@tabler/icons-react";
 
 import { Badge } from "@ziron/ui/components/badge";
 import { Button } from "@ziron/ui/components/button";
-import { Kbd, KbdGroup } from "@ziron/ui/components/kbd";
-import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ziron/ui/components/tooltip";
 
 import { zCardSchema } from "@ziron/validators";
 
-import { DeleteCard } from "./delete-card";
 import { CoverUpload } from "./fields/cover-upload";
 import { PhotoUploadModal } from "./fields/photo-upload-modal";
-import { SlugField } from "./fields/slug-field";
 
 interface Props {
   isPending: boolean;
@@ -26,12 +22,12 @@ interface Props {
   };
 }
 
-export const ProfileDashboard = ({ isPending, organization, data }: Props) => {
+export const ProfileDashboard = ({ organization, data }: Props) => {
   const [isCoverUploadOpen, setIsCoverUploadOpen] = useState(false);
 
   return (
     <div>
-      <div className="group relative h-48 cursor-pointer overflow-hidden border-b bg-secondary">
+      <div className="group relative h-40 cursor-pointer overflow-hidden border-b bg-secondary">
         <div
           onClick={() => {
             setIsCoverUploadOpen(true);
@@ -64,8 +60,8 @@ export const ProfileDashboard = ({ isPending, organization, data }: Props) => {
         />
       </div>
       <section className="-mt-16 container mx-auto">
-        <div className="relative grid grid-cols-10 rounded-xl border-background bg-card px-4 py-4 shadow-muted/30 backdrop-blur-xl sm:border sm:px-6 sm:shadow-lg md:grid-cols-12 md:divide-x">
-          <div className="col-span-10 flex items-center md:col-span-4 md:px-3 lg:pr-6">
+        <div className="relative rounded-xl border-background bg-card/80 px-4 py-4 backdrop-blur-xl sm:border sm:px-6 sm:shadow-lg">
+          <div className="flex items-center md:px-3 lg:pr-6">
             <div className="group relative size-24 shrink-0">
               <Image
                 alt="Profile Image"
@@ -85,14 +81,7 @@ export const ProfileDashboard = ({ isPending, organization, data }: Props) => {
                   </Badge>
                 )}
                 <span className="flex gap-2 text-primary md:hidden">
-                  <Button
-                    size="icon"
-                    //   onClick={() => {
-                    //     openPreview();
-                    //   }}
-                    type="button"
-                    variant="ghost"
-                  >
+                  <Button size="icon" type="button" variant="ghost">
                     <IconArrowsMaximize className="size-5" />
                   </Button>
                   <Button
@@ -122,26 +111,6 @@ export const ProfileDashboard = ({ isPending, organization, data }: Props) => {
                 {data && data.designation ? data.designation : "Designation"}
               </p>
             </div>
-          </div>
-
-          <div className="col-span-10 flex items-center justify-between gap-4 md:col-span-5 md:px-3 lg:px-6">
-            <Suspense fallback={<div>Loading...</div>}>
-              <SlugField data={data} organizationId={organization?.id} />
-            </Suspense>
-          </div>
-
-          <div className="col-span-3 hidden flex-col items-center gap-3 px-6 md:flex">
-            {data.id && <DeleteCard id={data.id} />}
-
-            <Button className="w-full" size="lg" type="submit">
-              <LoadingSwap className="flex items-center gap-1.5" isLoading={isPending}>
-                Save
-                <KbdGroup>
-                  <Kbd>Ctrl</Kbd>
-                  <Kbd>S</Kbd>
-                </KbdGroup>
-              </LoadingSwap>
-            </Button>
           </div>
         </div>
       </section>

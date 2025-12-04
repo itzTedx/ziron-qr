@@ -16,7 +16,7 @@ export const CreateButton = ({ href, label, hotkey }: { href: Route; label: stri
     () => {
       router.push(href);
     },
-    { priority: 10 }
+    { priority: 5 }
   );
 
   return (

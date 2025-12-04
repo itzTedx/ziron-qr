@@ -104,6 +104,35 @@ const router: Router = {
         }
       },
     }),
+    [UPLOAD_ROUTES.logo]: route({
+      fileTypes: UPLOAD_FILE_TYPES.image,
+      multipleFiles: false,
+      maxFileSize: UPLOAD_MAX_FILE_SIZE.lg,
+
+      onBeforeUpload: async ({ file }) => {
+        try {
+          const objectKey = generateObjectKey(file, UPLOAD_ROUTES.logo);
+          return {
+            objectInfo: {
+              key: objectKey,
+            },
+          };
+        } catch (error) {
+          throw error;
+        }
+      },
+
+      onAfterSignedUrl: async ({ file }) => {
+        try {
+          const url = generatePublicUrl(file.objectInfo.key);
+
+          return { metadata: { url } };
+        } catch (error) {
+          console.error(error);
+          throw error;
+        }
+      },
+    }),
   },
 };
 

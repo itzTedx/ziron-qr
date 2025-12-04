@@ -2,6 +2,7 @@ export const UPLOAD_ROUTES = {
   attachment: "attachment",
   photo: "photo",
   cover: "cover",
+  logo: "logo",
 } as const;
 
 export const UPLOAD_FILE_TYPES = {

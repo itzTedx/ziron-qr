@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 
 import { useRouter } from "next/navigation";
 
@@ -9,7 +9,10 @@ import { useMutation } from "@tanstack/react-query";
 import { useFormState } from "react-hook-form";
 import { toast } from "sonner";
 
+import { Button } from "@ziron/ui/components/button";
 import { Form, useForm, zodResolver } from "@ziron/ui/components/form";
+import { Kbd, KbdGroup } from "@ziron/ui/components/kbd";
+import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 import { TabsContent } from "@ziron/ui/components/tabs";
 import { useKeyboardShortcut } from "@ziron/ui/hooks";
 
@@ -210,7 +213,10 @@ export function CardForm({ isEditMode, initialData }: Props) {
 
   return (
     <Form {...form}>
-      <form className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_300px]" onSubmit={form.handleSubmit(onSubmit)}>
+      <form
+        className="grid grid-cols-1 md:divide-x lg:grid-cols-[minmax(0,1fr)_300px]"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
         <div>
           <ProfileDashboard
             data={{
@@ -254,7 +260,20 @@ export function CardForm({ isEditMode, initialData }: Props) {
         <div className="sticky top-0 px-4 md:h-[calc(100vh-calc(var(--spacing)*16)-16px)] md:px-6 lg:bg-sidebar lg:px-0">
           <div className="mx-auto max-w-xl lg:divide-y">
             <div className="py-4 lg:px-4 lg:py-6">
-              <SlugField data={data} organizationId={data.organizationId} />
+              <Suspense fallback={<div>Loading...</div>}>
+                <SlugField data={data} organizationId={data.organizationId} />
+              </Suspense>
+            </div>
+            <div className="flex-col items-center gap-3 py-4 md:flex lg:px-4 lg:py-6">
+              <Button className="w-full" size="lg" type="submit">
+                <LoadingSwap className="flex items-center gap-1.5" isLoading={isPending}>
+                  Save {isEditMode ? "Changes" : "Card"}
+                  <KbdGroup>
+                    <Kbd>Ctrl</Kbd>
+                    <Kbd>S</Kbd>
+                  </KbdGroup>
+                </LoadingSwap>
+              </Button>
             </div>
           </div>
         </div>
