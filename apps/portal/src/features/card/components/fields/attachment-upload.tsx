@@ -20,7 +20,7 @@ import { FileIcon, UploadDropzoneProgress } from "@/components/ui/upload-dropzon
 
 import { UPLOAD_ROUTES } from "@/lib/constants/upload";
 
-import { deleteFile } from "../../actions/s3";
+import { deleteFile } from "../../lib/s3";
 
 export const AttachmentUpload = ({
   attachment,
