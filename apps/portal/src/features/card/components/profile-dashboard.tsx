@@ -44,7 +44,7 @@ export const ProfileDashboard = ({ data }: Props) => {
 
         <CoverUpload
           className="absolute top-3 right-4 z-10 flex items-center gap-2"
-          data={data.cover}
+          coverImage={data.cover}
           isOpen={isCoverUploadOpen}
           onOpenChange={(open) => {
             if (!open) {

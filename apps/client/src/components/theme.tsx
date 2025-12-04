@@ -8,7 +8,7 @@ interface ProvidersProps {
   isDarkMode?: boolean;
 }
 
-export function Providers({ isDarkMode }: ProvidersProps) {
+export function Theme({ isDarkMode }: ProvidersProps) {
   const { setTheme } = useTheme();
 
   useEffect(() => {

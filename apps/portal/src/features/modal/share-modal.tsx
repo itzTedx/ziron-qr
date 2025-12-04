@@ -76,7 +76,9 @@ export const ShareModal = () => {
       <ResponsiveModalContent className="gap-0 sm:max-w-4xl">
         <ResponsiveModalHeader className="flex-row items-center justify-between">
           <ResponsiveModalTitle>Share digital card</ResponsiveModalTitle>
-          <ResponsiveModalDescription>Share the digital card with your friends and family.</ResponsiveModalDescription>
+          <ResponsiveModalDescription className="sr-only">
+            Share the digital card with your friends and family.
+          </ResponsiveModalDescription>
           <Tooltip>
             <TooltipTrigger asChild>
               <Kbd className="group" size="lg" variant="outline">
@@ -113,7 +115,7 @@ export const ShareModal = () => {
 
                   <Link
                     className="flex items-center gap-1.5 text-muted-foreground text-xs hover:underline"
-                    href={data.slug as Route}
+                    href={constructUrl(data.slug) as Route}
                     target="_blank"
                   >
                     Open in new tab

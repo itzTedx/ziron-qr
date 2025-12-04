@@ -1,8 +1,10 @@
+import { useEffect, useState } from "react";
+
 import Image from "next/image";
 
 import { useUploadFiles } from "@better-upload/client";
 import { formatBytes } from "@better-upload/client/helpers";
-import { IconLink, IconX } from "@tabler/icons-react";
+import { IconLink } from "@tabler/icons-react";
 import { useFormContext } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -19,6 +21,7 @@ import { zCardSchema } from "@ziron/validators";
 import {
   ResponsiveModal,
   ResponsiveModalContent,
+  ResponsiveModalFooter,
   ResponsiveModalHeader,
   ResponsiveModalTitle,
   ResponsiveModalTrigger,
@@ -29,21 +32,39 @@ import { UPLOAD_ROUTES } from "@/lib/constants/upload";
 
 interface Props {
   className?: string;
-  data?: string;
+  coverImage?: string;
   isOpen?: boolean;
   onOpenChange?: (value: boolean) => void;
 }
 
-export const CoverUpload = ({ className, data, isOpen, onOpenChange }: Props) => {
+export const CoverUpload = ({ className, coverImage, isOpen, onOpenChange }: Props) => {
   const form = useFormContext<zCardSchema>();
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  const { control } = useUploadFiles({
+  const { control, upload } = useUploadFiles({
     route: UPLOAD_ROUTES.cover,
+    onUploadBegin: () => {
+      toast.loading("Uploading cover image...");
+    },
+    onUploadSettle: () => {
+      toast.dismiss();
+    },
     onUploadComplete: ({ files, metadata }) => {
+      toast.success("Upload Successful", {
+        description: `File: ${files[0]?.raw.name ?? null}, Size: ${formatBytes(files[0]?.raw.size ?? 0)}`,
+      });
       form.setValue("cover", (metadata?.url as string) ?? null);
       toast.success("Upload Successful", {
         description: `File: ${files[0]?.raw.name ?? null}, Size: ${formatBytes(files[0]?.raw.size ?? 0)}`,
       });
+      // Clean up preview URL after successful upload
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+        setPreviewUrl(null);
+      }
+      setSelectedFile(null);
+      onOpenChange?.(false);
     },
     onError: (error) => {
       toast.error("Upload Error", { description: error.message });
@@ -52,6 +73,34 @@ export const CoverUpload = ({ className, data, isOpen, onOpenChange }: Props) =>
       toast.error("Upload Failed", { description: data.failedFiles[0]?.error.message });
     },
   });
+
+  // Clean up object URL on unmount or when modal closes
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
+
+  // Reset state when modal closes
+  useEffect(() => {
+    if (!isOpen) {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+      setPreviewUrl(null);
+      setSelectedFile(null);
+    }
+  }, [isOpen, previewUrl]);
+
+  const handleSave = () => {
+    if (selectedFile) {
+      upload([selectedFile]);
+    }
+  };
+
+  const isDirty = selectedFile !== null || form.formState.dirtyFields.cover === true;
 
   return (
     <ResponsiveModal onOpenChange={onOpenChange} open={isOpen}>
@@ -62,14 +111,14 @@ export const CoverUpload = ({ className, data, isOpen, onOpenChange }: Props) =>
           type="button"
           variant="secondary"
         >
-          <IconEdit className="size-4" /> <span className="sr-only">{data ? "Upload" : "Change"} Cover</span>
+          <IconEdit className="size-4" /> <span className="sr-only">{coverImage ? "Upload" : "Change"} Cover</span>
         </Button>
       </ResponsiveModalTrigger>
-      <ResponsiveModalContent>
-        <ResponsiveModalHeader>
-          <ResponsiveModalTitle>{data ? "Change Cover Image" : "Upload Cover Image"}</ResponsiveModalTitle>
+      <ResponsiveModalContent className="sm:max-w-xl">
+        <ResponsiveModalHeader className="border-b-0">
+          <ResponsiveModalTitle>{coverImage ? "Change Cover Image" : "Upload Cover Image"}</ResponsiveModalTitle>
         </ResponsiveModalHeader>
-        <div className="p-6">
+        <div className="bg-card p-6 pt-0">
           <FormField
             control={form.control}
             name="cover"
@@ -112,27 +161,28 @@ export const CoverUpload = ({ className, data, isOpen, onOpenChange }: Props) =>
                     </div>
                   </FormLabel>
                   <FormControl>
-                    {field.value ? (
-                      <div className="relative flex h-72 flex-col gap-2">
-                        <Tooltip>
-                          <Button
-                            className="absolute top-2 right-2 z-10"
-                            onClick={() => {
-                              form.setValue("cover", undefined);
-                            }}
-                            size="icon-sm"
-                            variant="destructive"
-                          >
-                            <IconX />
-                          </Button>
-                        </Tooltip>
-                        <Image alt="Cover" className="object-cover" fill src={field.value} />
+                    {previewUrl ? (
+                      <div className="relative flex aspect-video flex-col gap-2 overflow-hidden rounded-md border shadow-lg">
+                        <Image alt="Cover preview" className="object-cover" fill src={previewUrl} />
+                      </div>
+                    ) : coverImage ? (
+                      <div className="relative flex aspect-video flex-col gap-2 overflow-hidden rounded-md border shadow-lg">
+                        <Image alt="Cover" className="object-cover" fill src={coverImage} />
                       </div>
                     ) : (
                       <UploadDropzoneProgress
                         accept="image/*"
                         control={control}
                         description="Recommended: 1920 x 1080 pixels."
+                        uploadOverride={(files) => {
+                          const file = Array.isArray(files) ? files[0] : files[0];
+                          if (file) {
+                            const objectUrl = URL.createObjectURL(file);
+                            setSelectedFile(file);
+                            setPreviewUrl(objectUrl);
+                            field.onChange(null);
+                          }
+                        }}
                         {...field}
                       />
                     )}
@@ -143,6 +193,25 @@ export const CoverUpload = ({ className, data, isOpen, onOpenChange }: Props) =>
             }}
           />
         </div>
+        <ResponsiveModalFooter>
+          <Button
+            onClick={() => {
+              if (previewUrl) {
+                URL.revokeObjectURL(previewUrl);
+              }
+              setPreviewUrl(null);
+              setSelectedFile(null);
+              onOpenChange?.(false);
+            }}
+            type="button"
+            variant="outline"
+          >
+            Cancel
+          </Button>
+          <Button disabled={!isDirty} onClick={handleSave} type="button">
+            Save changes
+          </Button>
+        </ResponsiveModalFooter>
       </ResponsiveModalContent>
     </ResponsiveModal>
   );

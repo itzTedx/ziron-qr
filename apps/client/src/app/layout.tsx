@@ -33,18 +33,18 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <meta content="yes" name="apple-mobile-web-app-capable" />
+        <meta content="yes" name="mobile-web-app-capable" />
       </head>
       <body
         className={cn(
-          "@container flex min-h-dvh antialiased sm:items-center sm:justify-center",
+          "@container min-h-dvh bg-white text-black antialiased dark:bg-black dark:text-white",
           geistSans.className,
           geistMono.variable
         )}
       >
         <ThemeProvider>
-          <ScrollArea className="h-svh sm:h-[700px] sm:overflow-hidden sm:rounded-xl sm:shadow-xl md:max-w-lg">
-            <main className="relative">{children}</main>
+          <ScrollArea className="m-auto h-full sm:h-[700px] sm:overflow-hidden sm:rounded-xl sm:shadow-xl md:max-w-lg">
+            <main className="relative flex w-full items-center justify-center">{children}</main>
           </ScrollArea>
           <Footer />
         </ThemeProvider>
