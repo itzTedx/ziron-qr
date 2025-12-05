@@ -18,7 +18,7 @@ export const LogoutButton = ({
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  async function logout() {
+  function logout() {
     startTransition(async () => {
       await authClient.signOut({
         fetchOptions: {

@@ -69,7 +69,7 @@ const CardsClientContent = () => {
   const selectedSort = useAtomValue(selectedSortAtom);
 
   const { data: cards, isLoading } = useQuery(
-    orpc.card.list.queryOptions({ input: { viewMode, sortBy: selectedSort, showArchived } })
+    orpc.card.list.queryOptions({ input: { viewMode, sortBy: selectedSort, showArchived }, context: { cache: true } })
   );
   const { data: cardsCount } = useSuspenseQuery(
     orpc.card.count.queryOptions({ input: { showArchived: showArchived ? true : false } })
