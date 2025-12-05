@@ -8,7 +8,16 @@ import { Button } from "@ziron/ui/components/button";
 import { Kbd } from "@ziron/ui/components/kbd";
 import { useKeyboardShortcut } from "@ziron/ui/hooks";
 
-export const CreateButton = ({ href, label, hotkey }: { href: Route; label: string; hotkey: string }) => {
+import { cn } from "@ziron/utils";
+
+interface CreateButtonProps {
+  href: Route;
+  label: string;
+  hotkey: string;
+  className?: string;
+}
+
+export const CreateButton = ({ href, label, hotkey, className }: CreateButtonProps) => {
   const router = useRouter();
 
   useKeyboardShortcut(
@@ -20,7 +29,7 @@ export const CreateButton = ({ href, label, hotkey }: { href: Route; label: stri
   );
 
   return (
-    <Button asChild className="sm:pr-2.5">
+    <Button asChild className={cn("sm:pr-2.5", className)}>
       <Link href={href}>
         {label}
         <Kbd className="text-white uppercase">{hotkey}</Kbd>

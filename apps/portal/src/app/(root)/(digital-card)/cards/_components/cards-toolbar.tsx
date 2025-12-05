@@ -115,8 +115,13 @@ export const CardsToolbar = memo(({ cards, cardsCount, isSelectMode, setIsSelect
                   </Suspense>
                 </PaginationControls>
                 <div className="flex items-center gap-2 pt-3 sm:hidden">
-                  <CreateButton hotkey="c" href="/cards/create" label="Create Card" />
-                  <Button className="h-8 w-fit px-3.5" onClick={() => setIsSelectMode(true)} variant="secondary">
+                  <CreateButton
+                    className="w-full flex-1 md:w-auto"
+                    hotkey="c"
+                    href="/cards/create"
+                    label="Create Card"
+                  />
+                  <Button onClick={() => setIsSelectMode(true)} variant="outline">
                     <CircleCheck className="size-4" />
                     Select
                   </Button>

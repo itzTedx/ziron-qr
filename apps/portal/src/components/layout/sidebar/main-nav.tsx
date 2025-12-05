@@ -11,7 +11,7 @@ export function MainNav({
   toolContent?: ReactNode;
 }>) {
   return (
-    <div className="min-h-screen md:grid md:grid-cols-[min-content_minmax(0,1fr)]">
+    <div className="min-h-screen max-sm:bg-card md:grid md:grid-cols-[min-content_minmax(0,1fr)]">
       <Suspense>
         <Sidebar toolContent={toolContent} />
       </Suspense>

@@ -79,7 +79,8 @@ export const PersonCard = ({
         </div>
         <div>
           <Badge variant="secondary">
-            <IconMouse /> {card.pageVisits?.length} {pluralize("click", card.pageVisits?.length)}
+            <IconMouse /> {card.pageVisits?.length}{" "}
+            <span className="hidden md:inline">{pluralize("click", card.pageVisits?.length)}</span>
           </Badge>
         </div>
       </div>
