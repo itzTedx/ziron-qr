@@ -1,28 +1,30 @@
 "use client";
 
-import { Dispatch, MouseEvent, SetStateAction, useCallback, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useMemo, useState } from "react";
+
+import { useRouter } from "next/navigation";
 
 import { isDefinedError } from "@orpc/client";
-import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
+import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { Button } from "@ziron/ui/components/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@ziron/ui/components/dialog";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 
 import { CardType } from "@ziron/db/schema";
 import { pluralize } from "@ziron/utils";
 
+import {
+  ResponsiveModal,
+  ResponsiveModalClose,
+  ResponsiveModalContent,
+  ResponsiveModalDescription,
+  ResponsiveModalFooter,
+  ResponsiveModalHeader,
+  ResponsiveModalTitle,
+} from "@/components/ui/responsive-modal";
+
 import { orpc } from "@/lib/orpc/client";
-import { getQueryClient } from "@/lib/orpc/query/hydration";
 
 import { SimpleCardCard } from "./simple-card-card";
 
@@ -38,11 +40,11 @@ function capitalize(str: string) {
 
 export function ArchiveCardModal(props: ArchiveCardModalProps) {
   return (
-    <Dialog onOpenChange={props.setShowArchiveCardModalAction} open={props.showArchiveCardModal}>
-      <DialogContent className="p-0 sm:max-w-xl">
+    <ResponsiveModal onOpenChange={props.setShowArchiveCardModalAction} open={props.showArchiveCardModal}>
+      <ResponsiveModalContent className="p-0 sm:max-w-md">
         <ArchiveCardModalInner {...props} />
-      </DialogContent>
-    </Dialog>
+      </ResponsiveModalContent>
+    </ResponsiveModal>
   );
 }
 
@@ -52,8 +54,8 @@ function ArchiveCardModalInner({
 }: ArchiveCardModalProps) {
   const archived = cards.every((card) => card.archivedAt);
   const actionText = archived ? "unarchive" : "archive";
-  const queryClient = getQueryClient();
-  const [archiving, setArchiving] = useState(false);
+  const router = useRouter();
+  const queryClient = useQueryClient();
 
   const archiveCard = useMutation(
     orpc.card.archive.mutationOptions({
@@ -70,52 +72,30 @@ function ArchiveCardModalInner({
           queryKey: orpc.card.list.queryKey(),
         });
         setShowArchiveCardModal(false);
+        router.push("/cards");
         toast.success(`Successfully ${actionText}d ${pluralize("card", cards.length)}!`, {
-          duration: 5000,
+          duration: 1000,
         });
       },
     })
   );
 
-  const handleArchiveRequest = async (event: MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-
-    setArchiving(true);
-
-    try {
-      // The archive endpoint now handles both archive and unarchive
-      await Promise.all(cards.map((card) => archiveCard.mutateAsync({ id: card.id })));
-
-      queryClient.invalidateQueries({
-        queryKey: orpc.card.list.queryKey(),
-      });
-
-      setShowArchiveCardModal(false);
-      toast.success(`Successfully ${actionText}d ${pluralize("card", cards.length)}!`, {
-        duration: 5000,
-      });
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Unknown error";
-      toast.error(`Failed to ${actionText} cards. ${errorMessage}`);
-    } finally {
-      setArchiving(false);
-    }
+  const handleArchiveRequest = async () => {
+    await Promise.all(cards.map((card) => archiveCard.mutateAsync({ id: card.id })));
   };
 
   return (
     <>
-      <div className="space-y-2 border-neutral-200 border-b p-4 sm:p-6">
-        <DialogHeader>
-          <DialogTitle className="font-medium text-lg leading-none">
-            {capitalize(actionText)} {cards.length > 1 ? `${cards.length} cards` : "card"}
-          </DialogTitle>
-          <DialogDescription className="sr-only">
-            Are you sure you want to {actionText} the following {pluralize("card", cards.length)}?
-          </DialogDescription>
-        </DialogHeader>
-      </div>
+      <ResponsiveModalHeader>
+        <ResponsiveModalTitle className="font-medium text-lg leading-none">
+          {capitalize(actionText)} {cards.length > 1 ? `${cards.length} cards` : "card"}
+        </ResponsiveModalTitle>
+        <ResponsiveModalDescription className="sr-only">
+          Are you sure you want to {actionText} the following {pluralize("card", cards.length)}?
+        </ResponsiveModalDescription>
+      </ResponsiveModalHeader>
 
-      <div className="bg-card p-4 text-sm sm:p-6">
+      <div className="p-4 text-sm sm:p-6">
         <p className="text-foreground/80">
           Are you sure you want to {actionText} the following {pluralize("card", cards.length)}?
         </p>
@@ -133,22 +113,22 @@ function ArchiveCardModalInner({
         </div>
 
         <p className="mt-4 text-muted-foreground leading-relaxed">
-          This action can be undone by {actionText} the {pluralize("card", cards.length)}.
+          This action can be undone by {archived ? "unarchiving" : "archiving"} the {pluralize("card", cards.length)}.
         </p>
       </div>
 
-      <DialogFooter className="border-t bg-card px-4 py-5 sm:px-6">
-        <DialogClose asChild>
+      <ResponsiveModalFooter className="border-t bg-card px-4 py-5 sm:px-6">
+        <ResponsiveModalClose asChild>
           <Button className="h-8 w-fit px-3" variant="secondary">
             Cancel
           </Button>
-        </DialogClose>
-        <Button autoFocus className="h-8 w-fit px-3" disabled={archiving} onClick={handleArchiveRequest}>
-          <LoadingSwap isLoading={archiving}>
+        </ResponsiveModalClose>
+        <Button autoFocus className="h-8 w-fit px-3" disabled={archiveCard.isPending} onClick={handleArchiveRequest}>
+          <LoadingSwap isLoading={archiveCard.isPending}>
             {capitalize(actionText)} {pluralize("card", cards.length)}
           </LoadingSwap>
         </Button>
-      </DialogFooter>
+      </ResponsiveModalFooter>
     </>
   );
 }
@@ -160,7 +140,7 @@ export function useArchiveCardModal({
 }: {
   cardId?: string;
   cardIds?: string[];
-  cards?: CardType[];
+  cards?: Partial<CardType>[];
 }) {
   const [showArchiveCardModal, setShowArchiveCardModal] = useState(false);
 

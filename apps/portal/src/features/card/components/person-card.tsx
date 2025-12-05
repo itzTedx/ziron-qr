@@ -7,18 +7,22 @@ import Link from "next/link";
 import { IconArrowRight, IconCopy, IconEdit } from "@tabler/icons-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@ziron/ui/components/avatar";
+import { Badge } from "@ziron/ui/components/badge";
 import { Button } from "@ziron/ui/components/button";
 import { Card, CardContent, CardFooter } from "@ziron/ui/components/card";
 import { Tooltip, TooltipTrigger } from "@ziron/ui/components/tooltip";
 
 import type { CardType } from "@ziron/db/schema";
-import { formatDate } from "@ziron/utils";
+import { formatDate, pluralize } from "@ziron/utils";
 
 import { constructUrl } from "@/lib/link/construct-url";
 
 import ShareButton from "./share-button";
 
-type PersonCardFields = Pick<CardType, "id" | "name" | "designation" | "slug" | "image" | "cover" | "createdAt">;
+type PersonCardFields = Pick<
+  CardType,
+  "id" | "name" | "designation" | "slug" | "image" | "cover" | "createdAt" | "pageVisits"
+>;
 
 interface PersonCardProps {
   card: PersonCardFields;
@@ -54,6 +58,9 @@ export const PersonCard = ({ card, isSelectMode, setIsSelectMode, variant = "car
   }
   return (
     <Card className="relative overflow-hidden pt-10 md:pt-12">
+      <Badge className="absolute top-2 right-2 z-10">
+        {card.pageVisits?.length} {pluralize("click", card.pageVisits?.length)}
+      </Badge>
       <CardContent className="flex flex-col items-center justify-between p-0">
         <Image
           alt="Cover Image"

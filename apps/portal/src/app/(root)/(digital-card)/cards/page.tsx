@@ -12,6 +12,8 @@ export default async function CardsPage() {
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery(orpc.card.list.queryOptions());
+  await queryClient.prefetchQuery(orpc.workspace.getPreferences.queryOptions());
+
   return (
     <>
       <Header title="Cards">

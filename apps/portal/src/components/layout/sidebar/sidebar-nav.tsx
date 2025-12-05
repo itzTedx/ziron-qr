@@ -19,7 +19,7 @@ import { NavGroupItem } from "./sidebar-nav-group-item";
 import { SidebarNavItem } from "./sidebar-nav-item";
 import { SidebarNavAreas, SidebarNavGroups } from "./types";
 
-const SIDEBAR_WIDTH = 280;
+export const SIDEBAR_WIDTH = 280;
 const SIDEBAR_GROUPS_WIDTH = 64;
 const SIDEBAR_AREAS_WIDTH = SIDEBAR_WIDTH - SIDEBAR_GROUPS_WIDTH;
 

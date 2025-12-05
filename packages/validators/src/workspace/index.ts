@@ -9,16 +9,12 @@ export const cardsSortOptions = [
     slug: "createdAt",
   },
   {
+    display: "Organization",
+    slug: "organization",
+  },
+  {
     display: "Total clicks",
     slug: "clicks",
-  },
-  {
-    display: "Last clicked",
-    slug: "lastClicked",
-  },
-  {
-    display: "Total sales",
-    slug: "saleAmount",
   },
 ] as const;
 

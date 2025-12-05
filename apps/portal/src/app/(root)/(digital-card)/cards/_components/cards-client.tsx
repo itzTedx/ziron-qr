@@ -5,6 +5,7 @@ import { Suspense, useState } from "react";
 import { IconChevronDown, IconSearch } from "@tabler/icons-react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
+import { useHydrateAtoms } from "jotai/utils";
 
 import { Button } from "@ziron/ui/components/button";
 import { ButtonGroup } from "@ziron/ui/components/button-group";
@@ -18,12 +19,20 @@ import { IconSlidersHorizontal } from "@/assets/icons";
 import { orpc } from "@/lib/orpc/client";
 
 import { CardsItems } from "../../_components/organizations-items";
-import { showArchivedAtom, viewModeAtom } from "./cards-atoms";
+import { selectedSortAtom, showArchivedAtom, viewModeAtom } from "./cards-atoms";
 import { CardsDisplay } from "./cards-display";
 import { CardsToolbar } from "./cards-toolbar";
 import { MoreCardOptions } from "./more-card-options";
 
 export const CardsClient = () => {
+  const { data: preferences } = useSuspenseQuery(orpc.workspace.getPreferences.queryOptions());
+
+  useHydrateAtoms([
+    [viewModeAtom, preferences.viewMode],
+    [showArchivedAtom, preferences.showArchived],
+    [selectedSortAtom, preferences.sortBy],
+  ] as const);
+
   return (
     <PageWidthWrapper className="flex flex-col gap-y-3 sm:gap-y-4">
       <div className="flex flex-wrap items-center gap-2 sm:justify-between">
@@ -33,7 +42,7 @@ export const CardsClient = () => {
               <IconSlidersHorizontal /> Filter <IconChevronDown className="size-4 text-muted-foreground" />
             </Button>
           </AnimateIcon>
-          <CardsDisplay />
+          <CardsDisplay preferences={preferences} />
         </ButtonGroup>
 
         <ButtonGroup className="w-full sm:w-fit">
@@ -59,10 +68,13 @@ export const CardsClient = () => {
 const CardsClientContent = () => {
   const showArchived = useAtomValue(showArchivedAtom);
   const viewMode = useAtomValue(viewModeAtom);
+  const selectedSort = useAtomValue(selectedSortAtom);
   const [isSelectMode, setIsSelectMode] = useState(false);
   const [selectedCardsId, setSelectedCardsId] = useState<string[]>([]);
 
-  const { data: cards } = useSuspenseQuery(orpc.card.list.queryOptions());
+  const { data: cards } = useSuspenseQuery(
+    orpc.card.list.queryOptions({ input: { viewMode, sortBy: selectedSort, showArchived } })
+  );
   const { data: cardsCount } = useSuspenseQuery(
     orpc.card.count.queryOptions({ input: { showArchived: showArchived ? true : false } })
   );

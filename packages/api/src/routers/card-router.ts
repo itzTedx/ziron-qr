@@ -1,10 +1,17 @@
 import { os } from "@orpc/server";
 
-import { and, count, eq, gte, isNotNull, isNull, lte } from "@ziron/db";
+import { and, count, desc, eq, gte, isNull, lte } from "@ziron/db";
 import { db } from "@ziron/db/client";
-import { appearance, CardType, cards, emails, links, phones } from "@ziron/db/schema";
+import { appearance, CardType, cards, emails, links, organizationTable, pageVisits, phones } from "@ziron/db/schema";
 import { slugify } from "@ziron/utils";
-import { cardSchema, exportCardSchema, columns as exportColumns, transformSlug, z } from "@ziron/validators";
+import {
+  cardSchema,
+  exportCardSchema,
+  columns as exportColumns,
+  transformSlug,
+  workspacePreferencesSchema,
+  z,
+} from "@ziron/validators";
 
 import { protectedProcedure, publicProcedure } from "..";
 import { dbProvider } from "../middleware/db-provider";
@@ -582,16 +589,97 @@ export const listCards = os
     description: "List all cards with their company",
     tags: ["card"],
   })
+  .input(workspacePreferencesSchema.optional().default({ viewMode: "cards", sortBy: "createdAt", showArchived: false }))
   .output(z.array(z.custom<CardType>()))
-  .handler(async ({ context }) => {
+  .handler(async ({ context, input }) => {
+    const filters = input ?? {};
+
+    const conditions = [isNull(cards.deletedAt)];
+
+    if (filters.showArchived === false) {
+      conditions.push(isNull(cards.archivedAt));
+    }
+    // When showArchived === true, show all cards (no filter needed)
+
+    // For "organization" and "clicks" sorting, we need to use SQL builder
+    // because relational query API doesn't support ordering by related columns or aggregates
+    if (filters.sortBy === "organization" || filters.sortBy === "clicks") {
+      let sortedCardIds: { id: string }[];
+
+      if (filters.sortBy === "organization") {
+        sortedCardIds = await context.db
+          .select({
+            id: cards.id,
+          })
+          .from(cards)
+          .leftJoin(organizationTable, eq(cards.organizationId, organizationTable.id))
+          .where(and(...conditions))
+          .orderBy(desc(organizationTable.name));
+      } else {
+        // filters.sortBy === "clicks"
+        sortedCardIds = await context.db
+          .select({
+            id: cards.id,
+          })
+          .from(cards)
+          .leftJoin(pageVisits, eq(cards.id, pageVisits.cardId))
+          .where(and(...conditions))
+          .groupBy(cards.id)
+          .orderBy(desc(count(pageVisits.id)));
+      }
+
+      // Fetch full card data with relations using relational query API
+      const cardIds = sortedCardIds.map((row) => row.id);
+      if (cardIds.length === 0) {
+        return [];
+      }
+
+      // Fetch only the sorted cards with relations using relational query API
+      // We fetch all matching cards and filter in memory to maintain sort order
+      // (relational query API doesn't support ordering by the sorted IDs array)
+      const allData = await context.db.query.cards.findMany({
+        where: and(...conditions),
+        with: {
+          organization: true,
+          emails: true,
+          phones: true,
+          links: true,
+          appearance: true,
+          pageVisits: {
+            columns: {
+              referer: true,
+            },
+          },
+        },
+      });
+
+      // Maintain the sort order from the SQL query by mapping IDs to cards
+      const cardMap = new Map(allData.map((card) => [card.id, card]));
+      const sortedCards: CardType[] = [];
+      for (const id of cardIds) {
+        const card = cardMap.get(id);
+        if (card) {
+          sortedCards.push(card);
+        }
+      }
+      return sortedCards;
+    }
+
+    // For "createdAt" sorting, use relational query API (simpler and works fine)
     const data = await context.db.query.cards.findMany({
-      where: (organization, { isNull }) => isNull(organization.deletedAt),
+      where: and(...conditions),
+      orderBy: (cards, { desc }) => [desc(cards.createdAt)],
       with: {
         organization: true,
         emails: true,
         phones: true,
         links: true,
         appearance: true,
+        pageVisits: {
+          columns: {
+            referer: true,
+          },
+        },
       },
     });
 
@@ -612,7 +700,7 @@ export const getCard = publicProcedure
       id: z.string().optional(),
     })
   )
-  .output(z.custom<CardType>().optional())
+  .output(z.custom<Partial<CardType>>().optional())
   .handler(async ({ input, context, errors }) => {
     const cardId = input.id;
 
@@ -647,7 +735,7 @@ export const getCardBySlug = publicProcedure
     tags: ["card"],
   })
   .input(z.object({ slug: z.string() }))
-  .output(z.custom<CardType>().optional())
+  .output(z.custom<Partial<CardType>>().optional())
   .handler(async ({ input, context }) => {
     if (input.slug !== "new") {
       const data = await context.db.query.cards.findFirst({
@@ -685,9 +773,8 @@ export const countCards = publicProcedure
 
     if (filters.showArchived === false) {
       conditions.push(isNull(cards.archivedAt));
-    } else if (filters.showArchived === true) {
-      conditions.push(isNotNull(cards.archivedAt));
     }
+    // When showArchived === true, show all cards (no filter needed)
 
     const [data] = await context.db
       .select({ count: count() })

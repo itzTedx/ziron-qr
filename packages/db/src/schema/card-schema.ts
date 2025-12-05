@@ -216,5 +216,10 @@ export type CardType = InferResultType<
     organization: true;
     links: true;
     appearance: true;
+    pageVisits: {
+      columns: {
+        referer: true;
+      };
+    };
   }
 >;

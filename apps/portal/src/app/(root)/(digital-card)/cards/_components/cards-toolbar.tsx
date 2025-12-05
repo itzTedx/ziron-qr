@@ -93,7 +93,7 @@ export const CardsToolbar = memo(
         )}
         <div className="h-[120px]" />
 
-        <div className="fixed bottom-3 left-0 z-10 w-full [--left:62px] sm:max-[1372px]:w-[calc(100%-150px)] md:left-(--left) md:w-[calc(100%-var(--left))] md:max-[1372px]:w-[calc(100%-var(--left)-150px)]">
+        <div className="fixed bottom-5 left-0 z-10 w-full [--left:280px] sm:max-[1372px]:w-[calc(100%-150px)] md:left-(--left) md:w-[calc(100%-var(--left))] md:max-[1372px]:w-[calc(100%-var(--left)-150px)]">
           <div
             className={cn(
               "-translate-x-1/2 relative left-1/2 w-full max-w-[768px] px-5",

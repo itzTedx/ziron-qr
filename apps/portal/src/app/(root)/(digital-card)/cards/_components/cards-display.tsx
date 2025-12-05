@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from "react";
 
 import { IconChevronDown, IconLayoutList, IconTable } from "@tabler/icons-react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import { AnimatePresence, motion } from "motion/react";
 import { toast } from "sonner";
@@ -21,7 +21,6 @@ import { Switch } from "@/components/ui/switch";
 import { BoxArchive, IconArrowsUpDown, IconLayoutGrid } from "@/assets/icons";
 
 import { orpc } from "@/lib/orpc/client";
-import { getQueryClient } from "@/lib/orpc/query/hydration";
 
 import { CardSort } from "./card-sort";
 import { selectedSortAtom, showArchivedAtom, viewModeAtom } from "./cards-atoms";
@@ -31,30 +30,30 @@ const CARDS_DISPLAY_OPTIONS = [
   { id: "rows", label: "Rows", icon: IconTable },
 ] as const;
 
-export const CardsDisplay = () => {
+export const CardsDisplay = ({ preferences }: { preferences: WorkspacePreferences }) => {
+  const queryClient = useQueryClient();
+
   const [viewMode, setViewMode] = useAtom(viewModeAtom);
   const [showArchived, setShowArchived] = useAtom(showArchivedAtom);
   const [selectedSort, setSelectedSort] = useAtom(selectedSortAtom);
-  const { data: preferences } = useQuery(orpc.workspace.getPreferences.queryOptions());
-
-  const queryClient = getQueryClient();
 
   // Store original preferences for reset functionality
   const originalPreferences = useMemo<WorkspacePreferences>(
     () => ({
-      viewMode: preferences?.viewMode ?? "cards",
-      showArchived: preferences?.showArchived ?? false,
-      sortBy: preferences?.sortBy ?? "createdAt",
+      viewMode: preferences.viewMode,
+      showArchived: preferences.showArchived,
+      sortBy: preferences.sortBy,
     }),
-    [preferences?.viewMode, preferences?.showArchived, preferences?.sortBy]
+    [preferences.viewMode, preferences.showArchived, preferences.sortBy]
   );
 
   // Mutation to persist preferences
   const updatePreferences = useMutation(
     orpc.workspace.updatePreferences.mutationOptions({
-      onSuccess: () => {
+      onSuccess: (updatedPreferences) => {
         toast.success("Display preferences saved");
-        queryClient.invalidateQueries(orpc.workspace.getPreferences.queryOptions());
+        // Update the query cache directly instead of invalidating to prevent refetch loop
+        queryClient.setQueryData(orpc.workspace.getPreferences.queryOptions().queryKey, updatedPreferences);
       },
       onError: (error) => {
         toast.error("Failed to save preferences", { description: error.message });
@@ -91,7 +90,16 @@ export const CardsDisplay = () => {
       <PopoverTrigger asChild>
         <AnimateIcon animateOnHover asChild>
           <Button className="w-full flex-1 bg-inherit" size="lg" variant="outline">
-            <IconLayoutGrid /> Display <IconChevronDown className="size-4 text-muted-foreground" />
+            <span className="relative">
+              {isDirty && (
+                <>
+                  <span className="-top-1 -right-1 absolute size-2 rounded-full bg-brand-secondary" />
+                  <span className="-top-1 -right-1 absolute size-2 animate-pulse rounded-full bg-brand-secondary" />
+                </>
+              )}
+              <IconLayoutGrid />
+            </span>
+            Display <IconChevronDown className="size-4 text-muted-foreground" />
           </Button>
         </AnimateIcon>
       </PopoverTrigger>
