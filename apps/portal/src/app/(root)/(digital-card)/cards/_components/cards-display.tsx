@@ -20,9 +20,9 @@ import { Switch } from "@/components/ui/switch";
 
 import { BoxArchive, IconArrowsUpDown, IconLayoutGrid } from "@/assets/icons";
 
+import { selectedSortAtom, showArchivedAtom, viewModeAtom } from "@/features/card/cards-atoms";
 import { orpc } from "@/lib/orpc/client";
 
-import { selectedSortAtom, showArchivedAtom, viewModeAtom } from "../../../../../features/card/cards-atoms";
 import { CardSort } from "./card-sort";
 
 const CARDS_DISPLAY_OPTIONS = [

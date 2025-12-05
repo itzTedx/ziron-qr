@@ -4,8 +4,7 @@ import type { Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-import { IconCopy, IconEdit } from "@tabler/icons-react";
-import { CheckCircle2 } from "lucide-react";
+import { IconCheck, IconCopy, IconEdit } from "@tabler/icons-react";
 
 import { IconMouse } from "@ziron/ui/assets/icons/mouse";
 import { Badge } from "@ziron/ui/components/badge";
@@ -155,18 +154,21 @@ const CardIcon = memo(
       >
         {/* Link logo background circle */}
         <div className="absolute inset-0 shrink-0 rounded-full border opacity-0 transition-opacity group-data-[variant=cards]/card-list:sm:opacity-100">
-          <div className="h-full w-full rounded-full border border-card bg-linear-to-t from-background" />
+          <div className="h-full w-full rounded-full border border-card bg-linear-to-t from-background backdrop-blur-lg" />
         </div>
         <div className="relative transition-[padding,transform] group-hover:scale-90 group-data-[variant=cards]/card-list:sm:p-2">
-          <div className="hidden sm:block">
+          <div className="group-data-[variant=rows]/card-list:hidden group-data-[variant=rows]/card-list:sm:block">
             {card.archivedAt ? (
               <BoxArchive
-                className={cn("shrink-0 p-0.5 text-muted-foreground transition-[width,height]", LOGO_SIZE_CLASS_NAME)}
+                className={cn(
+                  "shrink-0 p-0.5 text-muted-foreground transition-[width,height] group-data-[variant=cards]/card-list:p-3",
+                  LOGO_SIZE_CLASS_NAME
+                )}
               />
             ) : (
               <Image
                 alt={`${card.name}'s Photo`}
-                className={cn("shrink-0 transition-[width,height]", LOGO_SIZE_CLASS_NAME)}
+                className={cn("shrink-0 rounded-full transition-[width,height]", LOGO_SIZE_CLASS_NAME)}
                 height={120}
                 loading="lazy"
                 src={card.image}
@@ -179,7 +181,7 @@ const CardIcon = memo(
         {/* Checkbox */}
         <div
           className={cn(
-            "pointer-events-none absolute inset-0 flex items-center justify-center rounded-full border bg-foreground ring-0 ring-black/5",
+            "pointer-events-none absolute inset-0 flex items-center justify-center rounded-full border border-input bg-card ring-0 ring-black/5",
             "opacity-100 max-sm:ring sm:opacity-0",
             "transition-all duration-150 group-hover:opacity-100 group-hover:ring group-focus-visible:opacity-100 group-focus-visible:ring",
             "group-data-[checked=true]:opacity-100"
@@ -187,11 +189,11 @@ const CardIcon = memo(
         >
           <div
             className={cn(
-              "rounded-full bg-neutral-800 p-0.5 group-data-[variant=cards]/card-list:p-1",
+              "rounded-full bg-foreground p-0.5 group-data-[variant=cards]/card-list:p-1",
               "scale-90 opacity-0 transition-[transform,opacity] duration-100 group-data-[checked=true]:scale-100 group-data-[checked=true]:opacity-100"
             )}
           >
-            <CheckCircle2 className="size-3 text-white" />
+            <IconCheck className="size-3 text-white" />
           </div>
         </div>
       </button>

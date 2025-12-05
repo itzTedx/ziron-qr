@@ -123,7 +123,7 @@ export function CardForm({ isEditMode, initialData, isDuplicateMode = false }: P
         toast.success(`Card: ${updatedCard.cardName} has been updated`);
         form.reset(form.getValues(), { keepDefaultValues: true });
         queryClient.invalidateQueries({
-          queryKey: orpc.card.get.queryKey({ input: { id: updatedCard.id } }),
+          queryKey: orpc.card.list.queryKey(),
         });
         router.push("/cards");
       },
@@ -152,17 +152,17 @@ export function CardForm({ isEditMode, initialData, isDuplicateMode = false }: P
   // console.log(validationResult);
 
   // Separate submit handlers
-  async function handleCreate(values: zCardSchema) {
+  function handleCreate(values: zCardSchema) {
     createCard.mutate(values);
   }
 
-  async function handleUpdate(values: zCardSchema) {
+  function handleUpdate(values: zCardSchema) {
     if (initialData?.id) {
       updateCard.mutate({ id: initialData.id, ...values });
     }
   }
 
-  async function onSubmit(values: zCardSchema) {
+  function onSubmit(values: zCardSchema) {
     if (isEditMode && !isDuplicateMode && initialData?.id) {
       handleUpdate(values);
     } else {

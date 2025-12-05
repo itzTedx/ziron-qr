@@ -23,7 +23,7 @@ export default async function CardsPage() {
       </Header>
 
       <ScrollArea className="h-full flex-1 overflow-y-auto pt-3 sm:py-4">
-        <Suspense>
+        <Suspense fallback={<div>Loading...</div>}>
           <HydrateClient client={queryClient}>
             <CardsClient />
           </HydrateClient>

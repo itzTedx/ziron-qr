@@ -1,7 +1,5 @@
 "use client";
 
-import { Suspense } from "react";
-
 import { IconChevronDown, IconSearch } from "@tabler/icons-react";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
@@ -16,10 +14,10 @@ import { AnimateIcon } from "@/components/ui/icon";
 
 import { IconSlidersHorizontal } from "@/assets/icons";
 
+import { selectedSortAtom, showArchivedAtom, viewModeAtom } from "@/features/card/cards-atoms";
 import { useCardSelection } from "@/features/card/hooks/use-card-selection";
 import { orpc } from "@/lib/orpc/client";
 
-import { selectedSortAtom, showArchivedAtom, viewModeAtom } from "../../../../../features/card/cards-atoms";
 import { CardsDisplay } from "./cards-display";
 import { CardsList } from "./cards-list";
 import { CardsToolbar } from "./cards-toolbar";
@@ -59,9 +57,8 @@ export const CardsClient = () => {
           <MoreCardOptions />
         </ButtonGroup>
       </div>
-      <Suspense>
-        <CardsClientContent />
-      </Suspense>
+
+      <CardsClientContent />
     </PageWidthWrapper>
   );
 };

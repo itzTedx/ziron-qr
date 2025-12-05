@@ -1,6 +1,7 @@
 "use client";
 
 import { cva } from "@ziron/ui/components/index.ts";
+import { Skeleton } from "@ziron/ui/components/skeleton";
 
 import { CardTypeWithPageVisits } from "@ziron/db/schema";
 import { cn } from "@ziron/utils";
@@ -42,6 +43,16 @@ export const CardsList = ({
 }) => {
   const { handleCardSelection } = useCardSelection(cards);
   const isFiltered = false;
+
+  if (loading) {
+    return (
+      <div className={cn(cardListVariants({ variant, loading }))}>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+          <Skeleton className="h-full w-full" />
+        </div>
+      </div>
+    );
+  }
 
   if (cards && cards.length === 0) {
     return (

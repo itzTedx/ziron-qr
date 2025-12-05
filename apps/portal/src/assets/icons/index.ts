@@ -1,5 +1,6 @@
 export * from "./arrows";
 export * from "./box-archive";
+export * from "./check";
 export * from "./connected-dots";
 export * from "./cursor-rays";
 export * from "./hyperlink";
