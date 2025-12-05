@@ -33,7 +33,7 @@ export const CardsList = ({
   selectedCardIds,
   variant = "cards",
 }: {
-  cards: CardType[];
+  cards?: CardType[];
   loading: boolean;
   isSelectMode: boolean;
   setIsSelectModeAction: (isSelectMode: boolean) => void;
@@ -43,7 +43,7 @@ export const CardsList = ({
   const { handleCardSelection } = useCardSelection(cards);
   const isFiltered = false;
 
-  if (cards.length === 0) {
+  if (cards && cards.length === 0) {
     return (
       <AnimatedEmptyState
         cardContent={
@@ -74,17 +74,18 @@ export const CardsList = ({
 
   return (
     <div className={cn(cardListVariants({ variant, loading }))} data-variant={variant}>
-      {cards.map((card) => (
-        <PersonCard
-          card={card}
-          handleCardSelection={handleCardSelection}
-          isSelectMode={isSelectMode}
-          key={card.id}
-          selectedCardIds={selectedCardIds}
-          setIsSelectMode={setIsSelectModeAction}
-          variant={variant}
-        />
-      ))}
+      {cards &&
+        cards.map((card) => (
+          <PersonCard
+            card={card}
+            handleCardSelection={handleCardSelection}
+            isSelectMode={isSelectMode}
+            key={card.id}
+            selectedCardIds={selectedCardIds}
+            setIsSelectMode={setIsSelectModeAction}
+            variant={variant}
+          />
+        ))}
     </div>
   );
 };

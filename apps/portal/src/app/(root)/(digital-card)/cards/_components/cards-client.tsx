@@ -3,7 +3,7 @@
 import { Suspense } from "react";
 
 import { IconChevronDown, IconSearch } from "@tabler/icons-react";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
 
@@ -71,7 +71,7 @@ const CardsClientContent = () => {
   const viewMode = useAtomValue(viewModeAtom);
   const selectedSort = useAtomValue(selectedSortAtom);
 
-  const { data: cards, isLoading } = useSuspenseQuery(
+  const { data: cards, isLoading } = useQuery(
     orpc.card.list.queryOptions({ input: { viewMode, sortBy: selectedSort, showArchived } })
   );
   const { data: cardsCount } = useSuspenseQuery(
@@ -91,12 +91,14 @@ const CardsClientContent = () => {
         variant={viewMode}
       />
 
-      <CardsToolbar
-        cards={cards}
-        cardsCount={cardsCount}
-        isSelectMode={isSelectMode}
-        setIsSelectMode={setIsSelectMode}
-      />
+      {cards && (
+        <CardsToolbar
+          cards={cards}
+          cardsCount={cardsCount}
+          isSelectMode={isSelectMode}
+          setIsSelectMode={setIsSelectMode}
+        />
+      )}
     </>
   );
 };

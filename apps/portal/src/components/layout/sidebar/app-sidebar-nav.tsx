@@ -2,6 +2,8 @@
 
 import { ReactNode } from "react";
 
+import { usePathname } from "next/navigation";
+
 import { Bell, ShieldCheck } from "lucide-react";
 
 import { IconBuilding } from "@ziron/ui/assets/icons/building";
@@ -30,9 +32,9 @@ const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = [
   },
 ];
 
-const NAV_AREAS: SidebarNavAreas = {
+const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
   // Top-level
-  default: {
+  default: () => ({
     title: "Digital Cards",
     direction: "left",
     content: [
@@ -86,10 +88,10 @@ const NAV_AREAS: SidebarNavAreas = {
       //   ],
       // },
     ],
-  },
+  }),
 
   // Workspace settings
-  workspaceSettings: {
+  workspaceSettings: () => ({
     title: "Settings",
     backHref: "/cards",
     direction: "right",
@@ -127,10 +129,10 @@ const NAV_AREAS: SidebarNavAreas = {
         ],
       },
     ],
-  },
+  }),
 
   // User settings
-  userSettings: {
+  userSettings: () => ({
     title: "Settings",
     backHref: "/cards",
     direction: "right",
@@ -153,9 +155,10 @@ const NAV_AREAS: SidebarNavAreas = {
         ],
       },
     ],
-  },
+  }),
 };
 
 export function AppSidebarNav({ toolContent }: { toolContent?: ReactNode }) {
-  return <SidebarNav areas={NAV_AREAS} groups={NAV_GROUPS} toolContent={toolContent} />;
+  const pathname = usePathname();
+  return <SidebarNav areas={NAV_AREAS} data={{ pathname }} groups={NAV_GROUPS} toolContent={toolContent} />;
 }

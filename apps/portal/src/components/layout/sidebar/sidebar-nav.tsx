@@ -1,9 +1,10 @@
 "use client";
 
-import { CSSProperties, PropsWithChildren, ReactNode, Suspense } from "react";
+import { CSSProperties, PropsWithChildren, ReactNode, Suspense, useMemo } from "react";
 
 import { Route } from "next";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { ChevronLeft } from "lucide-react";
 import { motion } from "motion/react";
@@ -25,18 +26,24 @@ const SIDEBAR_AREAS_WIDTH = SIDEBAR_WIDTH - SIDEBAR_GROUPS_WIDTH;
 
 interface SidebarNavProps<T extends Record<string, unknown>> {
   groups: SidebarNavGroups<T>;
-  areas: SidebarNavAreas;
+  areas: SidebarNavAreas<T>;
   toolContent?: ReactNode;
+  data: T;
 }
 
-export function SidebarNav<T extends Record<string, unknown>>({ groups, areas, toolContent }: SidebarNavProps<T>) {
-  // const pathname = usePathname();
+export function SidebarNav<T extends Record<string, unknown>>({
+  groups,
+  areas,
+  toolContent,
+  data,
+}: SidebarNavProps<T>) {
+  const pathname = usePathname();
 
-  // const currentArea = useMemo(() => {
-  //   if (pathname.startsWith("/settings/account")) return "userSettings";
-  //   if (pathname.startsWith("/workspace/settings")) return "workspaceSettings";
-  //   return "default";
-  // }, [pathname]);
+  const currentArea = useMemo(() => {
+    if (pathname.startsWith("/settings/account")) return "userSettings";
+    if (pathname.startsWith("/workspace/settings")) return "workspaceSettings";
+    return "default";
+  }, [pathname]);
 
   return (
     <div
@@ -80,12 +87,12 @@ export function SidebarNav<T extends Record<string, unknown>>({ groups, areas, t
             <div className="relative flex grow flex-col p-3 text-muted-foreground">
               <div className="relative w-full grow">
                 {Object.entries(areas).map(([area, areaConfig]) => {
-                  const { title, backHref, content, direction } = areaConfig;
+                  const { title, backHref, content, direction } = areaConfig(data);
 
                   const TitleContainer = backHref ? Link : "div";
 
                   return (
-                    <Area direction={direction ?? "left"} key={area} visible={true}>
+                    <Area direction={direction ?? "left"} key={area} visible={area === currentArea}>
                       {title &&
                         (typeof title === "string" ? (
                           <TitleContainer

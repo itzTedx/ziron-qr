@@ -45,16 +45,16 @@ export type NavGroupType = {
 
 export type SidebarNavGroups<_T extends Record<string, unknown>> = NavGroupType[];
 
-export type SidebarNavArea = {
-  title?: string | ReactNode;
-  backHref?: Route;
-  showNews?: boolean; // show news segment – TODO: enable this for Partner Program too
-  hideSwitcherIcons?: boolean; // hide workspace switcher + product icons for this area
-  direction?: "left" | "right";
-  content: {
-    name?: string;
-    items: NavItemType[];
-  }[];
-};
-
-export type SidebarNavAreas = Record<string, SidebarNavArea>;
+export type SidebarNavAreas<T extends Record<string, unknown>> = Record<
+  string,
+  (args: T) => {
+    title?: string | ReactNode;
+    backHref?: Route;
+    hideSwitcherIcons?: boolean; // hide workspace switcher + product icons for this area
+    direction?: "left" | "right";
+    content: {
+      name?: string;
+      items: NavItemType[];
+    }[];
+  }
+>;

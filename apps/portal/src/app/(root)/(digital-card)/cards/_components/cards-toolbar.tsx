@@ -15,9 +15,9 @@ import { CreateButton } from "@/components/ui/create-button";
 
 import { BoxArchive } from "@/assets/icons";
 
+import { selectedCardIdsAtom } from "@/features/card/cards-atoms";
 import { usePagination } from "@/hooks/use-pagination";
 
-import { selectedCardIdsAtom } from "../../../../../features/card/cards-atoms";
 import { ArchiveCardModal } from "./archive-card-modal";
 import ArchivedLinksHint from "./archived-links-hint";
 import { DeleteCardModal } from "./delete-card-modal";
