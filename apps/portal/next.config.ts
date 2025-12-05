@@ -23,7 +23,7 @@ const nextConfig: NextConfig = {
         protocol: "https",
       },
       {
-        hostname: "ziron-qr-live.s3.ap-south-1.amazonaws.com",
+        hostname: "ziron-qr-live.s3.me-central-1.amazonaws.com",
         protocol: "https",
       },
     ],
