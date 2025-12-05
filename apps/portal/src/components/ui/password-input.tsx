@@ -1,44 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { ComponentProps, useState } from "react";
 
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 import { Input } from "@ziron/ui/components/input";
 
-interface PasswordInputProps {
-  id?: string;
-  label?: string;
-  placeholder?: string;
-  value: string;
-  onChange: (value: string) => void;
-  required?: boolean;
-  className?: string;
-}
+import { cn } from "@ziron/utils";
 
-export function PasswordInput({
-  id = "password",
-  placeholder = "Password",
-  value,
-  onChange,
-  required = false,
-  className,
-}: PasswordInputProps) {
+export function PasswordInput({ id = "password", className, ...props }: ComponentProps<typeof Input>) {
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const toggleVisibility = () => setIsVisible((prevState) => !prevState);
 
   return (
     <div className="relative">
-      <Input
-        className={`pe-9 ${className || ""}`}
-        id={id}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        required={required}
-        type={isVisible ? "text" : "password"}
-        value={value}
-      />
+      <Input className={cn("pe-9", className)} type={isVisible ? "text" : "password"} {...props} />
       <button
         aria-controls={id}
         aria-label={isVisible ? "Hide password" : "Show password"}

@@ -1,3 +1,5 @@
+"use client";
+
 import { Suspense, useState } from "react";
 
 import { IconDotsVertical } from "@tabler/icons-react";

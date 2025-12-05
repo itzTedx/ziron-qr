@@ -1,13 +1,9 @@
-import { Suspense } from "react";
-
 import { Metadata } from "next";
 
 import { IconLogoMono } from "@ziron/ui/assets/logo";
 import { Card, CardContent } from "@ziron/ui/components/card";
 
 import { LoginForm } from "@/features/auth/components/login-form";
-
-import { RedirectUser } from "./_components/redirect-user";
 
 export const metadata: Metadata = {
   title: "Login - Ziron QR",
@@ -17,9 +13,7 @@ export const metadata: Metadata = {
 export default function LoginPage() {
   return (
     <>
-      <Suspense>
-        <RedirectUser />
-      </Suspense>
+      {/* <RedirectUser /> */}
 
       <div className="relative flex min-h-screen items-center justify-center bg-card/50">
         <Card className="relative overflow-hidden rounded-xl border-0 bg-muted/50 shadow-card shadow-lg sm:mx-auto sm:w-full sm:max-w-md">

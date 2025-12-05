@@ -25,6 +25,7 @@
     "nuqs",
     "orpc",
     "qrcodegen",
+    "squircle",
     "useCallback",
     "useMemo",
     "ziron"

@@ -1,8 +1,11 @@
+"use client";
+
 import { useCallback, useMemo } from "react";
 
 import { IconChevronDown, IconLayoutList, IconTable } from "@tabler/icons-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAtom } from "jotai";
+import { useHydrateAtoms } from "jotai/utils";
 import { AnimatePresence, motion } from "motion/react";
 import { toast } from "sonner";
 
@@ -32,6 +35,12 @@ const CARDS_DISPLAY_OPTIONS = [
 
 export const CardsDisplay = ({ preferences }: { preferences: WorkspacePreferences }) => {
   const queryClient = useQueryClient();
+
+  useHydrateAtoms([
+    [viewModeAtom, preferences.viewMode],
+    [showArchivedAtom, preferences.showArchived],
+    [selectedSortAtom, preferences.sortBy],
+  ] as const);
 
   const [viewMode, setViewMode] = useAtom(viewModeAtom);
   const [showArchived, setShowArchived] = useAtom(showArchivedAtom);

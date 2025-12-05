@@ -9,8 +9,6 @@ import { OrganizationClient } from "@/features/organization/components/organizat
 import { orpc } from "@/lib/orpc/client";
 import { getQueryClient, HydrateClient } from "@/lib/orpc/query/hydration";
 
-// export const dynamic = "force-dynamic";
-
 export default async function OrganizationsPage() {
   const queryClient = getQueryClient();
 

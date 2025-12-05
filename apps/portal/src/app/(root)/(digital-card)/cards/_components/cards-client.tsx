@@ -18,7 +18,6 @@ import { selectedSortAtom, showArchivedAtom, viewModeAtom } from "@/features/car
 import { useCardSelection } from "@/features/card/hooks/use-card-selection";
 import { orpc } from "@/lib/orpc/client";
 
-import { CardsDisplay } from "./cards-display";
 import { CardsList } from "./cards-list";
 import { CardsToolbar } from "./cards-toolbar";
 import { MoreCardOptions } from "./more-card-options";
@@ -41,7 +40,7 @@ export const CardsClient = () => {
               <IconSlidersHorizontal /> Filter <IconChevronDown className="size-4 text-muted-foreground" />
             </Button>
           </AnimateIcon>
-          <CardsDisplay preferences={preferences} />
+          {/* <CardsDisplay preferences={preferences} /> */}
         </ButtonGroup>
 
         <ButtonGroup className="w-full sm:w-fit">
@@ -63,7 +62,7 @@ export const CardsClient = () => {
   );
 };
 
-const CardsClientContent = () => {
+export const CardsClientContent = () => {
   const showArchived = useAtomValue(showArchivedAtom);
   const viewMode = useAtomValue(viewModeAtom);
   const selectedSort = useAtomValue(selectedSortAtom);
@@ -71,9 +70,14 @@ const CardsClientContent = () => {
   const { data: cards, isLoading } = useQuery(
     orpc.card.list.queryOptions({ input: { viewMode, sortBy: selectedSort, showArchived }, context: { cache: true } })
   );
-  const { data: cardsCount } = useSuspenseQuery(
-    orpc.card.count.queryOptions({ input: { showArchived: showArchived ? true : false } })
-  );
+  const { data: cardsCount } = useQuery({
+    ...orpc.card.count.queryOptions({
+      input: { showArchived },
+      context: { cache: true },
+    }),
+    staleTime: 5 * 60 * 1000, // 5 minutes - count doesn't change frequently
+    gcTime: 10 * 60 * 1000, // 10 minutes cache time
+  });
 
   const { isSelectMode, setIsSelectMode, selectedCardIds } = useCardSelection(cards);
 
@@ -91,7 +95,7 @@ const CardsClientContent = () => {
       {cards && (
         <CardsToolbar
           cards={cards}
-          cardsCount={cardsCount}
+          cardsCount={cardsCount ?? 0}
           isSelectMode={isSelectMode}
           setIsSelectMode={setIsSelectMode}
         />

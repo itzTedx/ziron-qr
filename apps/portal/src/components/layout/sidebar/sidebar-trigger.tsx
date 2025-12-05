@@ -3,11 +3,12 @@
 import { useCallback } from "react";
 
 import { useAtom } from "jotai";
-import { PanelLeftOpenIcon } from "lucide-react";
 
 import { Button } from "@ziron/ui/components/button";
 
 import { cn } from "@ziron/utils";
+
+import { IconPanelOpen } from "@/assets/icons/panel";
 
 import { sidebarOpenMobileAtom } from "./responsive-sidebar";
 
@@ -32,7 +33,7 @@ export function SidebarTrigger({ className, onClick, ...props }: React.Component
       variant="ghost"
       {...props}
     >
-      <PanelLeftOpenIcon />
+      <IconPanelOpen />
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );

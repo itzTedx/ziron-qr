@@ -28,7 +28,7 @@ async function SuspenseCardPageHeader({ params }: CardPageContentProps) {
   // Fetching the card if in edit mode
   const card = await client.card.get({ id });
 
-  const name = `${card?.organization.name}/${card?.name}` as const;
+  const name = `${card?.organization?.name}/${card?.name}` as const;
 
   return (
     <Header backHref="/" currentPage={name} showBackButton title="Cards">
