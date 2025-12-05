@@ -1,6 +1,6 @@
 "use client";
 
-import { CSSProperties, PropsWithChildren, ReactNode, Suspense, useMemo } from "react";
+import { PropsWithChildren, ReactNode, Suspense, useMemo } from "react";
 
 import { Route } from "next";
 import Link from "next/link";
@@ -16,13 +16,10 @@ import { cn } from "@ziron/utils";
 import { Tooltip } from "@/components/shared/tooltip";
 
 import { NavUser } from "./nav-user";
+import { ResponsiveSidebar } from "./responsive-sidebar";
 import { NavGroupItem } from "./sidebar-nav-group-item";
 import { SidebarNavItem } from "./sidebar-nav-item";
 import { SidebarNavAreas, SidebarNavGroups } from "./types";
-
-export const SIDEBAR_WIDTH = 280;
-const SIDEBAR_GROUPS_WIDTH = 64;
-const SIDEBAR_AREAS_WIDTH = SIDEBAR_WIDTH - SIDEBAR_GROUPS_WIDTH;
 
 interface SidebarNavProps<T extends Record<string, unknown>> {
   groups: SidebarNavGroups<T>;
@@ -46,16 +43,7 @@ export function SidebarNav<T extends Record<string, unknown>>({
   }, [pathname]);
 
   return (
-    <div
-      className={cn("h-full w-(--sidebar-width) transition-[width] duration-300")}
-      style={
-        {
-          "--sidebar-width": `${SIDEBAR_WIDTH}px`,
-          "--sidebar-groups-width": `${SIDEBAR_GROUPS_WIDTH}px`,
-          "--sidebar-areas-width": `${SIDEBAR_AREAS_WIDTH}px`,
-        } as CSSProperties
-      }
-    >
+    <ResponsiveSidebar>
       {/* <ClientOnly className="size-full"> */}
       <nav className="grid size-full grid-cols-[var(--sidebar-groups-width)_1fr]">
         <div className="flex flex-col items-center justify-between">
@@ -135,7 +123,7 @@ export function SidebarNav<T extends Record<string, unknown>>({
         </div>
       </nav>
       {/* </ClientOnly> */}
-    </div>
+    </ResponsiveSidebar>
   );
 }
 
