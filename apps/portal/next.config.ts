@@ -18,6 +18,14 @@ const nextConfig: NextConfig = {
         hostname: "zm-deals-local.s3.us-east-1.amazonaws.com",
         protocol: "https",
       },
+      {
+        hostname: "ziron-qr-local.s3.ap-south-1.amazonaws.com",
+        protocol: "https",
+      },
+      {
+        hostname: "ziron-qr-live.s3.ap-south-1.amazonaws.com",
+        protocol: "https",
+      },
     ],
   },
   typedRoutes: true,

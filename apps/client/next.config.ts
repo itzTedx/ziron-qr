@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   transpilePackages: ["@ziron/ui"],
   images: {
-    qualities: [25, 80],
+    qualities: [25, 70, 80],
     remotePatterns: [
       {
         hostname: "avatar.vercel.sh",
@@ -11,6 +11,14 @@ const nextConfig: NextConfig = {
       },
       {
         hostname: "zm-deals-local.s3.us-east-1.amazonaws.com",
+        protocol: "https",
+      },
+      {
+        hostname: "ziron-qr-local.s3.ap-south-1.amazonaws.com",
+        protocol: "https",
+      },
+      {
+        hostname: "ziron-qr-live.s3.ap-south-1.amazonaws.com",
         protocol: "https",
       },
     ],

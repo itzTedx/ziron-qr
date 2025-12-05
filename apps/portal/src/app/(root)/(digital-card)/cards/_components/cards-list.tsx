@@ -2,7 +2,7 @@
 
 import { cva } from "@ziron/ui/components/index.ts";
 
-import { CardType } from "@ziron/db/schema";
+import { CardTypeWithPageVisits } from "@ziron/db/schema";
 import { cn } from "@ziron/utils";
 
 import { AnimatedEmptyState } from "@/components/shared/animated-empty";
@@ -33,7 +33,7 @@ export const CardsList = ({
   selectedCardIds,
   variant = "cards",
 }: {
-  cards?: CardType[];
+  cards?: CardTypeWithPageVisits[];
   loading: boolean;
   isSelectMode: boolean;
   setIsSelectModeAction: (isSelectMode: boolean) => void;

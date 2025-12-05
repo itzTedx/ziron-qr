@@ -14,7 +14,7 @@ import { Card, CardContent, CardFooter } from "@ziron/ui/components/card";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ziron/ui/components/tooltip";
 import { useCopyToClipboard } from "@ziron/ui/hooks";
 
-import type { CardType } from "@ziron/db/schema";
+import type { CardTypeWithPageVisits } from "@ziron/db/schema";
 import { cn, formatDate, pluralize } from "@ziron/utils";
 
 import { BoxArchive } from "@/assets/icons";
@@ -25,7 +25,7 @@ import { constructUrl, getPrettyUrl } from "@/lib/link/construct-url";
 import ShareButton from "./share-button";
 
 type PersonCardFields = Pick<
-  CardType,
+  CardTypeWithPageVisits,
   "id" | "name" | "designation" | "slug" | "image" | "cover" | "createdAt" | "pageVisits" | "archivedAt"
 >;
 
@@ -55,7 +55,7 @@ export const PersonCard = ({
 
   if (variant === "rows") {
     return (
-      <div className="group relative flex items-center justify-between border border-b p-3 first-of-type:rounded-t-xl first-of-type:border-t last-of-type:rounded-b-xl">
+      <div className="group relative flex items-center justify-between border border-b p-3 first-of-type:rounded-t-xl first-of-type:border-t last-of-type:rounded-b-xl hover:bg-accent">
         <div className="flex items-center gap-3">
           <div onMouseDown={() => setIsSelectMode?.(true)} onMouseUp={() => setIsSelectMode?.(false)}>
             <CardIcon

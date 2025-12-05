@@ -2,7 +2,17 @@ import { os } from "@orpc/server";
 
 import { and, count, desc, eq, gte, isNull, lte } from "@ziron/db";
 import { db } from "@ziron/db/client";
-import { appearance, CardType, cards, emails, links, organizationTable, pageVisits, phones } from "@ziron/db/schema";
+import {
+  appearance,
+  CardType,
+  CardTypeWithPageVisits,
+  cards,
+  emails,
+  links,
+  organizationTable,
+  pageVisits,
+  phones,
+} from "@ziron/db/schema";
 import { slugify } from "@ziron/utils";
 import {
   cardSchema,
@@ -590,7 +600,7 @@ export const listCards = os
     tags: ["card"],
   })
   .input(workspacePreferencesSchema.optional().default({ viewMode: "cards", sortBy: "createdAt", showArchived: false }))
-  .output(z.array(z.custom<CardType>()))
+  .output(z.array(z.custom<CardTypeWithPageVisits>()))
   .handler(async ({ context, input }) => {
     const filters = input ?? {};
 
@@ -655,7 +665,7 @@ export const listCards = os
 
       // Maintain the sort order from the SQL query by mapping IDs to cards
       const cardMap = new Map(allData.map((card) => [card.id, card]));
-      const sortedCards: CardType[] = [];
+      const sortedCards: CardTypeWithPageVisits[] = [];
       for (const id of cardIds) {
         const card = cardMap.get(id);
         if (card) {
@@ -735,23 +745,23 @@ export const getCardBySlug = publicProcedure
     tags: ["card"],
   })
   .input(z.object({ slug: z.string() }))
-  .output(z.custom<Partial<CardType>>().optional())
-  .handler(async ({ input, context }) => {
-    if (input.slug !== "new") {
-      const data = await context.db.query.cards.findFirst({
-        where: (cards, { eq, isNull, and }) =>
-          and(eq(cards.slug, input.slug), isNull(cards.deletedAt), isNull(cards.archivedAt)),
-        with: {
-          emails: true,
-          phones: true,
-          links: true,
-          organization: true,
-          appearance: true,
-        },
-      });
+  .output(z.custom<CardType>())
+  .handler(async ({ input, context, errors }) => {
+    const data = await context.db.query.cards.findFirst({
+      where: (cards, { eq, isNull, and }) =>
+        and(eq(cards.slug, input.slug), isNull(cards.deletedAt), isNull(cards.archivedAt)),
+      with: {
+        emails: true,
+        phones: true,
+        links: true,
+        organization: true,
+        appearance: true,
+      },
+    });
 
-      return data;
-    }
+    if (!data) throw errors.NOT_FOUND();
+
+    return data;
   });
 
 export const countCards = publicProcedure

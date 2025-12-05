@@ -26,10 +26,10 @@ export async function generateMetadata({ params }: PageProps<"/[slug]">): Promis
     };
 
   const data = {
-    title: `${card.name} - ${card.organization.name} | Ziron Digital Card`,
+    title: `${card.name} - ${card.organization?.name} | Ziron Digital Card`,
     description: card.bio ?? "",
-    icon: card.organization.logo ?? undefined,
-    twitterHandler: card.links.find((l) => l.label === "Twitter")?.url?.replace(/.*\.com\//, "@"),
+    icon: card.organization?.logo ?? undefined,
+    twitterHandler: card.links?.find((l) => l.label === "Twitter")?.url?.replace(/.*\.com\//, "@"),
   };
 
   return {
@@ -50,12 +50,13 @@ export default async function DigitalCardPage({ params }: PageProps<"/[slug]">) 
   const card = await client.card.getBySlug({ slug });
 
   if (!card) return notFound();
+
   return (
     <>
       <CardTracker cardId={card.id}>
         <Template data={card} />
       </CardTracker>
-      <Theme isDarkMode={card.appearance.isDarkMode} />
+      <Theme isDarkMode={card.appearance?.isDarkMode ?? false} />
     </>
   );
 }

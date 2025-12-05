@@ -3,7 +3,7 @@
 import { usePageVisitTracking } from "@/hooks/use-analytics";
 
 interface CardTrackerProps {
-  cardId: string;
+  cardId?: string;
   children: React.ReactNode;
 }
 

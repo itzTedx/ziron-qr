@@ -15,6 +15,7 @@ import { Kbd, KbdGroup } from "@ziron/ui/components/kbd";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 import { TabsContent } from "@ziron/ui/components/tabs";
 import { useKeyboardShortcut } from "@ziron/ui/hooks";
+import useUnloadWarning from "@ziron/ui/hooks/use-unload-warning";
 
 import { CardType } from "@ziron/db/schema";
 import { cn } from "@ziron/utils";
@@ -161,8 +162,6 @@ export function CardForm({ isEditMode, initialData, isDuplicateMode = false }: P
     }
   }
 
-  console.log("isDuplicateMode", isDuplicateMode);
-
   async function onSubmit(values: zCardSchema) {
     if (isEditMode && !isDuplicateMode && initialData?.id) {
       handleUpdate(values);
@@ -190,6 +189,8 @@ export function CardForm({ isEditMode, initialData, isDuplicateMode = false }: P
   // Subscribe to form state changes using useFormState for proper reactivity
   const { isDirty, touchedFields } = useFormState({ control: form.control });
   const hasTouchedFields = hasAnyTouchedField(touchedFields);
+
+  useUnloadWarning(isDirty);
 
   // Track blur events on form inputs
   useEffect(() => {

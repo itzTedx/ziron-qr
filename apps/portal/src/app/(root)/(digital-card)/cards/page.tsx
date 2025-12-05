@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import { ScrollArea, ScrollBar } from "@ziron/ui/components/scroll-area";
 
 import Header from "@/components/layout/header";
@@ -21,9 +23,11 @@ export default async function CardsPage() {
       </Header>
 
       <ScrollArea className="h-full flex-1 overflow-y-auto pt-3 sm:py-4">
-        <HydrateClient client={queryClient}>
-          <CardsClient />
-        </HydrateClient>
+        <Suspense>
+          <HydrateClient client={queryClient}>
+            <CardsClient />
+          </HydrateClient>
+        </Suspense>
 
         <ScrollBar />
       </ScrollArea>
