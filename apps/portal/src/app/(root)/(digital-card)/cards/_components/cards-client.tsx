@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 
 import { IconChevronDown, IconSearch } from "@tabler/icons-react";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -16,11 +16,12 @@ import { AnimateIcon } from "@/components/ui/icon";
 
 import { IconSlidersHorizontal } from "@/assets/icons";
 
+import { useCardSelection } from "@/features/card/hooks/use-card-selection";
 import { orpc } from "@/lib/orpc/client";
 
-import { CardsItems } from "../../_components/organizations-items";
-import { selectedSortAtom, showArchivedAtom, viewModeAtom } from "./cards-atoms";
+import { selectedSortAtom, showArchivedAtom, viewModeAtom } from "../../../../../features/card/cards-atoms";
 import { CardsDisplay } from "./cards-display";
+import { CardsList } from "./cards-list";
 import { CardsToolbar } from "./cards-toolbar";
 import { MoreCardOptions } from "./more-card-options";
 
@@ -69,27 +70,32 @@ const CardsClientContent = () => {
   const showArchived = useAtomValue(showArchivedAtom);
   const viewMode = useAtomValue(viewModeAtom);
   const selectedSort = useAtomValue(selectedSortAtom);
-  const [isSelectMode, setIsSelectMode] = useState(false);
-  const [selectedCardsId, setSelectedCardsId] = useState<string[]>([]);
 
-  const { data: cards } = useSuspenseQuery(
+  const { data: cards, isLoading } = useSuspenseQuery(
     orpc.card.list.queryOptions({ input: { viewMode, sortBy: selectedSort, showArchived } })
   );
   const { data: cardsCount } = useSuspenseQuery(
     orpc.card.count.queryOptions({ input: { showArchived: showArchived ? true : false } })
   );
 
+  const { isSelectMode, setIsSelectMode, selectedCardIds } = useCardSelection(cards);
+
   return (
     <>
-      <CardsItems cards={cards} isSelectMode={isSelectMode} setIsSelectMode={setIsSelectMode} variant={viewMode} />
+      <CardsList
+        cards={cards}
+        isSelectMode={isSelectMode}
+        loading={isLoading}
+        selectedCardIds={selectedCardIds}
+        setIsSelectModeAction={setIsSelectMode}
+        variant={viewMode}
+      />
 
       <CardsToolbar
         cards={cards}
         cardsCount={cardsCount}
         isSelectMode={isSelectMode}
-        selectedCardsId={selectedCardsId}
         setIsSelectMode={setIsSelectMode}
-        setSelectedCardsId={setSelectedCardsId}
       />
     </>
   );

@@ -22,8 +22,8 @@ import { BoxArchive, IconArrowsUpDown, IconLayoutGrid } from "@/assets/icons";
 
 import { orpc } from "@/lib/orpc/client";
 
+import { selectedSortAtom, showArchivedAtom, viewModeAtom } from "../../../../../features/card/cards-atoms";
 import { CardSort } from "./card-sort";
-import { selectedSortAtom, showArchivedAtom, viewModeAtom } from "./cards-atoms";
 
 const CARDS_DISPLAY_OPTIONS = [
   { id: "cards", label: "Cards", icon: IconLayoutList },

@@ -27,27 +27,28 @@ function ArchivedLinksHintHelper({ setShowArchived }: { setShowArchived: (showAr
   return (
     archivedCount > 0 && (
       <Tooltip>
-        <TooltipTrigger>
-          <div className="flex cursor-default items-center gap-1.5 rounded-md bg-neutral-100 px-2 py-0.5 font-medium text-neutral-950 text-sm hover:bg-neutral-200">
+        <TooltipTrigger asChild>
+          <Button type="button" variant="ghost">
             <BoxArchive className="h-3 w-3" />
             <Suspense fallback={<Skeleton className="size-4" />}>{archivedCount}</Suspense>
-          </div>
+          </Button>
         </TooltipTrigger>
         <TooltipContent>
-          <div className="px-3 py-2">
-            <div className="flex items-center gap-4">
-              <span>
-                You have <span className="font-medium">{archivedCount}</span> archived{" "}
-                {pluralize("link", archivedCount)} that match
-                {/* {archivedCount === 1 && "es"} */}
-                the applied filters
-              </span>
-              <div>
-                <Button className="h-6 px-2" onClick={() => setShowArchived(true)} variant="secondary">
-                  Show archived links
-                </Button>
-              </div>
-            </div>
+          <div className="flex items-center gap-4">
+            <span>
+              You have <span className="font-medium">{archivedCount}</span> archived {pluralize("link", archivedCount)}{" "}
+              that match{archivedCount === 1 && "es"}
+              the applied filters
+            </span>
+
+            <Button
+              className="bg-accent text-accent-foreground hover:bg-accent/80"
+              onClick={() => setShowArchived(true)}
+              size="sm"
+              variant="secondary"
+            >
+              Show archived links
+            </Button>
           </div>
         </TooltipContent>
       </Tooltip>

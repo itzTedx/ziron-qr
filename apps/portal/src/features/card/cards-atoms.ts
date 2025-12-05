@@ -11,3 +11,8 @@ const DEFAULT_SORT: CardsSortSlug = "createdAt";
 export const viewModeAtom = atom<"cards" | "rows">(DEFAULT_VIEW_MODE);
 export const showArchivedAtom = atom<boolean>(DEFAULT_SHOW_ARCHIVED);
 export const selectedSortAtom = atom<CardsSortSlug>(DEFAULT_SORT);
+
+// Atoms for card selection state
+export const isSelectModeAtom = atom<boolean>(false);
+export const selectedCardIdsAtom = atom<string[]>([]);
+export const lastSelectedCardIdAtom = atom<string | null>(null);
