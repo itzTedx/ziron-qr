@@ -63,12 +63,14 @@ export function NavUser() {
                 Account Settings
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <LogoutButton>
-                <IconLogout className="size-4 text-muted-foreground" />
-                Log out
-              </LogoutButton>
-            </DropdownMenuItem>
+            <LogoutButton asChild>
+              <DropdownMenuItem asChild>
+                <button className="w-full">
+                  <IconLogout className="size-4 text-muted-foreground" />
+                  Log out
+                </button>
+              </DropdownMenuItem>
+            </LogoutButton>
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
