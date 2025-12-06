@@ -8,6 +8,7 @@ import { SearchIcon } from "lucide-react";
 import { cn } from "@ziron/utils";
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./dialog";
+import { Kbd } from "./kbd";
 
 function Command({ className, ...props }: React.ComponentProps<typeof CommandPrimitive>) {
   return (
@@ -50,9 +51,13 @@ function CommandDialog({
   );
 }
 
-function CommandInput({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Input>) {
+function CommandInput({
+  className,
+  shortcutHint,
+  ...props
+}: React.ComponentProps<typeof CommandPrimitive.Input> & { shortcutHint?: string }) {
   return (
-    <div className="flex h-9 items-center gap-2 border-b px-3" data-slot="command-input-wrapper">
+    <div className="flex h-12 items-center gap-2 border-b px-3" data-slot="command-input-wrapper">
       <SearchIcon className="size-4 shrink-0 opacity-50" />
       <CommandPrimitive.Input
         className={cn(
@@ -62,6 +67,7 @@ function CommandInput({ className, ...props }: React.ComponentProps<typeof Comma
         data-slot="command-input"
         {...props}
       />
+      {shortcutHint && <CommandShortcut>{shortcutHint}</CommandShortcut>}
     </div>
   );
 }
@@ -116,14 +122,8 @@ function CommandItem({ className, ...props }: React.ComponentProps<typeof Comman
   );
 }
 
-function CommandShortcut({ className, ...props }: React.ComponentProps<"span">) {
-  return (
-    <span
-      className={cn("ml-auto text-muted-foreground text-xs tracking-widest", className)}
-      data-slot="command-shortcut"
-      {...props}
-    />
-  );
+function CommandShortcut({ className, ...props }: React.ComponentProps<typeof Kbd>) {
+  return <Kbd className={cn("ml-auto", className)} data-slot="command-shortcut" {...props} />;
 }
 
 export {

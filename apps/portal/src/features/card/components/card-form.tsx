@@ -21,9 +21,9 @@ import { CardType } from "@ziron/db/schema";
 import { cn } from "@ziron/utils";
 import { cardSchema, zCardSchema } from "@ziron/validators";
 
+import { CardActionBar } from "@/components/ui/card-action-bar";
 import { QRCode } from "@/components/ui/qr-code";
 import { ShimmerDots } from "@/components/ui/shimmer-dots";
-import { UnsavedChangesBar } from "@/components/ui/unsaved-changes-bar";
 
 import { constructUrl } from "@/lib/link/construct-url";
 import { orpc } from "@/lib/orpc/client";
@@ -34,7 +34,6 @@ import { SlugField } from "./fields/slug-field";
 import { CardCustomize } from "./form-sections/customize";
 import { CardGeneral } from "./form-sections/general";
 import { CardLinks } from "./form-sections/links";
-import { hasAnyTouchedField } from "./helpers/has-touched-field";
 import { Preview } from "./preview";
 import { ProfileDashboard } from "./profile-dashboard";
 import { TabsLists } from "./tabs-lists";
@@ -63,7 +62,7 @@ export function CardForm({ isEditMode, initialData, isDuplicateMode = false }: P
   const [cardData, setCardData] = useState<Partial<zCardSchema> | null>(
     isEditMode && transformedInitialData ? transformedInitialData : null
   );
-  const [hasBlurred, setHasBlurred] = useState(false);
+  // const [hasBlurred, setHasBlurred] = useState(false);
 
   const form = useForm<zCardSchema>({
     resolver: zodResolver(cardSchema),
@@ -180,37 +179,12 @@ export function CardForm({ isEditMode, initialData, isDuplicateMode = false }: P
     form.handleSubmit(onSubmit)();
   }
 
-  function handleDiscard() {
-    form.reset(transformedInitialData, { keepDefaultValues: true });
-    setCardData(transformedInitialData ?? null);
-    setHasBlurred(false);
-  }
-
   // Subscribe to form state changes using useFormState for proper reactivity
-  const { isDirty, touchedFields } = useFormState({ control: form.control });
-  const hasTouchedFields = hasAnyTouchedField(touchedFields);
+  const { isDirty } = useFormState({ control: form.control });
 
   useUnloadWarning(isDirty);
 
-  // Track blur events on form inputs
-  useEffect(() => {
-    const handleBlur = () => {
-      setHasBlurred(true);
-    };
-
-    const formElement = document.querySelector("form");
-    if (formElement) {
-      // Use capture phase to catch all blur events
-      formElement.addEventListener("blur", handleBlur, true);
-      return () => {
-        formElement.removeEventListener("blur", handleBlur, true);
-      };
-    }
-  }, []);
-
   const isPending = isEditMode ? updateCard.isPending : createCard.isPending;
-  // Show bar if form is dirty AND (at least one field has been touched OR any input has been blurred)
-  const shouldShowBar = isDirty && (hasTouchedFields || hasBlurred);
 
   // Go back to `/cards` when ESC is pressed
   useKeyboardShortcut("Escape", () => router.push("/cards"), {
@@ -240,7 +214,7 @@ export function CardForm({ isEditMode, initialData, isDuplicateMode = false }: P
             }}
           />
 
-          <div className={cn("mx-auto grid max-w-3xl grid-cols-1 gap-4 pb-6", shouldShowBar && "pb-20")}>
+          <div className={cn("mx-auto grid max-w-3xl grid-cols-1 gap-4 pb-4")}>
             <TabsLists form={form}>
               <TabsContent value="general">
                 <CardGeneral data={data} />
@@ -257,12 +231,7 @@ export function CardForm({ isEditMode, initialData, isDuplicateMode = false }: P
               <TabsContent value="customize">
                 <CardCustomize template={data.template} />
               </TabsContent>
-              <UnsavedChangesBar
-                isSaving={isPending}
-                onDiscard={handleDiscard}
-                onSave={handleSave}
-                show={shouldShowBar}
-              />
+              <CardActionBar isSaving={isPending} />
             </TabsLists>
           </div>
         </div>

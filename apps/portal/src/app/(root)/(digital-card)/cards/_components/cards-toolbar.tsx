@@ -8,6 +8,7 @@ import { CircleCheck, Trash, X } from "lucide-react";
 import { AnimatedSizeContainer } from "@ziron/ui/components/animated-size-container";
 import { Button } from "@ziron/ui/components/button";
 import { ButtonGroup, ButtonGroupText } from "@ziron/ui/components/button-group";
+import { useKeyboardShortcut } from "@ziron/ui/hooks";
 
 import { CardType } from "@ziron/db/schema";
 import { cn } from "@ziron/utils";
@@ -69,6 +70,12 @@ export const CardsToolbar = memo(({ cards, cardsCount, isSelectMode, setIsSelect
     ],
     [selectedCards]
   );
+
+  useKeyboardShortcut("Escape", () => setSelectedCardIds([]), {
+    enabled: selectedCardIds.length > 0,
+    priority: 2, // Take priority over clearing filters
+    modal: false,
+  });
 
   const isSelecting = isSelectMode || selectedCardIds.length > 0;
 

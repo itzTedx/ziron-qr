@@ -46,7 +46,7 @@ export const CardGeneral = ({ data }: Props) => {
         </Suspense>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
-        <div className="space-y-4">
+        <div className="space-y-6">
           <FormField
             control={form.control}
             name="address"
@@ -81,7 +81,7 @@ export const CardGeneral = ({ data }: Props) => {
             )}
           />
         </div>
-        <div className="space-y-4">
+        <div className="space-y-6">
           <Suspense fallback={<div>Loading...</div>}>
             <OrganizationField organizationId={data.organizationId} />
           </Suspense>

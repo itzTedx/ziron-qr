@@ -2,6 +2,10 @@ import { createContext, Dispatch, SetStateAction, useCallback, useContext, useEf
 
 import { stableSort } from "@ziron/utils";
 
+/**
+ * Configuration object for a keyboard shortcut listener.
+ * Used internally by the hook to manage registered shortcuts.
+ */
 type KeyboardShortcutListener = {
   id: string;
   key: string | string[];
@@ -19,6 +23,22 @@ export const KeyboardShortcutContext = createContext<{
   setListeners: () => {},
 });
 
+/**
+ * Provider component that manages keyboard shortcut listeners across the application.
+ * Must wrap your app (or the portion where shortcuts should work) to enable keyboard shortcuts.
+ *
+ * @param children - React children to render within the provider context
+ *
+ * @example
+ * // In your app root or layout
+ * function App() {
+ *   return (
+ *     <KeyboardShortcutProvider>
+ *       <YourApp />
+ *     </KeyboardShortcutProvider>
+ *   );
+ * }
+ */
 export function KeyboardShortcutProvider({ children }: { children: React.ReactNode }) {
   const [listeners, setListeners] = useState<KeyboardShortcutListener[]>([]);
 
@@ -40,6 +60,82 @@ const OVERLAY_QUERY = `
   [role="alertdialog"]:not([aria-hidden="true"])
 `;
 
+/**
+ * Hook for registering keyboard shortcuts with support for priority, modal handling, and conditional enabling.
+ *
+ * @param key - The keyboard shortcut to listen for. Can be:
+ *   - A single string: `"Escape"`, `"ctrl+s"`, `"meta+k"`, `"ctrl+shift+p"`
+ *   - An array of strings: `["Escape", "Enter"]` to match multiple keys
+ *   - Modifier keys: Use `ctrl`, `meta` (Cmd on Mac), `alt`, `shift` prefixes
+ *   - Examples: `"ctrl+s"`, `"meta+k"`, `"Escape"`, `["Escape", "Enter"]`
+ *
+ * @param callback - Function to execute when the shortcut is triggered.
+ *   Receives the KeyboardEvent as parameter.
+ *   Example: `(e) => { console.log("Shortcut pressed", e); }`
+ *
+ * @param options - Optional configuration object:
+ *   - `enabled?: boolean` - Whether the shortcut is active. Defaults to `true`.
+ *     Set to `false` to temporarily disable without unregistering.
+ *     Example: `{ enabled: isEditing }` - only active when not editing
+ *
+ *   - `priority?: number` - Priority level for handling conflicts when multiple
+ *     listeners match the same key. Higher numbers win. Defaults to `0`.
+ *     Example: `{ priority: 10 }` - this listener takes precedence over others
+ *
+ *   - `modal?: boolean` - Allow the shortcut to work when a modal/dialog is open.
+ *     Defaults to `false`. When `true`, the shortcut will trigger even if a modal
+ *     overlay is present (useful for modal-specific shortcuts like closing modals).
+ *     Example: `{ modal: true }` - works inside modals
+ *
+ *   - `sheet?: boolean` - Allow the shortcut to work when a sheet/drawer is open.
+ *     Defaults to `false`. When `true`, the shortcut will trigger even if a sheet
+ *     overlay is present (useful for sheet-specific shortcuts).
+ *     Example: `{ sheet: true }` - works inside sheets
+ *
+ * @example
+ * // Basic usage - simple Escape key
+ * useKeyboardShortcut("Escape", () => {
+ *   console.log("Escape pressed");
+ * });
+ *
+ * @example
+ * // Save shortcut with Ctrl+S (or Cmd+S on Mac)
+ * useKeyboardShortcut("ctrl+s", (e) => {
+ *   e.preventDefault();
+ *   handleSave();
+ * });
+ *
+ * @example
+ * // Multiple keys - either Escape or Enter
+ * useKeyboardShortcut(["Escape", "Enter"], () => {
+ *   handleAction();
+ * });
+ *
+ * @example
+ * // Conditional enabling
+ * useKeyboardShortcut("ctrl+s", handleSave, {
+ *   enabled: !isLoading
+ * });
+ *
+ * @example
+ * // High priority shortcut (takes precedence)
+ * useKeyboardShortcut("Escape", closeModal, {
+ *   priority: 100,
+ *   modal: true // Works even when modal is open
+ * });
+ *
+ * @example
+ * // Sheet-specific shortcut
+ * useKeyboardShortcut("Escape", closeSheet, {
+ *   sheet: true // Works when sheet is open
+ * });
+ *
+ * @remarks
+ * - Shortcuts are automatically ignored when typing in input fields, textareas, or contenteditable elements
+ * - When multiple listeners match the same key, only the one with the highest priority executes
+ * - By default, shortcuts are disabled when modals/sheets are open (unless `modal` or `sheet` is `true`)
+ * - The hook requires a `KeyboardShortcutProvider` to be present in the component tree
+ */
 export function useKeyboardShortcut(
   key: KeyboardShortcutListener["key"],
   callback: (e: KeyboardEvent) => void,
@@ -113,5 +209,5 @@ export function useKeyboardShortcut(
     setListeners((prev) => [...prev.filter((listener) => listener.id !== id), { id, key, ...options }]);
 
     return () => setListeners((prev) => prev.filter((listener) => listener.id !== id));
-  }, [options.enabled, options.priority, key, options, id, setListeners]);
+  }, [options.enabled, options.priority, options.modal, options.sheet, key, id, setListeners, options]);
 }
