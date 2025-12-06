@@ -19,6 +19,11 @@ export function useCardSelection(cards?: Partial<CardType>[]) {
   }, [cards, setSelectedCardIds]);
 
   const handleCardSelection = (cardId: string, e: React.MouseEvent) => {
+    // Ensure select mode is enabled when selecting cards
+    if (!isSelectMode) {
+      setIsSelectMode(true);
+    }
+
     if (e.shiftKey && lastSelectedCardId && cards) {
       const lastSelectedIndex = cards.findIndex((card) => card.id === lastSelectedCardId);
       const currentIndex = cards.findIndex((card) => card.id === cardId);

@@ -98,17 +98,16 @@ export const CardsDisplay = ({ preferences }: { preferences: WorkspacePreference
     <Popover>
       <PopoverTrigger asChild>
         <AnimateIcon animateOnHover asChild>
-          <Button className="w-full flex-1 bg-inherit" size="lg" variant="outline">
-            <span className="relative">
+          <Button className="w-full flex-1 justify-between bg-inherit sm:justify-start" size="lg" variant="outline">
+            <span className="relative flex items-center gap-2">
               {isDirty && (
-                <>
-                  <span className="-top-1 -right-1 absolute size-2 rounded-full bg-brand-secondary" />
-                  <span className="-top-1 -right-1 absolute size-2 animate-pulse rounded-full bg-brand-secondary" />
-                </>
+                <span className="-top-1 -right-1 absolute size-2 rounded-full bg-brand-secondary">
+                  <span className="-translate-1/2 absolute top-1/2 left-1/2 size-3.5 animate-pulse rounded-full bg-brand-secondary/50" />
+                </span>
               )}
-              <IconLayoutGrid />
+              <IconLayoutGrid /> <span className="block">Display</span>
             </span>
-            Display <IconChevronDown className="size-4 text-muted-foreground" />
+            <IconChevronDown className="size-4 text-muted-foreground" />
           </Button>
         </AnimateIcon>
       </PopoverTrigger>

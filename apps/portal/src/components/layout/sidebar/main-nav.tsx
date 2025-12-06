@@ -17,7 +17,9 @@ export function MainNav({
       </Suspense>
 
       <div className="pt-(--page-top-margin) pb-(--page-bottom-margin) [--page-bottom-margin:0px] [--page-top-margin:0px] md:h-screen md:pr-2 md:pb-2 md:[--page-bottom-margin:0.5rem] md:[--page-top-margin:0.5rem]">
-        <div className="relative h-full overflow-y-auto bg-container pt-px md:rounded-xl">{children}</div>
+        <div className="relative h-full overflow-y-auto bg-container pt-px [corner-shape:squircle] md:rounded-xl">
+          {children}
+        </div>
       </div>
     </div>
   );

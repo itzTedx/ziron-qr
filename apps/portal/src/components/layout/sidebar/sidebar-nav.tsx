@@ -50,7 +50,7 @@ export function SidebarNav<T extends Record<string, unknown>>({
           <div className="flex flex-col items-center p-2">
             <div className="pt-2 pb-1">
               <Link
-                className="block rounded-lg px-1 py-4 outline-none transition-opacity focus-visible:ring-2 focus-visible:ring-black/50"
+                className="block rounded-lg px-1 py-4 outline-none transition-opacity [corner-shape:squircle] focus-visible:ring-2 focus-visible:ring-black/50"
                 href="/"
               >
                 <IconLogo className="h-5" />
@@ -71,7 +71,7 @@ export function SidebarNav<T extends Record<string, unknown>>({
           </div>
         </div>
         <div className={cn("size-full overflow-hidden py-2 pr-2 transition-opacity duration-300")}>
-          <div className="scrollbar-hide relative flex h-full w-[calc(var(--sidebar-areas-width)-0.5rem)] flex-col overflow-y-auto overflow-x-hidden rounded-xl bg-sidebar">
+          <div className="scrollbar-hide relative flex h-full w-[calc(var(--sidebar-areas-width)-0.5rem)] flex-col overflow-y-auto overflow-x-hidden rounded-2xl bg-sidebar [corner-shape:squircle]">
             <div className="relative flex grow flex-col p-3 text-muted-foreground">
               <div className="relative w-full grow">
                 {Object.entries(areas).map(([area, areaConfig]) => {
@@ -141,7 +141,7 @@ export function NavGroupTooltip({
 }>) {
   return (
     <Tooltip
-      className="e rounded-lg px-3 py-1.5 font-medium text-sm"
+      className="rounded-lg px-3 py-1.5 font-medium text-sm"
       content={
         <div>
           <span>{name}</span>

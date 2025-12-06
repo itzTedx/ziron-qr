@@ -38,8 +38,15 @@ export default async function CardsPage() {
           <div className="flex flex-wrap items-center gap-2 sm:justify-between">
             <ButtonGroup className="w-full sm:w-fit">
               <AnimateIcon animateOnHover asChild>
-                <Button className="w-full flex-1 bg-inherit" size="lg" variant="outline">
-                  <IconSlidersHorizontal /> Filter <IconChevronDown className="size-4 text-muted-foreground" />
+                <Button
+                  className="w-full flex-1 justify-between bg-inherit sm:justify-start"
+                  size="lg"
+                  variant="outline"
+                >
+                  <span className="flex items-center gap-2">
+                    <IconSlidersHorizontal /> <span className="block">Filter</span>
+                  </span>
+                  <IconChevronDown className="size-4 text-muted-foreground" />
                 </Button>
               </AnimateIcon>
               <CardsDisplay preferences={preferences} />

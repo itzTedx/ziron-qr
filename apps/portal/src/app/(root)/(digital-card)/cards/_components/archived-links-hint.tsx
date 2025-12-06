@@ -28,8 +28,8 @@ function ArchivedLinksHintHelper({ setShowArchived }: { setShowArchived: (showAr
     archivedCount > 0 && (
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button type="button" variant="ghost">
-            <BoxArchive className="h-3 w-3" />
+          <Button size="sm" type="button" variant="ghost">
+            <BoxArchive className="size-3" />
             <Suspense fallback={<Skeleton className="size-4" />}>{archivedCount}</Suspense>
           </Button>
         </TooltipTrigger>

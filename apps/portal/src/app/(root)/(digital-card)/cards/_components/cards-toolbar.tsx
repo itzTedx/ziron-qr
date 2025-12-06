@@ -7,6 +7,7 @@ import { CircleCheck, Trash, X } from "lucide-react";
 
 import { AnimatedSizeContainer } from "@ziron/ui/components/animated-size-container";
 import { Button } from "@ziron/ui/components/button";
+import { ButtonGroup, ButtonGroupText } from "@ziron/ui/components/button-group";
 
 import { CardType } from "@ziron/db/schema";
 import { cn } from "@ziron/utils";
@@ -96,11 +97,11 @@ export const CardsToolbar = memo(({ cards, cardsCount, isSelectMode, setIsSelect
             "max-[1372px]:left-0 max-[1372px]:translate-x-0"
           )}
         >
-          <div className="overflow-hidden rounded-xl border bg-card shadow-lg">
+          <div className="relative overflow-hidden rounded-lg border bg-card shadow-lg [corner-shape:squircle] dark:shadow-none">
             <AnimatedSizeContainer height>
               <div
                 className={cn(
-                  "relative px-4 py-2.5 transition-[opacity,transform] duration-100",
+                  "relative p-2.5 transition-[opacity,translate] duration-250 ease-tact-in",
                   isSelecting && "pointer-events-none absolute inset-0 translate-y-1/2 opacity-0"
                 )}
               >
@@ -129,32 +130,33 @@ export const CardsToolbar = memo(({ cards, cardsCount, isSelectMode, setIsSelect
               </div>
               <div
                 className={cn(
-                  "relative px-4 py-3.5 transition-[opacity,transform] duration-100",
+                  "relative p-2.5 transition-[opacity,translate] duration-250 ease-tact-in",
                   !isSelecting && "pointer-events-none absolute inset-0 translate-y-1/2 opacity-0"
                 )}
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div className="flex items-center gap-2">
+                  <ButtonGroup className="[corner-shape:squircle]">
+                    <ButtonGroupText className="whitespace-nowrap border-dashed bg-transparent font-medium text-sm">
+                      <strong className="font-semibold">{selectedCardIds.length}</strong> selected
+                    </ButtonGroupText>
                     <Button
+                      className="border-dashed"
                       onClick={() => {
                         setSelectedCardIds([]);
                         setIsSelectMode(false);
                       }}
                       size="icon-sm"
                       type="button"
-                      variant="ghost"
+                      variant="outline"
                     >
-                      <X className="size-4 text-foreground" />
+                      <X className="size-4 text-foreground/80" />
                     </Button>
-                    <span className="whitespace-nowrap font-medium text-muted-foreground text-sm">
-                      <strong className="font-semibold">{selectedCardIds.length}</strong> selected
-                    </span>
-                  </div>
+                  </ButtonGroup>
 
                   {/* Large screen controls */}
-                  <div
+                  <ButtonGroup
                     className={cn(
-                      "flex items-center gap-1.5 xs:gap-2 transition-[transform,opacity] duration-150",
+                      "transition-[translate,opacity] delay-50 duration-250 ease-tact-in",
                       selectedCardIds.length > 0
                         ? "translate-y-0 opacity-100"
                         : "pointer-events-none translate-y-1/2 opacity-0"
@@ -162,17 +164,18 @@ export const CardsToolbar = memo(({ cards, cardsCount, isSelectMode, setIsSelect
                   >
                     {bulkActions.map(({ label, icon: Icon, action }) => (
                       <Button
-                        className="h-7 gap-1.5 px-2 xs:px-2.5 text-xs min-[1120px]:pr-1.5"
+                        className="gap-1.5 px-2 xs:px-2.5 text-xs min-[1120px]:pr-1.5"
                         key={label}
                         onClick={action}
+                        size="sm"
                         type="button"
-                        variant="secondary"
+                        variant="outline"
                       >
                         <Icon className="size-3.5" />
                         {label}
                       </Button>
                     ))}
-                  </div>
+                  </ButtonGroup>
                 </div>
               </div>
             </AnimatedSizeContainer>

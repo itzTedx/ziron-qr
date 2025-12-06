@@ -54,8 +54,8 @@ export const PersonCard = ({
 
   if (variant === "rows") {
     return (
-      <div className="group relative flex items-center justify-between border border-b p-3 first-of-type:rounded-t-xl first-of-type:border-t last-of-type:rounded-b-xl hover:bg-accent">
-        <div className="flex items-center gap-3">
+      <div className="group relative flex items-center justify-between border border-b px-3 py-2 [corner-shape:squircle] first-of-type:rounded-t-lg first-of-type:border-t last-of-type:rounded-b-lg hover:bg-accent sm:p-3 sm:last-of-type:rounded-b-xl sm:first-of-type:rounded-t-xl">
+        <div className="flex items-center gap-2 md:gap-3">
           <div onMouseDown={() => setIsSelectMode?.(true)} onMouseUp={() => setIsSelectMode?.(false)}>
             <CardIcon
               card={card}
@@ -64,15 +64,17 @@ export const PersonCard = ({
               selectedCardIds={selectedCardIds}
             />
           </div>
-          <h3 className="font-semibold">{card.name}</h3>
+          <h3 className="text-nowrap font-semibold text-sm sm:text-base">{card.name}</h3>
           <Button onClick={handleCopyLink} size="icon-sm" variant="ghost">
             <IconCopy />
           </Button>
           {/* <IconArrowRight className="size-4 text-muted-foreground/50" /> */}
           <ExpandingArrow className="-ml-3.5 invisible size-3.5 text-muted-foreground/50 group-hover:visible" />
-          <p className="text-muted-foreground text-sm">{getPrettyUrl(constructUrl(card.slug))}</p>
+          <p className="truncate text-muted-foreground text-sm">{getPrettyUrl(constructUrl(card.slug))}</p>
           <Tooltip>
-            <TooltipTrigger className="text-sm">{formatDate(card.createdAt, { showYear: false })}</TooltipTrigger>
+            <TooltipTrigger className="text-nowrap text-sm">
+              {formatDate(card.createdAt, { showYear: false })}
+            </TooltipTrigger>
             <TooltipContent>Created on {formatDate(card.createdAt, { showYear: false })}</TooltipContent>
           </Tooltip>
         </div>
@@ -144,11 +146,14 @@ const CardIcon = memo(
       <button
         aria-checked={isSelected}
         className={cn(
-          "group relative hidden shrink-0 items-center justify-center outline-none sm:flex",
-          isSelectMode && "flex"
+          "group relative shrink-0 items-center justify-center outline-none",
+          isSelectMode ? "flex" : "hidden sm:flex"
         )}
         data-checked={isSelected}
-        onClick={(e) => handleCardSelection?.(card.id, e)}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleCardSelection?.(card.id, e);
+        }}
         role="checkbox"
         type="button"
       >
@@ -181,7 +186,7 @@ const CardIcon = memo(
         {/* Checkbox */}
         <div
           className={cn(
-            "pointer-events-none absolute inset-0 flex items-center justify-center rounded-full border border-input bg-card ring-0 ring-black/5",
+            "pointer-events-none absolute inset-0 flex items-center justify-center rounded-full border bg-card ring-0 ring-black/5",
             "opacity-100 max-sm:ring sm:opacity-0",
             "transition-all duration-150 group-hover:opacity-100 group-hover:ring group-focus-visible:opacity-100 group-focus-visible:ring",
             "group-data-[checked=true]:opacity-100"
@@ -193,7 +198,7 @@ const CardIcon = memo(
               "scale-90 opacity-0 transition-[transform,opacity] duration-100 group-data-[checked=true]:scale-100 group-data-[checked=true]:opacity-100"
             )}
           >
-            <IconCheck className="size-3 text-white" />
+            <IconCheck className="size-3 text-card" />
           </div>
         </div>
       </button>

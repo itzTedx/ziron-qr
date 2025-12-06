@@ -30,7 +30,7 @@ export function SidebarNavItem({ item }: { item: NavItemType | NavSubItemType })
     <div>
       <Link
         className={cn(
-          "group flex h-8 items-center justify-between rounded-lg p-2 text-content-default text-sm leading-none transition-[background-color,color,font-weight] duration-75",
+          "group flex h-8 items-center justify-between rounded-xl p-2 text-content-default text-sm leading-none transition-[background-color,color,font-weight] duration-75 [corner-shape:squircle]",
           "outline-none focus-visible:ring-2 focus-visible:ring-black/50",
           isActive && !items
             ? "bg-background font-medium text-brand-secondary active:bg-brand-secondary/30"
