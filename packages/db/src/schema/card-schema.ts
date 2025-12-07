@@ -4,7 +4,7 @@ import { boolean, index, pgTable, real, text, timestamp, uniqueIndex, uuid, varc
 import { InferResultType } from "../client";
 import { events, pageVisits } from "./analytics-schema";
 import { archivedAt, createdAt, deletedAt, id, updatedAt } from "./helper";
-import { organizationTable } from "./organization-schema";
+import { Organization, organizationTable } from "./organization-schema";
 
 export const cards = pgTable(
   "cards",
@@ -220,8 +220,6 @@ export type CardType = InferResultType<
 >;
 
 export type PageVisitType = typeof pageVisits.$inferSelect;
-
-export type Organization = typeof organizationTable.$inferSelect;
 
 export type Card = typeof cards.$inferSelect & {
   organization: Organization;

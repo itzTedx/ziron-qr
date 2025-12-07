@@ -51,6 +51,6 @@ export type OrganizationWithCards = InferResultType<
   }
 >;
 
-export type Organization = InferResultType<"organizationTable">;
+export type Organization = typeof organizationTable.$inferSelect;
 
 export type OrganizationWithCardsCount = Organization & { cardsCount: number };
