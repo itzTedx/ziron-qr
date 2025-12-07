@@ -77,7 +77,7 @@ export function CardPageContent({ params, isDuplicateMode }: CardPageContentProp
 
 export function CardPageHeaderSkeleton() {
   return (
-    <header className="sticky top-0 z-50 flex w-full items-center justify-between gap-3 overflow-hidden border-b bg-stone-50 px-6 py-2 backdrop-blur-2xl dark:bg-stone-950">
+    <header className="sticky top-0 z-50 flex h-14 w-full items-center justify-between gap-3 overflow-hidden border-b bg-card px-6 py-2">
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2">
           <Skeleton className="size-4" />

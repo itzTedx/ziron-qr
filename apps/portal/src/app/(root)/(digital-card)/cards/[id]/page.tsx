@@ -21,10 +21,10 @@ export async function generateMetadata({ params }: PageProps<"/cards/[id]">): Pr
     };
 
   const data = {
-    title: `${card.name} - ${card.organization.name} | Ziron Digital Card`,
+    title: `${card.name} - ${card.organization?.name} | Ziron Digital Card`,
     description: card.bio ?? "",
-    icon: card.organization.logo ?? undefined,
-    twitterHandler: card.links.find((l) => l.label === "Twitter")?.url?.replace(/.*\.com\//, "@"),
+    icon: card.organization?.logo ?? undefined,
+    twitterHandler: card.links?.find((l) => l.label === "Twitter")?.url?.replace(/.*\.com\//, "@"),
   };
 
   return {

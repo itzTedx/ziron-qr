@@ -221,6 +221,12 @@ export type CardType = InferResultType<
 
 export type PageVisitType = typeof pageVisits.$inferSelect;
 
-export type CardTypeWithPageVisits = CardType & {
+export type Organization = typeof organizationTable.$inferSelect;
+
+export type Card = typeof cards.$inferSelect & {
+  organization: Organization;
+};
+
+export type CardWithPageVisits = Card & {
   pageVisits: Pick<PageVisitType, "referer">[];
 };

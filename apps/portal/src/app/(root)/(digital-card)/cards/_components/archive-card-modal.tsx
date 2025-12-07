@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { Button } from "@ziron/ui/components/button";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 
-import { CardType } from "@ziron/db/schema";
+import { Card } from "@ziron/db/schema";
 import { pluralize } from "@ziron/utils";
 
 import {
@@ -31,7 +31,7 @@ import { SimpleCardCard } from "./simple-card-card";
 type ArchiveCardModalProps = {
   showArchiveCardModal: boolean;
   setShowArchiveCardModalAction: Dispatch<SetStateAction<boolean>>;
-  cards: CardType[];
+  cards: Card[];
 };
 
 function capitalize(str: string) {
@@ -140,7 +140,7 @@ export function useArchiveCardModal({
 }: {
   cardId?: string;
   cardIds?: string[];
-  cards?: Partial<CardType>[];
+  cards?: Card[];
 }) {
   const [showArchiveCardModal, setShowArchiveCardModal] = useState(false);
 
@@ -163,11 +163,13 @@ export function useArchiveCardModal({
     }
     // If cardIds are provided, fetch and return those
     if (cardIds && cardIds.length > 0) {
-      return multipleCardsQueries.map((query) => query.data).filter((card): card is CardType => card !== undefined);
+      return multipleCardsQueries
+        .map((query) => query.data)
+        .filter((card): card is Card => card !== undefined && card.id !== undefined) as Card[];
     }
     // If cardId is provided, fetch and return that single card
-    if (cardId && singleCardQuery.data) {
-      return [singleCardQuery.data];
+    if (cardId && singleCardQuery.data && singleCardQuery.data.id !== undefined) {
+      return [singleCardQuery.data as Card];
     }
     return [];
   }, [providedCards, cardIds, cardId, singleCardQuery.data, multipleCardsQueries]);

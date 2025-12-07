@@ -20,7 +20,7 @@ import {
 } from "@ziron/ui/components/dialog";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
 
-import { CardType } from "@ziron/db/schema";
+import { Card } from "@ziron/db/schema";
 import { pluralize } from "@ziron/utils";
 
 import { orpc } from "@/lib/orpc/client";
@@ -30,13 +30,13 @@ import { SimpleCardCard } from "./simple-card-card";
 
 type DeleteCardModalProps = {
   showDeleteCardModal: boolean;
-  setShowDeleteCardModal: Dispatch<SetStateAction<boolean>>;
-  cards: CardType[];
+  setShowDeleteCardModalAction: Dispatch<SetStateAction<boolean>>;
+  cards: Card[];
 };
 
 export function DeleteCardModal(props: DeleteCardModalProps) {
   return (
-    <Dialog onOpenChange={props.setShowDeleteCardModal} open={props.showDeleteCardModal}>
+    <Dialog onOpenChange={props.setShowDeleteCardModalAction} open={props.showDeleteCardModal}>
       <DialogContent className="p-0 sm:max-w-xl">
         <DeleteCardModalInner {...props} />
       </DialogContent>
@@ -44,7 +44,7 @@ export function DeleteCardModal(props: DeleteCardModalProps) {
   );
 }
 
-function DeleteCardModalInner({ setShowDeleteCardModal, cards }: DeleteCardModalProps) {
+function DeleteCardModalInner({ setShowDeleteCardModalAction: setShowDeleteCardModal, cards }: DeleteCardModalProps) {
   const [deleting, setDeleting] = useState(false);
   const router = useRouter();
   const queryClient = getQueryClient();
@@ -160,7 +160,7 @@ export function useDeleteCardModal({
 }: {
   cardId?: string;
   cardIds?: string[];
-  cards?: CardType[];
+  cards?: Card[];
 }) {
   const [showDeleteCardModal, setShowDeleteCardModal] = useState(false);
 
@@ -183,11 +183,13 @@ export function useDeleteCardModal({
     }
     // If cardIds are provided, fetch and return those
     if (cardIds && cardIds.length > 0) {
-      return multipleCardsQueries.map((query) => query.data).filter((card): card is CardType => card !== undefined);
+      return multipleCardsQueries
+        .map((query) => query.data)
+        .filter((card): card is Card => card !== undefined && card.id !== undefined) as Card[];
     }
     // If cardId is provided, fetch and return that single card
     if (cardId && singleCardQuery.data) {
-      return [singleCardQuery.data];
+      return [singleCardQuery.data as Card];
     }
     return [];
   }, [providedCards, cardIds, cardId, singleCardQuery.data, multipleCardsQueries]);
@@ -196,7 +198,7 @@ export function useDeleteCardModal({
     return cards.length > 0 ? (
       <DeleteCardModal
         cards={cards}
-        setShowDeleteCardModal={setShowDeleteCardModal}
+        setShowDeleteCardModalAction={setShowDeleteCardModal}
         showDeleteCardModal={showDeleteCardModal}
       />
     ) : null;

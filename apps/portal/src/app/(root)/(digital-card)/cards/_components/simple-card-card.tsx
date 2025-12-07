@@ -2,12 +2,12 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@ziron/ui/components/avatar";
 
-import { CardType } from "@ziron/db/schema";
+import { Card } from "@ziron/db/schema";
 
 import { env } from "@/lib/env/client";
 
 interface SimpleCardCardProps {
-  card: CardType;
+  card: Card;
 }
 
 export function SimpleCardCard({ card }: SimpleCardCardProps) {

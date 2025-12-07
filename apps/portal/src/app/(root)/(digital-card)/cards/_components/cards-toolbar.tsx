@@ -10,7 +10,7 @@ import { Button } from "@ziron/ui/components/button";
 import { ButtonGroup, ButtonGroupText } from "@ziron/ui/components/button-group";
 import { useKeyboardShortcut } from "@ziron/ui/hooks";
 
-import { CardType } from "@ziron/db/schema";
+import { CardWithPageVisits } from "@ziron/db/schema";
 import { cn } from "@ziron/utils";
 
 import { CreateButton } from "@/components/ui/create-button";
@@ -26,7 +26,7 @@ import { DeleteCardModal } from "./delete-card-modal";
 import { PaginationControls } from "./pagination";
 
 interface Props {
-  cards: CardType[];
+  cards: CardWithPageVisits[];
   cardsCount: number;
   isSelectMode: boolean;
   setIsSelectMode: (isSelectMode: boolean) => void;
@@ -90,7 +90,7 @@ export const CardsToolbar = memo(({ cards, cardsCount, isSelectMode, setIsSelect
           />
           <DeleteCardModal
             cards={selectedCards}
-            setShowDeleteCardModal={setShowDeleteCardModal}
+            setShowDeleteCardModalAction={setShowDeleteCardModal}
             showDeleteCardModal={showDeleteCardModal}
           />
         </>

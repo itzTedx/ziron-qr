@@ -1,5 +1,7 @@
 "use client";
 
+import { Suspense } from "react";
+
 import { IconChevronDown, IconSearch } from "@tabler/icons-react";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
@@ -8,6 +10,7 @@ import { useHydrateAtoms } from "jotai/utils";
 import { Button } from "@ziron/ui/components/button";
 import { ButtonGroup } from "@ziron/ui/components/button-group";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@ziron/ui/components/input-group";
+import { ScrollArea, ScrollBar } from "@ziron/ui/components/scroll-area";
 
 import { PageWidthWrapper } from "@/components/layout/page-width-wrapper";
 import { AnimateIcon } from "@/components/ui/icon";
@@ -18,6 +21,7 @@ import { selectedSortAtom, showArchivedAtom, viewModeAtom } from "@/features/car
 import { useCardSelection } from "@/features/card/hooks/use-card-selection";
 import { orpc } from "@/lib/orpc/client";
 
+import { CardsDisplay } from "./cards-display";
 import { CardsList } from "./cards-list";
 import { CardsToolbar } from "./cards-toolbar";
 import { MoreCardOptions } from "./more-card-options";
@@ -32,44 +36,69 @@ export const CardsClient = () => {
   ] as const);
 
   return (
-    <PageWidthWrapper className="flex flex-col gap-y-3 sm:gap-y-4">
-      <div className="flex flex-wrap items-center gap-2 sm:justify-between">
-        <ButtonGroup className="w-full sm:w-fit">
-          <AnimateIcon animateOnHover asChild>
-            <Button className="w-full flex-1 bg-inherit" size="lg" variant="outline">
-              <IconSlidersHorizontal /> Filter <IconChevronDown className="size-4 text-muted-foreground" />
-            </Button>
-          </AnimateIcon>
-          {/* <CardsDisplay preferences={preferences} /> */}
-        </ButtonGroup>
-
-        <ButtonGroup className="w-full sm:w-fit">
+    <ScrollArea className="h-full flex-1 overflow-y-auto pt-3 sm:py-4">
+      <PageWidthWrapper className="flex flex-col gap-y-3 sm:gap-y-4">
+        <div className="flex flex-wrap items-center gap-2 sm:justify-between">
           <ButtonGroup className="w-full sm:w-fit">
-            <InputGroup className="h-10 w-full">
-              <InputGroupInput placeholder="Search cards" />
-              <InputGroupAddon>
-                <IconSearch />
-              </InputGroupAddon>
-            </InputGroup>
+            <AnimateIcon animateOnHover asChild>
+              <Button className="w-full flex-1 justify-between bg-inherit sm:justify-start" size="lg" variant="outline">
+                <span className="flex items-center gap-2">
+                  <IconSlidersHorizontal /> <span className="block">Filter</span>
+                </span>
+                <IconChevronDown className="size-4 text-muted-foreground" />
+              </Button>
+            </AnimateIcon>
+            <CardsDisplay preferences={preferences} />
           </ButtonGroup>
 
-          <MoreCardOptions />
-        </ButtonGroup>
-      </div>
+          <ButtonGroup className="w-full sm:w-fit">
+            <ButtonGroup className="w-full sm:w-fit">
+              <InputGroup className="h-10 w-full">
+                <InputGroupInput placeholder="Search cards" />
+                <InputGroupAddon>
+                  <IconSearch />
+                </InputGroupAddon>
+              </InputGroup>
+            </ButtonGroup>
 
-      <CardsClientContent />
-    </PageWidthWrapper>
+            <MoreCardOptions />
+          </ButtonGroup>
+        </div>
+
+        <Suspense fallback={<CardsListSkeleton />}>
+          <CardsClientContent />
+        </Suspense>
+      </PageWidthWrapper>
+
+      <ScrollBar />
+    </ScrollArea>
   );
 };
+
+function CardsListSkeleton() {
+  return (
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+      {Array.from({ length: 5 }, (_, i) => `skeleton-${i}`).map((id) => (
+        <div className="h-64 animate-pulse rounded-lg bg-muted" key={id} />
+      ))}
+    </div>
+  );
+}
 
 export const CardsClientContent = () => {
   const showArchived = useAtomValue(showArchivedAtom);
   const viewMode = useAtomValue(viewModeAtom);
   const selectedSort = useAtomValue(selectedSortAtom);
 
-  const { data: cards, isLoading } = useQuery(
-    orpc.card.list.queryOptions({ input: { viewMode, sortBy: selectedSort, showArchived }, context: { cache: true } })
+  // Use useSuspenseQuery for cards list since it's prefetched
+  const { data: cards } = useSuspenseQuery(
+    orpc.card.list.queryOptions({
+      input: { viewMode, sortBy: selectedSort, showArchived },
+      context: { cache: true },
+    })
   );
+
+  // Use regular useQuery for count with optimized cache settings
   const { data: cardsCount } = useQuery({
     ...orpc.card.count.queryOptions({
       input: { showArchived },
@@ -86,7 +115,7 @@ export const CardsClientContent = () => {
       <CardsList
         cards={cards}
         isSelectMode={isSelectMode}
-        loading={isLoading}
+        loading={false}
         selectedCardIds={selectedCardIds}
         setIsSelectModeAction={setIsSelectMode}
         variant={viewMode}

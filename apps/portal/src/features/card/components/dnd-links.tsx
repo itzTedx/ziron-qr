@@ -18,7 +18,13 @@ import { Label } from "@ziron/ui/components/label";
 import { cn } from "@ziron/utils";
 import { zCardSchema } from "@ziron/validators";
 
-import { ResponsiveModal, ResponsiveModalContent, ResponsiveModalTrigger } from "@/components/ui/responsive-modal";
+import {
+  ResponsiveModal,
+  ResponsiveModalContent,
+  ResponsiveModalHeader,
+  ResponsiveModalTitle,
+  ResponsiveModalTrigger,
+} from "@/components/ui/responsive-modal";
 
 import { LINKS } from "../data/constants";
 import { Link } from "../types";
@@ -44,6 +50,7 @@ const LinkItem = ({ data, index, loading, onRemove, form, dragControls }: LinkIt
 
   return (
     <Card className="flex flex-row items-center justify-between gap-2 px-3 py-2">
+      {/* TODO: Implement input group and better input styling */}
       {isGeneral ? (
         <div className="grid w-full gap-4 md:grid-cols-5">
           <FormField
@@ -123,7 +130,7 @@ interface SuggestionCardProps {
 
 const SuggestionCard = ({ link, item, onAppend }: SuggestionCardProps) => (
   <Card
-    className="flex size-28 cursor-pointer flex-col items-center gap-2 transition-colors hover:border-primary hover:bg-muted/20"
+    className="flex size-28 cursor-pointer flex-col items-center justify-center gap-2 transition-colors hover:border-primary hover:bg-muted/50"
     onClick={() =>
       onAppend({
         category: item.label,
@@ -273,14 +280,20 @@ export const DndLinks = () => {
           </Button>
         </ResponsiveModalTrigger>
         <ResponsiveModalContent>
-          <div className="p-6 pt-0 pb-6">
+          <ResponsiveModalHeader>
+            <ResponsiveModalTitle>Add Links</ResponsiveModalTitle>
+          </ResponsiveModalHeader>
+          <div className="p-3">
             {LINKS.map((item, i) => (
-              <div className="py-3" key={`${item.label}-${i}`}>
-                <h4 className="pb-2 text-muted-foreground text-sm">{item.label}</h4>
+              <div className="pb-3 last-of-type:pb-0" key={`${item.label}-${i}`}>
+                <h4 className="mb-1 px-3 text-muted-foreground text-sm">{item.label}</h4>
 
                 <div className={cn("grid gap-x-6", item.links.length > 1 ? "grid-cols-2" : "grid-cols-1")}>
                   {item.links.map((link, i) => (
-                    <div className="flex items-center justify-between border-b py-3" key={`addLink-${i}-${link.label}`}>
+                    <div
+                      className="flex items-center justify-between rounded-2xl p-3 [corner-shape:squircle] hover:bg-faded"
+                      key={`addLink-${i}-${link.label}`}
+                    >
                       <div className="flex items-center gap-4 font-medium">
                         <div className="relative size-8">
                           <Image alt="" fill sizes="10vw" src={link.icon} />
@@ -320,7 +333,7 @@ export const DndLinks = () => {
             View All
           </Button>
         </div>
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(7rem,1fr))] gap-3">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(6rem,1fr))] gap-3">
           {suggestionLinks.map((link) => (
             <SuggestionCard
               item={{ label: link.itemLabel }}
@@ -330,7 +343,7 @@ export const DndLinks = () => {
             />
           ))}
           <button
-            className="flex cursor-pointer flex-col items-center justify-center rounded-md border font-medium text-muted-foreground text-sm transition-colors hover:border-primary hover:bg-muted/20"
+            className="flex cursor-pointer flex-col items-center justify-center rounded-md border font-medium text-muted-foreground text-sm transition-colors hover:border-primary hover:bg-muted/50"
             onClick={() => {
               setOpen(true);
             }}

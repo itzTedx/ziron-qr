@@ -26,7 +26,7 @@ export default function Header({ title, currentPage, children, showBackButton = 
   return (
     <header className="sticky top-0 z-50 flex h-14 w-full items-center justify-between gap-3 overflow-hidden border-b bg-card px-6 py-2">
       <div className="flex grow items-center gap-2">
-        <SidebarTrigger />
+        <SidebarTrigger className="sm:hidden" />
         <Breadcrumb className="w-full">
           <BreadcrumbList
             className={cn(

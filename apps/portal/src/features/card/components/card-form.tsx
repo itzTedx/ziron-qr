@@ -40,7 +40,7 @@ import { TabsLists } from "./tabs-lists";
 
 interface Props {
   isEditMode?: boolean;
-  initialData?: CardType;
+  initialData?: Partial<CardType>;
   isDuplicateMode?: boolean;
 }
 

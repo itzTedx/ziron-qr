@@ -4,8 +4,8 @@ import { and, count, desc, eq, gte, isNull, lte } from "@ziron/db";
 import { db } from "@ziron/db/client";
 import {
   appearance,
-  CardType,
-  CardTypeWithPageVisits,
+  type CardType,
+  type CardWithPageVisits,
   cards,
   emails,
   links,
@@ -600,7 +600,7 @@ export const listCards = os
     tags: ["card"],
   })
   .input(workspacePreferencesSchema.optional().default({ viewMode: "cards", sortBy: "createdAt", showArchived: false }))
-  .output(z.array(z.custom<CardTypeWithPageVisits>()))
+  .output(z.array(z.custom<CardWithPageVisits>()))
   .handler(async ({ context, input }) => {
     const filters = input ?? {};
 
@@ -651,10 +651,6 @@ export const listCards = os
         where: and(...conditions),
         with: {
           organization: true,
-          emails: true,
-          phones: true,
-          links: true,
-          appearance: true,
           pageVisits: {
             columns: {
               referer: true,
@@ -665,7 +661,7 @@ export const listCards = os
 
       // Maintain the sort order from the SQL query by mapping IDs to cards
       const cardMap = new Map(allData.map((card) => [card.id, card]));
-      const sortedCards: CardTypeWithPageVisits[] = [];
+      const sortedCards: CardWithPageVisits[] = [];
       for (const id of cardIds) {
         const card = cardMap.get(id);
         if (card) {
