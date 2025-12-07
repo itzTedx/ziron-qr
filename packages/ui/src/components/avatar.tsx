@@ -9,7 +9,7 @@ import { cn } from "@ziron/utils";
 function Avatar({ className, ...props }: React.ComponentProps<typeof AvatarPrimitive.Root>) {
   return (
     <AvatarPrimitive.Root
-      className={cn("relative flex size-8 shrink-0 overflow-hidden rounded-full [corner-shape:squircle]", className)}
+      className={cn("relative flex size-8 shrink-0 overflow-hidden rounded-full", className)}
       data-slot="avatar"
       {...props}
     />
@@ -26,7 +26,7 @@ function AvatarFallback({ className, ...props }: React.ComponentProps<typeof Ava
   return (
     <AvatarPrimitive.Fallback
       className={cn(
-        "flex size-full items-center justify-center rounded-sm bg-stone-400/50 uppercase [corner-shape:squircle] dark:bg-stone-700",
+        "flex size-full items-center justify-center rounded-sm bg-stone-400/50 uppercase dark:bg-stone-700",
         className
       )}
       data-slot="avatar-fallback"

@@ -37,35 +37,40 @@ export const CardsClient = () => {
   ] as const);
 
   return (
-    <ScrollArea className="h-full flex-1 overflow-y-auto pt-3 sm:py-4">
-      <PageWidthWrapper className="flex flex-col gap-y-3 sm:gap-y-4">
-        <div className="flex flex-wrap items-center gap-2 sm:justify-between">
+    <ScrollArea className="h-full flex-1 overflow-y-auto">
+      <div className="border-b py-2">
+        <PageWidthWrapper className="flex flex-wrap items-center gap-2 sm:justify-between">
           <ButtonGroup className="w-full sm:w-fit">
             <AnimateIcon animateOnHover asChild>
-              <Button className="w-full flex-1 justify-between bg-inherit sm:justify-start" size="lg" variant="outline">
+              <Button className="w-full flex-1 justify-between bg-inherit sm:justify-start" variant="outline">
                 <span className="flex items-center gap-2">
                   <IconSlidersHorizontal /> <span className="block">Filter</span>
                 </span>
                 <IconChevronDown className="size-4 text-muted-foreground" />
               </Button>
             </AnimateIcon>
-            <CardsDisplay preferences={preferences} />
           </ButtonGroup>
 
           <ButtonGroup className="w-full sm:w-fit">
             <ButtonGroup className="w-full sm:w-fit">
-              <InputGroup className="h-10 w-full">
+              <InputGroup className="w-full">
                 <InputGroupInput placeholder="Search cards" />
                 <InputGroupAddon>
                   <IconSearch />
                 </InputGroupAddon>
               </InputGroup>
             </ButtonGroup>
-
-            <MoreCardOptions />
+            <ButtonGroup>
+              <CardsDisplay preferences={preferences} />
+            </ButtonGroup>
+            <ButtonGroup>
+              <MoreCardOptions />
+            </ButtonGroup>
           </ButtonGroup>
-        </div>
+        </PageWidthWrapper>
+      </div>
 
+      <PageWidthWrapper className="py-2">
         <Suspense fallback={<CardsListSkeleton />}>
           <CardsClientContent />
         </Suspense>

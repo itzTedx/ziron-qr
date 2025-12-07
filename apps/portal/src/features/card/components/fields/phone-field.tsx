@@ -57,12 +57,7 @@ export const PhonesField = ({ data }: Props) => {
                 <FormControl>
                   <ButtonGroup className="w-full">
                     <InputGroup>
-                      <PhoneInput
-                        className={cn("w-full rounded-e-none border-0 shadow-none")}
-                        id={field.name}
-                        onChange={field.onChange}
-                        value={field.value}
-                      />
+                      <PhoneInput id={field.name} onChange={field.onChange} value={field.value} />
                     </InputGroup>
 
                     <Select
@@ -83,7 +78,7 @@ export const PhonesField = ({ data }: Props) => {
 
                     {fields.length > 1 && (
                       <Button
-                        className={cn("shrink-0 bg-transparent dark:bg-input/30 dark:hover:bg-input/50")}
+                        className={cn("shrink-0 border-input-border bg-input/60")}
                         onClick={() => remove(i)}
                         size="icon"
                         type="button"

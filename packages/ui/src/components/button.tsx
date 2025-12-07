@@ -6,17 +6,17 @@ import { Slot as SlotPrimitive } from "radix-ui";
 import { cn } from "@ziron/utils";
 
 const buttonVariants = cva(
-  "inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium text-sm outline-none transition-[color,box-shadow,background-color,border-color] duration-200 ease-tact [corner-shape:squircle] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium text-sm outline-none transition-[color,box-shadow,background-color,border-color] duration-200 ease-tact focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default:
-          "relative cursor-pointer rounded-md bg-gradient-to-bl bg-white from-primary to-brand-secondary text-center text-white transition duration-200 hover:brightness-110 disabled:border disabled:border-foreground/20 disabled:from-muted disabled:to-muted disabled:text-muted-foreground",
+        default: "border border-input-border bg-muted",
+        primary:
+          "relative bg-linear-[261.24deg,#CC50FB_-8.36%,_#0D4EFF_104.92%] text-center text-white shadow-btn-sm transition duration-200 hover:brightness-120 disabled:border disabled:border-foreground/20 disabled:from-muted disabled:to-muted disabled:text-muted-foreground",
         secondary: "bg-foreground text-background shadow-xs hover:bg-foreground/80",
         destructive:
-          "relative cursor-pointer rounded-md bg-gradient-to-b bg-white from-red-700 to-destructive text-center text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset] transition duration-200 hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40",
-        outline:
-          "border border-muted bg-transparent hover:border-transparent hover:bg-faded hover:text-accent-foreground",
+          "relative bg-gradient-to-b bg-white from-red-700 to-destructive text-center text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset] transition duration-200 hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40",
+        outline: "border border-muted bg-transparent hover:bg-faded hover:text-accent-foreground",
         ghost: "hover:bg-muted hover:text-accent-foreground",
         inverted: "bg-foreground text-background shadow-xs hover:bg-foreground/80",
         link: "text-primary underline underline-offset-4",

@@ -291,7 +291,7 @@ export const DndLinks = () => {
                 <div className={cn("grid gap-x-6", item.links.length > 1 ? "grid-cols-2" : "grid-cols-1")}>
                   {item.links.map((link, i) => (
                     <div
-                      className="flex items-center justify-between rounded-2xl p-3 [corner-shape:squircle] hover:bg-faded"
+                      className="flex items-center justify-between rounded-2xl p-3 hover:bg-faded"
                       key={`addLink-${i}-${link.label}`}
                     >
                       <div className="flex items-center gap-4 font-medium">

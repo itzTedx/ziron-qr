@@ -24,7 +24,7 @@ export function CardActionBar({ isSaving = false }: CardActionBarProps) {
     <div className={cn("sticky bottom-3 z-50 w-full lg:bottom-4")}>
       <div
         className={cn(
-          "mx-auto flex max-w-xl flex-col gap-3 rounded-lg border bg-accent/85 px-4 py-3 shadow-lg backdrop-blur-xl [corner-shape:squircle] sm:flex-row sm:items-center sm:justify-between lg:shadow-lg",
+          "mx-auto flex max-w-xl flex-col gap-3 rounded-lg border bg-accent/85 px-4 py-3 shadow-lg backdrop-blur-xl sm:flex-row sm:items-center sm:justify-between lg:shadow-lg",
           "duration-300 ease-tact-in lg:transition-[opacity,translate,scale]",
           !showActionBar && "lg:translate-y-4 lg:scale-95 lg:opacity-0"
         )}

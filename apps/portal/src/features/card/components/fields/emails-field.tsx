@@ -74,7 +74,7 @@ export const EmailsField = ({ data }: Props) => {
                       <SelectTrigger className="text-xs">
                         <SelectValue placeholder="Label" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent position="item-aligned">
                         {LabelEnum.options.map((option) => (
                           <SelectItem key={option} value={option}>
                             {option}
@@ -85,7 +85,7 @@ export const EmailsField = ({ data }: Props) => {
 
                     {fields.length > 1 && (
                       <Button
-                        className={cn("shrink-0 bg-transparent dark:bg-input/30 dark:hover:bg-input/50")}
+                        className={cn("shrink-0 border-input-border bg-input")}
                         onClick={() => remove(i)}
                         size="icon"
                         type="button"

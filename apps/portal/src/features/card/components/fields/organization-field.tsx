@@ -83,7 +83,7 @@ export const OrganizationField = ({ organizationId }: Props) => {
               <FormControl>
                 <Button
                   className={cn(
-                    "w-full justify-between border-input bg-stone-50 text-foreground hover:border-border dark:bg-input/80",
+                    "w-full justify-between border-input-border bg-input text-foreground hover:bg-input hover:brightness-120",
                     !field.value && "text-muted-foreground"
                   )}
                   role="combobox"
@@ -104,7 +104,7 @@ export const OrganizationField = ({ organizationId }: Props) => {
                   ) : (
                     "Select Organization"
                   )}
-                  <IconCaretUpDownFilled className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  <IconCaretUpDownFilled className="ml-2 size-3 shrink-0 opacity-40" />
                 </Button>
               </FormControl>
             </PopoverTrigger>

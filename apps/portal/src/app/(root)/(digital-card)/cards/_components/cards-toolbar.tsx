@@ -104,7 +104,7 @@ export const CardsToolbar = memo(({ cards, cardsCount, isSelectMode, setIsSelect
             "max-[1372px]:left-0 max-[1372px]:translate-x-0"
           )}
         >
-          <div className="relative overflow-hidden rounded-lg border bg-card shadow-lg [corner-shape:squircle] dark:shadow-none">
+          <div className="relative overflow-hidden rounded-lg border bg-card shadow-lg dark:shadow-none">
             <AnimatedSizeContainer height>
               <div
                 className={cn(
@@ -142,7 +142,7 @@ export const CardsToolbar = memo(({ cards, cardsCount, isSelectMode, setIsSelect
                 )}
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <ButtonGroup className="[corner-shape:squircle]">
+                  <ButtonGroup>
                     <ButtonGroupText className="whitespace-nowrap border-dashed bg-transparent font-medium text-sm">
                       <strong className="font-semibold">{selectedCardIds.length}</strong> selected
                     </ButtonGroupText>

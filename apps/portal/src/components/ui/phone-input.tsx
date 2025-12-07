@@ -9,6 +9,7 @@ import { List } from "react-window";
 
 import { Command, CommandEmpty, CommandInput, CommandItem, CommandList } from "@ziron/ui/components/command";
 import { Input } from "@ziron/ui/components/input";
+import { InputGroupInput } from "@ziron/ui/components/input-group";
 import { Popover, PopoverContent, PopoverTrigger } from "@ziron/ui/components/popover";
 
 import { cn } from "@ziron/utils";
@@ -39,7 +40,7 @@ export function PhoneInput({
   const inputId = id || autoId;
   return (
     <RPNInput.default
-      className={cn("flex rounded-md shadow-xs", className)}
+      className={cn("flex border-0 bg-transparent", className)}
       countrySelectComponent={(props) => <CountrySelect {...props} {...countrySelectProps} />}
       disabled={disabled}
       flagComponent={FlagComponent}
@@ -58,17 +59,7 @@ PhoneInput.displayName = "PhoneInput";
 
 const PlainInput = React.forwardRef<HTMLInputElement, React.ComponentProps<typeof Input>>(
   ({ className, type, ...props }, ref) => {
-    return (
-      <Input
-        className={cn(
-          "-ms-px w-full rounded-s-none rounded-e-none border-r-0 shadow-none focus-visible:z-10",
-          className
-        )}
-        data-slot="phone-input"
-        ref={ref}
-        {...props}
-      />
-    );
+    return <InputGroupInput className={cn("-ms-px w-full", className)} data-slot="phone-input" ref={ref} {...props} />;
   }
 );
 PlainInput.displayName = "PlainInput";
@@ -151,7 +142,7 @@ const CountrySelect = ({ disabled, value, onChange }: CountrySelectProps) => {
       <PopoverTrigger asChild>
         <button
           className={cn(
-            "relative inline-flex items-center self-stretch rounded-s-md border border-input bg-transparent py-2 ps-3 pe-2 text-muted-foreground outline-none transition-[color,box-shadow] focus-within:z-10 focus-within:ring-[3px] hover:bg-accent hover:text-foreground has-disabled:pointer-events-none has-disabled:opacity-50 dark:bg-input/30",
+            "relative inline-flex items-center self-stretch rounded-s-md border border-input-border bg-input py-2 ps-3 pe-2 text-muted-foreground outline-none transition-[color,box-shadow] focus-within:z-10 focus-within:ring-[3px] hover:bg-accent hover:text-foreground hover:brightness-120 has-disabled:pointer-events-none has-disabled:opacity-50",
             disabled && "pointer-events-none opacity-50"
           )}
           disabled={disabled}

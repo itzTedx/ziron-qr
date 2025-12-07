@@ -13,7 +13,7 @@ import { Card, CardContent, CardFooter } from "@ziron/ui/components/card";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ziron/ui/components/tooltip";
 import { useCopyToClipboard } from "@ziron/ui/hooks";
 
-import type { CardTypeWithPageVisits } from "@ziron/db/schema";
+import type { CardWithPageVisits } from "@ziron/db/schema";
 import { cn, formatDate, pluralize } from "@ziron/utils";
 
 import { BoxArchive } from "@/assets/icons";
@@ -24,7 +24,7 @@ import { constructUrl, getPrettyUrl } from "@/lib/link/construct-url";
 import ShareButton from "./share-button";
 
 type PersonCardFields = Pick<
-  CardTypeWithPageVisits,
+  CardWithPageVisits,
   "id" | "name" | "designation" | "slug" | "image" | "cover" | "createdAt" | "pageVisits" | "archivedAt"
 >;
 
@@ -54,7 +54,7 @@ export const PersonCard = ({
 
   if (variant === "rows") {
     return (
-      <div className="group relative flex items-center justify-between border border-b px-3 py-2 [corner-shape:squircle] first-of-type:rounded-t-lg first-of-type:border-t last-of-type:rounded-b-lg hover:bg-accent sm:p-3 sm:last-of-type:rounded-b-xl sm:first-of-type:rounded-t-xl">
+      <div className="group relative flex items-center justify-between border border-b px-3 py-2 first-of-type:rounded-t-lg first-of-type:border-t last-of-type:rounded-b-lg hover:bg-accent sm:p-3 sm:last-of-type:rounded-b-xl sm:first-of-type:rounded-t-xl">
         <div className="flex items-center gap-2 md:gap-3">
           <div onMouseDown={() => setIsSelectMode?.(true)} onMouseUp={() => setIsSelectMode?.(false)}>
             <CardIcon

@@ -23,7 +23,7 @@ export function NavGroupItem({
         <div>
           <Link
             className={cn(
-              "relative flex size-11 items-center justify-center rounded-lg transition-colors duration-150 [corner-shape:squircle]",
+              "relative flex size-11 items-center justify-center rounded-lg transition-colors duration-150",
               "outline-none focus-visible:ring-2 focus-visible:ring-card/50",
               active ? "bg-card" : "hover:bg-muted/5 active:bg-muted/10"
             )}
