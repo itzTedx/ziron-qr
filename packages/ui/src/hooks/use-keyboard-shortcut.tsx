@@ -205,9 +205,10 @@ export function useKeyboardShortcut(
   }, [onKeyDown]);
 
   // Register/unregister the listener
+  // biome-ignore lint/correctness/useExhaustiveDependencies: we don't need to update the listener when the key changes
   useEffect(() => {
     setListeners((prev) => [...prev.filter((listener) => listener.id !== id), { id, key, ...options }]);
 
     return () => setListeners((prev) => prev.filter((listener) => listener.id !== id));
-  }, [options.enabled, options.priority, key, options, id, setListeners]);
+  }, [JSON.stringify(key), options.enabled, options.priority]);
 }
