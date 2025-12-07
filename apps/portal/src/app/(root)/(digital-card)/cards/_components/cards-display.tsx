@@ -113,26 +113,28 @@ export const CardsDisplay = ({ preferences }: { preferences: WorkspacePreference
       </PopoverTrigger>
 
       <PopoverContent className="bg-popover md:w-80">
-        <div className="grid grid-cols-2 gap-2 rounded-md bg-popover p-2">
-          {CARDS_DISPLAY_OPTIONS.map(({ id, label, icon: Icon }) => {
-            const selected = viewMode === id;
-            return (
-              <button
-                aria-pressed={selected}
-                className={cn(
-                  "flex h-16 cursor-pointer flex-col items-center justify-center gap-1 rounded-md border border-transparent transition-colors",
-                  selected
-                    ? "border-muted bg-muted/50 text-foreground"
-                    : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
-                )}
-                key={id}
-                onClick={() => setViewMode(id)}
-              >
-                <Icon className={cn("size-5 text-muted-foreground", selected && "text-foreground")} />
-                {label}
-              </button>
-            );
-          })}
+        <div className="p-2">
+          <div className="grid grid-cols-2 gap-2 rounded-md bg-muted/50 p-1">
+            {CARDS_DISPLAY_OPTIONS.map(({ id, label, icon: Icon }) => {
+              const selected = viewMode === id;
+              return (
+                <button
+                  aria-pressed={selected}
+                  className={cn(
+                    "flex h-16 cursor-pointer flex-col items-center justify-center gap-1 rounded-md border border-transparent transition-colors",
+                    selected
+                      ? "border-muted bg-muted/50 text-foreground"
+                      : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                  )}
+                  key={id}
+                  onClick={() => setViewMode(id)}
+                >
+                  <Icon className={cn("size-5 text-muted-foreground", selected && "text-foreground")} />
+                  {label}
+                </button>
+              );
+            })}
+          </div>
         </div>
         <Separator />
         <div className="flex h-16 items-center justify-between gap-2 px-4">

@@ -11,6 +11,7 @@ import { Button } from "@ziron/ui/components/button";
 import { ButtonGroup } from "@ziron/ui/components/button-group";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@ziron/ui/components/input-group";
 import { ScrollArea, ScrollBar } from "@ziron/ui/components/scroll-area";
+import { Skeleton } from "@ziron/ui/components/skeleton";
 
 import { PageWidthWrapper } from "@/components/layout/page-width-wrapper";
 import { AnimateIcon } from "@/components/ui/icon";
@@ -79,7 +80,7 @@ function CardsListSkeleton() {
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
       {Array.from({ length: 5 }, (_, i) => `skeleton-${i}`).map((id) => (
-        <div className="h-64 animate-pulse rounded-lg bg-muted" key={id} />
+        <Skeleton className="h-64" key={id} />
       ))}
     </div>
   );
