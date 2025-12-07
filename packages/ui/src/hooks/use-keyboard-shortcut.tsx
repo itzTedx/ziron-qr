@@ -209,5 +209,5 @@ export function useKeyboardShortcut(
     setListeners((prev) => [...prev.filter((listener) => listener.id !== id), { id, key, ...options }]);
 
     return () => setListeners((prev) => prev.filter((listener) => listener.id !== id));
-  }, [options.enabled, options.priority, options.modal, options.sheet, key, id, setListeners, options]);
+  }, [options.enabled, options.priority, key, options, id, setListeners]);
 }
