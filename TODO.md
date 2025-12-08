@@ -53,11 +53,11 @@ This document contains a comprehensive list of improvements and tasks for the Zi
 
 ## 📱 Client App
 
-- [ ] Replace default Next.js template in apps/client with actual card viewer implementation
-- [ ] Implement public card viewing page with slug-based routing
+- [x] Replace default Next.js template in apps/client with actual card viewer implementation
+- [x] Implement public card viewing page with slug-based routing
 - [x] Add QR code generation and display for cards
 - [x] Implement share functionality (social media, copy link, download vCard)
-- [ ] Add analytics tracking for card views and interactions
+- [x] Add analytics tracking for card views and interactions
 
 ## ♿ Accessibility
 
@@ -86,7 +86,7 @@ This document contains a comprehensive list of improvements and tasks for the Zi
 
 ## 🧹 Code Quality
 
-- [ ] Remove commented-out code (card-form.tsx lines 48-51)
+- [x] Remove commented-out code (card-form.tsx lines 48-51) - Note: Some commented code remains but not at specified location
 - [ ] Fix unused variables and imports across the codebase
 - [ ] Standardize error handling patterns across all API routes
 - [ ] Refactor duplicate code in card router (createCard and updateCard have similar logic)
@@ -102,6 +102,7 @@ This document contains a comprehensive list of improvements and tasks for the Zi
 - [ ] Add card duplication/cloning functionality
 - [ ] Implement search and filtering for cards in the dashboard
 - [ ] Add card preview in different devices (mobile, tablet, desktop)
+- [ ] Implement interactive map with searchbox in card form for easy location selection (replace manual mapUrl input)
 
 ## 🚀 DevOps
 
@@ -121,7 +122,7 @@ This document contains a comprehensive list of improvements and tasks for the Zi
 - [ ] Improve form validation feedback and error messages
 - [ ] Add confirmation dialogs for destructive actions
 - [ ] Implement drag-and-drop improvements for link ordering
-- [ ] Add keyboard shortcuts for common actions
+- [x] Add keyboard shortcuts for common actions
 
 ## 🔌 API
 

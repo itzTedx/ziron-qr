@@ -4,6 +4,7 @@ import { and, count, desc, eq, gte, isNull, lte } from "@ziron/db";
 import { db } from "@ziron/db/client";
 import {
   appearance,
+  Card,
   type CardType,
   type CardWithPageVisits,
   cards,
@@ -757,6 +758,26 @@ export const getCardBySlug = publicProcedure
 
     if (!data) throw errors.NOT_FOUND();
 
+    return data;
+  });
+
+export const getAllCards = publicProcedure
+  .use(dbProvider)
+  .route({
+    method: "GET",
+    path: "/card/all",
+    summary: "Get all cards",
+    description: "Get all cards",
+    tags: ["card"],
+  })
+  .output(z.array(z.custom<Card>()))
+  .handler(async ({ context }) => {
+    const data = await context.db.query.cards.findMany({
+      where: (cards, { isNull, and }) => and(isNull(cards.deletedAt), isNull(cards.archivedAt)),
+      with: {
+        organization: true,
+      },
+    });
     return data;
   });
 

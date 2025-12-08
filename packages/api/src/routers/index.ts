@@ -10,6 +10,7 @@ import {
   deleteCard,
   duplicateCard,
   exportAllCards,
+  getAllCards,
   getCard,
   getCardBySlug,
   listCards,
@@ -64,6 +65,7 @@ export const router = {
 export const clientRouter = {
   card: {
     getBySlug: getCardBySlug,
+    getAll: getAllCards,
   },
   analytics: {
     trackPageVisit: trackPageVisit,
