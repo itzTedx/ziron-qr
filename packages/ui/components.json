@@ -13,8 +13,11 @@
   "aliases": {
     "components": "@ziron/ui/components",
     "utils": "@ziron/utils",
-    "hooks": "@ziron/ui/hooks",
+    "ui": "@ziron/ui/components",
     "lib": "@ziron/ui/lib",
-    "ui": "@ziron/ui/components"
+    "hooks": "@ziron/ui/hooks"
+  },
+  "registries": {
+    "@shadcn-map": "http://shadcn-map.vercel.app/r/{name}.json"
   }
 }

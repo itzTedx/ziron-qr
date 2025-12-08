@@ -3,6 +3,8 @@
 
   --animate-fade-in: fade-in 0.2s ease-out forwards;
 
+  --animate-shimmer: shimmer 0.3s linear(0, 0.2175, 0.5207, 0.7361, 0.8631, 0.9317, 0.9668, 0.9842, 0.9926, 1) forwards;
+
   @keyframes infinite-scroll-y {
     0% {
       transform: translateY(0);
@@ -17,6 +19,17 @@
     }
     100% {
       opacity: 1;
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      opacity: 1;
+      transform: skew(-45deg) translate(-300%);
+    }
+    100% {
+      opacity: 1;
+      transform: skew(-45deg) translate(600%);
     }
   }
 }

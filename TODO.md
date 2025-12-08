@@ -95,11 +95,11 @@ This document contains a comprehensive list of improvements and tasks for the Zi
 ## ✨ Features
 
 - [ ] Implement card analytics dashboard (views, shares, interactions)
-- [ ] Add bulk card operations (import, export, delete multiple)
+- [x] Add bulk card operations (import, export, delete multiple)
 - [ ] Implement card templates customization (custom colors, fonts, layouts)
 - [ ] Add card versioning/history (track changes over time)
 - [ ] Implement card sharing permissions and privacy settings
-- [ ] Add card duplication/cloning functionality
+- [x] Add card duplication/cloning functionality
 - [ ] Implement search and filtering for cards in the dashboard
 - [ ] Add card preview in different devices (mobile, tablet, desktop)
 - [ ] Implement interactive map with searchbox in card form for easy location selection (replace manual mapUrl input)
@@ -115,13 +115,13 @@ This document contains a comprehensive list of improvements and tasks for the Zi
 
 ## 🎨 UI/UX
 
-- [ ] Improve loading states and skeletons for better UX
-- [ ] Add empty states for cards, companies, and other lists
+- [x] Improve loading states and skeletons for better UX
+- [x] Add empty states for cards, companies, and other lists
 - [ ] Implement optimistic updates for better perceived performance
 - [x] Add toast notifications for all user actions (success, error, info)
 - [ ] Improve form validation feedback and error messages
-- [ ] Add confirmation dialogs for destructive actions
-- [ ] Implement drag-and-drop improvements for link ordering
+- [x] Add confirmation dialogs for destructive actions
+- [x] Implement drag-and-drop improvements for link ordering
 - [x] Add keyboard shortcuts for common actions
 
 ## 🔌 API
