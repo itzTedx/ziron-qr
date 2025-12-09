@@ -1,34 +1,34 @@
 {
-  "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": {
-    "source.organizeImports.biome": "explicit",
-    "source.fixAll.biome": "explicit",
-    "source.addMissingImports.ts": "explicit"
-  },
-  "editor.defaultFormatter": "biomejs.biome",
-  "files.associations": {
-    "*.css": "tailwindcss"
-  },
-  "tailwindCSS.experimental.configFile": "packages/ui/src/styles/globals.css",
-  "tailwindCSS.experimental.classRegex": [
-    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
-    ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
-  ],
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
-  "cSpell.words": [
-    "codegen",
-    "FGCOLOR",
-    "Foneflip",
-    "hitbox",
-    "nuqs",
-    "orpc",
-    "qrcodegen",
-    "squircle",
-    "useCallback",
-    "useMemo",
-    "ziron"
-  ],
-  "typescript.tsdk": "node_modules\\typescript\\lib"
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"source.organizeImports.biome": "explicit",
+		"source.fixAll.biome": "explicit",
+		"source.addMissingImports.ts": "explicit"
+	},
+	"editor.defaultFormatter": "biomejs.biome",
+	"files.associations": {
+		"*.css": "tailwindcss"
+	},
+	"tailwindCSS.experimental.configFile": "packages/ui/src/styles/globals.css",
+	"tailwindCSS.experimental.classRegex": [
+		["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+		["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+	],
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"cSpell.words": [
+		"codegen",
+		"FGCOLOR",
+		"Foneflip",
+		"hitbox",
+		"nuqs",
+		"orpc",
+		"qrcodegen",
+		"squircle",
+		"useCallback",
+		"useMemo",
+		"ziron"
+	],
+	"typescript.tsdk": "node_modules\\typescript\\lib"
 }
