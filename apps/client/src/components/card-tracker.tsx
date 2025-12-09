@@ -2,9 +2,9 @@
 
 import { createContext, useContext } from "react";
 
-import { useEventTracking, usePageVisitTracking } from "@/hooks/use-analytics";
+import { useEventTracking } from "@/hooks/use-analytics";
 
-import { EventTracker } from "./event-tracker";
+import { LinkProvider } from "./link-provider";
 
 interface AnalyticsContextValue {
 	track: (eventType: string, eventName?: string, metadata?: Record<string, unknown>) => void;
@@ -32,15 +32,49 @@ interface CardTrackerProps {
 }
 
 /**
- * Client component that tracks page visits and provides event tracking for a card
+ * Client component that provides event tracking for a card
+ *
+ * Wraps card content and provides:
+ * - Analytics context via `useAnalytics()` hook
+ * - TrackableLink component via LinkProvider context
+ *
+ * **Important:** Page visits should be tracked separately in the server component
+ * using the `trackPageVisit` server action.
+ *
+ * @example
+ * ```tsx
+ * // In a server component page
+ * export default async function CardPage({ params }) {
+ *   const card = await getCard(params.slug);
+ *
+ *   // Track page visit (server-side)
+ *   trackPageVisit(card.id);
+ *
+ *   return (
+ *     <CardTracker cardId={card.id}>
+ *       <CardTemplate card={card} />
+ *     </CardTracker>
+ *   );
+ * }
+ *
+ * // In a client component (inside CardTracker)
+ * function CardContent() {
+ *   const analytics = useAnalytics();
+ *
+ *   return (
+ *     <button onClick={() => analytics.trackClick("custom_button")}>
+ *       Click Me
+ *     </button>
+ *   );
+ * }
+ * ```
  */
 export function CardTracker({ cardId, children }: CardTrackerProps) {
-	usePageVisitTracking(cardId);
 	const tracking = useEventTracking(cardId);
 
 	return (
 		<AnalyticsContext.Provider value={tracking}>
-			<EventTracker>{children}</EventTracker>
+			<LinkProvider>{children}</LinkProvider>
 		</AnalyticsContext.Provider>
 	);
 }

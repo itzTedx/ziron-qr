@@ -1,8 +1,8 @@
 import type { JSX, ReactNode } from "react";
 
-import { Loader } from "lucide-react";
-
 import { cn } from "@ziron/utils";
+
+import { IconSpinner } from "../assets/icons/spinner";
 
 export function LoadingSwap({
 	isLoading,
@@ -33,7 +33,7 @@ export function LoadingSwap({
 					className
 				)}
 			>
-				{icon ? icon : <Loader className="size-4 animate-spin" />}
+				{icon ? icon : <IconSpinner className="size-4" />}
 			</div>
 		</div>
 	);

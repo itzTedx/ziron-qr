@@ -13,6 +13,7 @@ interface TemplateProps {
 	card?: Partial<CardType>;
 	organization?: Organization | null;
 	imageBase64URI?: string;
+	LinkComponent?: typeof Link;
 }
 
 export default function ModernTemplate({ card, organization, imageBase64URI }: TemplateProps) {
@@ -126,14 +127,24 @@ export default function ModernTemplate({ card, organization, imageBase64URI }: T
 						<div className="grid grid-cols-3 gap-4">
 							{card.emails &&
 								card.emails.map((e, i) => (
-									<LinkBox color={theme} href={`mailto:${e.email}`} key={`${e.id}-${i}-${e.email}`}>
+									<LinkBox
+										color={theme}
+										emailId={e.id}
+										href={`mailto:${e.email}`}
+										key={`${e.id}-${i}-${e.email}`}
+									>
 										<IconMail className="@sm:size-16 size-9 shrink-0 stroke-[1.5]" />
 										<p className="sr-only">{e.email}</p>
 									</LinkBox>
 								))}
 							{card.phones &&
 								card.phones.map((ph, i) => (
-									<LinkBox color={theme} href={`tel:${ph.phone}`} key={`${ph.id}-${i}-${ph.phone}`}>
+									<LinkBox
+										color={theme}
+										href={`tel:${ph.phone}`}
+										key={`${ph.id}-${i}-${ph.phone}`}
+										phoneId={ph.id}
+									>
 										<IconPhone className="@sm:size-16 size-9 shrink-0 stroke-[1.5]" />
 										<p className="sr-only"> {ph.phone}</p>
 									</LinkBox>
@@ -157,6 +168,7 @@ export default function ModernTemplate({ card, organization, imageBase64URI }: T
 									color={theme}
 									href={link.url || "#"}
 									key={`${index}-${link.label}-${link.url}`}
+									linkId={link.id || link.label}
 								>
 									<div className="relative @sm:size-16 size-9 shrink-0">
 										<Image alt="" fill sizes="10vw" src={link.icon} />
@@ -183,22 +195,35 @@ const LinkBox = ({
 	href,
 	download,
 	color,
+	phoneId,
+	emailId,
+	linkId,
+	LinkComponent = Link,
 	children,
 }: {
 	href: string;
 	download?: boolean;
 	color: string;
+	phoneId?: string;
+	emailId?: string;
+	linkId?: string;
+	LinkComponent?: typeof Link | React.ComponentType<React.ComponentProps<typeof Link>>;
 	children: React.ReactNode;
 }) => {
+	// If LinkComponent is TrackableLink, pass tracking props
+	const isTrackable = LinkComponent && "name" in LinkComponent && LinkComponent.name === "TrackableLink";
+	const linkProps = isTrackable ? { phoneId, emailId, linkId } : {};
+
 	return (
-		<Link
+		<LinkComponent
 			className="flex items-center justify-center gap-2 rounded-md border border-primary bg-primary/10 p-5 @sm:text-base text-sm"
 			download={download}
 			href={href}
+			{...linkProps}
 			style={{ borderColor: color, backgroundColor: `${color}10` }}
 			target="_blank"
 		>
 			{children}
-		</Link>
+		</LinkComponent>
 	);
 };

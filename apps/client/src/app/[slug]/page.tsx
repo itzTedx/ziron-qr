@@ -8,6 +8,7 @@ import ModernTemplate from "@ziron/ui/templates/modern-template";
 import { CardTracker } from "@/components/card-tracker";
 import { Theme } from "@/components/theme";
 
+import { trackPageVisit } from "@/actions/analytics";
 import { client } from "@/lib/orpc/client";
 
 import { CardType } from "../../../../../packages/db/src/schema/card-schema";
@@ -71,6 +72,10 @@ export default async function DigitalCardPage({ params }: PageProps<"/[slug]">) 
 		const card = await client.card.getBySlug({ slug });
 
 		if (!card) return notFound();
+
+		// Track page visit using server action with "after" function
+		// This runs after the response is sent, non-blocking
+		trackPageVisit(card.id);
 
 		return (
 			<>

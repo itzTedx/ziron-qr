@@ -36,7 +36,7 @@ Whether you're networking at events, sharing contact details online, or building
 - **Real-time Preview**: Live preview of card designs during creation
 - **Contact Management**: Add multiple phone numbers, emails, and social links
 - **File Attachments**: Support for profile images, cover photos, and document attachments
-- **Card Analytics**: Track page visits, events, and user interactions
+- **Card Analytics**: Track page visits, events, and user interactions with automatic click tracking
 - **Card Export**: Export cards to CSV format
 - **Card Duplication**: Clone existing cards for quick creation
 
@@ -371,11 +371,28 @@ The application uses ORPC (Object RPC) for type-safe API routes:
 Available API endpoints:
 - `/api/rpc/card/*` - Card CRUD operations, export, duplication
 - `/api/rpc/organization/*` - Organization management
-- `/api/rpc/analytics/*` - Analytics and tracking
+- `/api/rpc/analytics/*` - Analytics and tracking (page visits, events)
 - `/api/rpc/qr/*` - QR code generation
 - `/api/rpc/avatar/*` - Avatar generation
 - `/api/rpc/metrics` - System metrics
 - `/api/rpc/workspace/*` - Workspace preferences
+
+### Analytics & Tracking
+
+The platform includes a comprehensive analytics system that tracks user interactions with digital cards:
+
+**Automatic Tracking:**
+- **Page Visits**: Automatically tracked when a card page is viewed (server-side)
+- **Link Clicks**: Phone, email, external links, and downloads are automatically tracked
+- **Event Tracking**: Custom events can be tracked programmatically
+
+**Implementation:**
+- Uses Next.js Server Actions with `after()` function for non-blocking analytics
+- Automatic click tracking via `TrackableLink` component
+- Analytics data includes device info, IP address, user agent, and timestamps
+- All tracking is non-blocking and fails silently to not impact user experience
+
+See the [Analytics Documentation](#analytics-documentation) section below for detailed usage examples, or check out the comprehensive [Analytics Guide](./apps/client/docs/analytics.md) for in-depth documentation.
 
 ## 🚀 Deployment
 
