@@ -14,20 +14,26 @@ import { KeyboardShortcutProvider } from "@ziron/ui/hooks";
 import { createQueryClient } from "@/lib/orpc/query/client";
 
 export function Providers({ children }: { children: React.ReactNode }) {
-  const [queryClient] = useState(() => createQueryClient());
-  return (
-    <ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange enableColorScheme enableSystem>
-      <KeyboardShortcutProvider>
-        <QueryClientProvider client={queryClient}>
-          <NuqsAdapter>
-            <ProgressProvider color="#962DFF" height="3px" memo options={{ showSpinner: false }} shallowRouting>
-              {children}
-            </ProgressProvider>
-            <Toaster position="bottom-center" richColors />
-          </NuqsAdapter>
-          <ReactQueryDevtools />
-        </QueryClientProvider>
-      </KeyboardShortcutProvider>
-    </ThemeProvider>
-  );
+	const [queryClient] = useState(() => createQueryClient());
+	return (
+		<ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange enableColorScheme enableSystem>
+			<KeyboardShortcutProvider>
+				<QueryClientProvider client={queryClient}>
+					<NuqsAdapter>
+						<ProgressProvider
+							color="#962DFF"
+							height="3px"
+							memo
+							options={{ showSpinner: false }}
+							shallowRouting
+						>
+							{children}
+						</ProgressProvider>
+						<Toaster position="bottom-center" richColors />
+					</NuqsAdapter>
+					<ReactQueryDevtools />
+				</QueryClientProvider>
+			</KeyboardShortcutProvider>
+		</ThemeProvider>
+	);
 }

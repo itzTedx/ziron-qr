@@ -1,12 +1,12 @@
 {
-  "extends": "@ziron/typescript-config/react-library.json",
-  "compilerOptions": {
-    "baseUrl": ".",
-    "lib": ["dom", "esnext"],
-    "paths": {
-      "@ziron/ui/*": ["./src/*"]
-    }
-  },
-  "include": [".", "../../types.d.ts"],
-  "exclude": ["node_modules", "dist"]
+	"extends": "@ziron/typescript-config/react-library.json",
+	"compilerOptions": {
+		"baseUrl": ".",
+		"lib": ["dom", "esnext"],
+		"paths": {
+			"@ziron/ui/*": ["./src/*"]
+		}
+	},
+	"include": [".", "../../types.d.ts"],
+	"exclude": ["node_modules", "dist"]
 }

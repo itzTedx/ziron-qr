@@ -9,32 +9,32 @@ import { Kbd } from "@ziron/ui/components/kbd";
 import { useKeyboardShortcut } from "@ziron/ui/hooks";
 
 interface Props {
-  cardId: string;
+	cardId: string;
 }
 
 export const DuplicateCard = ({ cardId }: Props) => {
-  const router = useRouter();
+	const router = useRouter();
 
-  const handleDuplicate = () => {
-    router.push(`/cards/${cardId}/duplicate`);
-  };
+	const handleDuplicate = () => {
+		router.push(`/cards/${cardId}/duplicate`);
+	};
 
-  useKeyboardShortcut("d", handleDuplicate, { priority: 3 });
-  return (
-    <DropdownMenuItem
-      onSelect={(e) => {
-        e.preventDefault();
-        handleDuplicate();
-      }}
-      role="button"
-    >
-      <IconCopyPlus className="size-4" />
+	useKeyboardShortcut("d", handleDuplicate, { priority: 3 });
+	return (
+		<DropdownMenuItem
+			onSelect={(e) => {
+				e.preventDefault();
+				handleDuplicate();
+			}}
+			role="button"
+		>
+			<IconCopyPlus className="size-4" />
 
-      <span>Duplicate Card</span>
+			<span>Duplicate Card</span>
 
-      <DropdownMenuShortcut>
-        <Kbd>D</Kbd>
-      </DropdownMenuShortcut>
-    </DropdownMenuItem>
-  );
+			<DropdownMenuShortcut>
+				<Kbd>D</Kbd>
+			</DropdownMenuShortcut>
+		</DropdownMenuItem>
+	);
 };

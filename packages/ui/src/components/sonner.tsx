@@ -6,22 +6,22 @@ import { Toaster as Sonner, ToasterProps } from "sonner";
 export { toast } from "sonner";
 
 const Toaster = ({ ...props }: ToasterProps) => {
-  const { theme = "system" } = useTheme();
+	const { theme = "system" } = useTheme();
 
-  return (
-    <Sonner
-      className="toaster group z-9999"
-      style={
-        {
-          "--normal-bg": "var(--popover)",
-          "--normal-text": "var(--popover-foreground)",
-          "--normal-border": "var(--border)",
-        } as React.CSSProperties
-      }
-      theme={theme as ToasterProps["theme"]}
-      {...props}
-    />
-  );
+	return (
+		<Sonner
+			className="toaster group z-9999"
+			style={
+				{
+					"--normal-bg": "var(--popover)",
+					"--normal-text": "var(--popover-foreground)",
+					"--normal-border": "var(--border)",
+				} as React.CSSProperties
+			}
+			theme={theme as ToasterProps["theme"]}
+			{...props}
+		/>
+	);
 };
 
 export { Toaster };

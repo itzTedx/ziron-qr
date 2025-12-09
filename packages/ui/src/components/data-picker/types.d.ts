@@ -6,50 +6,50 @@ import { Matcher } from "react-day-picker";
 import { PopoverProps } from "../popover";
 
 export type CalendarProps = {
-  startMonth?: Date;
-  endMonth?: Date;
-  startDate?: Date;
-  endDate?: Date;
-  fromDate?: Date;
-  toDate?: Date;
-  locale?: Locale;
+	startMonth?: Date;
+	endMonth?: Date;
+	startDate?: Date;
+	endDate?: Date;
+	fromDate?: Date;
+	toDate?: Date;
+	locale?: Locale;
 };
 
 export interface PickerProps extends CalendarProps {
-  className?: string;
-  disabled?: boolean;
-  disabledDays?: Matcher | Matcher[] | undefined;
-  required?: boolean;
-  showTimePicker?: boolean;
-  placeholder?: string;
-  showYearNavigation?: boolean;
-  disableNavigation?: boolean;
-  hasError?: boolean;
-  id?: string;
-  align?: PopoverProps["align"];
-  "aria-invalid"?: boolean;
-  "aria-label"?: string;
-  "aria-labelledby"?: string;
-  "aria-required"?: boolean;
+	className?: string;
+	disabled?: boolean;
+	disabledDays?: Matcher | Matcher[] | undefined;
+	required?: boolean;
+	showTimePicker?: boolean;
+	placeholder?: string;
+	showYearNavigation?: boolean;
+	disableNavigation?: boolean;
+	hasError?: boolean;
+	id?: string;
+	align?: PopoverProps["align"];
+	"aria-invalid"?: boolean;
+	"aria-label"?: string;
+	"aria-labelledby"?: string;
+	"aria-required"?: boolean;
 }
 
 export type DateRange = {
-  from: Date | undefined;
-  to?: Date | undefined;
+	from: Date | undefined;
+	to?: Date | undefined;
 };
 
 export interface Preset {
-  id: string;
-  label: string;
-  requiresUpgrade?: boolean;
-  tooltipContent?: ReactNode;
-  shortcut?: string;
+	id: string;
+	label: string;
+	requiresUpgrade?: boolean;
+	tooltipContent?: ReactNode;
+	shortcut?: string;
 }
 
 export interface DatePreset extends Preset {
-  date: Date;
+	date: Date;
 }
 
 export interface DateRangePreset extends Preset {
-  dateRange: DateRange;
+	dateRange: DateRange;
 }

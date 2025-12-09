@@ -1,10 +1,10 @@
 import qrcodegen from "./codegen";
 
 export const ERROR_LEVEL_MAP: { [index: string]: qrcodegen.QrCode.Ecc } = {
-  L: qrcodegen.QrCode.Ecc.LOW,
-  M: qrcodegen.QrCode.Ecc.MEDIUM,
-  Q: qrcodegen.QrCode.Ecc.QUARTILE,
-  H: qrcodegen.QrCode.Ecc.HIGH,
+	L: qrcodegen.QrCode.Ecc.LOW,
+	M: qrcodegen.QrCode.Ecc.MEDIUM,
+	Q: qrcodegen.QrCode.Ecc.QUARTILE,
+	H: qrcodegen.QrCode.Ecc.HIGH,
 };
 
 export const DEFAULT_SIZE = 128;

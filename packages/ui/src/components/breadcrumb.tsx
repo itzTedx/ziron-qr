@@ -6,94 +6,98 @@ import { Slot as SlotPrimitive } from "radix-ui";
 import { cn } from "@ziron/utils";
 
 function Breadcrumb({ ...props }: React.ComponentProps<"nav">) {
-  return <nav aria-label="breadcrumb" data-slot="breadcrumb" {...props} />;
+	return <nav aria-label="breadcrumb" data-slot="breadcrumb" {...props} />;
 }
 
 function BreadcrumbList({ className, ...props }: React.ComponentProps<"ol">) {
-  return (
-    <ol
-      className={cn(
-        "wrap-break-words flex items-center gap-1.5 font-medium text-sm sm:gap-2.5 sm:text-base",
-        className
-      )}
-      data-slot="breadcrumb-list"
-      {...props}
-    />
-  );
+	return (
+		<ol
+			className={cn(
+				"wrap-break-words flex items-center gap-1.5 font-medium text-sm sm:gap-2.5 sm:text-base",
+				className
+			)}
+			data-slot="breadcrumb-list"
+			{...props}
+		/>
+	);
 }
 
 function BreadcrumbItem({ className, ...props }: React.ComponentProps<"li">) {
-  return (
-    <li className={cn("inline-flex items-center gap-2 sm:gap-1.5", className)} data-slot="breadcrumb-item" {...props} />
-  );
+	return (
+		<li
+			className={cn("inline-flex items-center gap-2 sm:gap-1.5", className)}
+			data-slot="breadcrumb-item"
+			{...props}
+		/>
+	);
 }
 
 function BreadcrumbLink({
-  asChild,
-  className,
-  ...props
+	asChild,
+	className,
+	...props
 }: React.ComponentProps<"a"> & {
-  asChild?: boolean;
+	asChild?: boolean;
 }) {
-  const Comp = asChild ? SlotPrimitive.Slot : "a";
+	const Comp = asChild ? SlotPrimitive.Slot : "a";
 
-  return (
-    <Comp
-      className={cn("transition-colors hover:text-muted-foreground", className)}
-      data-slot="breadcrumb-link"
-      {...props}
-    />
-  );
+	return (
+		<Comp
+			className={cn("transition-colors hover:text-muted-foreground", className)}
+			data-slot="breadcrumb-link"
+			{...props}
+		/>
+	);
 }
 
 function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
-  return (
-    <span
-      aria-current="page"
-      aria-disabled="true"
-      className={cn("min-w-0 text-foreground", className)}
-      data-slot="breadcrumb-page"
-      role="link"
-      {...props}
-    />
-  );
+	return (
+		<span
+			aria-current="page"
+			aria-disabled="true"
+			className={cn("min-w-0 text-foreground", className)}
+			data-slot="breadcrumb-page"
+			role="link"
+			{...props}
+		/>
+	);
 }
 
 function BreadcrumbSeparator({ children, className, ...props }: React.ComponentProps<"li">) {
-  return (
-    <li
-      aria-hidden="true"
-      className={cn("[&>svg]:size-3.5", className)}
-      data-slot="breadcrumb-separator"
-      role="presentation"
-      {...props}
-    >
-      {children ?? <ChevronRight />}
-    </li>
-  );
+	return (
+		<li
+			aria-hidden="true"
+			className={cn("[&>svg]:size-3.5", className)}
+			data-slot="breadcrumb-separator"
+			role="presentation"
+			{...props}
+		>
+			{children ?? <ChevronRight />}
+		</li>
+	);
 }
 
 function BreadcrumbEllipsis({ className, ...props }: React.ComponentProps<"span">) {
-  return (
-    <span
-      aria-hidden="true"
-      className={cn("flex size-9 items-center justify-center", className)}
-      data-slot="breadcrumb-ellipsis"
-      role="presentation"
-      {...props}
-    >
-      <MoreHorizontal className="size-4" />
-      <span className="sr-only">More</span>
-    </span>
-  );
+	return (
+		<span
+			aria-hidden="true"
+			className={cn("flex size-9 items-center justify-center", className)}
+			data-slot="breadcrumb-ellipsis"
+			role="presentation"
+			{...props}
+		>
+			<MoreHorizontal className="size-4" />
+			<span className="sr-only">More</span>
+		</span>
+	);
 }
 
 export {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-  BreadcrumbEllipsis,
+	Breadcrumb,
+	BreadcrumbList,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	BreadcrumbPage,
+	BreadcrumbSeparator,
+	BreadcrumbEllipsis,
 };

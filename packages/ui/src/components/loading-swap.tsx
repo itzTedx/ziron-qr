@@ -5,32 +5,36 @@ import { Loader } from "lucide-react";
 import { cn } from "@ziron/utils";
 
 export function LoadingSwap({
-  isLoading,
-  children,
-  className,
-  icon,
+	isLoading,
+	children,
+	className,
+	icon,
 }: {
-  isLoading: boolean;
-  children: ReactNode;
-  className?: string;
-  icon?: JSX.Element;
+	isLoading: boolean;
+	children: ReactNode;
+	className?: string;
+	icon?: JSX.Element;
 }) {
-  return (
-    <div className="grid grid-cols-1 items-center justify-items-center">
-      <div
-        className={cn(
-          "col-start-1 col-end-2 row-start-1 row-end-2 w-full items-center has-[>svg]:flex has-[>svg]:gap-2",
-          isLoading ? "invisible" : "visible",
-          className
-        )}
-      >
-        {children}
-      </div>
-      <div
-        className={cn("col-start-1 col-end-2 row-start-1 row-end-2", isLoading ? "visible" : "invisible", className)}
-      >
-        {icon ? icon : <Loader className="size-4 animate-spin" />}
-      </div>
-    </div>
-  );
+	return (
+		<div className="grid grid-cols-1 items-center justify-items-center">
+			<div
+				className={cn(
+					"col-start-1 col-end-2 row-start-1 row-end-2 w-full items-center has-[>svg]:flex has-[>svg]:gap-2",
+					isLoading ? "invisible" : "visible",
+					className
+				)}
+			>
+				{children}
+			</div>
+			<div
+				className={cn(
+					"col-start-1 col-end-2 row-start-1 row-end-2",
+					isLoading ? "visible" : "invisible",
+					className
+				)}
+			>
+				{icon ? icon : <Loader className="size-4 animate-spin" />}
+			</div>
+		</div>
+	);
 }

@@ -12,22 +12,22 @@ import { EmptyOrganization } from "./empty-organization";
 import { OrganizationsList } from "./organizations-list";
 
 export const OrganizationClient = () => {
-  const { data: organizations } = useSuspenseQuery(orpc.organization.list.queryOptions());
+	const { data: organizations } = useSuspenseQuery(orpc.organization.list.queryOptions());
 
-  if (!organizations?.length) {
-    return (
-      <section className="px-6 pt-12">
-        <EmptyOrganization />
-      </section>
-    );
-  }
+	if (!organizations?.length) {
+		return (
+			<section className="px-6 pt-12">
+				<EmptyOrganization />
+			</section>
+		);
+	}
 
-  return (
-    <ScrollArea className="h-full flex-1 overflow-y-auto pt-3 sm:py-4">
-      <PageWidthWrapper>
-        <OrganizationsList organizations={organizations} />
-      </PageWidthWrapper>
-      <ScrollBar />
-    </ScrollArea>
-  );
+	return (
+		<ScrollArea className="h-full flex-1 overflow-y-auto pt-3 sm:py-4">
+			<PageWidthWrapper>
+				<OrganizationsList organizations={organizations} />
+			</PageWidthWrapper>
+			<ScrollBar />
+		</ScrollArea>
+	);
 };

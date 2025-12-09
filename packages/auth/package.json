@@ -1,35 +1,35 @@
 {
-  "name": "@ziron/auth",
-  "version": "0.1.0",
-  "private": true,
-  "type": "module",
-  "exports": {
-    ".": "./src/index.ts",
-    "./env": "./env.ts"
-  },
-  "license": "MIT",
-  "scripts": {
-    "clean": "git clean -xdf .cache .turbo dist node_modules",
-    "format": "biome check .",
-    "format:fix": "biome check --write .",
-    "lint": "biome check .",
-    "generate": "dotenv -e ../../.env -- pnpx @better-auth/cli generate --output ../db/src/auth-schema.ts --config ./src/index.ts",
-    "typecheck": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@t3-oss/env-nextjs": "^0.13.6",
-    "@ziron/db": "workspace:*",
-    "@ziron/redis": "workspace:*",
-    "better-auth": "catalog:",
-    "next": "catalog:",
-    "react": "catalog:react19",
-    "react-dom": "catalog:react19",
-    "zod": "catalog:"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "catalog:",
-    "@types/react": "catalog:react19",
-    "@ziron/typescript-config": "workspace:*",
-    "typescript": "catalog:"
-  }
+	"name": "@ziron/auth",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts",
+		"./env": "./env.ts"
+	},
+	"license": "MIT",
+	"scripts": {
+		"clean": "git clean -xdf .cache .turbo dist node_modules",
+		"format": "biome check .",
+		"format:fix": "biome check --write .",
+		"lint": "biome check .",
+		"generate": "dotenv -e ../../.env -- pnpx @better-auth/cli generate --output ../db/src/auth-schema.ts --config ./src/index.ts",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@t3-oss/env-nextjs": "^0.13.6",
+		"@ziron/db": "workspace:*",
+		"@ziron/redis": "workspace:*",
+		"better-auth": "catalog:",
+		"next": "catalog:",
+		"react": "catalog:react19",
+		"react-dom": "catalog:react19",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "catalog:",
+		"@types/react": "catalog:react19",
+		"@ziron/typescript-config": "workspace:*",
+		"typescript": "catalog:"
+	}
 }

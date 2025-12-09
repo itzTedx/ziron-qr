@@ -10,20 +10,20 @@ const HERO_GRADIENT = `radial-gradient(77% 116% at 37% 67%, #EEA5BA, rgba(238, 1
   radial-gradient(102% 143% at 92% 7%, #72FE7D, rgba(114, 254, 125, 0) 50%)`;
 
 export function Hero({ children }: PropsWithChildren) {
-  return (
-    <div className="relative mx-auto mt-4 w-full max-w-screen-lg overflow-hidden rounded-2xl bg-neutral-50 p-6 text-center sm:p-20 sm:px-0">
-      <Grid
-        cellSize={80}
-        className="-translate-x-1/2 inset-[unset] top-0 left-1/2 w-[1200px] text-neutral-300 [mask-image:linear-gradient(transparent,black_70%)]"
-        patternOffset={[1, -58]}
-      />
-      <div className="-inset-x-10 absolute bottom-0 h-[60%] opacity-40 blur-[100px] [transform:translate3d(0,0,0)]">
-        <div
-          className="-scale-y-100 size-full [mask-image:radial-gradient(closest-side,black_100%,transparent_100%)]"
-          style={{ backgroundImage: HERO_GRADIENT }}
-        />
-      </div>
-      {children}
-    </div>
-  );
+	return (
+		<div className="relative mx-auto mt-4 w-full max-w-screen-lg overflow-hidden rounded-2xl bg-neutral-50 p-6 text-center sm:p-20 sm:px-0">
+			<Grid
+				cellSize={80}
+				className="-translate-x-1/2 inset-[unset] top-0 left-1/2 w-[1200px] text-neutral-300 [mask-image:linear-gradient(transparent,black_70%)]"
+				patternOffset={[1, -58]}
+			/>
+			<div className="-inset-x-10 absolute bottom-0 h-[60%] opacity-40 blur-[100px] [transform:translate3d(0,0,0)]">
+				<div
+					className="-scale-y-100 size-full [mask-image:radial-gradient(closest-side,black_100%,transparent_100%)]"
+					style={{ backgroundImage: HERO_GRADIENT }}
+				/>
+			</div>
+			{children}
+		</div>
+	);
 }

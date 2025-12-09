@@ -8,54 +8,54 @@ import { CoverUpload } from "./fields/cover-upload";
 import { PhotoUploadModal } from "./fields/photo-upload-modal";
 
 interface Props {
-  data: Partial<Pick<zCardSchema, "id" | "image" | "cover">>;
+	data: Partial<Pick<zCardSchema, "id" | "image" | "cover">>;
 }
 
 export const ProfileDashboard = ({ data }: Props) => {
-  const [isCoverUploadOpen, setIsCoverUploadOpen] = useState(false);
+	const [isCoverUploadOpen, setIsCoverUploadOpen] = useState(false);
 
-  return (
-    <div>
-      <div className="relative h-40 overflow-hidden border-b bg-secondary">
-        <div>
-          <Image
-            alt="cover image"
-            className="object-cover transition-[filter] duration-500 hover:brightness-75"
-            fill
-            priority
-            quality={80}
-            sizes="100vw"
-            src={data.cover ?? "/images/placeholder-cover.jpg"}
-            title="Cover Image"
-          />
-        </div>
-        <div className="absolute top-4 left-4 z-10 aspect-square h-32 overflow-hidden rounded-xl border-4 bg-card shadow-lg">
-          <Image
-            alt="profile image"
-            className="object-cover transition-[filter] duration-500 hover:brightness-75"
-            fill
-            priority
-            quality={80}
-            sizes="100vw"
-            src={data.image ?? "/images/placeholder-profile.jpg"}
-          />
-          <PhotoUploadModal currentImage={data.image} />
-        </div>
+	return (
+		<div>
+			<div className="relative h-40 overflow-hidden border-b bg-secondary">
+				<div>
+					<Image
+						alt="cover image"
+						className="object-cover transition-[filter] duration-500 hover:brightness-75"
+						fill
+						priority
+						quality={80}
+						sizes="100vw"
+						src={data.cover ?? "/images/placeholder-cover.jpg"}
+						title="Cover Image"
+					/>
+				</div>
+				<div className="absolute top-4 left-4 z-10 aspect-square h-32 overflow-hidden rounded-xl border-4 bg-card shadow-lg">
+					<Image
+						alt="profile image"
+						className="object-cover transition-[filter] duration-500 hover:brightness-75"
+						fill
+						priority
+						quality={80}
+						sizes="100vw"
+						src={data.image ?? "/images/placeholder-profile.jpg"}
+					/>
+					<PhotoUploadModal currentImage={data.image} />
+				</div>
 
-        <CoverUpload
-          className="absolute top-3 right-4 z-10 flex items-center gap-2"
-          coverImage={data.cover}
-          isOpen={isCoverUploadOpen}
-          onOpenChange={(open) => {
-            if (!open) {
-              setIsCoverUploadOpen(false);
-            } else {
-              setIsCoverUploadOpen(true);
-            }
-          }}
-        />
-      </div>
-      {/* <section className="-mt-16 container mx-auto">
+				<CoverUpload
+					className="absolute top-3 right-4 z-10 flex items-center gap-2"
+					coverImage={data.cover}
+					isOpen={isCoverUploadOpen}
+					onOpenChange={(open) => {
+						if (!open) {
+							setIsCoverUploadOpen(false);
+						} else {
+							setIsCoverUploadOpen(true);
+						}
+					}}
+				/>
+			</div>
+			{/* <section className="-mt-16 container mx-auto">
         <div className="relative rounded-xl border-background bg-card/80 px-4 py-4 backdrop-blur-xl sm:border sm:px-6 sm:shadow-lg">
           <div className="flex items-center md:px-3 lg:pr-6">
             <div className="group relative size-24 shrink-0">
@@ -110,6 +110,6 @@ export const ProfileDashboard = ({ data }: Props) => {
           </div>
         </div>
       </section> */}
-    </div>
-  );
+		</div>
+	);
 };

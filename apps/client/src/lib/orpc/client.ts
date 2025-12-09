@@ -7,34 +7,34 @@ import { toast } from "sonner";
 import { ClientRouterClient } from "@ziron/api/routers/index";
 
 declare global {
-  var $client: ClientRouterClient | undefined;
+	var $client: ClientRouterClient | undefined;
 }
 
 export const queryClient = new QueryClient({
-  queryCache: new QueryCache({
-    onError: (error) => {
-      toast.error(`Error: ${error.message}`, {
-        action: {
-          label: "retry",
-          onClick: () => {
-            queryClient.invalidateQueries();
-          },
-        },
-      });
-    },
-  }),
+	queryCache: new QueryCache({
+		onError: (error) => {
+			toast.error(`Error: ${error.message}`, {
+				action: {
+					label: "retry",
+					onClick: () => {
+						queryClient.invalidateQueries();
+					},
+				},
+			});
+		},
+	}),
 });
 
 const link = new RPCLink({
-  url: `${typeof window !== "undefined" ? window.location.origin : "http://localhost:3000"}/api/rpc`,
-  // headers: async () => {
-  //   if (typeof window !== "undefined") {
-  //     return {};
-  //   }
+	url: `${typeof window !== "undefined" ? window.location.origin : "http://localhost:3000"}/api/rpc`,
+	// headers: async () => {
+	//   if (typeof window !== "undefined") {
+	//     return {};
+	//   }
 
-  //   const { headers } = await import("next/headers");
-  //   return await headers();
-  // },
+	//   const { headers } = await import("next/headers");
+	//   return await headers();
+	// },
 });
 
 /**

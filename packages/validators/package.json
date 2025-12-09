@@ -1,28 +1,28 @@
 {
-  "name": "@ziron/validators",
-  "private": true,
-  "version": "0.1.0",
-  "type": "module",
-  "exports": {
-    ".": "./src/index.ts"
-  },
-  "license": "MIT",
-  "scripts": {
-    "build": "tsup --clean",
-    "clean": "git clean -xdf .cache .turbo dist node_modules",
-    "format": "biome check .",
-    "format:fix": "biome check --write .",
-    "lint": "biome check .",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
-  },
-  "dependencies": {
-    "@hookform/resolvers": "^5.1.1",
-    "zod": "catalog:"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "catalog:",
-    "@ziron/typescript-config": "workspace:*",
-    "tsup": "^8.5.1",
-    "typescript": "catalog:"
-  }
+	"name": "@ziron/validators",
+	"private": true,
+	"version": "0.1.0",
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"license": "MIT",
+	"scripts": {
+		"build": "tsup --clean",
+		"clean": "git clean -xdf .cache .turbo dist node_modules",
+		"format": "biome check .",
+		"format:fix": "biome check --write .",
+		"lint": "biome check .",
+		"typecheck": "tsc --noEmit --emitDeclarationOnly false"
+	},
+	"dependencies": {
+		"@hookform/resolvers": "^5.1.1",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "catalog:",
+		"@ziron/typescript-config": "workspace:*",
+		"tsup": "^8.5.1",
+		"typescript": "catalog:"
+	}
 }

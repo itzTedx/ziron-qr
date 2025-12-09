@@ -6,23 +6,23 @@ import { RefObject, useEffect, useState } from "react";
  * More about ResizeObserver: https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver
  */
 export function useResizeObserver(elementRef: RefObject<Element | null>): ResizeObserverEntry | undefined {
-  const [entry, setEntry] = useState<ResizeObserverEntry>();
+	const [entry, setEntry] = useState<ResizeObserverEntry>();
 
-  const updateEntry = ([entry]: ResizeObserverEntry[]): void => {
-    setEntry(entry);
-  };
+	const updateEntry = ([entry]: ResizeObserverEntry[]): void => {
+		setEntry(entry);
+	};
 
-  useEffect(() => {
-    const node = elementRef?.current;
-    if (!node) return;
+	useEffect(() => {
+		const node = elementRef?.current;
+		if (!node) return;
 
-    const observer = new ResizeObserver(updateEntry);
+		const observer = new ResizeObserver(updateEntry);
 
-    observer.observe(node);
+		observer.observe(node);
 
-    return () => observer.disconnect();
-    // biome-ignore lint/correctness/useExhaustiveDependencies: we want to memoize by all values
-  }, [elementRef, updateEntry]);
+		return () => observer.disconnect();
+		// biome-ignore lint/correctness/useExhaustiveDependencies: we want to memoize by all values
+	}, [elementRef, updateEntry]);
 
-  return entry;
+	return entry;
 }

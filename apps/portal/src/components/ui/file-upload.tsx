@@ -15,286 +15,291 @@ type Icon = TablerIcon | LucideIcon | ComponentType<SVGProps<SVGSVGElement>>;
 type AcceptedFileFormats = "any" | "images" | "csv" | "documents" | "programResourceImages" | "programResourceFiles";
 
 const documentTypes = [
-  "application/pdf", // .pdf
-  "text/plain", // .txt
-  "application/msword", // .doc
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
-  "application/vnd.ms-excel", // .xls
-  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xlsx
-  "text/csv", // .csv
+	"application/pdf", // .pdf
+	"text/plain", // .txt
+	"application/msword", // .doc
+	"application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
+	"application/vnd.ms-excel", // .xls
+	"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xlsx
+	"text/csv", // .csv
 ];
 
 const acceptFileTypes: Record<AcceptedFileFormats, { types: string[]; errorMessage?: string }> = {
-  any: { types: [] },
-  images: {
-    types: ["image/png", "image/jpeg"],
-    errorMessage: "File type not supported (.png or .jpg only)",
-  },
-  csv: {
-    types: ["text/csv"],
-    errorMessage: "File type not supported (.csv only)",
-  },
-  documents: {
-    types: documentTypes,
-    errorMessage: "File type not supported (document files only)",
-  },
-  // TODO: allow custom `accept` prop so we don't need specific options here
-  programResourceImages: {
-    types: ["image/svg+xml", "image/png", "image/jpeg", "image/webp"],
-    errorMessage: "File type not supported (.svg, .png, .jpg, or .webp only)",
-  },
-  programResourceFiles: {
-    types: [...documentTypes, "application/zip"],
-    errorMessage: "File type not supported (document or zip files only)",
-  },
+	any: { types: [] },
+	images: {
+		types: ["image/png", "image/jpeg"],
+		errorMessage: "File type not supported (.png or .jpg only)",
+	},
+	csv: {
+		types: ["text/csv"],
+		errorMessage: "File type not supported (.csv only)",
+	},
+	documents: {
+		types: documentTypes,
+		errorMessage: "File type not supported (document files only)",
+	},
+	// TODO: allow custom `accept` prop so we don't need specific options here
+	programResourceImages: {
+		types: ["image/svg+xml", "image/png", "image/jpeg", "image/webp"],
+		errorMessage: "File type not supported (.svg, .png, .jpg, or .webp only)",
+	},
+	programResourceFiles: {
+		types: [...documentTypes, "application/zip"],
+		errorMessage: "File type not supported (document or zip files only)",
+	},
 };
 
 const imageUploadVariants = cva(
-  "group relative isolate flex aspect-1200/630 w-full flex-col items-center justify-center overflow-hidden bg-card transition-all hover:bg-muted/50",
-  {
-    variants: {
-      variant: {
-        default: "rounded-md border shadow-sm",
-        plain: "",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-    },
-  }
+	"group relative isolate flex aspect-1200/630 w-full flex-col items-center justify-center overflow-hidden bg-card transition-all hover:bg-muted/50",
+	{
+		variants: {
+			variant: {
+				default: "rounded-md border shadow-sm",
+				plain: "",
+			},
+		},
+		defaultVariants: {
+			variant: "default",
+		},
+	}
 );
 
 type FileUploadReadFileProps =
-  | {
-      /**
-       * Whether to automatically read the file and return the result as `src` to onChange
-       */
-      readFile?: false;
-      onChange?: (data: { file: File }) => void;
-    }
-  | {
-      /**
-       * Whether to automatically read the file and return the result as `src` to onChange
-       */
-      readFile: true;
-      onChange?: (data: { file: File; src: string }) => void;
-    };
+	| {
+			/**
+			 * Whether to automatically read the file and return the result as `src` to onChange
+			 */
+			readFile?: false;
+			onChange?: (data: { file: File }) => void;
+	  }
+	| {
+			/**
+			 * Whether to automatically read the file and return the result as `src` to onChange
+			 */
+			readFile: true;
+			onChange?: (data: { file: File; src: string }) => void;
+	  };
 
 export type FileUploadProps = FileUploadReadFileProps & {
-  id?: string;
-  accept: AcceptedFileFormats;
-  className?: string;
-  iconClassName?: string;
-  previewClassName?: string;
+	id?: string;
+	accept: AcceptedFileFormats;
+	className?: string;
+	iconClassName?: string;
+	previewClassName?: string;
 
-  icon?: Icon;
+	icon?: Icon;
 
-  /**
-   * Custom preview component to display instead of the default
-   */
-  customPreview?: ReactNode;
-  /**
-   * Image to display (generally for image uploads)
-   */
-  imageSrc?: string | null;
+	/**
+	 * Custom preview component to display instead of the default
+	 */
+	customPreview?: ReactNode;
+	/**
+	 * Image to display (generally for image uploads)
+	 */
+	imageSrc?: string | null;
 
-  /**
-   * Whether to display a loading spinner
-   */
-  loading?: boolean;
+	/**
+	 * Whether to display a loading spinner
+	 */
+	loading?: boolean;
 
-  /**
-   * Whether to allow clicking on the area to upload
-   */
-  clickToUpload?: boolean;
+	/**
+	 * Whether to allow clicking on the area to upload
+	 */
+	clickToUpload?: boolean;
 
-  /**
-   * Whether to show instruction overlay when hovered
-   */
-  showHoverOverlay?: boolean;
+	/**
+	 * Whether to show instruction overlay when hovered
+	 */
+	showHoverOverlay?: boolean;
 
-  /**
-   * Content to display below the upload icon (null to only display the icon)
-   */
-  content?: ReactNode | null;
+	/**
+	 * Content to display below the upload icon (null to only display the icon)
+	 */
+	content?: ReactNode | null;
 
-  /**
-   * Desired resolution to suggest and optionally resize to
-   */
-  targetResolution?: { width: number; height: number };
+	/**
+	 * Desired resolution to suggest and optionally resize to
+	 */
+	targetResolution?: { width: number; height: number };
 
-  /**
-   * A maximum file size (in megabytes) to check upon file selection. Default is 5MB.
-   */
-  maxFileSizeMB?: number;
+	/**
+	 * A maximum file size (in megabytes) to check upon file selection. Default is 5MB.
+	 */
+	maxFileSizeMB?: number;
 
-  /**
-   * Accessibility label for screen readers
-   */
-  accessibilityLabel?: string;
+	/**
+	 * Accessibility label for screen readers
+	 */
+	accessibilityLabel?: string;
 
-  disabled?: boolean;
+	disabled?: boolean;
 } & VariantProps<typeof imageUploadVariants>;
 
 export function FileUpload({
-  id,
-  readFile,
-  onChange,
-  variant,
-  className,
-  iconClassName,
-  previewClassName,
-  icon: Icon = CloudUpload,
-  customPreview,
-  accept = "any",
-  imageSrc,
-  loading = false,
-  clickToUpload = true,
-  showHoverOverlay = true,
-  content,
-  maxFileSizeMB = 5,
-  targetResolution,
-  accessibilityLabel = "File upload",
-  disabled = false,
+	id,
+	readFile,
+	onChange,
+	variant,
+	className,
+	iconClassName,
+	previewClassName,
+	icon: Icon = CloudUpload,
+	customPreview,
+	accept = "any",
+	imageSrc,
+	loading = false,
+	clickToUpload = true,
+	showHoverOverlay = true,
+	content,
+	maxFileSizeMB = 5,
+	targetResolution,
+	accessibilityLabel = "File upload",
+	disabled = false,
 }: FileUploadProps) {
-  const [dragActive, setDragActive] = useState(false);
-  const [fileName, setFileName] = useState<string | null>(null);
+	const [dragActive, setDragActive] = useState(false);
+	const [fileName, setFileName] = useState<string | null>(null);
 
-  const onFileChange = async (e: React.ChangeEvent<HTMLInputElement> | DragEvent) => {
-    const file =
-      "dataTransfer" in e ? e.dataTransfer.files && e.dataTransfer.files[0] : e.target.files && e.target.files[0];
-    if (!file) return;
+	const onFileChange = async (e: React.ChangeEvent<HTMLInputElement> | DragEvent) => {
+		const file =
+			"dataTransfer" in e ? e.dataTransfer.files && e.dataTransfer.files[0] : e.target.files && e.target.files[0];
+		if (!file) return;
 
-    setFileName(file.name);
+		setFileName(file.name);
 
-    if (maxFileSizeMB > 0 && file.size / 1024 / 1024 > maxFileSizeMB) {
-      toast.error(`File size too big (max ${maxFileSizeMB} MB)`);
-      return;
-    }
+		if (maxFileSizeMB > 0 && file.size / 1024 / 1024 > maxFileSizeMB) {
+			toast.error(`File size too big (max ${maxFileSizeMB} MB)`);
+			return;
+		}
 
-    const acceptedTypes = acceptFileTypes[accept].types;
+		const acceptedTypes = acceptFileTypes[accept].types;
 
-    if (acceptedTypes.length && !acceptedTypes.includes(file.type)) {
-      toast.error(acceptFileTypes[accept].errorMessage ?? "File type not supported");
-      return;
-    }
+		if (acceptedTypes.length && !acceptedTypes.includes(file.type)) {
+			toast.error(acceptFileTypes[accept].errorMessage ?? "File type not supported");
+			return;
+		}
 
-    let fileToUse = file;
+		let fileToUse = file;
 
-    // Add image resizing logic
-    if (targetResolution && file.type.startsWith("image/")) {
-      try {
-        const resizedFile = await resizeImage(file, targetResolution);
-        const blob = await fetch(resizedFile).then((r) => r.blob());
-        fileToUse = new File([blob], file.name, { type: file.type });
-      } catch (error) {
-        console.error("Error resizing image:", error);
-        // Fallback to original file if resize fails
-      }
-    }
+		// Add image resizing logic
+		if (targetResolution && file.type.startsWith("image/")) {
+			try {
+				const resizedFile = await resizeImage(file, targetResolution);
+				const blob = await fetch(resizedFile).then((r) => r.blob());
+				fileToUse = new File([blob], file.name, { type: file.type });
+			} catch (error) {
+				console.error("Error resizing image:", error);
+				// Fallback to original file if resize fails
+			}
+		}
 
-    // File reading logic
-    if (readFile) {
-      const reader = new FileReader();
-      reader.onload = (e) => onChange?.({ src: e.target?.result as string, file: fileToUse });
-      reader.readAsDataURL(fileToUse);
-      return;
-    }
+		// File reading logic
+		if (readFile) {
+			const reader = new FileReader();
+			reader.onload = (e) => onChange?.({ src: e.target?.result as string, file: fileToUse });
+			reader.readAsDataURL(fileToUse);
+			return;
+		}
 
-    onChange?.({ file: fileToUse });
-  };
+		onChange?.({ file: fileToUse });
+	};
 
-  return (
-    <label
-      className={cn(
-        imageUploadVariants({ variant }),
-        !disabled ? cn(clickToUpload && "cursor-pointer") : "cursor-not-allowed",
-        className
-      )}
-    >
-      {loading && (
-        <div className="absolute inset-0 z-5 flex items-center justify-center rounded-[inherit] bg-card">
-          <Spinner />
-        </div>
-      )}
-      <div
-        className="absolute inset-0 z-5"
-        onDragEnter={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          setDragActive(true);
-        }}
-        onDragLeave={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          setDragActive(false);
-        }}
-        onDragOver={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          setDragActive(true);
-        }}
-        onDrop={async (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          onFileChange(e);
-          setDragActive(false);
-        }}
-      />
-      <div
-        className={cn(
-          "absolute inset-0 z-3 flex flex-col items-center justify-center rounded-[inherit] border-2 border-transparent bg-card transition-all",
-          disabled && "bg-neutral-50",
-          dragActive && !disabled && "cursor-copy bg-muted/50 opacity-100",
-          imageSrc
-            ? cn("opacity-0", showHoverOverlay && !disabled && "group-hover:opacity-100")
-            : cn(!disabled && "group-hover:bg-muted/50")
-        )}
-      >
-        <Icon
-          className={cn(
-            "size-7 transition-all duration-75",
-            !disabled
-              ? cn(
-                  "text-neutral-500 group-hover:scale-110 group-active:scale-95",
-                  dragActive ? "scale-110" : "scale-100"
-                )
-              : "text-neutral-400",
-            iconClassName
-          )}
-        />
-        {content !== null && (
-          <div className={cn("mt-2 text-center text-muted-foreground text-sm", disabled && "text-muted-foreground/60")}>
-            {content ?? (
-              <>
-                <p>Drag and drop {clickToUpload && "or click"} to upload.</p>
-              </>
-            )}
-          </div>
-        )}
-        <span className="sr-only">{accessibilityLabel}</span>
-      </div>
-      {imageSrc &&
-        (customPreview ?? (
-          // biome-ignore lint/performance/noImgElement: we need to use img element for the preview
-          <img
-            alt="Preview"
-            className={cn("h-full w-full rounded-[inherit] object-cover", previewClassName)}
-            src={imageSrc}
-          />
-        ))}
-      {clickToUpload && (
-        <div className="sr-only mt-1 flex shadow-sm">
-          <input
-            accept={acceptFileTypes[accept]?.types.join(",")}
-            disabled={disabled} // Gets us a fresh input every time a file is uploaded
-            id={id}
-            key={fileName}
-            onChange={onFileChange}
-            type="file"
-          />
-        </div>
-      )}
-    </label>
-  );
+	return (
+		<label
+			className={cn(
+				imageUploadVariants({ variant }),
+				!disabled ? cn(clickToUpload && "cursor-pointer") : "cursor-not-allowed",
+				className
+			)}
+		>
+			{loading && (
+				<div className="absolute inset-0 z-5 flex items-center justify-center rounded-[inherit] bg-card">
+					<Spinner />
+				</div>
+			)}
+			<div
+				className="absolute inset-0 z-5"
+				onDragEnter={(e) => {
+					e.preventDefault();
+					e.stopPropagation();
+					setDragActive(true);
+				}}
+				onDragLeave={(e) => {
+					e.preventDefault();
+					e.stopPropagation();
+					setDragActive(false);
+				}}
+				onDragOver={(e) => {
+					e.preventDefault();
+					e.stopPropagation();
+					setDragActive(true);
+				}}
+				onDrop={async (e) => {
+					e.preventDefault();
+					e.stopPropagation();
+					onFileChange(e);
+					setDragActive(false);
+				}}
+			/>
+			<div
+				className={cn(
+					"absolute inset-0 z-3 flex flex-col items-center justify-center rounded-[inherit] border-2 border-transparent bg-card transition-all",
+					disabled && "bg-neutral-50",
+					dragActive && !disabled && "cursor-copy bg-muted/50 opacity-100",
+					imageSrc
+						? cn("opacity-0", showHoverOverlay && !disabled && "group-hover:opacity-100")
+						: cn(!disabled && "group-hover:bg-muted/50")
+				)}
+			>
+				<Icon
+					className={cn(
+						"size-7 transition-all duration-75",
+						!disabled
+							? cn(
+									"text-neutral-500 group-hover:scale-110 group-active:scale-95",
+									dragActive ? "scale-110" : "scale-100"
+								)
+							: "text-neutral-400",
+						iconClassName
+					)}
+				/>
+				{content !== null && (
+					<div
+						className={cn(
+							"mt-2 text-center text-muted-foreground text-sm",
+							disabled && "text-muted-foreground/60"
+						)}
+					>
+						{content ?? (
+							<>
+								<p>Drag and drop {clickToUpload && "or click"} to upload.</p>
+							</>
+						)}
+					</div>
+				)}
+				<span className="sr-only">{accessibilityLabel}</span>
+			</div>
+			{imageSrc &&
+				(customPreview ?? (
+					// biome-ignore lint/performance/noImgElement: we need to use img element for the preview
+					<img
+						alt="Preview"
+						className={cn("h-full w-full rounded-[inherit] object-cover", previewClassName)}
+						src={imageSrc}
+					/>
+				))}
+			{clickToUpload && (
+				<div className="sr-only mt-1 flex shadow-sm">
+					<input
+						accept={acceptFileTypes[accept]?.types.join(",")}
+						disabled={disabled} // Gets us a fresh input every time a file is uploaded
+						id={id}
+						key={fileName}
+						onChange={onFileChange}
+						type="file"
+					/>
+				</div>
+			)}
+		</label>
+	);
 }

@@ -1,45 +1,45 @@
 {
-  "name": "@ziron/db",
-  "version": "0.1.0",
-  "private": true,
-  "type": "module",
-  "exports": {
-    ".": "./src/index.ts",
-    "./client": "./src/client.ts",
-    "./schema": "./src/schema.ts"
-  },
-  "license": "MIT",
-  "scripts": {
-    "build": "tsup --clean",
-    "clean": "git clean -xdf .cache .turbo dist node_modules",
-    "dev:old": "concurrently \"pnpm with-env drizzle-kit studio --config=drizzle.config.ts --verbose\" \"tsc --watch\"",
-    "dev": "pnpm with-env drizzle-kit studio --config=drizzle.config.ts --verbose",
-    "format": "biome check .",
-    "format:fix": "biome check --write .",
-    "lint": "biome check .",
-    "generate": "pnpm with-env drizzle-kit generate",
-    "migrate": "pnpm with-env drizzle-kit migrate",
-    "push": "pnpm with-env drizzle-kit push",
-    "studio": "pnpm with-env drizzle-kit studio",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
-    "with-env": "dotenv -e ../../.env --"
-  },
-  "dependencies": {
-    "dotenv": "^17.0.1",
-    "drizzle-orm": "^0.44.2",
-    "pg": "^8.16.3",
-    "@ziron/validators": "workspace:*",
-    "zod": "catalog:"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "catalog:",
-    "@types/pg": "^8.15.4",
-    "@ziron/typescript-config": "workspace:*",
-    "concurrently": "^9.2.0",
-    "dotenv-cli": "^8.0.0",
-    "drizzle-kit": "^0.31.1",
-    "tsup": "^8.5.1",
-    "tsx": "^4.20.3",
-    "typescript": "catalog:"
-  }
+	"name": "@ziron/db",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts",
+		"./client": "./src/client.ts",
+		"./schema": "./src/schema.ts"
+	},
+	"license": "MIT",
+	"scripts": {
+		"build": "tsup --clean",
+		"clean": "git clean -xdf .cache .turbo dist node_modules",
+		"dev:old": "concurrently \"pnpm with-env drizzle-kit studio --config=drizzle.config.ts --verbose\" \"tsc --watch\"",
+		"dev": "pnpm with-env drizzle-kit studio --config=drizzle.config.ts --verbose",
+		"format": "biome check .",
+		"format:fix": "biome check --write .",
+		"lint": "biome check .",
+		"generate": "pnpm with-env drizzle-kit generate",
+		"migrate": "pnpm with-env drizzle-kit migrate",
+		"push": "pnpm with-env drizzle-kit push",
+		"studio": "pnpm with-env drizzle-kit studio",
+		"typecheck": "tsc --noEmit --emitDeclarationOnly false",
+		"with-env": "dotenv -e ../../.env --"
+	},
+	"dependencies": {
+		"dotenv": "^17.0.1",
+		"drizzle-orm": "^0.44.2",
+		"pg": "^8.16.3",
+		"@ziron/validators": "workspace:*",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "catalog:",
+		"@types/pg": "^8.15.4",
+		"@ziron/typescript-config": "workspace:*",
+		"concurrently": "^9.2.0",
+		"dotenv-cli": "^8.0.0",
+		"drizzle-kit": "^0.31.1",
+		"tsup": "^8.5.1",
+		"tsx": "^4.20.3",
+		"typescript": "catalog:"
+	}
 }

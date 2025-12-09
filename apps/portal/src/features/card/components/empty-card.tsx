@@ -6,29 +6,29 @@ import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTi
 import { Kbd } from "@ziron/ui/components/kbd";
 
 export const EmptyCard = () => {
-  return (
-    <Empty className="col-span-full border border-dashed">
-      <EmptyHeader>
-        <EmptyMedia>
-          <IconEmptyCard className="invert dark:invert-0" />
-        </EmptyMedia>
-        <EmptyTitle>No Cards Available</EmptyTitle>
-        <EmptyDescription>
-          You haven&apos;t created any cards yet. Get started by creating your first card.
-        </EmptyDescription>
-      </EmptyHeader>
-      <EmptyContent>
-        <div className="flex gap-2">
-          <Button asChild className="gap-2" size="sm">
-            <Link href={"/cards/create"}>
-              Create a Card <Kbd size="sm">C</Kbd>
-            </Link>
-          </Button>
-          <Button size="sm" variant="outline">
-            Import Card
-          </Button>
-        </div>
-      </EmptyContent>
-    </Empty>
-  );
+	return (
+		<Empty className="col-span-full border border-dashed">
+			<EmptyHeader>
+				<EmptyMedia>
+					<IconEmptyCard className="invert dark:invert-0" />
+				</EmptyMedia>
+				<EmptyTitle>No Cards Available</EmptyTitle>
+				<EmptyDescription>
+					You haven&apos;t created any cards yet. Get started by creating your first card.
+				</EmptyDescription>
+			</EmptyHeader>
+			<EmptyContent>
+				<div className="flex gap-2">
+					<Button asChild className="gap-2" size="sm">
+						<Link href={"/cards/create"}>
+							Create a Card <Kbd size="sm">C</Kbd>
+						</Link>
+					</Button>
+					<Button size="sm" variant="outline">
+						Import Card
+					</Button>
+				</div>
+			</EmptyContent>
+		</Empty>
+	);
 };

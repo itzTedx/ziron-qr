@@ -3,12 +3,12 @@ import Image from "next/image";
 import { getAvatarDataUrl } from "@/lib/avatar";
 
 interface AvatarImageProps {
-  name: string;
-  image?: string | null;
-  size?: number;
-  rounded?: number;
-  className?: string;
-  alt?: string;
+	name: string;
+	image?: string | null;
+	size?: number;
+	rounded?: number;
+	className?: string;
+	alt?: string;
 }
 
 /**
@@ -16,7 +16,7 @@ interface AvatarImageProps {
  * Falls back to generated avatar if no image is provided
  */
 export async function AvatarImage({ name, image, size = 120, rounded = 999, className, alt }: AvatarImageProps) {
-  const avatarUrl = image ?? (await getAvatarDataUrl(name, { size, rounded }));
+	const avatarUrl = image ?? (await getAvatarDataUrl(name, { size, rounded }));
 
-  return <Image alt={alt ?? `${name}'s avatar`} className={className} height={size} src={avatarUrl} width={size} />;
+	return <Image alt={alt ?? `${name}'s avatar`} className={className} height={size} src={avatarUrl} width={size} />;
 }

@@ -11,34 +11,34 @@ import { cn } from "@ziron/utils";
 import { authClient } from "@/lib/auth/client";
 
 export const LogoutButton = ({
-  className,
-  asChild = false,
-  ...props
+	className,
+	asChild = false,
+	...props
 }: React.ComponentProps<"button"> & { asChild?: boolean }) => {
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
+	const [isPending, startTransition] = useTransition();
+	const router = useRouter();
 
-  function logout() {
-    startTransition(async () => {
-      await authClient.signOut({
-        fetchOptions: {
-          onSuccess: () => {
-            router.push("/login");
-          },
-        },
-      });
-    });
-  }
+	function logout() {
+		startTransition(async () => {
+			await authClient.signOut({
+				fetchOptions: {
+					onSuccess: () => {
+						router.push("/login");
+					},
+				},
+			});
+		});
+	}
 
-  const Comp = asChild ? SlotPrimitive.Slot : "button";
-  return (
-    <Comp
-      aria-disabled={isPending}
-      className={cn("flex cursor-pointer items-center gap-2", className)}
-      data-slot="button"
-      disabled={isPending}
-      onClick={logout}
-      {...props}
-    />
-  );
+	const Comp = asChild ? SlotPrimitive.Slot : "button";
+	return (
+		<Comp
+			aria-disabled={isPending}
+			className={cn("flex cursor-pointer items-center gap-2", className)}
+			data-slot="button"
+			disabled={isPending}
+			onClick={logout}
+			{...props}
+		/>
+	);
 };

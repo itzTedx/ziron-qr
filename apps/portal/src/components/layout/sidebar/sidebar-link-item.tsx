@@ -10,37 +10,37 @@ import { useKeyboardShortcut } from "@ziron/ui/hooks";
 import { cn } from "@ziron/utils";
 
 interface Props {
-  href: Route;
-  children: React.ReactNode;
-  icon: React.ReactNode;
-  shortcut?: string;
-  className?: string;
+	href: Route;
+	children: React.ReactNode;
+	icon: React.ReactNode;
+	shortcut?: string;
+	className?: string;
 }
 
 export function SidebarLinkItem({ href, children, icon, shortcut, className }: Props) {
-  const pathname = usePathname();
-  const router = useRouter();
-  const segment = useSelectedLayoutSegment();
+	const pathname = usePathname();
+	const router = useRouter();
+	const segment = useSelectedLayoutSegment();
 
-  const isActive = segment ? href.toString().includes(segment) : pathname === href;
+	const isActive = segment ? href.toString().includes(segment) : pathname === href;
 
-  useKeyboardShortcut(
-    shortcut?.toLowerCase() ?? "",
-    () => {
-      router.push(href);
-    },
-    { priority: 10, enabled: !!shortcut }
-  );
+	useKeyboardShortcut(
+		shortcut?.toLowerCase() ?? "",
+		() => {
+			router.push(href);
+		},
+		{ priority: 10, enabled: !!shortcut }
+	);
 
-  return (
-    <Link className={cn(className)} data-active={isActive} href={href}>
-      {icon}
-      <span className="grow text-sm">{children}</span>
-      {shortcut && (
-        <Kbd className="uppercase" size="sm" variant="outline">
-          {shortcut}
-        </Kbd>
-      )}
-    </Link>
-  );
+	return (
+		<Link className={cn(className)} data-active={isActive} href={href}>
+			{icon}
+			<span className="grow text-sm">{children}</span>
+			{shortcut && (
+				<Kbd className="uppercase" size="sm" variant="outline">
+					{shortcut}
+				</Kbd>
+			)}
+		</Link>
+	);
 }

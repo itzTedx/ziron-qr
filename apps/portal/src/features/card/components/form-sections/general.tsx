@@ -11,110 +11,114 @@ import { OrganizationField } from "../fields/organization-field";
 import { PhonesField } from "../fields/phone-field";
 
 interface Props {
-  data: {
-    emails?: EmailsType;
-    phones?: PhonesType;
-    organizationId?: string;
-  };
+	data: {
+		emails?: EmailsType;
+		phones?: PhonesType;
+		organizationId?: string;
+	};
 }
 
 export const CardGeneral = ({ data }: Props) => {
-  const form = useFormContext<zCardSchema>();
+	const form = useFormContext<zCardSchema>();
 
-  return (
-    <div className="space-y-6">
-      <FormField
-        control={form.control}
-        name="name"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Name</FormLabel>
-            <FormControl>
-              <Input placeholder="Full Name" {...field} />
-            </FormControl>
+	return (
+		<div className="space-y-6">
+			<FormField
+				control={form.control}
+				name="name"
+				render={({ field }) => (
+					<FormItem>
+						<FormLabel>Name</FormLabel>
+						<FormControl>
+							<Input placeholder="Full Name" {...field} />
+						</FormControl>
 
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Suspense fallback={<div>Loading...</div>}>
-          <EmailsField data={data.emails} />
-        </Suspense>
-        <Suspense fallback={<div>Loading...</div>}>
-          <PhonesField data={data.phones} />
-        </Suspense>
-      </div>
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="space-y-6">
-          <FormField
-            control={form.control}
-            name="address"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Address</FormLabel>
-                <FormControl>
-                  <Textarea
-                    className="min-h-fit"
-                    placeholder="Enter Full Address"
-                    {...field}
-                    value={field.value ?? ""}
-                  />
-                </FormControl>
+						<FormMessage />
+					</FormItem>
+				)}
+			/>
+			<div className="grid gap-4 sm:grid-cols-2">
+				<Suspense fallback={<div>Loading...</div>}>
+					<EmailsField data={data.emails} />
+				</Suspense>
+				<Suspense fallback={<div>Loading...</div>}>
+					<PhonesField data={data.phones} />
+				</Suspense>
+			</div>
+			<div className="grid gap-4 sm:grid-cols-2">
+				<div className="space-y-6">
+					<FormField
+						control={form.control}
+						name="address"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Address</FormLabel>
+								<FormControl>
+									<Textarea
+										className="min-h-fit"
+										placeholder="Enter Full Address"
+										{...field}
+										value={field.value ?? ""}
+									/>
+								</FormControl>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="mapUrl"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Google Map Link</FormLabel>
-                <FormControl>
-                  <Input placeholder="https://maps.app.goo.gl/link" {...field} value={field.value ?? ""} />
-                </FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="mapUrl"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Google Map Link</FormLabel>
+								<FormControl>
+									<Input
+										placeholder="https://maps.app.goo.gl/link"
+										{...field}
+										value={field.value ?? ""}
+									/>
+								</FormControl>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <div className="space-y-6">
-          <Suspense fallback={<div>Loading...</div>}>
-            <OrganizationField organizationId={data.organizationId} />
-          </Suspense>
-          <FormField
-            control={form.control}
-            name="designation"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Designation</FormLabel>
-                <FormControl>
-                  <Input placeholder="Sales & Marketing" {...field} value={field.value ?? ""} />
-                </FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+				</div>
+				<div className="space-y-6">
+					<Suspense fallback={<div>Loading...</div>}>
+						<OrganizationField organizationId={data.organizationId} />
+					</Suspense>
+					<FormField
+						control={form.control}
+						name="designation"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Designation</FormLabel>
+								<FormControl>
+									<Input placeholder="Sales & Marketing" {...field} value={field.value ?? ""} />
+								</FormControl>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-      </div>
-      <FormField
-        control={form.control}
-        name="bio"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Bio</FormLabel>
-            <FormControl>
-              <Textarea placeholder="More about the person" {...field} value={field.value ?? ""} />
-            </FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+				</div>
+			</div>
+			<FormField
+				control={form.control}
+				name="bio"
+				render={({ field }) => (
+					<FormItem>
+						<FormLabel>Bio</FormLabel>
+						<FormControl>
+							<Textarea placeholder="More about the person" {...field} value={field.value ?? ""} />
+						</FormControl>
 
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-    </div>
-  );
+						<FormMessage />
+					</FormItem>
+				)}
+			/>
+		</div>
+	);
 };

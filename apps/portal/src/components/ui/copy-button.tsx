@@ -6,19 +6,19 @@ import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "
 import { useCopyToClipboard } from "@ziron/ui/hooks";
 
 export const CopyButton = ({ link }: { link: string }) => {
-  const { isCopied, copyToClipboard } = useCopyToClipboard();
+	const { isCopied, copyToClipboard } = useCopyToClipboard();
 
-  return (
-    <InputGroup>
-      <InputGroupAddon>
-        <Link />
-      </InputGroupAddon>
-      <InputGroupInput readOnly value={link} />
-      <InputGroupAddon align="inline-end">
-        <InputGroupButton className="cursor-copy" onClick={() => copyToClipboard(link)}>
-          {isCopied ? <Check /> : <Copy />}
-        </InputGroupButton>
-      </InputGroupAddon>
-    </InputGroup>
-  );
+	return (
+		<InputGroup>
+			<InputGroupAddon>
+				<Link />
+			</InputGroupAddon>
+			<InputGroupInput readOnly value={link} />
+			<InputGroupAddon align="inline-end">
+				<InputGroupButton className="cursor-copy" onClick={() => copyToClipboard(link)}>
+					{isCopied ? <Check /> : <Copy />}
+				</InputGroupButton>
+			</InputGroupAddon>
+		</InputGroup>
+	);
 };

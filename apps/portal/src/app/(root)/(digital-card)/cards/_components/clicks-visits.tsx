@@ -10,23 +10,23 @@ import { pluralize } from "@ziron/utils";
 import { orpc } from "@/lib/orpc/client";
 
 interface ClicksVisitsProps {
-  cardId: string;
-  className?: string;
+	cardId: string;
+	className?: string;
 }
 
 export const ClicksVisits = ({ cardId, className }: ClicksVisitsProps) => {
-  const { data: analytics } = useSuspenseQuery(
-    orpc.analytics.getCardAnalytics.queryOptions({
-      input: {
-        cardId,
-      },
-    })
-  );
+	const { data: analytics } = useSuspenseQuery(
+		orpc.analytics.getCardAnalytics.queryOptions({
+			input: {
+				cardId,
+			},
+		})
+	);
 
-  return (
-    <Button className={className} size="sm" type="button" variant="outline">
-      <IconMouse className="text-primary" />
-      {analytics.totalVisits} {pluralize("click", analytics.totalVisits)}
-    </Button>
-  );
+	return (
+		<Button className={className} size="sm" type="button" variant="outline">
+			<IconMouse className="text-primary" />
+			{analytics.totalVisits} {pluralize("click", analytics.totalVisits)}
+		</Button>
+	);
 };

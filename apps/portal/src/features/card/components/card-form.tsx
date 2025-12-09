@@ -39,237 +39,245 @@ import { ProfileDashboard } from "./profile-dashboard";
 import { TabsLists } from "./tabs-lists";
 
 interface Props {
-  isEditMode?: boolean;
-  initialData?: Partial<CardType>;
-  isDuplicateMode?: boolean;
+	isEditMode?: boolean;
+	initialData?: Partial<CardType>;
+	isDuplicateMode?: boolean;
 }
 
 export function CardForm({ isEditMode, initialData, isDuplicateMode = false }: Props) {
-  const router = useRouter();
-  const queryClient = getQueryClient();
+	const router = useRouter();
+	const queryClient = getQueryClient();
 
-  // Conditionally get initial data based on mode
-  const transformedInitialData = useMemo(() => {
-    if (isEditMode && initialData) {
-      return transformCardData(initialData);
-    }
-    // Create mode: return static defaults (no server fetch)
-    return transformCardData();
-  }, [isEditMode, initialData]);
+	// Conditionally get initial data based on mode
+	const transformedInitialData = useMemo(() => {
+		if (isEditMode && initialData) {
+			return transformCardData(initialData);
+		}
+		// Create mode: return static defaults (no server fetch)
+		return transformCardData();
+	}, [isEditMode, initialData]);
 
-  // In create mode, start with null (static, no initial data)
-  // In edit mode, initialize with transformed data
-  const [cardData, setCardData] = useState<Partial<zCardSchema> | null>(
-    isEditMode && transformedInitialData ? transformedInitialData : null
-  );
-  // const [hasBlurred, setHasBlurred] = useState(false);
+	// In create mode, start with null (static, no initial data)
+	// In edit mode, initialize with transformed data
+	const [cardData, setCardData] = useState<Partial<zCardSchema> | null>(
+		isEditMode && transformedInitialData ? transformedInitialData : null
+	);
+	// const [hasBlurred, setHasBlurred] = useState(false);
 
-  const form = useForm<zCardSchema>({
-    resolver: zodResolver(cardSchema),
-    defaultValues: transformedInitialData,
-    mode: "onBlur",
-  });
+	const form = useForm<zCardSchema>({
+		resolver: zodResolver(cardSchema),
+		defaultValues: transformedInitialData,
+		mode: "onBlur",
+	});
 
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    const subscription = form.watch((value) => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
+	useEffect(() => {
+		const subscription = form.watch((value) => {
+			if (timeoutRef.current) {
+				clearTimeout(timeoutRef.current);
+			}
 
-      timeoutRef.current = setTimeout(() => {
-        setCardData(value as Partial<zCardSchema>);
-      }, 1000);
-    });
+			timeoutRef.current = setTimeout(() => {
+				setCardData(value as Partial<zCardSchema>);
+			}, 1000);
+		});
 
-    return () => {
-      subscription.unsubscribe();
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, [form.watch]);
+		return () => {
+			subscription.unsubscribe();
+			if (timeoutRef.current) {
+				clearTimeout(timeoutRef.current);
+			}
+		};
+	}, [form.watch]);
 
-  // Conditionally use mutations based on mode
-  const createCard = useMutation(
-    orpc.card.create.mutationOptions({
-      onSuccess: (newCard) => {
-        toast.success(`Card: ${newCard.cardName} has been Created`);
-        form.reset(form.getValues(), { keepDefaultValues: true });
-        queryClient.invalidateQueries({
-          queryKey: orpc.card.list.queryKey(),
-        });
-        router.push("/cards");
-      },
-      onError: (error) => {
-        if (isDefinedError(error)) {
-          if (error.code === "NOT_FOUND") {
-            toast.error("Card not found", { description: error.message });
-            return;
-          }
-          toast.error("Failed to create card, try again later!", { description: error.message });
-          return;
-        }
-        toast.error(error.message);
-        console.log("error", error);
-      },
-    })
-  );
-  const updateCard = useMutation(
-    orpc.card.update.mutationOptions({
-      onSuccess: (updatedCard) => {
-        toast.success(`Card: ${updatedCard.cardName} has been updated`);
-        form.reset(form.getValues(), { keepDefaultValues: true });
-        queryClient.invalidateQueries({
-          queryKey: orpc.card.list.queryKey(),
-        });
-        router.push("/cards");
-      },
-      onError: (error) => {
-        if (isDefinedError(error)) {
-          if (error.code === "NOT_FOUND") {
-            toast.error("Card not found", { description: error.message });
-            return;
-          }
-          toast.error("Failed to update card, try again later!", { description: error.message });
-          return;
-        }
-        toast.error(error.message);
-      },
-    })
-  );
+	// Conditionally use mutations based on mode
+	const createCard = useMutation(
+		orpc.card.create.mutationOptions({
+			onSuccess: (newCard) => {
+				toast.success(`Card: ${newCard.cardName} has been Created`);
+				form.reset(form.getValues(), { keepDefaultValues: true });
+				queryClient.invalidateQueries({
+					queryKey: orpc.card.list.queryKey(),
+				});
+				router.push("/cards");
+			},
+			onError: (error) => {
+				if (isDefinedError(error)) {
+					if (error.code === "NOT_FOUND") {
+						toast.error("Card not found", { description: error.message });
+						return;
+					}
+					toast.error("Failed to create card, try again later!", { description: error.message });
+					return;
+				}
+				toast.error(error.message);
+				console.log("error", error);
+			},
+		})
+	);
+	const updateCard = useMutation(
+		orpc.card.update.mutationOptions({
+			onSuccess: (updatedCard) => {
+				toast.success(`Card: ${updatedCard.cardName} has been updated`);
+				form.reset(form.getValues(), { keepDefaultValues: true });
+				queryClient.invalidateQueries({
+					queryKey: orpc.card.list.queryKey(),
+				});
+				router.push("/cards");
+			},
+			onError: (error) => {
+				if (isDefinedError(error)) {
+					if (error.code === "NOT_FOUND") {
+						toast.error("Card not found", { description: error.message });
+						return;
+					}
+					toast.error("Failed to update card, try again later!", { description: error.message });
+					return;
+				}
+				toast.error(error.message);
+			},
+		})
+	);
 
-  const data = {
-    ...cardData,
-    emails: cardData?.emails ?? undefined,
-    template: cardData?.appearance?.template ?? "default",
-    organizationId: cardData?.organizationId ?? "",
-  };
+	const data = {
+		...cardData,
+		emails: cardData?.emails ?? undefined,
+		template: cardData?.appearance?.template ?? "default",
+		organizationId: cardData?.organizationId ?? "",
+	};
 
-  // const validationResult = validateForm(form.watch(), cardSchema);
-  // console.log(validationResult);
+	// const validationResult = validateForm(form.watch(), cardSchema);
+	// console.log(validationResult);
 
-  // Separate submit handlers
-  function handleCreate(values: zCardSchema) {
-    createCard.mutate(values);
-  }
+	// Separate submit handlers
+	function handleCreate(values: zCardSchema) {
+		createCard.mutate(values);
+	}
 
-  function handleUpdate(values: zCardSchema) {
-    if (initialData?.id) {
-      updateCard.mutate({ id: initialData.id, ...values });
-    }
-  }
+	function handleUpdate(values: zCardSchema) {
+		if (initialData?.id) {
+			updateCard.mutate({ id: initialData.id, ...values });
+		}
+	}
 
-  function onSubmit(values: zCardSchema) {
-    if (isEditMode && !isDuplicateMode && initialData?.id) {
-      handleUpdate(values);
-    } else {
-      const sanitizedValues = {
-        ...values,
-        id: undefined,
-      };
-      handleCreate(sanitizedValues);
-    }
+	function onSubmit(values: zCardSchema) {
+		if (isEditMode && !isDuplicateMode && initialData?.id) {
+			handleUpdate(values);
+		} else {
+			const sanitizedValues = {
+				...values,
+				id: undefined,
+			};
+			handleCreate(sanitizedValues);
+		}
 
-    form.reset();
-  }
+		form.reset();
+	}
 
-  function handleSave() {
-    form.handleSubmit(onSubmit)();
-  }
+	function handleSave() {
+		form.handleSubmit(onSubmit)();
+	}
 
-  // Subscribe to form state changes using useFormState for proper reactivity
-  const { isDirty } = useFormState({ control: form.control });
+	// Subscribe to form state changes using useFormState for proper reactivity
+	const { isDirty } = useFormState({ control: form.control });
 
-  useUnloadWarning(isDirty);
+	useUnloadWarning(isDirty);
 
-  const isPending = isEditMode ? updateCard.isPending : createCard.isPending;
+	const isPending = isEditMode ? updateCard.isPending : createCard.isPending;
 
-  // Go back to `/cards` when ESC is pressed
-  useKeyboardShortcut("Escape", () => router.push("/cards"), {
-    enabled: !isDirty,
-    priority: 1,
-  });
+	// Go back to `/cards` when ESC is pressed
+	useKeyboardShortcut("Escape", () => router.push("/cards"), {
+		enabled: !isDirty,
+		priority: 1,
+	});
 
-  // Save when CMD+S or CTRL+S is pressed
-  useKeyboardShortcut(["meta+s", "ctrl+s"], handleSave, {
-    enabled: isDirty,
-    priority: 10,
-    modal: true,
-  });
+	// Save when CMD+S or CTRL+S is pressed
+	useKeyboardShortcut(["meta+s", "ctrl+s"], handleSave, {
+		enabled: isDirty,
+		priority: 10,
+		modal: true,
+	});
 
-  return (
-    <Form {...form}>
-      <form
-        className="grid grid-cols-1 md:divide-x lg:grid-cols-[minmax(0,1fr)_320px]"
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
-        <div>
-          <ProfileDashboard
-            data={{
-              id: data.id,
-              image: data.image,
-              cover: data.cover,
-            }}
-          />
+	return (
+		<Form {...form}>
+			<form
+				className="grid grid-cols-1 md:divide-x lg:grid-cols-[minmax(0,1fr)_320px]"
+				onSubmit={form.handleSubmit(onSubmit)}
+			>
+				<div>
+					<ProfileDashboard
+						data={{
+							id: data.id,
+							image: data.image,
+							cover: data.cover,
+						}}
+					/>
 
-          <div className={cn("mx-auto grid max-w-3xl grid-cols-1 gap-4 pb-4")}>
-            <TabsLists form={form}>
-              <TabsContent value="general">
-                <CardGeneral data={data} />
-              </TabsContent>
-              <TabsContent value="links">
-                <CardLinks
-                  attachment={
-                    data.attachmentUrl
-                      ? { url: data.attachmentUrl, filename: data.attachmentFileName ?? undefined }
-                      : null
-                  }
-                />
-              </TabsContent>
-              <TabsContent value="customize">
-                <CardCustomize template={data.template} />
-              </TabsContent>
-              <CardActionBar isSaving={isPending} />
-            </TabsLists>
-          </div>
-        </div>
-        <div className="sticky top-0 flex flex-col px-4 md:h-[calc(100vh-calc(var(--spacing)*14)-18px)] md:px-6 lg:bg-sidebar lg:px-0">
-          <div className="lg:divide-y">
-            <div className="py-4 lg:px-4">
-              <SlugField data={data} />
-            </div>
-            <div className="py-4 lg:px-4">
-              <p className="mb-1 font-medium text-sm leading-none">QR Code</p>
-              <div className="relative flex items-center justify-center gap-6 rounded-lg border p-4">
-                <ShimmerDots className="mask-[radial-gradient(40%_80%,transparent_20%,black)] opacity-50 dark:opacity-30" />
+					<div className={cn("mx-auto grid max-w-3xl grid-cols-1 gap-4 pb-4")}>
+						<TabsLists form={form}>
+							<TabsContent value="general">
+								<CardGeneral data={data} />
+							</TabsContent>
+							<TabsContent value="links">
+								<CardLinks
+									attachment={
+										data.attachmentUrl
+											? {
+													url: data.attachmentUrl,
+													filename: data.attachmentFileName ?? undefined,
+												}
+											: null
+									}
+								/>
+							</TabsContent>
+							<TabsContent value="customize">
+								<CardCustomize template={data.template} />
+							</TabsContent>
+							<CardActionBar isSaving={isPending} />
+						</TabsLists>
+					</div>
+				</div>
+				<div className="sticky top-0 flex flex-col px-4 md:h-[calc(100vh-calc(var(--spacing)*14)-18px)] md:px-6 lg:bg-sidebar lg:px-0">
+					<div className="lg:divide-y">
+						<div className="py-4 lg:px-4">
+							<SlugField data={data} />
+						</div>
+						<div className="py-4 lg:px-4">
+							<p className="mb-1 font-medium text-sm leading-none">QR Code</p>
+							<div className="relative flex items-center justify-center gap-6 rounded-lg border p-4">
+								<ShimmerDots className="mask-[radial-gradient(40%_80%,transparent_20%,black)] opacity-50 dark:opacity-30" />
 
-                <QRCode className="rounded-md dark:invert" scale={1} url={constructUrl(data.slug ?? "")} />
-              </div>
-            </div>
-            <div className="py-4 lg:px-4">
-              <Suspense fallback={<div>Loading Preview...</div>}>
-                <Preview cardData={data} />
-              </Suspense>
-            </div>
-          </div>
-          <div className="mt-auto justify-between gap-3 border-t py-4 md:flex lg:px-4">
-            <p className="flex items-center gap-2 text-muted-foreground text-sm">
-              <span className="inline-block size-1.5 rounded-full bg-success" /> {isDirty ? null : "Saved as draft"}
-            </p>
-            <Button type="submit">
-              <LoadingSwap className="flex items-center gap-1.5" isLoading={isPending}>
-                Save
-                <KbdGroup>
-                  <Kbd className="text-white">Ctrl</Kbd>
-                  <Kbd className="text-white">S</Kbd>
-                </KbdGroup>
-              </LoadingSwap>
-            </Button>
-          </div>
-        </div>
-      </form>
-    </Form>
-  );
+								<QRCode
+									className="rounded-md dark:invert"
+									scale={1}
+									url={constructUrl(data.slug ?? "")}
+								/>
+							</div>
+						</div>
+						<div className="py-4 lg:px-4">
+							<Suspense fallback={<div>Loading Preview...</div>}>
+								<Preview cardData={data} />
+							</Suspense>
+						</div>
+					</div>
+					<div className="mt-auto justify-between gap-3 border-t py-4 md:flex lg:px-4">
+						<p className="flex items-center gap-2 text-muted-foreground text-sm">
+							<span className="inline-block size-1.5 rounded-full bg-success" />{" "}
+							{isDirty ? null : "Saved as draft"}
+						</p>
+						<Button type="submit">
+							<LoadingSwap className="flex items-center gap-1.5" isLoading={isPending}>
+								Save
+								<KbdGroup>
+									<Kbd className="text-white">Ctrl</Kbd>
+									<Kbd className="text-white">S</Kbd>
+								</KbdGroup>
+							</LoadingSwap>
+						</Button>
+					</div>
+				</div>
+			</form>
+		</Form>
+	);
 }

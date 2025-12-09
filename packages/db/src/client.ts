@@ -9,28 +9,28 @@ import * as schema from "./schema";
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 export const db = drizzle(pool, {
-  schema: {
-    ...schema,
-  },
+	schema: {
+		...schema,
+	},
 });
 
 type Schema = typeof schema;
 type TSchema = ExtractTablesWithRelations<Schema>;
 
 export type IncludeRelation<TableName extends keyof TSchema> = DBQueryConfig<
-  "one" | "many",
-  boolean,
-  TSchema,
-  TSchema[TableName]
+	"one" | "many",
+	boolean,
+	TSchema,
+	TSchema[TableName]
 >["with"];
 
 export type InferResultType<
-  TableName extends keyof TSchema,
-  With extends IncludeRelation<TableName> | undefined = undefined,
+	TableName extends keyof TSchema,
+	With extends IncludeRelation<TableName> | undefined = undefined,
 > = BuildQueryResult<
-  TSchema,
-  TSchema[TableName],
-  {
-    with: With;
-  }
+	TSchema,
+	TSchema[TableName],
+	{
+		with: With;
+	}
 >;

@@ -1,13 +1,13 @@
 {
-  "extends": "@ziron/typescript-config/nextjs.json",
-  "compilerOptions": {
-    "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  },
-  "include": [".", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+	"extends": "@ziron/typescript-config/nextjs.json",
+	"compilerOptions": {
+		"target": "ES2017",
+		"lib": ["dom", "dom.iterable", "esnext"],
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./src/*"]
+		}
+	},
+	"include": [".", ".next/types/**/*.ts"],
+	"exclude": ["node_modules"]
 }

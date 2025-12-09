@@ -1,3 +1,3 @@
 export default function SecurityPage() {
-  return <div>SecurityPage</div>;
+	return <div>SecurityPage</div>;
 }

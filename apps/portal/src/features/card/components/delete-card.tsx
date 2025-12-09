@@ -11,53 +11,53 @@ import { orpc } from "@/lib/orpc/client";
 import { getQueryClient } from "@/lib/orpc/query/hydration";
 
 interface Props {
-  id: string;
+	id: string;
 }
 
 export const DeleteCard = ({ id }: Props) => {
-  const router = useRouter();
-  const queryClient = getQueryClient();
-  const deleteCard = useMutation(
-    orpc.card.delete.mutationOptions({
-      onSuccess: (data) => {
-        toast.success("Card deleted successfully", {
-          description: `Card: ${data.cardName} has been deleted`,
-        });
-        queryClient.invalidateQueries({
-          queryKey: orpc.card.list.queryKey(),
-        });
-        router.push("/");
-      },
+	const router = useRouter();
+	const queryClient = getQueryClient();
+	const deleteCard = useMutation(
+		orpc.card.delete.mutationOptions({
+			onSuccess: (data) => {
+				toast.success("Card deleted successfully", {
+					description: `Card: ${data.cardName} has been deleted`,
+				});
+				queryClient.invalidateQueries({
+					queryKey: orpc.card.list.queryKey(),
+				});
+				router.push("/");
+			},
 
-      onError: (error) => {
-        if (isDefinedError(error)) {
-          toast.error("Failed to delete card", { description: `${error.message}, try again later!` });
-          return;
-        }
-        toast.error("Failed to delete card, try again later!", {
-          description: error.message,
-        });
-      },
-    })
-  );
+			onError: (error) => {
+				if (isDefinedError(error)) {
+					toast.error("Failed to delete card", { description: `${error.message}, try again later!` });
+					return;
+				}
+				toast.error("Failed to delete card, try again later!", {
+					description: error.message,
+				});
+			},
+		})
+	);
 
-  const deleteCardAction = async () => {
-    deleteCard.mutate({ id });
-    return { error: deleteCard.isError };
-  };
+	const deleteCardAction = async () => {
+		deleteCard.mutate({ id });
+		return { error: deleteCard.isError };
+	};
 
-  return (
-    <ActionButton
-      action={deleteCardAction}
-      actionButton="Delete"
-      areYouSureDescription="This action cannot be undone."
-      className="w-full"
-      requireAreYouSure
-      size="lg"
-      variant="destructive"
-    >
-      <IconTrash className="size-4" />
-      Delete
-    </ActionButton>
-  );
+	return (
+		<ActionButton
+			action={deleteCardAction}
+			actionButton="Delete"
+			areYouSureDescription="This action cannot be undone."
+			className="w-full"
+			requireAreYouSure
+			size="lg"
+			variant="destructive"
+		>
+			<IconTrash className="size-4" />
+			Delete
+		</ActionButton>
+	);
 };

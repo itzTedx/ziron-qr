@@ -8,14 +8,14 @@ import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 import { Button } from "@ziron/ui/components/button";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  useForm,
-  zodResolver,
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+	useForm,
+	zodResolver,
 } from "@ziron/ui/components/form";
 import { Input } from "@ziron/ui/components/input";
 import { LoadingSwap } from "@ziron/ui/components/loading-swap";
@@ -26,117 +26,123 @@ import { RegisterUserType, registerUserSchema } from "@ziron/validators";
 import { authClient } from "@/lib/auth/client";
 
 export const RegisterForm = () => {
-  const router = useRouter();
-  const [isVisible, setIsVisible] = useState(false);
-  const [isPending, startTransition] = useTransition();
+	const router = useRouter();
+	const [isVisible, setIsVisible] = useState(false);
+	const [isPending, startTransition] = useTransition();
 
-  const toggleVisibility = () => setIsVisible((prevState) => !prevState);
+	const toggleVisibility = () => setIsVisible((prevState) => !prevState);
 
-  const form = useForm<RegisterUserType>({
-    resolver: zodResolver(registerUserSchema),
-    defaultValues: {
-      username: "",
-      email: "",
-      password: "",
-    },
-  });
+	const form = useForm<RegisterUserType>({
+		resolver: zodResolver(registerUserSchema),
+		defaultValues: {
+			username: "",
+			email: "",
+			password: "",
+		},
+	});
 
-  function onSubmit(values: RegisterUserType) {
-    startTransition(async () => {
-      await authClient.signUp.email({
-        email: values.email,
-        name: values.username,
-        password: values.password,
-        fetchOptions: {
-          onSuccess: () => {
-            toast.success("Registration Successful!");
-            router.push("/");
-          },
-          onError: (error) => {
-            toast.error(error.error.message);
-          },
-        },
-      });
-    });
-  }
+	function onSubmit(values: RegisterUserType) {
+		startTransition(async () => {
+			await authClient.signUp.email({
+				email: values.email,
+				name: values.username,
+				password: values.password,
+				fetchOptions: {
+					onSuccess: () => {
+						toast.success("Registration Successful!");
+						router.push("/");
+					},
+					onError: (error) => {
+						toast.error(error.error.message);
+					},
+				},
+			});
+		});
+	}
 
-  return (
-    <>
-      <Form {...form}>
-        <form className="mt-9" onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="grid gap-6">
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Username" {...field} />
-                  </FormControl>
+	return (
+		<>
+			<Form {...form}>
+				<form className="mt-9" onSubmit={form.handleSubmit(onSubmit)}>
+					<div className="grid gap-6">
+						<FormField
+							control={form.control}
+							name="username"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Username</FormLabel>
+									<FormControl>
+										<Input placeholder="Username" {...field} />
+									</FormControl>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input id="email" placeholder="johndoe@mail.com" required type="email" {...field} />
-                  </FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="email"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Email</FormLabel>
+									<FormControl>
+										<Input
+											id="email"
+											placeholder="johndoe@mail.com"
+											required
+											type="email"
+											{...field}
+										/>
+									</FormControl>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Input
-                        className="pe-9"
-                        id="password"
-                        placeholder="Password"
-                        type={isVisible ? "text" : "password"}
-                        {...field}
-                        required
-                      />
-                      <button
-                        aria-controls="password"
-                        aria-label={isVisible ? "Hide password" : "Show password"}
-                        aria-pressed={isVisible}
-                        className="absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md text-muted-foreground/80 outline-none transition-[color,box-shadow] hover:text-foreground focus:z-10 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
-                        onClick={toggleVisibility}
-                        type="button"
-                      >
-                        {isVisible ? (
-                          <EyeOffIcon aria-hidden="true" size={16} />
-                        ) : (
-                          <EyeIcon aria-hidden="true" size={16} />
-                        )}
-                      </button>
-                    </div>
-                  </FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="password"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Password</FormLabel>
+									<FormControl>
+										<div className="relative">
+											<Input
+												className="pe-9"
+												id="password"
+												placeholder="Password"
+												type={isVisible ? "text" : "password"}
+												{...field}
+												required
+											/>
+											<button
+												aria-controls="password"
+												aria-label={isVisible ? "Hide password" : "Show password"}
+												aria-pressed={isVisible}
+												className="absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md text-muted-foreground/80 outline-none transition-[color,box-shadow] hover:text-foreground focus:z-10 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+												onClick={toggleVisibility}
+												type="button"
+											>
+												{isVisible ? (
+													<EyeOffIcon aria-hidden="true" size={16} />
+												) : (
+													<EyeIcon aria-hidden="true" size={16} />
+												)}
+											</button>
+										</div>
+									</FormControl>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 
-            <Button className="w-full" disabled={isPending} type="submit">
-              <LoadingSwap isLoading={isPending}>Register</LoadingSwap>
-            </Button>
-          </div>
-        </form>
-      </Form>
-    </>
-  );
+						<Button className="w-full" disabled={isPending} type="submit">
+							<LoadingSwap isLoading={isPending}>Register</LoadingSwap>
+						</Button>
+					</div>
+				</form>
+			</Form>
+		</>
+	);
 };

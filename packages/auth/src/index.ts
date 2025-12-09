@@ -9,85 +9,85 @@ import redis from "@ziron/redis";
 import { authEnv } from "../env";
 
 export function initAuth(options: {
-  baseUrl: string;
-  secret: string | undefined;
-  plugins?: BetterAuthOptions["plugins"];
-  trustedOrigins?: string[];
+	baseUrl: string;
+	secret: string | undefined;
+	plugins?: BetterAuthOptions["plugins"];
+	trustedOrigins?: string[];
 }) {
-  const config = {
-    database: drizzleAdapter(db, {
-      provider: "pg",
-      usePlural: true,
-    }),
+	const config = {
+		database: drizzleAdapter(db, {
+			provider: "pg",
+			usePlural: true,
+		}),
 
-    appName: "Ziron QR",
-    emailAndPassword: {
-      enabled: true,
-    },
+		appName: "Ziron QR",
+		emailAndPassword: {
+			enabled: true,
+		},
 
-    baseURL: options.baseUrl,
-    secret: options.secret,
+		baseURL: options.baseUrl,
+		secret: options.secret,
 
-    user: {
-      additionalFields: {
-        role: {
-          type: ["user", "admin", "dev"],
-          input: false,
-        },
-      },
-    },
+		user: {
+			additionalFields: {
+				role: {
+					type: ["user", "admin", "dev"],
+					input: false,
+				},
+			},
+		},
 
-    session: {
-      cookieCache: {
-        enabled: true,
-        maxAge: 5 * 60, // 5 minutes cache duration
-      },
-    },
+		session: {
+			cookieCache: {
+				enabled: true,
+				maxAge: 5 * 60, // 5 minutes cache duration
+			},
+		},
 
-    plugins: [...(options.plugins || []), nextCookies()],
+		plugins: [...(options.plugins || []), nextCookies()],
 
-    rateLimit: {
-      enabled: true,
-      window: 60, // time window in seconds
-      max: 100, // max requests in the window
-    },
+		rateLimit: {
+			enabled: true,
+			window: 60, // time window in seconds
+			max: 100, // max requests in the window
+		},
 
-    secondaryStorage: {
-      get: async (key) => {
-        const value = await redis.get(`session:${key}`);
-        return value ?? null;
-      },
-      set: async (key, value, ttl) => {
-        if (ttl) await redis.setex(`session:${key}`, ttl, value);
-        else await redis.set(`session:${key}`, value);
-      },
-      delete: async (key) => {
-        await redis.del(`session:${key}`);
-      },
-    },
-    advanced: {
-      cookiePrefix: "ziron",
-      database: {
-        generateId: false,
-      },
-    },
+		secondaryStorage: {
+			get: async (key) => {
+				const value = await redis.get(`session:${key}`);
+				return value ?? null;
+			},
+			set: async (key, value, ttl) => {
+				if (ttl) await redis.setex(`session:${key}`, ttl, value);
+				else await redis.set(`session:${key}`, value);
+			},
+			delete: async (key) => {
+				await redis.del(`session:${key}`);
+			},
+		},
+		advanced: {
+			cookiePrefix: "ziron",
+			database: {
+				generateId: false,
+			},
+		},
 
-    trustedOrigins: [
-      "https://ziron-qr-portal.vercel.app",
-      "http://localhost:3000",
-      "http://192.168.0.206:3000",
-      authEnv().PRODUCTION_URL,
-      ...(options.trustedOrigins || []),
-    ],
+		trustedOrigins: [
+			"https://ziron-qr-portal.vercel.app",
+			"http://localhost:3000",
+			"http://192.168.0.206:3000",
+			authEnv().PRODUCTION_URL,
+			...(options.trustedOrigins || []),
+		],
 
-    onAPIError: {
-      onError(error, ctx) {
-        console.error("BETTER AUTH API ERROR", error, ctx);
-      },
-    },
-  } satisfies BetterAuthOptions;
+		onAPIError: {
+			onError(error, ctx) {
+				console.error("BETTER AUTH API ERROR", error, ctx);
+			},
+		},
+	} satisfies BetterAuthOptions;
 
-  return betterAuth(config);
+	return betterAuth(config);
 }
 
 export type Auth = ReturnType<typeof initAuth>;

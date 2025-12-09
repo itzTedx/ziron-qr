@@ -6,14 +6,14 @@ import { authEnv } from "@ziron/auth/env";
 const baseUrl = authEnv().NODE_ENV === "production" ? "https://ziron-qr-portal.vercel.app" : "http://localhost:3000";
 
 export const auth: Auth = initAuth({
-  baseUrl: baseUrl,
-  secret: authEnv().BETTER_AUTH_SECRET,
+	baseUrl: baseUrl,
+	secret: authEnv().BETTER_AUTH_SECRET,
 });
 
 export async function createContext(request: NextRequest) {
-  return {
-    request,
-  };
+	return {
+		request,
+	};
 }
 
 export type Context = Awaited<ReturnType<typeof createContext>>;

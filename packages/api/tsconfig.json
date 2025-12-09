@@ -1,16 +1,16 @@
 {
-  "extends": "@ziron/typescript-config/base.json",
-  "compilerOptions": {
-    "composite": true,
-    "baseUrl": ".",
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "outDir": "dist",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  },
-  "include": ["src", "*.ts"],
-  "exclude": ["node_modules"]
+	"extends": "@ziron/typescript-config/base.json",
+	"compilerOptions": {
+		"composite": true,
+		"baseUrl": ".",
+		"declaration": true,
+		"declarationMap": true,
+		"sourceMap": true,
+		"outDir": "dist",
+		"paths": {
+			"@/*": ["./src/*"]
+		}
+	},
+	"include": ["src", "*.ts"],
+	"exclude": ["node_modules"]
 }

@@ -9,33 +9,33 @@ import { useKeyboardShortcut } from "@ziron/ui/hooks";
 import { useArchiveCardModal } from "../archive-card-modal";
 
 interface Props {
-  cardId: string;
+	cardId: string;
 }
 
 export const ArchiveCard = ({ cardId }: Props) => {
-  const { setShowArchiveCardModal, ArchiveCardModal } = useArchiveCardModal({
-    cardId,
-  });
+	const { setShowArchiveCardModal, ArchiveCardModal } = useArchiveCardModal({
+		cardId,
+	});
 
-  useKeyboardShortcut("a", () => setShowArchiveCardModal(true), { priority: 3 });
+	useKeyboardShortcut("a", () => setShowArchiveCardModal(true), { priority: 3 });
 
-  return (
-    <>
-      <ArchiveCardModal />
-      <DropdownMenuItem
-        onSelect={(e) => {
-          e.preventDefault();
-          setShowArchiveCardModal(true);
-        }}
-        role="button"
-      >
-        <IconArchive className="size-4" />
-        <span>Archive</span>
+	return (
+		<>
+			<ArchiveCardModal />
+			<DropdownMenuItem
+				onSelect={(e) => {
+					e.preventDefault();
+					setShowArchiveCardModal(true);
+				}}
+				role="button"
+			>
+				<IconArchive className="size-4" />
+				<span>Archive</span>
 
-        <DropdownMenuShortcut>
-          <Kbd>A</Kbd>
-        </DropdownMenuShortcut>
-      </DropdownMenuItem>
-    </>
-  );
+				<DropdownMenuShortcut>
+					<Kbd>A</Kbd>
+				</DropdownMenuShortcut>
+			</DropdownMenuItem>
+		</>
+	);
 };

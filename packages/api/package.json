@@ -1,38 +1,38 @@
 {
-  "name": "@ziron/api",
-  "exports": {
-    ".": {
-      "default": "./src/index.ts"
-    },
-    "./*": {
-      "default": "./src/*.ts"
-    }
-  },
-  "type": "module",
-  "scripts": {
-    "format": "biome check .",
-    "format:fix": "biome check --write .",
-    "lint": "biome check ."
-  },
-  "dependencies": {
-    "@orpc/client": "catalog:",
-    "@orpc/openapi": "catalog:",
-    "@orpc/server": "catalog:",
-    "@orpc/zod": "catalog:",
-    "@t3-oss/env-nextjs": "^0.13.8",
-    "@ziron/auth": "workspace:*",
-    "@ziron/db": "workspace:*",
-    "@ziron/utils": "workspace:*",
-    "@ziron/validators": "workspace:*",
-    "json-2-csv": "^5.5.10",
-    "next": "catalog:",
-    "sharp": "^0.34.5",
-    "zod": "catalog:"
-  },
-  "devDependencies": {
-    "@ziron/typescript-config": "workspace:*"
-  },
-  "peerDependencies": {
-    "typescript": "catalog:"
-  }
+	"name": "@ziron/api",
+	"exports": {
+		".": {
+			"default": "./src/index.ts"
+		},
+		"./*": {
+			"default": "./src/*.ts"
+		}
+	},
+	"type": "module",
+	"scripts": {
+		"format": "biome check .",
+		"format:fix": "biome check --write .",
+		"lint": "biome check ."
+	},
+	"dependencies": {
+		"@orpc/client": "catalog:",
+		"@orpc/openapi": "catalog:",
+		"@orpc/server": "catalog:",
+		"@orpc/zod": "catalog:",
+		"@t3-oss/env-nextjs": "^0.13.8",
+		"@ziron/auth": "workspace:*",
+		"@ziron/db": "workspace:*",
+		"@ziron/utils": "workspace:*",
+		"@ziron/validators": "workspace:*",
+		"json-2-csv": "^5.5.10",
+		"next": "catalog:",
+		"sharp": "^0.34.5",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@ziron/typescript-config": "workspace:*"
+	},
+	"peerDependencies": {
+		"typescript": "catalog:"
+	}
 }
