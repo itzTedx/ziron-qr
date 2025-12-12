@@ -19,6 +19,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "catalog:",
+		"@turbo/gen": "^2.6.1",
 		"@ziron/typescript-config": "workspace:*",
 		"baseline-browser-mapping": "^2.8.32",
 		"husky": "^9.1.7",

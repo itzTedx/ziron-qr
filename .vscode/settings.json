@@ -1,4 +1,8 @@
 {
+	"workbench.editor.customLabels.patterns": {
+		"**/app/**/{page,layout,index}.{extname}": "(${dirname})/${filename}.${extname}",
+		"**/index.{extname}": "${dirname}/index.${extname}"
+	},
 	"editor.formatOnSave": true,
 	"editor.codeActionsOnSave": {
 		"source.organizeImports.biome": "explicit",

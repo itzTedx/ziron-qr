@@ -1,0 +1,26 @@
+{
+	"name": "@ziron/email",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"license": "MIT",
+	"scripts": {
+		"clean": "git clean -xdf .cache .turbo dist node_modules",
+		"format": "biome check .",
+		"format:fix": "biome check --write .",
+		"lint": "biome check .",
+		"typecheck": "tsc --noEmit --emitDeclarationOnly false"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "catalog:",
+		"@ziron/typescript-config": "workspace:*",
+		"typescript": "catalog:"
+	},
+	"dependencies": {
+		"react-email": "^5.0.6",
+		"nodemailer": "^7.0.11"
+	}
+}

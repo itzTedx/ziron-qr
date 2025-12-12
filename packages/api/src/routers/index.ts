@@ -2,20 +2,9 @@ import type { RouterClient as AppRouterClient } from "@orpc/server";
 
 import { getCardAnalytics, trackEvent, trackPageVisit } from "./analytics-router";
 import { getAvatar, getAvatarV1 } from "./avatar-router";
-import {
-	archiveCard,
-	checkSlugAvailability,
-	countCards,
-	createCard,
-	deleteCard,
-	duplicateCard,
-	exportAllCards,
-	getAllCards,
-	getCard,
-	getCardBySlug,
-	listCards,
-	updateCard,
-} from "./card-router";
+import { checkSlugAvailability } from "./card/helpers";
+import { archiveCard, createCard, deleteCard, duplicateCard, exportAllCards, updateCard } from "./card/mutation";
+import { countCards, getAllCards, getCard, getCardBySlug, listCards } from "./card/query";
 import { getMetrics } from "./metrics-router";
 import { createOrganization, deleteOrganization, getOrganization, listOrganizations } from "./organization-router";
 import { generateQR } from "./qr-router";
