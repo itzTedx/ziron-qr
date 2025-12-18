@@ -2,11 +2,10 @@ import { and, eq, gte, isNull, lte } from "@ziron/db";
 import { appearance, cards, emails, links, phones } from "@ziron/db/schema";
 import { cardSchema, exportCardSchema, columns as exportColumns, z } from "@ziron/validators";
 
-import { dbProvider } from "@/middleware/db-provider";
-import { convertToCSV } from "@/utils/json-to-csv";
-
 import { protectedProcedure } from "../..";
+import { dbProvider } from "../../middleware/db-provider";
 import { getAvatar } from "../../utils/get-avatar";
+import { convertToCSV } from "../../utils/json-to-csv";
 import { generateSlug } from "./helpers";
 
 export const createCard = protectedProcedure

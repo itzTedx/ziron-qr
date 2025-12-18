@@ -18,7 +18,7 @@ export const pageVisits = pgTable(
 		userAgent: text("user_agent"),
 		referer: text("referer"),
 
-		// Location data (optional, can be enriched later)
+		// Location data
 		country: varchar("country", { length: 2 }),
 		city: varchar("city", { length: 255 }),
 

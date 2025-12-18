@@ -14,15 +14,19 @@ export default async function CardsPage() {
 	// Prefetch both queries in parallel for better performance
 	// Prefetch cards with default values (most common case)
 	// If user has different preferences, React Query will handle the refetch
-	await Promise.all([
-		queryClient.prefetchQuery(
-			orpc.card.list.queryOptions({
-				input: { viewMode: "cards", sortBy: "createdAt", showArchived: false },
-				context: { cache: true },
-			})
-		),
-		queryClient.prefetchQuery(orpc.workspace.getPreferences.queryOptions()),
-	]);
+	// Fetch preferences first to ensure we prefetch the correct cards list
+	const preferences = await queryClient.fetchQuery(orpc.workspace.getPreferences.queryOptions());
+
+	await queryClient.prefetchQuery(
+		orpc.card.list.queryOptions({
+			input: {
+				viewMode: preferences.viewMode,
+				sortBy: preferences.sortBy,
+				showArchived: preferences.showArchived,
+			},
+			context: { cache: true },
+		})
+	);
 
 	return (
 		<>

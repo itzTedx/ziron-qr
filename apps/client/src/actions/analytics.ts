@@ -108,12 +108,12 @@ export async function trackEvent(
 			metadata,
 		});
 
+		const headersList = await headers();
+		const userAgent = headersList.get("user-agent") || "unknown";
+
 		// Log analytics after response is sent (non-blocking)
 		after(async () => {
 			try {
-				const headersList = await headers();
-				const userAgent = headersList.get("user-agent") || "unknown";
-
 				if (process.env.NODE_ENV === "development") {
 					console.log("[Analytics] Event tracked:", {
 						cardId,

@@ -1,13 +1,16 @@
 import { Suspense } from "react";
 
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 
 import { AppSidebarNav } from "@/components/layout/sidebar/app-sidebar-nav";
 import { MainNav } from "@/components/layout/sidebar/main-nav";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 
-import { ShareModal } from "@/features/modal/share-modal";
-import { OrganizationFormModal } from "@/features/organization/components/modal";
+const ShareModal = dynamic(() => import("@/features/modal/share-modal").then((mod) => mod.ShareModal));
+const OrganizationFormModal = dynamic(() =>
+	import("@/features/organization/components/modal").then((mod) => mod.OrganizationFormModal)
+);
 
 export const metadata: Metadata = {
 	title: "QR Code Generator",

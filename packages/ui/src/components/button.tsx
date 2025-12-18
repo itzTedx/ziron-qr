@@ -12,7 +12,7 @@ const buttonVariants = cva(
 			variant: {
 				default: "border border-input-border bg-muted",
 				primary:
-					"relative bg-linear-[261.24deg,#CC50FB_-8.36%,_#0D4EFF_104.92%] text-center text-white shadow-btn-sm transition duration-200 hover:brightness-120 disabled:border disabled:border-foreground/20 disabled:from-muted disabled:to-muted disabled:text-muted-foreground",
+					"relative bg-linear-[261.24deg,#CC50FB_-8.36%,_#0D4EFF_104.92%] text-center text-white shadow-btn-sm transition duration-200 before:absolute before:inset-0 before:size-full before:bg-gradient-to-b before:from-white/20 before:transition-opacity hover:brightness-120 disabled:border disabled:border-foreground/20 disabled:from-muted disabled:to-muted disabled:text-muted-foreground",
 				secondary: "bg-foreground text-background shadow-xs hover:bg-foreground/80",
 				destructive:
 					"relative bg-gradient-to-b bg-white from-red-700 to-destructive text-center text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset] transition duration-200 hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40",
