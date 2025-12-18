@@ -1,10 +1,13 @@
 import type { NextConfig } from "next";
 
 // Generate types for public images
-import "../../plugins/public-images";
+// import "../../plugins/public-images";
 
 const nextConfig: NextConfig = {
 	transpilePackages: ["@ziron/ui", "@ziron/auth", "@ziron/utils", "@ziron/validators", "@ziron/db", "@ziron/api"],
+	experimental: {
+		turbopackFileSystemCacheForDev: true,
+	},
 	logging: {
 		fetches: {
 			fullUrl: true,

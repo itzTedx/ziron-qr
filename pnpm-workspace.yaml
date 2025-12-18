@@ -14,7 +14,7 @@ catalog:
   '@tanstack/react-query': ^5.90.11
   '@tanstack/react-query-devtools': ^5.91.1
   better-auth: 1.4.4
-  next: 16.0.10
+  next: 16.1.0
   typescript: ^5
   zod: ^4.1.12
 

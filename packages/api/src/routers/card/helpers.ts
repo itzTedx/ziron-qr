@@ -6,8 +6,8 @@ import { cards } from "@ziron/db/schema";
 import { slugify } from "@ziron/utils";
 import { transformSlug } from "@ziron/validators";
 
-import { protectedProcedure } from "@/index";
-import { dbProvider } from "@/middleware/db-provider";
+import { protectedProcedure } from "../..";
+import { dbProvider } from "../../middleware/db-provider";
 
 export async function generateSlug(name: string) {
 	let slug = slugify(name);
