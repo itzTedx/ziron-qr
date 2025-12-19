@@ -63,6 +63,9 @@ function DeleteCardModalInner({ setShowDeleteCardModalAction: setShowDeleteCardM
 				queryClient.invalidateQueries({
 					queryKey: orpc.card.list.queryKey(),
 				});
+				queryClient.invalidateQueries({
+					queryKey: orpc.card.count.queryKey(),
+				});
 				setShowDeleteCardModal(false);
 				toast.success(`Successfully deleted ${pluralize("card", cards.length)}!`, {
 					duration: 5000,
@@ -81,6 +84,9 @@ function DeleteCardModalInner({ setShowDeleteCardModalAction: setShowDeleteCardM
 
 			queryClient.invalidateQueries({
 				queryKey: orpc.card.list.queryKey(),
+			});
+			queryClient.invalidateQueries({
+				queryKey: orpc.card.count.queryKey(),
 			});
 
 			setShowDeleteCardModal(false);

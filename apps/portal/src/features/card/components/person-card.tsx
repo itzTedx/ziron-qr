@@ -37,94 +37,100 @@ interface PersonCardProps {
 	variant?: "cards" | "rows";
 }
 
-export const PersonCard = ({
-	card,
-	isSelectMode,
-	setIsSelectMode,
-	selectedCardIds = [],
-	handleCardSelection,
-	variant = "cards",
-}: PersonCardProps) => {
-	const { copyToClipboard } = useCopyToClipboard();
+export const PersonCard = memo(
+	({
+		card,
+		isSelectMode,
+		setIsSelectMode,
+		selectedCardIds = [],
+		handleCardSelection,
+		variant = "cards",
+	}: PersonCardProps) => {
+		const { copyToClipboard } = useCopyToClipboard();
 
-	function handleCopyLink() {
-		if (!card.slug) return;
-		copyToClipboard(constructUrl(card.slug));
-	}
+		function handleCopyLink() {
+			if (!card.slug) return;
+			copyToClipboard(constructUrl(card.slug));
+		}
 
-	if (variant === "rows") {
+		if (variant === "rows") {
+			return (
+				<div className="group relative flex items-center justify-between border border-b px-3 py-2 first-of-type:rounded-t-lg first-of-type:border-t last-of-type:rounded-b-lg hover:bg-accent sm:p-3 sm:last-of-type:rounded-b-xl sm:first-of-type:rounded-t-xl">
+					<div className="flex items-center gap-2 md:gap-3">
+						<div onMouseDown={() => setIsSelectMode?.(true)} onMouseUp={() => setIsSelectMode?.(false)}>
+							<CardIcon
+								card={card}
+								handleCardSelection={handleCardSelection}
+								isSelectMode={isSelectMode ?? false}
+								selectedCardIds={selectedCardIds}
+							/>
+						</div>
+						<h3 className="text-nowrap font-semibold text-sm sm:text-base">{card.name}</h3>
+						<Button onClick={handleCopyLink} size="icon-sm" variant="ghost">
+							<IconCopy />
+						</Button>
+						{/* <IconArrowRight className="size-4 text-muted-foreground/50" /> */}
+						<ExpandingArrow className="-ml-3.5 invisible size-3.5 text-muted-foreground/50 group-hover:visible" />
+						<p className="truncate text-muted-foreground text-sm">
+							{getPrettyUrl(constructUrl(card.slug))}
+						</p>
+						<Tooltip>
+							<TooltipTrigger className="text-nowrap text-sm">
+								{formatDate(card.createdAt, { showYear: false })}
+							</TooltipTrigger>
+							<TooltipContent>
+								Created on {formatDate(card.createdAt, { showYear: false })}
+							</TooltipContent>
+						</Tooltip>
+					</div>
+					<div>
+						<Badge variant="secondary">
+							<IconMouse /> {card.pageVisits?.length}{" "}
+							<span className="hidden md:inline">{pluralize("click", card.pageVisits?.length)}</span>
+						</Badge>
+					</div>
+				</div>
+			);
+		}
 		return (
-			<div className="group relative flex items-center justify-between border border-b px-3 py-2 first-of-type:rounded-t-lg first-of-type:border-t last-of-type:rounded-b-lg hover:bg-accent sm:p-3 sm:last-of-type:rounded-b-xl sm:first-of-type:rounded-t-xl">
-				<div className="flex items-center gap-2 md:gap-3">
-					<div onMouseDown={() => setIsSelectMode?.(true)} onMouseUp={() => setIsSelectMode?.(false)}>
+			<Card className="relative overflow-hidden pt-10">
+				<Badge className="absolute top-2 right-2 z-10" variant="secondary">
+					<IconMouse /> {card.pageVisits?.length} {pluralize("click", card.pageVisits?.length)}
+				</Badge>
+				<CardContent className="flex flex-col items-center justify-between p-0">
+					<Image
+						alt="Cover Image"
+						className="absolute top-0 h-24 w-full object-cover"
+						height={112}
+						quality={70}
+						src={card.cover ?? "/images/placeholder-cover.jpg"}
+						width={260}
+					/>
+					<div className="z-10 flex flex-col items-center pb-3 text-center">
 						<CardIcon
 							card={card}
 							handleCardSelection={handleCardSelection}
 							isSelectMode={isSelectMode ?? false}
 							selectedCardIds={selectedCardIds}
 						/>
+						<h3 className="mt-2 font-semibold">{card.name}</h3>
+						<p className="text-muted-foreground text-sm">{card.designation}</p>
 					</div>
-					<h3 className="text-nowrap font-semibold text-sm sm:text-base">{card.name}</h3>
-					<Button onClick={handleCopyLink} size="icon-sm" variant="ghost">
-						<IconCopy />
+				</CardContent>
+				<CardFooter className="mt-auto border-t">
+					<Button asChild className="w-full flex-1 gap-1.5" size="sm" variant="ghost">
+						<Link href={`cards/${card.id}` as Route}>
+							<IconEdit className="size-3.5 sm:size-4" />
+							<span className="text-xs sm:text-sm">Edit</span>
+						</Link>
 					</Button>
-					{/* <IconArrowRight className="size-4 text-muted-foreground/50" /> */}
-					<ExpandingArrow className="-ml-3.5 invisible size-3.5 text-muted-foreground/50 group-hover:visible" />
-					<p className="truncate text-muted-foreground text-sm">{getPrettyUrl(constructUrl(card.slug))}</p>
-					<Tooltip>
-						<TooltipTrigger className="text-nowrap text-sm">
-							{formatDate(card.createdAt, { showYear: false })}
-						</TooltipTrigger>
-						<TooltipContent>Created on {formatDate(card.createdAt, { showYear: false })}</TooltipContent>
-					</Tooltip>
-				</div>
-				<div>
-					<Badge variant="secondary">
-						<IconMouse /> {card.pageVisits?.length}{" "}
-						<span className="hidden md:inline">{pluralize("click", card.pageVisits?.length)}</span>
-					</Badge>
-				</div>
-			</div>
+
+					<ShareButton cardId={card.id} />
+				</CardFooter>
+			</Card>
 		);
 	}
-	return (
-		<Card className="relative overflow-hidden pt-10">
-			<Badge className="absolute top-2 right-2 z-10" variant="secondary">
-				<IconMouse /> {card.pageVisits?.length} {pluralize("click", card.pageVisits?.length)}
-			</Badge>
-			<CardContent className="flex flex-col items-center justify-between p-0">
-				<Image
-					alt="Cover Image"
-					className="absolute top-0 h-24 w-full object-cover"
-					height={112}
-					quality={70}
-					src={card.cover ?? "/images/placeholder-cover.jpg"}
-					width={260}
-				/>
-				<div className="z-10 flex flex-col items-center pb-3 text-center">
-					<CardIcon
-						card={card}
-						handleCardSelection={handleCardSelection}
-						isSelectMode={isSelectMode ?? false}
-						selectedCardIds={selectedCardIds}
-					/>
-					<h3 className="mt-2 font-semibold">{card.name}</h3>
-					<p className="text-muted-foreground text-sm">{card.designation}</p>
-				</div>
-			</CardContent>
-			<CardFooter className="mt-auto border-t">
-				<Button asChild className="w-full flex-1 gap-1.5" size="sm" variant="ghost">
-					<Link href={`cards/${card.id}` as Route}>
-						<IconEdit className="size-3.5 sm:size-4" />
-						<span className="text-xs sm:text-sm">Edit</span>
-					</Link>
-				</Button>
-
-				<ShareButton cardId={card.id} />
-			</CardFooter>
-		</Card>
-	);
-};
+);
 
 const LOGO_SIZE_CLASS_NAME = "size-4 sm:size-6 group-data-[variant=cards]/card-list:sm:size-28";
 

@@ -208,15 +208,15 @@ export const countCards = publicProcedure
 		description: "Count all cards",
 		tags: ["card"],
 	})
-	.input(z.object({ showArchived: z.boolean().optional() }))
+	.input(z.object({ showArchived: z.boolean().optional() }).optional())
 	.output(z.number())
 	.handler(async ({ context, input }) => {
-		const filters = input ?? {};
+		const filters = input;
 
 		// Build where conditions
 		const conditions = [isNull(cards.deletedAt)];
 
-		if (filters.showArchived === false) {
+		if (filters && filters.showArchived === false) {
 			conditions.push(isNull(cards.archivedAt));
 		}
 		// When showArchived === true, show all cards (no filter needed)

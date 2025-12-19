@@ -2,6 +2,8 @@
 
 import { ComponentType, memo, ReactNode, Suspense, SVGProps, useMemo, useState } from "react";
 
+import dynamic from "next/dynamic";
+
 import { useAtomValue, useSetAtom } from "jotai";
 import { CircleCheck, Trash, X } from "lucide-react";
 
@@ -20,10 +22,15 @@ import { BoxArchive } from "@/assets/icons";
 import { selectedCardIdsAtom } from "@/features/card/cards-atoms";
 import { usePagination } from "@/hooks/use-pagination";
 
-import { ArchiveCardModal } from "./archive-card-modal";
 import ArchivedLinksHint from "./archived-links-hint";
-import { DeleteCardModal } from "./delete-card-modal";
 import { PaginationControls } from "./pagination";
+
+const ArchiveCardModal = dynamic(() => import("./archive-card-modal").then((mod) => mod.ArchiveCardModal), {
+	ssr: false,
+});
+const DeleteCardModal = dynamic(() => import("./delete-card-modal").then((mod) => mod.DeleteCardModal), {
+	ssr: false,
+});
 
 interface Props {
 	cards: CardWithPageVisits[];

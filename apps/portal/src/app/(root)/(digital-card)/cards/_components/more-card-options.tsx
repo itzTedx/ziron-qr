@@ -2,6 +2,8 @@
 
 import { Suspense, useState } from "react";
 
+import dynamic from "next/dynamic";
+
 import { IconDotsVertical } from "@tabler/icons-react";
 import { Download } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
@@ -18,8 +20,12 @@ import {
 
 import { IconTable } from "@/assets/icons/table";
 
-import { ExportCardModal } from "./export-cards-modal";
-import { ImportCardsModal } from "./import-cards-modal";
+const ExportCardModal = dynamic(() => import("./export-cards-modal").then((mod) => mod.ExportCardModal), {
+	ssr: false,
+});
+const ImportCardsModal = dynamic(() => import("./import-cards-modal").then((mod) => mod.ImportCardsModal), {
+	ssr: false,
+});
 
 export const MoreCardOptions = () => {
 	const [openExport, setOpenExport] = useState(false);

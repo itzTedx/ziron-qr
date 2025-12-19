@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 import { useAtom } from "jotai";
 
@@ -18,39 +18,42 @@ export function useCardSelection(cards?: Partial<CardType>[]) {
 		}
 	}, [cards, setSelectedCardIds]);
 
-	const handleCardSelection = (cardId: string, e: React.MouseEvent) => {
-		if (e.shiftKey && lastSelectedCardId && cards) {
-			const lastSelectedIndex = cards.findIndex((card) => card.id === lastSelectedCardId);
-			const currentIndex = cards.findIndex((card) => card.id === cardId);
+	const handleCardSelection = useCallback(
+		(cardId: string, e: React.MouseEvent) => {
+			if (e.shiftKey && lastSelectedCardId && cards) {
+				const lastSelectedIndex = cards.findIndex((card) => card.id === lastSelectedCardId);
+				const currentIndex = cards.findIndex((card) => card.id === cardId);
 
-			if (lastSelectedIndex !== -1 && currentIndex !== -1) {
-				const start = Math.min(lastSelectedIndex, currentIndex);
-				const end = Math.max(lastSelectedIndex, currentIndex);
-				const rangeIds: string[] = cards
-					.slice(start, end + 1)
-					.map((card) => card.id)
-					.filter((id): id is string => id !== undefined);
+				if (lastSelectedIndex !== -1 && currentIndex !== -1) {
+					const start = Math.min(lastSelectedIndex, currentIndex);
+					const end = Math.max(lastSelectedIndex, currentIndex);
+					const rangeIds: string[] = cards
+						.slice(start, end + 1)
+						.map((card) => card.id)
+						.filter((id): id is string => id !== undefined);
 
-				if (selectedCardIds.includes(cardId)) {
-					setSelectedCardIds((prev) => prev.filter((id) => !rangeIds.includes(id)));
-				} else {
-					setSelectedCardIds((prev) => Array.from(new Set([...prev, ...rangeIds])) as string[]);
+					if (selectedCardIds.includes(cardId)) {
+						setSelectedCardIds((prev) => prev.filter((id) => !rangeIds.includes(id)));
+					} else {
+						setSelectedCardIds((prev) => Array.from(new Set([...prev, ...rangeIds])) as string[]);
+					}
+					setLastSelectedCardId(cardId);
 				}
+			} else {
 				setLastSelectedCardId(cardId);
+				setSelectedCardIds((prev) =>
+					prev.includes(cardId) ? prev.filter((id) => id !== cardId) : [...prev, cardId]
+				);
 			}
-		} else {
-			setLastSelectedCardId(cardId);
-			setSelectedCardIds((prev) =>
-				prev.includes(cardId) ? prev.filter((id) => id !== cardId) : [...prev, cardId]
-			);
-		}
-	};
+		},
+		[cards, lastSelectedCardId, selectedCardIds, setLastSelectedCardId, setSelectedCardIds]
+	);
 
-	const clearSelection = () => {
+	const clearSelection = useCallback(() => {
 		setSelectedCardIds([]);
 		setIsSelectMode(false);
 		setLastSelectedCardId(null);
-	};
+	}, [setIsSelectMode, setLastSelectedCardId, setSelectedCardIds]);
 
 	return {
 		isSelectMode,

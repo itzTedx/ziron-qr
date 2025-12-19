@@ -3,31 +3,9 @@ import { Suspense } from "react";
 import Header from "@/components/layout/header";
 import { CreateButton } from "@/components/ui/create-button";
 
-import { orpc } from "@/lib/orpc/client";
-import { getQueryClient, HydrateClient } from "@/lib/orpc/query/hydration";
+import { CardsDataLoader } from "./_components/cards-data-loader";
 
-import { CardsClient } from "./_components/cards-client";
-
-export default async function CardsPage() {
-	const queryClient = getQueryClient();
-
-	// Prefetch both queries in parallel for better performance
-	// Prefetch cards with default values (most common case)
-	// If user has different preferences, React Query will handle the refetch
-	// Fetch preferences first to ensure we prefetch the correct cards list
-	const preferences = await queryClient.fetchQuery(orpc.workspace.getPreferences.queryOptions());
-
-	await queryClient.prefetchQuery(
-		orpc.card.list.queryOptions({
-			input: {
-				viewMode: preferences.viewMode,
-				sortBy: preferences.sortBy,
-				showArchived: preferences.showArchived,
-			},
-			context: { cache: true },
-		})
-	);
-
+export default function CardsPage() {
 	return (
 		<>
 			<Header title="Cards">
@@ -35,9 +13,7 @@ export default async function CardsPage() {
 			</Header>
 
 			<Suspense fallback={<CardsPageSkeleton />}>
-				<HydrateClient client={queryClient}>
-					<CardsClient />
-				</HydrateClient>
+				<CardsDataLoader />
 			</Suspense>
 		</>
 	);

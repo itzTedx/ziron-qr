@@ -71,6 +71,9 @@ function ArchiveCardModalInner({
 				queryClient.invalidateQueries({
 					queryKey: orpc.card.list.queryKey(),
 				});
+				queryClient.invalidateQueries({
+					queryKey: orpc.card.count.queryKey(),
+				});
 				setShowArchiveCardModal(false);
 				router.push("/cards");
 				toast.success(`Successfully ${actionText}d ${pluralize("card", cards.length)}!`, {
