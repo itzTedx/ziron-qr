@@ -18,27 +18,31 @@ const sharedOptions = {
 	maxRetriesPerRequest: null,
 };
 
-const redis = redisUrl
-	? (() => {
-			const parsed = new URL(redisUrl);
-			const db = parsed.pathname ? Number(parsed.pathname.replace("/", "")) : undefined;
+const redis = new Redis(redisUrl as string, {
+	...sharedOptions,
+});
 
-			return new Redis({
-				host: parsed.hostname,
-				port: parsed.port ? Number(parsed.port) : 6379,
-				username: parsed.username || undefined,
-				password: parsed.password || redisPassword,
-				db: Number.isNaN(db) ? undefined : db,
-				tls: parsed.protocol === "rediss:" ? {} : undefined,
-				...sharedOptions,
-			});
-		})()
-	: new Redis({
-			host: redisHost,
-			port: Number(redisPort),
-			password: redisPassword,
-			...sharedOptions,
-		});
+// const redis = redisUrl
+// 	? (() => {
+// 			const parsed = new URL(redisUrl);
+// 			const db = parsed.pathname ? Number(parsed.pathname.replace("/", "")) : undefined;
+
+// 			return new Redis({
+// 				host: parsed.hostname,
+// 				port: parsed.port ? Number(parsed.port) : 6379,
+// 				username: parsed.username || undefined,
+// 				password: parsed.password || redisPassword,
+// 				db: Number.isNaN(db) ? undefined : db,
+// 				tls: parsed.protocol === "rediss:" ? {} : undefined,
+// 				...sharedOptions,
+// 			});
+// 		})()
+// 	: new Redis({
+// 			host: redisHost,
+// 			port: Number(redisPort),
+// 			// password: redisPassword,
+// 			...sharedOptions,
+// 		});
 
 redis.on("error", (err) => {
 	console.error("[Redis Error] Unhandled error event:", err);
