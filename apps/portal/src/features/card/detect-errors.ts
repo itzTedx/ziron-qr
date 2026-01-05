@@ -61,7 +61,7 @@ export const detectGeneralErrors = (form: UseFormReturn<zCardSchema>) => {
 	const errors = form.formState.errors;
 
 	// Check simple fields
-	if (errors.name || errors.address || errors.mapUrl || errors.companyId || errors.designation || errors.bio) {
+	if (errors.name || errors.address || errors.mapUrl || errors.organizationId || errors.designation || errors.bio) {
 		return true;
 	}
 

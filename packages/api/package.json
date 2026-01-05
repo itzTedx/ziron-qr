@@ -26,11 +26,13 @@
 		"@ziron/validators": "workspace:*",
 		"json-2-csv": "^5.5.10",
 		"next": "catalog:",
+		"react": "catalog:react19",
 		"sharp": "^0.34.5",
 		"zod": "catalog:"
 	},
 	"devDependencies": {
-		"@ziron/typescript-config": "workspace:*"
+		"@ziron/typescript-config": "workspace:*",
+		"@types/react": "catalog:react19"
 	},
 	"peerDependencies": {
 		"typescript": "catalog:"

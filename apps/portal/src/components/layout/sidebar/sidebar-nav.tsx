@@ -66,7 +66,9 @@ export function SidebarNav<T extends Record<string, unknown>>({
 					<div className="flex flex-col items-center gap-3 py-3">
 						{toolContent}
 						<div className="flex size-12 items-center justify-center">
-							<NavUser />
+							<Suspense>
+								<NavUser />
+							</Suspense>
 						</div>
 					</div>
 				</div>

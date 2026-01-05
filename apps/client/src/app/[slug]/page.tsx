@@ -102,3 +102,26 @@ async function Template({ data }: { data: CardType }) {
 			return <DefaultTemplate card={data} />;
 	}
 }
+
+// TODO: Change the rendering logic something like below
+// import WebDevelopment from './components/WebDevelopment';
+// import SEO from './components/SEO';
+// import GraphicDesign from './components/GraphicDesign';
+
+// const serviceComponents: Record<string, React.FC> = {
+//   'web-development': WebDevelopment,
+//   'seo': SEO,
+//   'graphic-design': GraphicDesign,
+// };
+
+// interface PageProps {
+//   params: { slug: string };
+// }
+
+// export default function ServicePage({ params }: PageProps) {
+//   const Component = serviceComponents[params.slug];
+
+//   if (!Component) return <h1>Service Not Found</h1>;
+
+//   return <Component />;
+// }

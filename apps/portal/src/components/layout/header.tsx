@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import { Route } from "next";
 
 import {
@@ -40,7 +42,11 @@ export default function Header({ title, currentPage, children, showBackButton = 
 							{currentPage ? (
 								<>
 									<BreadcrumbItem className={cn(backHref && "group")}>
-										{showBackButton && <BackButton href={backHref} />}
+										{showBackButton && (
+											<Suspense>
+												<BackButton href={backHref} />
+											</Suspense>
+										)}
 										<BreadcrumbLink href="/">{title}</BreadcrumbLink>
 									</BreadcrumbItem>
 									<BreadcrumbSeparator />
@@ -50,7 +56,11 @@ export default function Header({ title, currentPage, children, showBackButton = 
 								</>
 							) : (
 								<BreadcrumbItem className={cn(backHref && "group")}>
-									{showBackButton && <BackButton href={backHref} />}
+									{showBackButton && (
+										<Suspense>
+											<BackButton href={backHref} />
+										</Suspense>
+									)}
 									<BreadcrumbPage>{title}</BreadcrumbPage>
 								</BreadcrumbItem>
 							)}
