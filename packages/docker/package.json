@@ -2,7 +2,7 @@
 	"name": "@ziron/docker",
 	"private": true,
 	"scripts": {
-		"dev": "pnpm with-env docker-compose up ",
+		"dev:old": "pnpm with-env docker-compose up ",
 		"db:reset": "docker compose rm --force --stop postgres && docker compose up -d",
 		"with-env": "dotenv -e ../../.env --"
 	},

@@ -19,12 +19,12 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "catalog:",
-		"@turbo/gen": "^2.6.3",
+		"@turbo/gen": "^2.7.3",
 		"@ziron/typescript-config": "workspace:*",
-		"baseline-browser-mapping": "^2.9.7",
+		"baseline-browser-mapping": "^2.9.11",
 		"husky": "^9.1.7",
 		"lint-staged": "^16.2.7",
-		"turbo": "^2.6.3",
+		"turbo": "^2.7.3",
 		"typescript": "5.7.3"
 	},
 	"lint-staged": {
